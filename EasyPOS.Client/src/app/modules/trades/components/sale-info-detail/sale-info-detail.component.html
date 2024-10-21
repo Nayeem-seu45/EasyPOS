@@ -1,5 +1,5 @@
-<div class="card">
-  <h3>Purchase Details</h3>
+<div class="card" *ngIf="item">
+  <h3>Sale Details</h3>
   <div class="grid p-fluid">
     <div *ngIf="item?.companyInfo" class="col-12 md:col-4">
       <div>
@@ -18,21 +18,21 @@
         <span>Email: {{item.companyInfo.email}}</span>
       </div>
     </div>
-    <div *ngIf="item?.supplier" class="col-12 md:col-4">
+    <div *ngIf="item?.customer" class="col-12 md:col-4">
       <div>
-        <span>Supplier Details:</span>
+        <span>Customer Details:</span>
       </div>
       <div>
-        <span>{{item.supplier.name}}</span>
+        <span>{{item.customer.name}}</span>
       </div>
       <div>
-        <span>{{item.supplier.address}} {{item.supplier.city}} {{item.supplier.country}}</span>
+        <span>{{item.customer.address}} {{item.customer.city}} {{item.customer.country}}</span>
       </div>
       <div>
-        <span>Phone: {{item.supplier.phoneNo}}, {{item.supplier.mobile}} </span>
+        <span>Phone: {{item.customer.phoneNo}}, {{item.customer.mobile}} </span>
       </div>
       <div>
-        <span>Email: {{item.supplier.email}}</span>
+        <span>Email: {{item.customer.email}}</span>
       </div>
     </div>
     <div class="col-12 md:col-4">
@@ -40,7 +40,7 @@
         <span>Reference: {{item?.referenceNo}}</span>
       </div>
       <div>
-        <span>Purchase Status: {{item?.purchaseStatus}}</span>
+        <span>Sale Status: {{item?.saleStatus}}</span>
       </div>
       <div>
         <span>Payment Status: {{item?.paymentStatusId}}</span>
@@ -52,7 +52,7 @@
 
   <div class="grid p-fluid">
     <div class="col-12">
-      <p-table [value]="item?.purchaseDetails" [scrollable]="true" scrollHeight="600px" styleClass="p-datatable-gridlines">
+      <p-table [value]="item?.saleDetails" [scrollable]="true" scrollHeight="600px" styleClass="p-datatable-gridlines">
         <ng-template pTemplate="header">
           <tr class="text-center">
             <th>#</th>

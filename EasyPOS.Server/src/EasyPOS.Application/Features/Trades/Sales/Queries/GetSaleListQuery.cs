@@ -1,4 +1,6 @@
-﻿namespace EasyPOS.Application.Features.Trades.Sales.Queries;
+﻿using EasyPOS.Application.Features.Trades.Purchases.Queries;
+
+namespace EasyPOS.Application.Features.Trades.Sales.Queries;
 
 [Authorize(Policy = Permissions.Sales.View)]
 public record GetSaleListQuery
@@ -30,6 +32,8 @@ internal sealed class GetSaleQueryHandler(ISqlConnectionFactory sqlConnection)
                 t.DiscountAmount AS {nameof(SaleModel.DiscountAmount)},
                 t.ShippingCost AS {nameof(SaleModel.ShippingCost)},
                 t.GrandTotal AS {nameof(SaleModel.GrandTotal)},
+                t.PaidAmount AS {nameof(PurchaseModel.PaidAmount)},
+                t.DueAmount AS {nameof(PurchaseModel.DueAmount)},
                 t.SaleNote AS {nameof(SaleModel.SaleNote)},
                 t.StaffNote AS {nameof(SaleModel.StaffNote)},
                 w.Name AS {nameof(SaleModel.WarehouseName)},

@@ -74,7 +74,7 @@
                 </td>
                 <td>
                   <div class="text-right mr-2">
-                    {{ detail.totalPrice }}
+                    {{ detail.totalPrice | number:'1.2-2' }}
                   </div>
                 </td>
                 <td>
@@ -85,11 +85,11 @@
             <ng-template pTemplate="footer">
               <tr class="text-center">
                 <td colspan="2" class="text-left">Total</td>
-                <td class="text-center">{{ totalQuantity }}</td>
+                <td class="text-center">{{ totalQuantity | number:'1.2-2' }}</td>
                 <td ></td>
-                <td class="text-center">{{ totalDiscount }}</td>
-                <td class="text-center">{{ totalTaxAmount }}</td>
-                <td class="text-right">{{ item.subTotal }}</td>
+                <td class="text-center">{{ totalDiscount | number:'1.2-2' }}</td>
+                <td class="text-center">{{ totalTaxAmount | number:'1.2-2' }}</td>
+                <td class="text-right">{{ item.subTotal | number:'1.2-2' }}</td>
                 <td></td>
               </tr>
             </ng-template>
@@ -169,7 +169,7 @@
                 <strong>Total</strong>
               </td>
               <td class="">
-                <span>{{ item.subTotal }}</span>
+                <span>{{ item.subTotal | number:'1.2-2' }}</span>
               </td>
             </tr>
             <tr>
@@ -177,7 +177,7 @@
                 <strong>Order Tax</strong>
               </td>
               <td class="">
-                <span>{{ item.taxAmount }}</span>
+                <span>{{ item.taxAmount | number:'1.2-2'}}</span>
               </td>
             </tr>
             <tr>
@@ -185,7 +185,7 @@
                 <strong>Order Discount</strong>
               </td>
               <td class="">
-                <span>{{ item.discountAmount }}</span>
+                <span>{{ item.discountAmount | number:'1.2-2'}}</span>
               </td>
             </tr>
             <tr>
@@ -193,7 +193,7 @@
                 <strong>Shipping Cost</strong>
               </td>
               <td class="">
-                <span>{{ item.shippingCost }}</span>
+                <span>{{ item.shippingCost | number:'1.2-2'}}</span>
               </td>
             </tr>
             <tr>
@@ -201,7 +201,7 @@
                 <strong>Grand Total</strong>
               </td>
               <td class="font-bold">
-                <span>{{ item.grandTotal }}</span>
+                <span>{{ item.grandTotal | number:'1.2-2'}}</span>
               </td>
             </tr>
           </tbody>

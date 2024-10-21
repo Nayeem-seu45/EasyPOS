@@ -1,4 +1,5 @@
-﻿using EasyPOS.Application.Features.Settings.CompanyInfos.Queries;
+﻿using EasyPOS.Application.Features.Customers.Queries;
+using EasyPOS.Application.Features.Settings.CompanyInfos.Queries;
 using EasyPOS.Application.Features.Suppliers.Queries;
 using EasyPOS.Domain.Common;
 
@@ -11,5 +12,5 @@ public interface ICommonQueryService
     Task<List<LookupDetail>> GetLookupDetailsAsync(int lookupDevCode, CancellationToken cancellationToken = default);
     Task<CompanyInfoModel> GetCompanyInfoAsync(CancellationToken cancellationToken = default);
     Task<SupplierModel> GetSupplierDetail(Guid supplierId, CancellationToken cancellationToken = default);
-    Task<SupplierModel> GetCustomerDetail(Guid customerId, CancellationToken cancellationToken = default);
+    Task<CustomerModel> GetCustomerDetail(Guid customerId, CancellationToken cancellationToken = default);
 }

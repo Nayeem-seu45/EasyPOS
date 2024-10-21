@@ -1,4 +1,5 @@
 ﻿using EasyPOS.Application.Features.Trades.PurchasePayments.Queries;
+using EasyPOS.Domain.Trades;
 
 namespace EasyPOS.Application.Features.Trades.Purchases.Queries;
 
@@ -123,6 +124,11 @@ internal sealed class GetPurchaseDetailByIdQueryHandler(
         var purchase = purchaseDictionary.Values.FirstOrDefault();
         if(purchase is not null)
         {
+            purchase.TotalQuantity = purchase.PurchaseDetails.Count;
+            purchase.TotalDiscount = purchase.PurchaseDetails.Sum(x => x.DiscountAmount);
+            purchase.TotalTaxAmount = purchase.PurchaseDetails.Sum(x => x.TaxAmount);
+            purchase.TotalItems = $"{purchase.TotalQuantity} ({purchase.PurchaseDetails.Sum(x => x.Quantity)})";
+
             purchase.CompanyInfo = await commonQueryService.GetCompanyInfoAsync(cancellationToken);
             purchase.Supplier = await commonQueryService.GetSupplierDetail(purchase.SupplierId, cancellationToken);
             return purchase;

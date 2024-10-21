@@ -1,6 +1,7 @@
 ﻿using EasyPOS.Application.Features.Common.Queries;
 using EasyPOS.Application.Features.ProductManagement.Queries;
 using EasyPOS.Application.Features.Trades.Purchases.Commands;
+using EasyPOS.Application.Features.Trades.Purchases.Queries;
 using EasyPOS.Application.Features.Trades.Sales.Commands;
 using EasyPOS.Application.Features.Trades.Sales.Queries;
 using EasyPOS.Application.Features.UnitManagement.Queries;
@@ -20,6 +21,10 @@ public class Sales : EndpointGroupBase
         group.MapGet("Get/{id:Guid}", Get)
              .WithName("GetSale")
              .Produces<UpsertSaleModel>(StatusCodes.Status200OK);
+
+        group.MapGet("GetDetail/{id:Guid}", GetDetail)
+             .WithName("GetSaleDetail")
+             .Produces<SaleInfoModel>(StatusCodes.Status200OK);
 
         group.MapPost("Create", Create)
              .WithName("CreateSale")
@@ -110,6 +115,13 @@ public class Sales : EndpointGroupBase
         result.Value.OptionsDataSources.Add("productsSelectList", productsSelectList.Value);
         result.Value.OptionsDataSources.Add("taxesSelectList", taxesSelectList.Value);
         result.Value.OptionsDataSources.Add("productUnitSelectList", productUnitSelectList.Value);
+
+        return TypedResults.Ok(result.Value);
+    }
+
+    private async Task<IResult> GetDetail(ISender sender, Guid id)
+    {
+        var result = await sender.Send(new GetSaleDetailByIdQuery(id));
 
         return TypedResults.Ok(result.Value);
     }

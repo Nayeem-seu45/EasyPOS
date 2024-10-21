@@ -2429,6 +2429,295 @@
         ]
       }
     },
+    "/api/SalePayments/GetAll": {
+      "post": {
+        "tags": [
+          "SalePayments"
+        ],
+        "operationId": "GetSalePayments",
+        "requestBody": {
+          "x-name": "query",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetSalePaymentListQuery"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedResponseOfSalePaymentModel"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/SalePayments/GetAllBySaleId": {
+      "post": {
+        "tags": [
+          "SalePayments"
+        ],
+        "operationId": "GetAllBySaleId",
+        "requestBody": {
+          "x-name": "query",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetPaymentListBySaleIdQuery"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SalePaymentModel"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/SalePayments/Get/{id}": {
+      "get": {
+        "tags": [
+          "SalePayments"
+        ],
+        "operationId": "GetSalePayment",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SalePaymentModel"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/SalePayments/Create": {
+      "post": {
+        "tags": [
+          "SalePayments"
+        ],
+        "operationId": "CreateSalePayment",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateSalePaymentCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "guid"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/SalePayments/Update": {
+      "put": {
+        "tags": [
+          "SalePayments"
+        ],
+        "operationId": "UpdateSalePayment",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateSalePaymentCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/SalePayments/Delete/{id}": {
+      "delete": {
+        "tags": [
+          "SalePayments"
+        ],
+        "operationId": "DeleteSalePayment",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/SalePayments/DeleteMultiple": {
+      "post": {
+        "tags": [
+          "SalePayments"
+        ],
+        "operationId": "DeleteSalePayments",
+        "requestBody": {
+          "x-name": "ids",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "guid"
+                }
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
     "/api/Sales/GetAll": {
       "post": {
         "tags": [
@@ -2491,6 +2780,43 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/UpsertSaleModel"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/Sales/GetDetail/{id}": {
+      "get": {
+        "tags": [
+          "Sales"
+        ],
+        "operationId": "GetSaleDetail",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SaleInfoModel"
                 }
               }
             }
@@ -7234,7 +7560,7 @@
           "purchaseStatus": {
             "type": "string"
           },
-          "paymentStatusId": {
+          "paymentStatus": {
             "type": "string"
           },
           "purchaseDetails": {
@@ -7525,6 +7851,21 @@
             "type": "string"
           },
           "paymentStatusId": {
+            "type": "string"
+          },
+          "totalQuantity": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "totalDiscount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "totalTaxAmount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "totalItems": {
             "type": "string"
           },
           "companyInfo": {
@@ -7952,6 +8293,200 @@
           }
         }
       },
+      "PaginatedResponseOfSalePaymentModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SalePaymentModel"
+            }
+          },
+          "pageNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "hasPreviousPage": {
+            "type": "boolean"
+          },
+          "hasNextPage": {
+            "type": "boolean"
+          },
+          "optionsDataSources": {
+            "type": "object",
+            "additionalProperties": {}
+          }
+        }
+      },
+      "SalePaymentModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "saleId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "paymentDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "receivedAmount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "payingAmount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "changeAmount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "paymentType": {
+            "type": "string",
+            "format": "guid",
+            "nullable": true
+          },
+          "paymentTypeName": {
+            "type": "string"
+          },
+          "createdBy": {
+            "type": "string"
+          },
+          "note": {
+            "type": "string",
+            "nullable": true
+          },
+          "paymentDateString": {
+            "type": "string",
+            "nullable": true
+          },
+          "optionsDataSources": {
+            "type": "object",
+            "additionalProperties": {}
+          }
+        }
+      },
+      "GetSalePaymentListQuery": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/DataGridModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "cacheKey": {
+                "type": "string"
+              },
+              "saleId": {
+                "type": "string",
+                "format": "guid"
+              }
+            }
+          }
+        ]
+      },
+      "GetPaymentListBySaleIdQuery": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "cacheKey": {
+            "type": "string"
+          },
+          "saleId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "allowCache": {
+            "type": "boolean",
+            "nullable": true
+          }
+        }
+      },
+      "CreateSalePaymentCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "saleId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "receivedAmount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "payingAmount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "changeAmount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "paymentType": {
+            "type": "string",
+            "format": "guid"
+          },
+          "note": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "UpdateSalePaymentCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "saleId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "receivedAmount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "payingAmount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "changeAmount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "paymentType": {
+            "type": "string",
+            "format": "guid"
+          },
+          "note": {
+            "type": "string",
+            "nullable": true
+          },
+          "cacheKey": {
+            "type": "string"
+          }
+        }
+      },
       "PaginatedResponseOfSaleModel": {
         "type": "object",
         "additionalProperties": false,
@@ -8057,6 +8592,14 @@
             "nullable": true
           },
           "grandTotal": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "paidAmount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "dueAmount": {
             "type": "number",
             "format": "decimal"
           },
@@ -8299,6 +8842,139 @@
           "optionsDataSources": {
             "type": "object",
             "additionalProperties": {}
+          }
+        }
+      },
+      "SaleInfoModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "saleDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "referenceNo": {
+            "type": "string",
+            "nullable": true
+          },
+          "warehouseId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "customerId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "billerId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "attachmentUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "saleStatusId": {
+            "type": "string",
+            "format": "guid",
+            "nullable": true
+          },
+          "paymentStatusId": {
+            "type": "string",
+            "format": "guid",
+            "nullable": true
+          },
+          "taxRate": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "taxAmount": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "discountAmount": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "discountRate": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "discountType": {
+            "$ref": "#/components/schemas/DiscountType"
+          },
+          "shippingCost": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "subTotal": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "grandTotal": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "saleNote": {
+            "type": "string",
+            "nullable": true
+          },
+          "staffNote": {
+            "type": "string",
+            "nullable": true
+          },
+          "warehouseName": {
+            "type": "string"
+          },
+          "customerName": {
+            "type": "string"
+          },
+          "saleStatus": {
+            "type": "string"
+          },
+          "paymentStatus": {
+            "type": "string"
+          },
+          "totalQuantity": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "totalDiscount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "totalTaxAmount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "totalItems": {
+            "type": "string"
+          },
+          "companyInfo": {
+            "$ref": "#/components/schemas/CompanyInfoModel"
+          },
+          "customer": {
+            "$ref": "#/components/schemas/CustomerModel"
+          },
+          "saleDetails": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SaleDetailModel"
+            }
+          },
+          "paymentDetails": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SalePaymentModel"
+            }
           }
         }
       },

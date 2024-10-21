@@ -23,14 +23,7 @@ export class PurchaseListComponent {
   pageId = 'e6a24c4e-13aa-4862-b415-08dce587d160'
 
   item: PurchaseInfoModel;
-  // Table footer section
-  totalQuantity: number = 0;
-  totalDiscount: number = 0;
-  totalTaxAmount: number = 0;
-  subTotal: number = 0;
 
-  // Grand total Section
-  totalItems: string = '0';
   @ViewChild('grid') grid: DataGridComponent;
   entityClient: PurchasesClient = inject(PurchasesClient);
   constructor(private customDialogService: CustomDialogService,
@@ -91,7 +84,7 @@ export class PurchaseListComponent {
 
   }
 
-  
+
 
   private exportPdf() {
     const doc = new jsPDF('p', 'mm', 'a4'); // Create jsPDF instance
@@ -133,6 +126,20 @@ export class PurchaseListComponent {
       detail.totalPrice.toFixed(2)
     ]);
 
+    // Footer row with totals
+    const footerRow = [
+      'Total',
+      '',
+      '',
+      this.item.totalQuantity.toFixed(2), // Sum of quantities
+      '',
+      this.item.totalDiscount.toFixed(2), // Total Discount
+      this.item.totalTaxAmount.toFixed(2),      // Total Tax
+      this.item.subTotal.toFixed(2)  // Total Sub Total
+    ];
+
+    itemBody.push(footerRow); // Append footer row
+
     // Calculate available width for the table
     const rightMargin = 10;
     const tableWidth = doc.internal.pageSize.getWidth() - leftMargin - rightMargin; // Full width minus margins
@@ -161,7 +168,7 @@ export class PurchaseListComponent {
 
         // Section: Footer Summary Data
         const footerData = [
-          [`Items`, `${this.totalItems}`],
+          [`Items`, `${this.item.totalItems}`],
           [`Total`, `${this.item.subTotal.toFixed(2)}`],
           [`Order Tax`, `${this.item.taxAmount.toFixed(2)}`],
           [`Order Discount`, `${this.item.discountAmount.toFixed(2)}`],
@@ -188,7 +195,7 @@ export class PurchaseListComponent {
             1: { cellWidth: footerTableWidth * 0.5, halign: 'right' }, // Amount column
           },
           margin: { left: footerLeftMargin }, // Set left margin for the table
-          didDrawPage: () => { 
+          didDrawPage: () => {
             // Save the PDF
             doc.save('purchase-details.pdf');
           }
@@ -269,7 +276,7 @@ export class PurchaseListComponent {
 
             // Section: Footer Summary
             doc.setFontSize(10);
-            doc.text(`Items: ${this.totalItems}`, 10, finalYAfterPaymentsTable + 10);
+            doc.text(`Items: ${this.item.totalItems}`, 10, finalYAfterPaymentsTable + 10);
             doc.text(`Total: ${this.item.subTotal.toFixed(2)}`, 10, finalYAfterPaymentsTable + 20);
             doc.text(`Order Tax: ${this.item.taxAmount.toFixed(2)}`, 10, finalYAfterPaymentsTable + 30);
             doc.text(`Order Discount: ${this.item.discountAmount.toFixed(2)}`, 10, finalYAfterPaymentsTable + 40);
@@ -293,7 +300,6 @@ export class PurchaseListComponent {
       this.entityClient.getDetail(id).subscribe({
         next: (res: any) => {
           this.item = res;
-          this.calculateFooterSection();
           resolve(); // Resolves after item data is set and footer is calculated
         },
         error: (error) => {
@@ -304,11 +310,4 @@ export class PurchaseListComponent {
     });
   }
 
-  // Calculates total items, tax, discount, and quantities
-  private calculateFooterSection() {
-    this.totalQuantity = this.item.purchaseDetails.reduce((total, detail) => total + detail.quantity, 0);
-    this.totalDiscount = this.item.purchaseDetails.reduce((total, detail) => total + (detail.discountAmount || 0), 0);
-    this.totalTaxAmount = this.item.purchaseDetails.reduce((total, detail) => total + (detail.taxAmount || 0), 0);
-    this.totalItems = this.item.purchaseDetails.length > 0 ? `${this.item.purchaseDetails.length} (${this.totalQuantity})` : '0';
-  }
 }

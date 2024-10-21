@@ -3,6 +3,7 @@ using Azure.Core;
 using Dapper;
 using EasyPOS.Application.Common.Abstractions;
 using EasyPOS.Application.Common.DapperQueries;
+using EasyPOS.Application.Features.Customers.Queries;
 using EasyPOS.Application.Features.Settings.CompanyInfos.Queries;
 using EasyPOS.Application.Features.Suppliers.Queries;
 using EasyPOS.Domain.Common;
@@ -75,26 +76,26 @@ internal sealed class CommonQueryService(ISqlConnectionFactory sqlConnection) : 
         return await connection.QueryFirstOrDefaultAsync<SupplierModel>(sql, new {Id = supplierId });
     }
 
-    public async Task<SupplierModel> GetCustomerDetail(Guid customerId, CancellationToken cancellationToken = default)
+    public async Task<CustomerModel> GetCustomerDetail(Guid customerId, CancellationToken cancellationToken = default)
     {
         var connection = sqlConnection.GetOpenConnection();
 
         var sql = $"""
             SELECT
-                t.Id AS {nameof(SupplierModel.Id)},
-                t.Name AS {nameof(SupplierModel.Name)},
-                t.Email AS {nameof(SupplierModel.Email)},
-                t.PhoneNo AS {nameof(SupplierModel.PhoneNo)},
-                t.Mobile AS {nameof(SupplierModel.Mobile)},
-                t.Country AS {nameof(SupplierModel.Country)},
-                t.City AS {nameof(SupplierModel.City)},
-                t.Address AS {nameof(SupplierModel.Address)},
-                t.IsActive AS {nameof(SupplierModel.IsActive)}
+                t.Id AS {nameof(CustomerModel.Id)},
+                t.Name AS {nameof(CustomerModel.Name)},
+                t.Email AS {nameof(CustomerModel.Email)},
+                t.PhoneNo AS {nameof(CustomerModel.PhoneNo)},
+                t.Mobile AS {nameof(CustomerModel.Mobile)},
+                t.Country AS {nameof(CustomerModel.Country)},
+                t.City AS {nameof(CustomerModel.City)},
+                t.Address AS {nameof(CustomerModel.Address)},
+                t.IsActive AS {nameof(CustomerModel.IsActive)}
             FROM dbo.Customers t
             WHERE t.Id = @Id
             """
         ;
-        return await connection.QueryFirstOrDefaultAsync<SupplierModel>(sql, new { Id = customerId });
+        return await connection.QueryFirstOrDefaultAsync<CustomerModel>(sql, new { Id = customerId });
     }
 
     public async Task<CompanyInfoModel> GetCompanyInfoAsync(

@@ -3627,9 +3627,429 @@ export class PurchasePaymentsClient implements IPurchasePaymentsClient {
     }
 }
 
+export interface ISalePaymentsClient {
+    getAll(query: GetSalePaymentListQuery): Observable<PaginatedResponseOfSalePaymentModel>;
+    getAllBySaleId(query: GetPaymentListBySaleIdQuery): Observable<SalePaymentModel[]>;
+    get(id: string): Observable<SalePaymentModel>;
+    create(command: CreateSalePaymentCommand): Observable<string>;
+    update(command: UpdateSalePaymentCommand): Observable<void>;
+    delete(id: string): Observable<void>;
+    deleteMultiple(ids: string[]): Observable<void>;
+}
+
+@Injectable()
+export class SalePaymentsClient implements ISalePaymentsClient {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ?? "";
+    }
+
+    getAll(query: GetSalePaymentListQuery): Observable<PaginatedResponseOfSalePaymentModel> {
+        let url_ = this.baseUrl + "/api/SalePayments/GetAll";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(query);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            withCredentials: true,
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAll(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAll(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<PaginatedResponseOfSalePaymentModel>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<PaginatedResponseOfSalePaymentModel>;
+        }));
+    }
+
+    protected processGetAll(response: HttpResponseBase): Observable<PaginatedResponseOfSalePaymentModel> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = PaginatedResponseOfSalePaymentModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    getAllBySaleId(query: GetPaymentListBySaleIdQuery): Observable<SalePaymentModel[]> {
+        let url_ = this.baseUrl + "/api/SalePayments/GetAllBySaleId";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(query);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            withCredentials: true,
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAllBySaleId(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAllBySaleId(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<SalePaymentModel[]>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<SalePaymentModel[]>;
+        }));
+    }
+
+    protected processGetAllBySaleId(response: HttpResponseBase): Observable<SalePaymentModel[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(SalePaymentModel.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    get(id: string): Observable<SalePaymentModel> {
+        let url_ = this.baseUrl + "/api/SalePayments/Get/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            withCredentials: true,
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGet(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGet(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<SalePaymentModel>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<SalePaymentModel>;
+        }));
+    }
+
+    protected processGet(response: HttpResponseBase): Observable<SalePaymentModel> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = SalePaymentModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    create(command: CreateSalePaymentCommand): Observable<string> {
+        let url_ = this.baseUrl + "/api/SalePayments/Create";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            withCredentials: true,
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreate(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<string>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<string>;
+        }));
+    }
+
+    protected processCreate(response: HttpResponseBase): Observable<string> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 201) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result201: any = null;
+            let resultData201 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result201 = resultData201 !== undefined ? resultData201 : <any>null;
+    
+            return _observableOf(result201);
+            }));
+        } else if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ProblemDetails.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    update(command: UpdateSalePaymentCommand): Observable<void> {
+        let url_ = this.baseUrl + "/api/SalePayments/Update";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            withCredentials: true,
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+            })
+        };
+
+        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdate(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processUpdate(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ProblemDetails.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            }));
+        } else if (status === 404) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("A server side error occurred.", status, _responseText, _headers);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    delete(id: string): Observable<void> {
+        let url_ = this.baseUrl + "/api/SalePayments/Delete/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            withCredentials: true,
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDelete(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDelete(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processDelete(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ProblemDetails.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    deleteMultiple(ids: string[]): Observable<void> {
+        let url_ = this.baseUrl + "/api/SalePayments/DeleteMultiple";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(ids);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            withCredentials: true,
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDeleteMultiple(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDeleteMultiple(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processDeleteMultiple(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ProblemDetails.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+}
+
 export interface ISalesClient {
     getAll(query: GetSaleListQuery): Observable<PaginatedResponseOfSaleModel>;
     get(id: string): Observable<UpsertSaleModel>;
+    getDetail(id: string): Observable<SaleInfoModel>;
     create(command: CreateSaleCommand): Observable<string>;
     update(command: UpdateSaleCommand): Observable<void>;
     delete(id: string): Observable<void>;
@@ -3743,6 +4163,58 @@ export class SalesClient implements ISalesClient {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
             result200 = UpsertSaleModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    getDetail(id: string): Observable<SaleInfoModel> {
+        let url_ = this.baseUrl + "/api/Sales/GetDetail/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            withCredentials: true,
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetDetail(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetDetail(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<SaleInfoModel>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<SaleInfoModel>;
+        }));
+    }
+
+    protected processGetDetail(response: HttpResponseBase): Observable<SaleInfoModel> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = SaleInfoModel.fromJS(resultData200);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -11148,7 +11620,7 @@ export class PurchaseModel implements IPurchaseModel {
     note?: string | undefined;
     supplierName?: string;
     purchaseStatus?: string;
-    paymentStatusId?: string;
+    paymentStatus?: string;
     purchaseDetails?: PurchaseDetailModel[];
     paymentDetails?: PurchasePaymentModel[];
     optionsDataSources?: { [key: string]: any; };
@@ -11184,7 +11656,7 @@ export class PurchaseModel implements IPurchaseModel {
             this.note = _data["note"];
             this.supplierName = _data["supplierName"];
             this.purchaseStatus = _data["purchaseStatus"];
-            this.paymentStatusId = _data["paymentStatusId"];
+            this.paymentStatus = _data["paymentStatus"];
             if (Array.isArray(_data["purchaseDetails"])) {
                 this.purchaseDetails = [] as any;
                 for (let item of _data["purchaseDetails"])
@@ -11234,7 +11706,7 @@ export class PurchaseModel implements IPurchaseModel {
         data["note"] = this.note;
         data["supplierName"] = this.supplierName;
         data["purchaseStatus"] = this.purchaseStatus;
-        data["paymentStatusId"] = this.paymentStatusId;
+        data["paymentStatus"] = this.paymentStatus;
         if (Array.isArray(this.purchaseDetails)) {
             data["purchaseDetails"] = [];
             for (let item of this.purchaseDetails)
@@ -11277,7 +11749,7 @@ export interface IPurchaseModel {
     note?: string | undefined;
     supplierName?: string;
     purchaseStatus?: string;
-    paymentStatusId?: string;
+    paymentStatus?: string;
     purchaseDetails?: PurchaseDetailModel[];
     paymentDetails?: PurchasePaymentModel[];
     optionsDataSources?: { [key: string]: any; };
@@ -11560,6 +12032,10 @@ export class PurchaseInfoModel implements IPurchaseInfoModel {
     supplierName?: string;
     purchaseStatus?: string;
     paymentStatusId?: string;
+    totalQuantity?: number;
+    totalDiscount?: number;
+    totalTaxAmount?: number;
+    totalItems?: string;
     companyInfo?: CompanyInfoModel;
     supplier?: SupplierModel;
     purchaseDetails?: PurchaseDetailModel[];
@@ -11597,6 +12073,10 @@ export class PurchaseInfoModel implements IPurchaseInfoModel {
             this.supplierName = _data["supplierName"];
             this.purchaseStatus = _data["purchaseStatus"];
             this.paymentStatusId = _data["paymentStatusId"];
+            this.totalQuantity = _data["totalQuantity"];
+            this.totalDiscount = _data["totalDiscount"];
+            this.totalTaxAmount = _data["totalTaxAmount"];
+            this.totalItems = _data["totalItems"];
             this.companyInfo = _data["companyInfo"] ? CompanyInfoModel.fromJS(_data["companyInfo"]) : <any>undefined;
             this.supplier = _data["supplier"] ? SupplierModel.fromJS(_data["supplier"]) : <any>undefined;
             if (Array.isArray(_data["purchaseDetails"])) {
@@ -11642,6 +12122,10 @@ export class PurchaseInfoModel implements IPurchaseInfoModel {
         data["supplierName"] = this.supplierName;
         data["purchaseStatus"] = this.purchaseStatus;
         data["paymentStatusId"] = this.paymentStatusId;
+        data["totalQuantity"] = this.totalQuantity;
+        data["totalDiscount"] = this.totalDiscount;
+        data["totalTaxAmount"] = this.totalTaxAmount;
+        data["totalItems"] = this.totalItems;
         data["companyInfo"] = this.companyInfo ? this.companyInfo.toJSON() : <any>undefined;
         data["supplier"] = this.supplier ? this.supplier.toJSON() : <any>undefined;
         if (Array.isArray(this.purchaseDetails)) {
@@ -11680,6 +12164,10 @@ export interface IPurchaseInfoModel {
     supplierName?: string;
     purchaseStatus?: string;
     paymentStatusId?: string;
+    totalQuantity?: number;
+    totalDiscount?: number;
+    totalTaxAmount?: number;
+    totalItems?: string;
     companyInfo?: CompanyInfoModel;
     supplier?: SupplierModel;
     purchaseDetails?: PurchaseDetailModel[];
@@ -12375,6 +12863,379 @@ export interface IUpdatePurchasePaymentCommand {
     cacheKey?: string;
 }
 
+export class PaginatedResponseOfSalePaymentModel implements IPaginatedResponseOfSalePaymentModel {
+    items?: SalePaymentModel[];
+    pageNumber?: number;
+    totalPages?: number;
+    totalCount?: number;
+    hasPreviousPage?: boolean;
+    hasNextPage?: boolean;
+    optionsDataSources?: { [key: string]: any; };
+
+    constructor(data?: IPaginatedResponseOfSalePaymentModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["items"])) {
+                this.items = [] as any;
+                for (let item of _data["items"])
+                    this.items!.push(SalePaymentModel.fromJS(item));
+            }
+            this.pageNumber = _data["pageNumber"];
+            this.totalPages = _data["totalPages"];
+            this.totalCount = _data["totalCount"];
+            this.hasPreviousPage = _data["hasPreviousPage"];
+            this.hasNextPage = _data["hasNextPage"];
+            if (_data["optionsDataSources"]) {
+                this.optionsDataSources = {} as any;
+                for (let key in _data["optionsDataSources"]) {
+                    if (_data["optionsDataSources"].hasOwnProperty(key))
+                        (<any>this.optionsDataSources)![key] = _data["optionsDataSources"][key];
+                }
+            }
+        }
+    }
+
+    static fromJS(data: any): PaginatedResponseOfSalePaymentModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new PaginatedResponseOfSalePaymentModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        data["pageNumber"] = this.pageNumber;
+        data["totalPages"] = this.totalPages;
+        data["totalCount"] = this.totalCount;
+        data["hasPreviousPage"] = this.hasPreviousPage;
+        data["hasNextPage"] = this.hasNextPage;
+        if (this.optionsDataSources) {
+            data["optionsDataSources"] = {};
+            for (let key in this.optionsDataSources) {
+                if (this.optionsDataSources.hasOwnProperty(key))
+                    (<any>data["optionsDataSources"])[key] = (<any>this.optionsDataSources)[key];
+            }
+        }
+        return data;
+    }
+}
+
+export interface IPaginatedResponseOfSalePaymentModel {
+    items?: SalePaymentModel[];
+    pageNumber?: number;
+    totalPages?: number;
+    totalCount?: number;
+    hasPreviousPage?: boolean;
+    hasNextPage?: boolean;
+    optionsDataSources?: { [key: string]: any; };
+}
+
+export class SalePaymentModel implements ISalePaymentModel {
+    id?: string;
+    saleId?: string;
+    paymentDate?: Date;
+    receivedAmount?: number;
+    payingAmount?: number;
+    changeAmount?: number;
+    paymentType?: string | undefined;
+    paymentTypeName?: string;
+    createdBy?: string;
+    note?: string | undefined;
+    paymentDateString?: string | undefined;
+    optionsDataSources?: { [key: string]: any; };
+
+    constructor(data?: ISalePaymentModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.saleId = _data["saleId"];
+            this.paymentDate = _data["paymentDate"] ? new Date(_data["paymentDate"].toString()) : <any>undefined;
+            this.receivedAmount = _data["receivedAmount"];
+            this.payingAmount = _data["payingAmount"];
+            this.changeAmount = _data["changeAmount"];
+            this.paymentType = _data["paymentType"];
+            this.paymentTypeName = _data["paymentTypeName"];
+            this.createdBy = _data["createdBy"];
+            this.note = _data["note"];
+            this.paymentDateString = _data["paymentDateString"];
+            if (_data["optionsDataSources"]) {
+                this.optionsDataSources = {} as any;
+                for (let key in _data["optionsDataSources"]) {
+                    if (_data["optionsDataSources"].hasOwnProperty(key))
+                        (<any>this.optionsDataSources)![key] = _data["optionsDataSources"][key];
+                }
+            }
+        }
+    }
+
+    static fromJS(data: any): SalePaymentModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new SalePaymentModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["saleId"] = this.saleId;
+        data["paymentDate"] = this.paymentDate ? this.paymentDate.toISOString() : <any>undefined;
+        data["receivedAmount"] = this.receivedAmount;
+        data["payingAmount"] = this.payingAmount;
+        data["changeAmount"] = this.changeAmount;
+        data["paymentType"] = this.paymentType;
+        data["paymentTypeName"] = this.paymentTypeName;
+        data["createdBy"] = this.createdBy;
+        data["note"] = this.note;
+        data["paymentDateString"] = this.paymentDateString;
+        if (this.optionsDataSources) {
+            data["optionsDataSources"] = {};
+            for (let key in this.optionsDataSources) {
+                if (this.optionsDataSources.hasOwnProperty(key))
+                    (<any>data["optionsDataSources"])[key] = (<any>this.optionsDataSources)[key];
+            }
+        }
+        return data;
+    }
+}
+
+export interface ISalePaymentModel {
+    id?: string;
+    saleId?: string;
+    paymentDate?: Date;
+    receivedAmount?: number;
+    payingAmount?: number;
+    changeAmount?: number;
+    paymentType?: string | undefined;
+    paymentTypeName?: string;
+    createdBy?: string;
+    note?: string | undefined;
+    paymentDateString?: string | undefined;
+    optionsDataSources?: { [key: string]: any; };
+}
+
+export class GetSalePaymentListQuery extends DataGridModel implements IGetSalePaymentListQuery {
+    cacheKey?: string;
+    saleId?: string;
+
+    constructor(data?: IGetSalePaymentListQuery) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+        if (_data) {
+            this.cacheKey = _data["cacheKey"];
+            this.saleId = _data["saleId"];
+        }
+    }
+
+    static override fromJS(data: any): GetSalePaymentListQuery {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetSalePaymentListQuery();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["cacheKey"] = this.cacheKey;
+        data["saleId"] = this.saleId;
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IGetSalePaymentListQuery extends IDataGridModel {
+    cacheKey?: string;
+    saleId?: string;
+}
+
+export class GetPaymentListBySaleIdQuery implements IGetPaymentListBySaleIdQuery {
+    cacheKey?: string;
+    saleId?: string;
+    allowCache?: boolean | undefined;
+
+    constructor(data?: IGetPaymentListBySaleIdQuery) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.cacheKey = _data["cacheKey"];
+            this.saleId = _data["saleId"];
+            this.allowCache = _data["allowCache"];
+        }
+    }
+
+    static fromJS(data: any): GetPaymentListBySaleIdQuery {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPaymentListBySaleIdQuery();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["cacheKey"] = this.cacheKey;
+        data["saleId"] = this.saleId;
+        data["allowCache"] = this.allowCache;
+        return data;
+    }
+}
+
+export interface IGetPaymentListBySaleIdQuery {
+    cacheKey?: string;
+    saleId?: string;
+    allowCache?: boolean | undefined;
+}
+
+export class CreateSalePaymentCommand implements ICreateSalePaymentCommand {
+    saleId?: string;
+    receivedAmount?: number;
+    payingAmount?: number;
+    changeAmount?: number;
+    paymentType?: string;
+    note?: string | undefined;
+
+    constructor(data?: ICreateSalePaymentCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.saleId = _data["saleId"];
+            this.receivedAmount = _data["receivedAmount"];
+            this.payingAmount = _data["payingAmount"];
+            this.changeAmount = _data["changeAmount"];
+            this.paymentType = _data["paymentType"];
+            this.note = _data["note"];
+        }
+    }
+
+    static fromJS(data: any): CreateSalePaymentCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateSalePaymentCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["saleId"] = this.saleId;
+        data["receivedAmount"] = this.receivedAmount;
+        data["payingAmount"] = this.payingAmount;
+        data["changeAmount"] = this.changeAmount;
+        data["paymentType"] = this.paymentType;
+        data["note"] = this.note;
+        return data;
+    }
+}
+
+export interface ICreateSalePaymentCommand {
+    saleId?: string;
+    receivedAmount?: number;
+    payingAmount?: number;
+    changeAmount?: number;
+    paymentType?: string;
+    note?: string | undefined;
+}
+
+export class UpdateSalePaymentCommand implements IUpdateSalePaymentCommand {
+    id!: string;
+    saleId?: string;
+    receivedAmount?: number;
+    payingAmount?: number;
+    changeAmount?: number;
+    paymentType?: string;
+    note?: string | undefined;
+    cacheKey?: string;
+
+    constructor(data?: IUpdateSalePaymentCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.saleId = _data["saleId"];
+            this.receivedAmount = _data["receivedAmount"];
+            this.payingAmount = _data["payingAmount"];
+            this.changeAmount = _data["changeAmount"];
+            this.paymentType = _data["paymentType"];
+            this.note = _data["note"];
+            this.cacheKey = _data["cacheKey"];
+        }
+    }
+
+    static fromJS(data: any): UpdateSalePaymentCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdateSalePaymentCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["saleId"] = this.saleId;
+        data["receivedAmount"] = this.receivedAmount;
+        data["payingAmount"] = this.payingAmount;
+        data["changeAmount"] = this.changeAmount;
+        data["paymentType"] = this.paymentType;
+        data["note"] = this.note;
+        data["cacheKey"] = this.cacheKey;
+        return data;
+    }
+}
+
+export interface IUpdateSalePaymentCommand {
+    id: string;
+    saleId?: string;
+    receivedAmount?: number;
+    payingAmount?: number;
+    changeAmount?: number;
+    paymentType?: string;
+    note?: string | undefined;
+    cacheKey?: string;
+}
+
 export class PaginatedResponseOfSaleModel implements IPaginatedResponseOfSaleModel {
     items?: SaleModel[];
     pageNumber?: number;
@@ -12472,6 +13333,8 @@ export class SaleModel implements ISaleModel {
     discountType?: DiscountType;
     shippingCost?: number | undefined;
     grandTotal?: number;
+    paidAmount?: number;
+    dueAmount?: number;
     saleNote?: string | undefined;
     staffNote?: string | undefined;
     warehouseName?: string;
@@ -12508,6 +13371,8 @@ export class SaleModel implements ISaleModel {
             this.discountType = _data["discountType"];
             this.shippingCost = _data["shippingCost"];
             this.grandTotal = _data["grandTotal"];
+            this.paidAmount = _data["paidAmount"];
+            this.dueAmount = _data["dueAmount"];
             this.saleNote = _data["saleNote"];
             this.staffNote = _data["staffNote"];
             this.warehouseName = _data["warehouseName"];
@@ -12554,6 +13419,8 @@ export class SaleModel implements ISaleModel {
         data["discountType"] = this.discountType;
         data["shippingCost"] = this.shippingCost;
         data["grandTotal"] = this.grandTotal;
+        data["paidAmount"] = this.paidAmount;
+        data["dueAmount"] = this.dueAmount;
         data["saleNote"] = this.saleNote;
         data["staffNote"] = this.staffNote;
         data["warehouseName"] = this.warehouseName;
@@ -12593,6 +13460,8 @@ export interface ISaleModel {
     discountType?: DiscountType;
     shippingCost?: number | undefined;
     grandTotal?: number;
+    paidAmount?: number;
+    dueAmount?: number;
     saleNote?: string | undefined;
     staffNote?: string | undefined;
     warehouseName?: string;
@@ -12890,6 +13759,178 @@ export interface IUpsertSaleModel {
     staffNote?: string | undefined;
     saleDetails?: SaleDetailModel[];
     optionsDataSources?: { [key: string]: any; };
+}
+
+export class SaleInfoModel implements ISaleInfoModel {
+    id?: string;
+    saleDate?: Date;
+    referenceNo?: string | undefined;
+    warehouseId?: string;
+    customerId?: string;
+    billerId?: string;
+    attachmentUrl?: string | undefined;
+    saleStatusId?: string | undefined;
+    paymentStatusId?: string | undefined;
+    taxRate?: number | undefined;
+    taxAmount?: number | undefined;
+    discountAmount?: number | undefined;
+    discountRate?: number | undefined;
+    discountType?: DiscountType;
+    shippingCost?: number | undefined;
+    subTotal?: number;
+    grandTotal?: number;
+    saleNote?: string | undefined;
+    staffNote?: string | undefined;
+    warehouseName?: string;
+    customerName?: string;
+    saleStatus?: string;
+    paymentStatus?: string;
+    totalQuantity?: number;
+    totalDiscount?: number;
+    totalTaxAmount?: number;
+    totalItems?: string;
+    companyInfo?: CompanyInfoModel;
+    customer?: CustomerModel;
+    saleDetails?: SaleDetailModel[];
+    paymentDetails?: SalePaymentModel[];
+
+    constructor(data?: ISaleInfoModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.saleDate = _data["saleDate"] ? new Date(_data["saleDate"].toString()) : <any>undefined;
+            this.referenceNo = _data["referenceNo"];
+            this.warehouseId = _data["warehouseId"];
+            this.customerId = _data["customerId"];
+            this.billerId = _data["billerId"];
+            this.attachmentUrl = _data["attachmentUrl"];
+            this.saleStatusId = _data["saleStatusId"];
+            this.paymentStatusId = _data["paymentStatusId"];
+            this.taxRate = _data["taxRate"];
+            this.taxAmount = _data["taxAmount"];
+            this.discountAmount = _data["discountAmount"];
+            this.discountRate = _data["discountRate"];
+            this.discountType = _data["discountType"];
+            this.shippingCost = _data["shippingCost"];
+            this.subTotal = _data["subTotal"];
+            this.grandTotal = _data["grandTotal"];
+            this.saleNote = _data["saleNote"];
+            this.staffNote = _data["staffNote"];
+            this.warehouseName = _data["warehouseName"];
+            this.customerName = _data["customerName"];
+            this.saleStatus = _data["saleStatus"];
+            this.paymentStatus = _data["paymentStatus"];
+            this.totalQuantity = _data["totalQuantity"];
+            this.totalDiscount = _data["totalDiscount"];
+            this.totalTaxAmount = _data["totalTaxAmount"];
+            this.totalItems = _data["totalItems"];
+            this.companyInfo = _data["companyInfo"] ? CompanyInfoModel.fromJS(_data["companyInfo"]) : <any>undefined;
+            this.customer = _data["customer"] ? CustomerModel.fromJS(_data["customer"]) : <any>undefined;
+            if (Array.isArray(_data["saleDetails"])) {
+                this.saleDetails = [] as any;
+                for (let item of _data["saleDetails"])
+                    this.saleDetails!.push(SaleDetailModel.fromJS(item));
+            }
+            if (Array.isArray(_data["paymentDetails"])) {
+                this.paymentDetails = [] as any;
+                for (let item of _data["paymentDetails"])
+                    this.paymentDetails!.push(SalePaymentModel.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): SaleInfoModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new SaleInfoModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["saleDate"] = this.saleDate ? formatDate(this.saleDate) : <any>undefined;
+        data["referenceNo"] = this.referenceNo;
+        data["warehouseId"] = this.warehouseId;
+        data["customerId"] = this.customerId;
+        data["billerId"] = this.billerId;
+        data["attachmentUrl"] = this.attachmentUrl;
+        data["saleStatusId"] = this.saleStatusId;
+        data["paymentStatusId"] = this.paymentStatusId;
+        data["taxRate"] = this.taxRate;
+        data["taxAmount"] = this.taxAmount;
+        data["discountAmount"] = this.discountAmount;
+        data["discountRate"] = this.discountRate;
+        data["discountType"] = this.discountType;
+        data["shippingCost"] = this.shippingCost;
+        data["subTotal"] = this.subTotal;
+        data["grandTotal"] = this.grandTotal;
+        data["saleNote"] = this.saleNote;
+        data["staffNote"] = this.staffNote;
+        data["warehouseName"] = this.warehouseName;
+        data["customerName"] = this.customerName;
+        data["saleStatus"] = this.saleStatus;
+        data["paymentStatus"] = this.paymentStatus;
+        data["totalQuantity"] = this.totalQuantity;
+        data["totalDiscount"] = this.totalDiscount;
+        data["totalTaxAmount"] = this.totalTaxAmount;
+        data["totalItems"] = this.totalItems;
+        data["companyInfo"] = this.companyInfo ? this.companyInfo.toJSON() : <any>undefined;
+        data["customer"] = this.customer ? this.customer.toJSON() : <any>undefined;
+        if (Array.isArray(this.saleDetails)) {
+            data["saleDetails"] = [];
+            for (let item of this.saleDetails)
+                data["saleDetails"].push(item.toJSON());
+        }
+        if (Array.isArray(this.paymentDetails)) {
+            data["paymentDetails"] = [];
+            for (let item of this.paymentDetails)
+                data["paymentDetails"].push(item.toJSON());
+        }
+        return data;
+    }
+}
+
+export interface ISaleInfoModel {
+    id?: string;
+    saleDate?: Date;
+    referenceNo?: string | undefined;
+    warehouseId?: string;
+    customerId?: string;
+    billerId?: string;
+    attachmentUrl?: string | undefined;
+    saleStatusId?: string | undefined;
+    paymentStatusId?: string | undefined;
+    taxRate?: number | undefined;
+    taxAmount?: number | undefined;
+    discountAmount?: number | undefined;
+    discountRate?: number | undefined;
+    discountType?: DiscountType;
+    shippingCost?: number | undefined;
+    subTotal?: number;
+    grandTotal?: number;
+    saleNote?: string | undefined;
+    staffNote?: string | undefined;
+    warehouseName?: string;
+    customerName?: string;
+    saleStatus?: string;
+    paymentStatus?: string;
+    totalQuantity?: number;
+    totalDiscount?: number;
+    totalTaxAmount?: number;
+    totalItems?: string;
+    companyInfo?: CompanyInfoModel;
+    customer?: CustomerModel;
+    saleDetails?: SaleDetailModel[];
+    paymentDetails?: SalePaymentModel[];
 }
 
 export class CreateSaleCommand extends UpsertSaleModel implements ICreateSaleCommand {

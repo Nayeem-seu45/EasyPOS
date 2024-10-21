@@ -20,7 +20,9 @@ public record SaleModel
     public decimal? DiscountRate {get;set;} 
     public DiscountType DiscountType { get;set;} 
     public decimal? ShippingCost {get;set;} 
-    public decimal GrandTotal {get;set;} 
+    public decimal GrandTotal {get;set;}
+    public decimal PaidAmount { get; set; }
+    public decimal DueAmount { get; set; }
     public string? SaleNote {get;set;} 
     public string? StaffNote {get;set;}
 

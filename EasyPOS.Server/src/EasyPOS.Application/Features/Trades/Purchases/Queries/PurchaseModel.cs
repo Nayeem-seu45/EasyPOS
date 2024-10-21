@@ -27,7 +27,7 @@ public record PurchaseModel
 
     public string SupplierName { get; set; }
     public string PurchaseStatus { get; set; }
-    public string PaymentStatusId { get; set; }
+    public string PaymentStatus { get; set; }
 
     public List<PurchaseDetailModel> PurchaseDetails { get; set; } = [];
     public List<PurchasePaymentModel> PaymentDetails { get; set; } = [];

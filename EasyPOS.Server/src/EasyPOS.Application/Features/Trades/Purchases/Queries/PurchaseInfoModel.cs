@@ -30,6 +30,10 @@ public class PurchaseInfoModel
     public string SupplierName { get; set; }
     public string PurchaseStatus { get; set; }
     public string PaymentStatusId { get; set; }
+    public decimal TotalQuantity { get; set; } = 0;
+    public decimal TotalDiscount { get; set; } = 0;
+    public decimal TotalTaxAmount { get; set; } = 0;
+    public string TotalItems { get; set; } = "0";
 
     public CompanyInfoModel CompanyInfo { get; set; } = default!;
     public SupplierModel Supplier { get; set; } = default!;

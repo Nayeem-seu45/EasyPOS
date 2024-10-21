@@ -1,22 +1,22 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CommonConstants } from 'src/app/core/contants/common';
-import { PurchaseInfoModel, PurchasesClient } from 'src/app/modules/generated-clients/api-service';
+import { SaleInfoModel, SalesClient } from 'src/app/modules/generated-clients/api-service';
 import { CustomDialogService } from 'src/app/shared/services/custom-dialog.service';
 import { ToastService } from 'src/app/shared/services/toast.service';
 import { CommonUtils } from 'src/app/shared/Utilities/common-utilities';
 
 @Component({
-  selector: 'app-purchase-info-detail',
-  templateUrl: './purchase-info-detail.component.html',
-  styleUrl: './purchase-info-detail.component.scss',
-  providers: [PurchasesClient]
+  selector: 'app-sale-info-detail',
+  templateUrl: './sale-info-detail.component.html',
+  styleUrl: './sale-info-detail.component.scss',
+  providers: [SalesClient]
 })
-export class PurchaseInfoDetailComponent {
+export class SaleInfoDetailComponent {
   id: string;
-  item: PurchaseInfoModel;
+  item: SaleInfoModel;
 
-  constructor(private entityClient: PurchasesClient,
+  constructor(private entityClient: SalesClient,
     private activatedRoute: ActivatedRoute,
     private customDialogService: CustomDialogService,
     private toast: ToastService
@@ -39,11 +39,11 @@ export class PurchaseInfoDetailComponent {
     this.entityClient.getDetail(id).subscribe({
       next: (res: any) => {
         this.item = res;
+        console.log(res)
       },
       error: (error) => {
         this.toast.showError(CommonUtils.getErrorMessage(error));
       }
     });
   }
-
 }

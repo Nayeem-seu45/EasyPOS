@@ -84,7 +84,7 @@
                 </td>
                 <td >
                   <div class="text-right mr-2">
-                    {{ field.get('totalPrice').value }}
+                    {{ field.get('totalPrice').value | number:'1.2-2' }}
                   </div>
                 </td>
                 <td>
@@ -99,9 +99,9 @@
                 <td></td>
                 <td></td>
                 <!-- <td class="text-center">{{ getTotalUnitNetCost() }}</td> -->
-                <td class="text-center">{{ totalDiscount }}</td>
-                <td class="text-center">{{ totalTaxAmount }}</td>
-                <td class="text-right mr-2">{{ subTotal }}</td>
+                <td class="text-center">{{ totalDiscount | number:'1.2-2'}}</td>
+                <td class="text-center">{{ totalTaxAmount | number:'1.2-2'}}</td>
+                <td class="text-right mr-2">{{ subTotal | number:'1.2-2'}}</td>
                 <td></td>
               </tr>
             </ng-template>
@@ -159,7 +159,7 @@
                 <strong>Total</strong>
               </td>
               <td class="">
-                <span>{{ subTotal }}</span>
+                <span>{{ subTotal | number:'1.2-2'}}</span>
               </td>
             </tr>
             <tr>
@@ -167,7 +167,7 @@
                 <strong>Order Tax</strong>
               </td>
               <td class="">
-                <span>{{ orderTaxAmount }}</span>
+                <span>{{ orderTaxAmount | number:'1.2-2'}}</span>
               </td>
             </tr>
             <tr>
@@ -175,7 +175,7 @@
                 <strong>Order Discount</strong>
               </td>
               <td class="">
-                <span>{{ orderDiscountAmount }}</span>
+                <span>{{ orderDiscountAmount | number:'1.2-2'}}</span>
               </td>
             </tr>
             <tr>
@@ -183,7 +183,7 @@
                 <strong>Shipping Cost</strong>
               </td>
               <td class="">
-                <span>{{ shippingCostAmount }}</span>
+                <span>{{ shippingCostAmount | number:'1.2-2'}}</span>
               </td>
             </tr>
             <tr>
@@ -191,7 +191,7 @@
                 <strong>Grand Total</strong>
               </td>
               <td class="font-bold">
-                <span>{{ grandTotalAmount }}</span>
+                <span>{{ grandTotalAmount | number:'1.2-2'}}</span>
               </td>
             </tr>
           </tbody>

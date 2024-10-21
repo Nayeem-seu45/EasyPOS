@@ -9,11 +9,15 @@ import { UpdatePurchaseOrderDetailComponent } from "./components/update-purchase
 import { PurchasePaymentDetailComponent } from "./components/purchase-payment-detail/purchase-payment-detail.component";
 import { PurchasePaymentListComponent } from "./components/purchase-payment-list/purchase-payment-list.component";
 import { PurchaseInfoDetailComponent } from "./components/purchase-info-detail/purchase-info-detail.component";
+import { SaleInfoDetailComponent } from "./components/sale-info-detail/sale-info-detail.component";
+import { SalePaymentDetailComponent } from "./components/sale-payment-detail/sale-payment-detail.component";
+import { SalePaymentListComponent } from "./components/sale-payment-list/sale-payment-list.component";
 
 const routes: Routes = [
   {path: 'sales', component: SaleListComponent},
   {path: 'sale/:id', component: SaleDetailComponent},
   {path: 'add-sale', component: SaleDetailComponent},
+  {path: 'sale-detail/:id', component: SaleInfoDetailComponent},
   {path: 'purchases', component: PurchaseListComponent},
   {path: 'purchase/:id', component: PurchaseDetailComponent},
   {path: 'add-purchase', component: PurchaseDetailComponent},
@@ -29,11 +33,15 @@ export class TradesRoutingModule{}
 export const TradesRoutingComponents = [
   SaleListComponent,
   SaleDetailComponent,
+  SaleInfoDetailComponent,
+  SalePaymentListComponent,
+  SalePaymentDetailComponent,
+  UpdateSaleDetailComponent,
+
   PurchaseListComponent,
   PurchaseDetailComponent,
-  UpdateSaleDetailComponent,
+  PurchaseInfoDetailComponent,
   UpdatePurchaseOrderDetailComponent,
   PurchasePaymentDetailComponent,
   PurchasePaymentListComponent,
-  PurchaseInfoDetailComponent
 ];

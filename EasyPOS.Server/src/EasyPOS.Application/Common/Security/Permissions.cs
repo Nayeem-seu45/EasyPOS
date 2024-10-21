@@ -233,6 +233,14 @@ public static class Permissions
         public const string Edit = "Permissions.Sales.Edit";
         public const string Delete = "Permissions.Sales.Delete";
     }
+
+    public static class SalePayments
+    {
+        public const string View = "Permissions.SalePayments.View";
+        public const string Create = "Permissions.SalePayments.Create";
+        public const string Edit = "Permissions.SalePayments.Edit";
+        public const string Delete = "Permissions.SalePayments.Delete";
+    }
     #endregion
 
     #region Accounts
