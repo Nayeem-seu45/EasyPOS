@@ -1,0 +1,29 @@
+<div *ngIf="!hidden" class="cust-field">
+  <label class="label" *ngIf="label">
+    {{ label }}
+    <span class="required-star" *ngIf="required">*</span>
+  </label>
+  <p-selectButton 
+    [disabled]="disabled"
+    [autofocus]="autofocus"
+    [tabindex]="tabindex"
+    [options]="options"
+    [optionValue]="optionValue"
+    [optionLabel]="optionLabel"
+    [optionDisabled]="optionDisabled"
+    [unselectable]="unselectable"
+    [multiple]="multiple"
+    [allowEmpty]="allowEmpty"
+    [style]="style"
+    [styleClass]="styleClass"
+    [dataKey]="dataKey"
+    [(ngModel)]="value"
+    (onChange)="onInputChange($event)"
+    (onOptionClick)="handleOptionClick($event)"
+    (onBlur)="onBlurEvent()"
+  >
+  <ng-template *ngIf="showOnlyIcon" let-item pTemplate>
+    <i [class]="item.icon"></i>
+  </ng-template>
+</p-selectButton>
+</div>

@@ -146,14 +146,14 @@ export class AppPageDetailComponent implements OnInit {
       rowActions: this.form.get('rowActions').value,
       appPageFields: this.form.get('appPageFields').value,
     };
-  
+
     // Reset showProperties and sort by sortOrder
     ['toolbarActions', 'rowActions', 'appPageFields'].forEach((key) => {
       pageLayout[key] = pageLayout[key]
         .map(item => ({ ...item, showProperties: false }))
         .sort((a, b) => a.sortOrder - b.sortOrder);
     });
-  
+
     return pageLayout;
   }
 
@@ -408,6 +408,35 @@ export class AppPageDetailComponent implements OnInit {
     { 'id': 'center', 'name': 'Center' },
     { 'id': 'right', 'name': 'Right' }
   ];
+
+  justifyOptions: any[] = [
+    { id: 'left', name: 'Left', icon: 'pi pi-align-left' },
+    { id: 'right', name: 'Right', icon: 'pi pi-align-right' },
+    { id: 'center', name: 'Center', icon: 'pi pi-align-center' },
+    { id: 'justify', name: 'Justify', icon: 'pi pi-align-justify' }
+  ];
+
+  // justifyOptions: any[] = [
+  //   { id: 'left', name: 'Left' },
+  //   { id: 'right', name: 'Right' },
+  //   { id: 'center', name: 'Center' },
+  //   { id: 'justify', name: 'Justify' }
+  // ];
+
+
+  // justifyOptions: any[] = [
+  //   { name: 'Left', value: 'left' },
+  //   { name: 'Right', value: 'right' },
+  //   { name: 'Center', value: 'center' },
+  //   { name: 'Justify', value: 'justify' }
+
+  // { icon: 'pi pi-align-left', value: 'left' },
+  // { icon: 'pi pi-align-right', value: 'right' },
+  // { icon: 'pi pi-align-center', value: 'center' },
+  // { icon: 'pi pi-align-justify', value: 'justify' }
+
+  // ];
+
 
   filterTypeSelectList = [
     { 'id': 'string', 'name': 'String' },

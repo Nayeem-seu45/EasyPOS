@@ -70,6 +70,7 @@ import { AvatarModule } from 'primeng/avatar';
 import { SidebarModule } from 'primeng/sidebar';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { SidebarService } from './services/sidebar.service';
+import { SelectButtonComponent } from './components/select-button/select-button.component';
 
 
 @NgModule({
@@ -105,7 +106,8 @@ import { SidebarService } from './services/sidebar.service';
 		ImageComponent,
 		SplitButtonComponent,
 		CustomMenuComponent,
-		SidebarComponent
+		SidebarComponent,
+		SelectButtonComponent
 	],
 	imports: [
 		CommonModule,
@@ -188,7 +190,8 @@ import { SidebarService } from './services/sidebar.service';
 		ImageComponent,
 		SplitButtonComponent,
 		CustomMenuComponent,
-		SidebarComponent
+		SidebarComponent,
+		SelectButtonComponent
 	]
 })
 export class AppSharedModule { }

@@ -114,6 +114,7 @@
               </div>
               <div class="field col-4">
                 <app-input-select [options]="alignSelectList" formControlName="position" label="Position" />
+                <!-- <app-select-button [options]="justifyOptions" formControlName="position" label="Position" optionLabel="icon" optionValue="value" [showOnlyIcon]="true" /> -->
               </div>
               <div class="field col-4">
                 <app-input-number formControlName="sortOrder" label="Sort Order" textAlign="center" [showButtons]="true" buttonLayout="horizontal"
@@ -303,7 +304,8 @@
                 <app-input-text formControlName="dbField" label="Db Field" [required]="true" />
               </div>
               <div class="field col-4">
-                <app-input-select [options]="alignSelectList" formControlName="textAlign" label="Text Align" />
+                <!-- <app-input-select [options]="alignSelectList" formControlName="textAlign" label="Text Align" /> -->
+                <app-select-button [options]="justifyOptions" formControlName="textAlign" label="Text Align" [showOnlyIcon]="true" />
               </div>
               <div class="field col-4">
                 <app-input-number formControlName="sortOrder" label="Sort Order" textAlign="center" [showButtons]="true" buttonLayout="horizontal"
