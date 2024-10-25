@@ -11735,6 +11735,7 @@ export class PurchaseModel implements IPurchaseModel {
     supplierName?: string;
     purchaseStatus?: string;
     paymentStatus?: string;
+    paymentStatusTag?: string;
     purchaseDetails?: PurchaseDetailModel[];
     paymentDetails?: PurchasePaymentModel[];
     optionsDataSources?: { [key: string]: any; };
@@ -11771,6 +11772,7 @@ export class PurchaseModel implements IPurchaseModel {
             this.supplierName = _data["supplierName"];
             this.purchaseStatus = _data["purchaseStatus"];
             this.paymentStatus = _data["paymentStatus"];
+            this.paymentStatusTag = _data["paymentStatusTag"];
             if (Array.isArray(_data["purchaseDetails"])) {
                 this.purchaseDetails = [] as any;
                 for (let item of _data["purchaseDetails"])
@@ -11821,6 +11823,7 @@ export class PurchaseModel implements IPurchaseModel {
         data["supplierName"] = this.supplierName;
         data["purchaseStatus"] = this.purchaseStatus;
         data["paymentStatus"] = this.paymentStatus;
+        data["paymentStatusTag"] = this.paymentStatusTag;
         if (Array.isArray(this.purchaseDetails)) {
             data["purchaseDetails"] = [];
             for (let item of this.purchaseDetails)
@@ -11864,6 +11867,7 @@ export interface IPurchaseModel {
     supplierName?: string;
     purchaseStatus?: string;
     paymentStatus?: string;
+    paymentStatusTag?: string;
     purchaseDetails?: PurchaseDetailModel[];
     paymentDetails?: PurchasePaymentModel[];
     optionsDataSources?: { [key: string]: any; };
@@ -17969,6 +17973,7 @@ export class AppPageFieldModel implements IAppPageFieldModel {
     linkValueFieldName?: string;
     bgColor?: string;
     color?: string;
+    tag?: string;
     isVisible?: boolean;
     sortOrder?: number;
     isActive?: boolean;
@@ -18001,6 +18006,7 @@ export class AppPageFieldModel implements IAppPageFieldModel {
             this.linkValueFieldName = _data["linkValueFieldName"];
             this.bgColor = _data["bgColor"];
             this.color = _data["color"];
+            this.tag = _data["tag"];
             this.isVisible = _data["isVisible"];
             this.sortOrder = _data["sortOrder"];
             this.isActive = _data["isActive"];
@@ -18033,6 +18039,7 @@ export class AppPageFieldModel implements IAppPageFieldModel {
         data["linkValueFieldName"] = this.linkValueFieldName;
         data["bgColor"] = this.bgColor;
         data["color"] = this.color;
+        data["tag"] = this.tag;
         data["isVisible"] = this.isVisible;
         data["sortOrder"] = this.sortOrder;
         data["isActive"] = this.isActive;
@@ -18058,6 +18065,7 @@ export interface IAppPageFieldModel {
     linkValueFieldName?: string;
     bgColor?: string;
     color?: string;
+    tag?: string;
     isVisible?: boolean;
     sortOrder?: number;
     isActive?: boolean;

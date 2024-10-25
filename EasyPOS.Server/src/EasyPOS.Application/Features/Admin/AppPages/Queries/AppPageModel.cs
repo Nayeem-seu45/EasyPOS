@@ -38,6 +38,7 @@ public record AppPageFieldModel
     public string LinkValueFieldName { get; set; } = string.Empty;
     public string BgColor { get; set; } = string.Empty;
     public string Color { get; set; } = string.Empty;
+    public string Tag { get; set; } = string.Empty;
     public bool IsVisible { get; set; } = true;
     public int SortOrder { get; set; }
     public bool IsActive { get; set; } = true;

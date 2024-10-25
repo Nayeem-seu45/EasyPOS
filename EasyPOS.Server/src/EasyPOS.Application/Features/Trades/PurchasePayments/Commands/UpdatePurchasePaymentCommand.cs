@@ -1,4 +1,6 @@
-﻿namespace EasyPOS.Application.Features.Trades.PurchasePayments.Commands;
+﻿using EasyPOS.Application.Features.Trades.Purchases.Shared;
+
+namespace EasyPOS.Application.Features.Trades.PurchasePayments.Commands;
 
 public record UpdatePurchasePaymentCommand(
     Guid Id,
@@ -14,7 +16,8 @@ public record UpdatePurchasePaymentCommand(
 }
 
 internal sealed class UpdatePurchasePaymentCommandHandler(
-    IApplicationDbContext dbContext) 
+    IApplicationDbContext dbContext,
+    ICommonQueryService commonQueryService) 
     : ICommandHandler<UpdatePurchasePaymentCommand>
 {
     public async Task<Result> Handle(UpdatePurchasePaymentCommand request, CancellationToken cancellationToken)
@@ -34,6 +37,8 @@ internal sealed class UpdatePurchasePaymentCommandHandler(
 
         purchase.PaidAmount += (entity.PayingAmount - previousPaymentAmount);
         purchase.DueAmount = purchase.GrandTotal - purchase.PaidAmount;
+        purchase.PaymentStatusId = await PurchaseSharedService.GetPurchasePaymentId(commonQueryService, purchase);
+
 
         await dbContext.SaveChangesAsync(cancellationToken);
 

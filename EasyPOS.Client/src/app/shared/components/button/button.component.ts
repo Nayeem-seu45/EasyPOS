@@ -38,12 +38,14 @@ export class ButtonComponent {
   @Output() onFocus = new EventEmitter<FocusEvent>();
   @Output() onBlur = new EventEmitter<FocusEvent>();
 
-  get asSeverity(): SeverityType {
-    return this.severity as SeverityType;
-  }  
+  severityType: SeverityType = 'primary';
 
-  handleClick() {
-    this.onClick.emit();
+  ngOnChanges() {
+    this.severityType = this.severity as SeverityType;
+  } 
+
+  handleClick(event) {
+    this.onClick.emit(event);
   }
 
   handleFocus() {

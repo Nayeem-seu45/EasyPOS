@@ -25,7 +25,8 @@ internal sealed class GetPurchaseListQueryHandler(ISqlConnectionFactory sqlConne
                 ISNULL(t.DueAmount, 0) AS {nameof(PurchaseModel.DueAmount)},
                 s.Name AS {nameof(PurchaseModel.SupplierName)},
                 ps.Name AS {nameof(PurchaseModel.PurchaseStatus)},
-                pmns.Name AS {nameof(PurchaseModel.PaymentStatus)}
+                pmns.Name AS {nameof(PurchaseModel.PaymentStatus)},
+                [dbo].[fn_PaymentStatusTag](pmns.Name) AS {nameof(PurchaseModel.PaymentStatusTag)}
             FROM dbo.Purchases t
             LEFT JOIN dbo.Suppliers s ON s.Id = t.SupplierId
             LEFT JOIN dbo.LookupDetails ps ON ps.Id = t.PurchaseStatusId

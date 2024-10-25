@@ -7631,6 +7631,9 @@
           "paymentStatus": {
             "type": "string"
           },
+          "paymentStatusTag": {
+            "type": "string"
+          },
           "purchaseDetails": {
             "type": "array",
             "items": {
@@ -11224,6 +11227,9 @@
             "type": "string"
           },
           "color": {
+            "type": "string"
+          },
+          "tag": {
             "type": "string"
           },
           "isVisible": {

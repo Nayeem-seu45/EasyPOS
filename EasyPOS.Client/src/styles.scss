@@ -25,3 +25,9 @@ $gutter: 1rem; //for primeflex grid system
 .field{
   margin-bottom: 0;
 }
+
+/* Define custom classes in your styles.css or component CSS */
+.p-tag.urgent {
+  background-color: #f726db; /* Replace with your desired color */
+  color: #fff;
+}

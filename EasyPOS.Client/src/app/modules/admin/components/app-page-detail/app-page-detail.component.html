@@ -304,7 +304,7 @@
                 <app-input-text formControlName="dbField" label="Db Field" [required]="true" />
               </div>
               <div class="field col-4">
-                <!-- <app-input-select [options]="alignSelectList" formControlName="textAlign" label="Text Align" /> -->
+                <!-- <app-input-select [options]="justifyOptions" formControlName="textAlign" label="Text Align" /> -->
                 <app-select-button [options]="justifyOptions" formControlName="textAlign" label="Text Align" [showOnlyIcon]="true" />
               </div>
               <div class="field col-4">
@@ -327,7 +327,7 @@
                 <app-input-text formControlName="linkValueFieldName" label="Link Value Field Name" />
               </div>
               <div class="field col-4">
-                <app-input-text formControlName="bgColor" label="Background Color" />
+                <app-input-text formControlName="tag" label="Tag Name" />
               </div>
               <div class="field col-4">
                 <app-input-switch formControlName="isVisible" label="Visible" />

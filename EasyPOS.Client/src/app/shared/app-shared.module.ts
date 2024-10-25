@@ -70,6 +70,7 @@ import { SidebarModule } from 'primeng/sidebar';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { SidebarService } from './services/sidebar.service';
 import { SelectButtonComponent } from './components/select-button/select-button.component';
+import { TagComponent } from './components/tag/tag.component';
 
 
 @NgModule({
@@ -105,7 +106,8 @@ import { SelectButtonComponent } from './components/select-button/select-button.
 		SplitButtonComponent,
 		CustomMenuComponent,
 		SidebarComponent,
-		SelectButtonComponent
+		SelectButtonComponent,
+		TagComponent
 	],
 	imports: [
 		CommonModule,
@@ -188,7 +190,8 @@ import { SelectButtonComponent } from './components/select-button/select-button.
 		SplitButtonComponent,
 		CustomMenuComponent,
 		SidebarComponent,
-		SelectButtonComponent
+		SelectButtonComponent,
+		TagComponent
 	]
 })
 export class AppSharedModule { }

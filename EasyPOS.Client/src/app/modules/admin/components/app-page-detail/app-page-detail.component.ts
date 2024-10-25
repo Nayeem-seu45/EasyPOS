@@ -367,7 +367,7 @@ export class AppPageDetailComponent implements OnInit {
       fieldType: ['string'],
       dbField: [''],
       format: [''],
-      textAlign: ['center'],
+      textAlign: ['text-center'],
       isSortable: [true],
       isFilterable: [false],
       isGlobalFilterable: [false],
@@ -378,6 +378,7 @@ export class AppPageDetailComponent implements OnInit {
       linkValueFieldName: [''],
       bgColor: [''],
       color: [''],
+      tag: [''],
       isVisible: [true],
       isActive: [true],
       sortOrder: [sortOrder],
@@ -410,10 +411,10 @@ export class AppPageDetailComponent implements OnInit {
   ];
 
   justifyOptions: any[] = [
-    { id: 'left', name: 'Left', icon: 'pi pi-align-left' },
-    { id: 'right', name: 'Right', icon: 'pi pi-align-right' },
-    { id: 'center', name: 'Center', icon: 'pi pi-align-center' },
-    { id: 'justify', name: 'Justify', icon: 'pi pi-align-justify' }
+    { id: 'text-left', name: 'Left', icon: 'pi pi-align-left' },
+    { id: 'text-right', name: 'Right', icon: 'pi pi-align-right' },
+    { id: 'text-center', name: 'Center', icon: 'pi pi-align-center' },
+    { id: 'text-justify', name: 'Justify', icon: 'pi pi-align-justify' }
   ];
 
   // justifyOptions: any[] = [
