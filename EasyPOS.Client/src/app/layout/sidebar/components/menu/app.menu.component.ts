@@ -30,6 +30,14 @@ export class AppMenuComponent implements OnInit {
                 }, 2000);
             }
         });
+
+        this.signalrNotificationService.menuOrderChanged.subscribe({
+            next: () => {
+                setTimeout(() => {
+                    this.getSidebarMenus();
+                }, 2000);
+            }
+        });
     }
 
     ngOnInit() {

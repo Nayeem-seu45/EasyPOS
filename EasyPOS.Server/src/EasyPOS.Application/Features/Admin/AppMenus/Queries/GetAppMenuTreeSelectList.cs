@@ -39,6 +39,7 @@ internal sealed class GetAppMenuTreeSelectListHandler(ISqlConnectionFactory sqlC
                 M.Icon AS {nameof(AppMenuModel.Icon)},
                 M.OrderNo AS {nameof(AppMenuModel.OrderNo)}
             FROM dbo.AppMenus AS M
+            ORDER BY M.OrderNo
             """;
 
         var appMenus = await connection.QueryAsync<AppMenu>(sql);
@@ -62,6 +63,7 @@ internal sealed class GetAppMenuTreeSelectListHandler(ISqlConnectionFactory sqlC
                     OrderNo = x.OrderNo,
                     Children = BuildTree(x.Id)
                 })
+                .OrderBy(x => x.OrderNo)
                 .ToList();
         }
 

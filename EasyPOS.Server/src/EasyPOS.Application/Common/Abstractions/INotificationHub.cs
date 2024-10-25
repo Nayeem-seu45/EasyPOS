@@ -6,4 +6,5 @@ public interface INotificationHub
 {
     Task ReceiveNotification(AppNotificationModel notification);
     Task ReceiveRolePermissionNotify();
+    Task ReceiveMenuOrderChangeNotify();
 }

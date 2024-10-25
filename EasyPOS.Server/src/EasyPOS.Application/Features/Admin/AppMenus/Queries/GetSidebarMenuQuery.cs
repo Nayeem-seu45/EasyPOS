@@ -95,6 +95,7 @@ internal sealed class GetSidebarMenuQueryHandler(ISqlConnectionFactory sqlConnec
                     ParentLabel = x.ParentLabel,
                     Items = BuildTree(x.Id)
                 })
+                .OrderBy(x => x.OrderNo)
                 .ToList();
         }
 

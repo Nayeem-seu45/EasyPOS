@@ -10,6 +10,7 @@ export class NotificationService {
   private hubConnection: signalR.HubConnection;
   public newNotification: Subject<AppNotificationModel> = new Subject<AppNotificationModel>();
   public permissionChanged: Subject<boolean> = new Subject<boolean>();
+  public menuOrderChanged: Subject<boolean> = new Subject<boolean>();
 
   constructor(private authService: AuthService) {
     this.hubConnection = new signalR.HubConnectionBuilder()
@@ -21,13 +22,17 @@ export class NotificationService {
       .build();
 
     this.hubConnection.on('ReceiveNotification', (notification: AppNotificationModel) => {
-      if(notification.recieverId?.toLowerCase() === this.authService.getUserId()?.toLowerCase()){
+      if (notification.recieverId?.toLowerCase() === this.authService.getUserId()?.toLowerCase()) {
         this.newNotification.next(notification);
       }
     });
 
     this.hubConnection.on('ReceiveRolePermissionNotify', () => {
-        this.permissionChanged.next(true);
+      this.permissionChanged.next(true);
+    });
+
+    this.hubConnection.on('ReceiveMenuOrderChangeNotify', () => {
+      this.menuOrderChanged.next(true);
     });
 
     this.startConnection();

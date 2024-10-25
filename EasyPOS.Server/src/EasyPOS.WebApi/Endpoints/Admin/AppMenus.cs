@@ -1,9 +1,12 @@
-﻿using EasyPOS.Application.Common.Extensions;
+﻿using EasyPOS.Application.Common.Abstractions;
+using EasyPOS.Application.Common.Extensions;
 using EasyPOS.Application.Common.Models;
 using EasyPOS.Application.Features.Admin.AppMenus.Commands;
 using EasyPOS.Application.Features.Admin.AppMenus.Queries;
 using EasyPOS.Application.Features.Common.Queries;
 using EasyPOS.Domain.Shared;
+using EasyPOS.Infrastructure.Communications;
+using Microsoft.AspNetCore.SignalR;
 
 namespace EasyPOS.WebApi.Endpoints.Admin;
 
@@ -42,8 +45,8 @@ public class AppMenus : EndpointGroupBase
             .Produces(StatusCodes.Status204NoContent)
             .Produces<ProblemDetails>(StatusCodes.Status400BadRequest);
 
-        group.MapPost("GetMenuTreeSelect", GetMenuTreeSelect)
-            .WithName("GetMenuTreeSelect")
+        group.MapPost("GetAllMenuAsTree", GetAllMenuAsTree)
+            .WithName("GetAllMenuAsTree")
             .Produces<List<TreeNodeModel>>(StatusCodes.Status200OK);
 
         group.MapPost("ReorderAppMenus", ReorderAppMenus)
@@ -73,7 +76,7 @@ public class AppMenus : EndpointGroupBase
         return TypedResults.Ok(result.Value);
     }
 
-    public async Task<IResult> GetMenuTreeSelect(ISender sender)
+    public async Task<IResult> GetAllMenuAsTree(ISender sender)
     {
         var result = await sender.Send(new GetAppMenuTreeSelectList()).ConfigureAwait(false);
         return TypedResults.Ok(result.Value);
@@ -133,9 +136,17 @@ public class AppMenus : EndpointGroupBase
              onFailure: result.ToProblemDetails);
     }
 
-    public async Task<IResult> ReorderAppMenus(ISender sender, UpdateAppMenuOrderCommand command)
+    public async Task<IResult> ReorderAppMenus(
+        ISender sender,
+        IHubContext<NotificationHub, INotificationHub> signalrContext,
+        UpdateAppMenuOrderCommand command)
     {
         var result = await sender.Send(command);
+
+        if (result.IsSuccess)
+        {
+            await signalrContext.Clients.All.ReceiveMenuOrderChangeNotify();
+        }
 
         return result.Match(
              onSuccess: () => Results.NoContent(),

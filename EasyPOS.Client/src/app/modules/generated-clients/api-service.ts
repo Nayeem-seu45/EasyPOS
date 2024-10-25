@@ -7813,7 +7813,7 @@ export interface IAppMenusClient {
     create(command: CreateAppMenuCommand): Observable<string>;
     update(command: UpdateAppMenuCommand): Observable<void>;
     delete(id: string): Observable<void>;
-    getMenuTreeSelect(): Observable<TreeNodeModel[]>;
+    getAllMenuAsTree(): Observable<TreeNodeModel[]>;
     reorderAppMenus(command: UpdateAppMenuOrderCommand): Observable<void>;
 }
 
@@ -8175,8 +8175,8 @@ export class AppMenusClient implements IAppMenusClient {
         return _observableOf(null as any);
     }
 
-    getMenuTreeSelect(): Observable<TreeNodeModel[]> {
-        let url_ = this.baseUrl + "/api/AppMenus/GetMenuTreeSelect";
+    getAllMenuAsTree(): Observable<TreeNodeModel[]> {
+        let url_ = this.baseUrl + "/api/AppMenus/GetAllMenuAsTree";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -8189,11 +8189,11 @@ export class AppMenusClient implements IAppMenusClient {
         };
 
         return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGetMenuTreeSelect(response_);
+            return this.processGetAllMenuAsTree(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processGetMenuTreeSelect(response_ as any);
+                    return this.processGetAllMenuAsTree(response_ as any);
                 } catch (e) {
                     return _observableThrow(e) as any as Observable<TreeNodeModel[]>;
                 }
@@ -8202,7 +8202,7 @@ export class AppMenusClient implements IAppMenusClient {
         }));
     }
 
-    protected processGetMenuTreeSelect(response: HttpResponseBase): Observable<TreeNodeModel[]> {
+    protected processGetAllMenuAsTree(response: HttpResponseBase): Observable<TreeNodeModel[]> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :

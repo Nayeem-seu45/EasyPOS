@@ -1,28 +1,21 @@
 import { Injectable, Type } from '@angular/core';
-import { Subject, Observable } from 'rxjs';
-import { SidebarComponent } from '../components/sidebar/sidebar.component';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SidebarService {
-  private visibilityChange = new Subject<boolean>();
-  private closeSidebarSubject = new Subject<any>();
-  private sidebarComponentRef: SidebarComponent | null = null;
+  private sidebarState = new Subject<{ component: Type<any>, data?: any, config?: any }>();
+  sidebarState$ = this.sidebarState.asObservable();
 
-  openSidebar<T>(component: Type<T>, inputs?: Partial<T>): Observable<any> {
-    this.visibilityChange.next(true);
+  private sidebarClose = new Subject<any>();
+  sidebarClose$ = this.sidebarClose.asObservable();
 
-
-    return this.closeSidebarSubject.asObservable();
+  open(component: Type<any>, data?: any, config?: any) {
+    this.sidebarState.next({ component, data, config });
   }
 
-  closeSidebar(result?: any) {
-    this.visibilityChange.next(false);
-    this.closeSidebarSubject.next(result);
-  }
-
-  getVisibilityChange(): Observable<boolean> {
-    return this.visibilityChange.asObservable();
+  close(returnData?: any) {
+    this.sidebarClose.next(returnData);
   }
 }

@@ -155,7 +155,7 @@ import { SidebarService } from './services/sidebar.service';
 		DialogService,
 		CustomDialogService,
 		ToastService,
-		SidebarService
+		// SidebarService
 	],
 	exports: [
 		ConfirmDialogComponent,

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { TreeDragDropService, TreeNode } from 'primeng/api';
 import { AppMenusClient, TreeNodeModel, UpdateAppMenuOrderCommand } from 'src/app/modules/generated-clients/api-service';
 import { CustomDialogService } from 'src/app/shared/services/custom-dialog.service';
+import { SidebarService } from 'src/app/shared/services/sidebar.service';
 import { ToastService } from 'src/app/shared/services/toast.service';
 import { CommonUtils } from 'src/app/shared/Utilities/common-utilities';
 
@@ -17,8 +18,8 @@ export class ReorderAppMenusComponent implements OnInit {
   updatedMenus!: TreeNodeModel[];
 
   constructor(public entityClient: AppMenusClient,
-    private customDialogService: CustomDialogService,
-    private toast: ToastService
+    private toast: ToastService,
+    private sidebarService: SidebarService
   ) {
 
   }
@@ -28,7 +29,7 @@ export class ReorderAppMenusComponent implements OnInit {
   }
 
   private getMenuTree() {
-    this.entityClient.getMenuTreeSelect().subscribe({
+    this.entityClient.getAllMenuAsTree().subscribe({
       next: (treeNodes: TreeNodeModel[]) => {
         this.appMenus = treeNodes;
         console.log(this.appMenus);
@@ -39,7 +40,7 @@ export class ReorderAppMenusComponent implements OnInit {
   }
 
   cancel() {
-    this.customDialogService.closeLastDialog(false);
+    this.sidebarService.close(false);
   }
 
   onNodeDrop(event: any) {
@@ -56,6 +57,7 @@ export class ReorderAppMenusComponent implements OnInit {
     this.entityClient.reorderAppMenus(command).subscribe({
       next: () => {
         this.toast.updated();
+        this.sidebarService.close(true);
       }, error: (error) => {
         this.toast.showError(CommonUtils.getErrorMessage(error));
       }

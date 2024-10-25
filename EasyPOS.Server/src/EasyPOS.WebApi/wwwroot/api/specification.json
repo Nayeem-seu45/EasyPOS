@@ -5543,12 +5543,12 @@
         ]
       }
     },
-    "/api/AppMenus/GetMenuTreeSelect": {
+    "/api/AppMenus/GetAllMenuAsTree": {
       "post": {
         "tags": [
           "AppMenus"
         ],
-        "operationId": "GetMenuTreeSelect",
+        "operationId": "GetAllMenuAsTree",
         "responses": {
           "200": {
             "description": "",

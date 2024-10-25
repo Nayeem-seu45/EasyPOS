@@ -1,5 +1,4 @@
 <p-sidebar
-  *ngIf="visible"
   [(visible)]="visible"
   [appendTo]="appendTo"
   [blockScroll]="blockScroll"
@@ -17,7 +16,16 @@
   [fullScreen]="fullScreen"
   (onShow)="handleShow()"
   (onHide)="handleHide()"
-  (visibleChange)="handleVisibleChange($event)"
->
-  <ng-container *ngTemplateOutlet="template; context: { sidebar: this }"></ng-container>
+  (visibleChange)="handleVisibleChange($event)">
+  <ng-template pTemplate="header">
+    <div class="flex align-items-center gap-2">
+        <span [class]="titleIcon"></span>
+        <span class="font-bold">
+            {{title}}
+        </span>
+    </div>
+</ng-template>
+<div style="margin-top: 1rem">
+  <ng-container  #sidebarContent></ng-container>
+</div>
 </p-sidebar>
