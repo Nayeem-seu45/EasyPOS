@@ -43,17 +43,11 @@ export class ReorderAppMenusComponent implements OnInit {
   }
 
   onNodeDrop(event: any) {
-    console.log(event)
-    const dragNode: TreeNodeModel = event.dragNode;
-    const dropNode: TreeNodeModel = event.dropNode;
-    const dragNodeCurrentIndex = event.index;
+    // const dragNode: TreeNodeModel = event.dragNode;
+    // const dropNode: TreeNodeModel = event.dropNode;
+    // const dragNodeCurrentIndex = event.index;
 
-    // Clone appMenus without recursive parent-child references
     this.updatedMenus = this.cloneTreeNodes(this.appMenus);
-    console.log(this.updatedMenus)
-    
-    // const draggedNode = this.updatedMenus.find(x => x.key === dragNode.key);
-    // console.log(draggedNode)
   }
 
   saveChangesOrder() {

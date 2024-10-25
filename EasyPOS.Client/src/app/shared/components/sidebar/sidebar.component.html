@@ -1,0 +1,23 @@
+<p-sidebar
+  *ngIf="visible"
+  [(visible)]="visible"
+  [appendTo]="appendTo"
+  [blockScroll]="blockScroll"
+  [style]="style"
+  [styleClass]="styleClass"
+  [ariaCloseLabel]="ariaCloseLabel"
+  [autoZIndex]="autoZIndex"
+  [baseZIndex]="baseZIndex"
+  [modal]="modal"
+  [dismissible]="dismissible"
+  [showCloseIcon]="showCloseIcon"
+  [closeOnEscape]="closeOnEscape"
+  [transitionOptions]="transitionOptions"
+  [position]="position"
+  [fullScreen]="fullScreen"
+  (onShow)="handleShow()"
+  (onHide)="handleHide()"
+  (visibleChange)="handleVisibleChange($event)"
+>
+  <ng-container *ngTemplateOutlet="template; context: { sidebar: this }"></ng-container>
+</p-sidebar>

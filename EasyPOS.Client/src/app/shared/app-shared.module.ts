@@ -67,6 +67,9 @@ import { CustomMenuComponent } from './components/custom-menu/custom-menu.compon
 import { MenuModule } from 'primeng/menu';
 import { BadgeModule } from 'primeng/badge';
 import { AvatarModule } from 'primeng/avatar';
+import { SidebarModule } from 'primeng/sidebar';
+import { SidebarComponent } from './components/sidebar/sidebar.component';
+import { SidebarService } from './services/sidebar.service';
 
 
 @NgModule({
@@ -101,7 +104,8 @@ import { AvatarModule } from 'primeng/avatar';
 		ProgressBarComponent,
 		ImageComponent,
 		SplitButtonComponent,
-		CustomMenuComponent
+		CustomMenuComponent,
+		SidebarComponent
 	],
 	imports: [
 		CommonModule,
@@ -141,7 +145,8 @@ import { AvatarModule } from 'primeng/avatar';
 		SplitButtonModule ,
 		MenuModule,
 		BadgeModule,
-		AvatarModule
+		AvatarModule,
+		SidebarModule 
 
 	],
 	providers: [
@@ -149,7 +154,8 @@ import { AvatarModule } from 'primeng/avatar';
 		ConfirmationService,
 		DialogService,
 		CustomDialogService,
-		ToastService
+		ToastService,
+		SidebarService
 	],
 	exports: [
 		ConfirmDialogComponent,
@@ -181,7 +187,8 @@ import { AvatarModule } from 'primeng/avatar';
 		InputSelectButtonComponent,
 		ImageComponent,
 		SplitButtonComponent,
-		CustomMenuComponent
+		CustomMenuComponent,
+		SidebarComponent
 	]
 })
 export class AppSharedModule { }
