@@ -1,11 +1,4 @@
-﻿using EasyPOS.Application.Common.Abstractions;
-using EasyPOS.Application.Common.Abstractions.Caching;
-using EasyPOS.Application.Common.Abstractions.Messaging;
-using EasyPOS.Application.Common.Constants;
-using EasyPOS.Domain.Shared;
-using Mapster;
-
-namespace EasyPOS.Application.Features.Admin.AppMenus.Commands;
+﻿namespace EasyPOS.Application.Features.Admin.AppMenus.Commands;
 
 public record UpdateAppMenuCommand(
     Guid Id,

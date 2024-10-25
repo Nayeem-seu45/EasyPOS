@@ -3076,7 +3076,7 @@ export class PurchasesClient implements IPurchasesClient {
 }
 
 export interface ITreeNodeListsClient {
-    getAllPermissionNodeList(allowCache: boolean | null | undefined): Observable<TreeNodeModel[]>;
+    getAllPermissionNodeList(allowCache: boolean | null | undefined): Observable<DynamicTreeNodeModel[]>;
     getAllAppMenuTreeSelectList(allowCache: boolean | null | undefined): Observable<TreeNodeModel[]>;
 }
 
@@ -3091,7 +3091,7 @@ export class TreeNodeListsClient implements ITreeNodeListsClient {
         this.baseUrl = baseUrl ?? "";
     }
 
-    getAllPermissionNodeList(allowCache: boolean | null | undefined): Observable<TreeNodeModel[]> {
+    getAllPermissionNodeList(allowCache: boolean | null | undefined): Observable<DynamicTreeNodeModel[]> {
         let url_ = this.baseUrl + "/api/TreeNodeLists/GetAllPermissionNodeList?";
         if (allowCache !== undefined && allowCache !== null)
             url_ += "allowCache=" + encodeURIComponent("" + allowCache) + "&";
@@ -3113,14 +3113,14 @@ export class TreeNodeListsClient implements ITreeNodeListsClient {
                 try {
                     return this.processGetAllPermissionNodeList(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<TreeNodeModel[]>;
+                    return _observableThrow(e) as any as Observable<DynamicTreeNodeModel[]>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<TreeNodeModel[]>;
+                return _observableThrow(response_) as any as Observable<DynamicTreeNodeModel[]>;
         }));
     }
 
-    protected processGetAllPermissionNodeList(response: HttpResponseBase): Observable<TreeNodeModel[]> {
+    protected processGetAllPermissionNodeList(response: HttpResponseBase): Observable<DynamicTreeNodeModel[]> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -3134,7 +3134,7 @@ export class TreeNodeListsClient implements ITreeNodeListsClient {
             if (Array.isArray(resultData200)) {
                 result200 = [] as any;
                 for (let item of resultData200)
-                    result200!.push(TreeNodeModel.fromJS(item));
+                    result200!.push(DynamicTreeNodeModel.fromJS(item));
             }
             else {
                 result200 = <any>null;
@@ -7813,6 +7813,8 @@ export interface IAppMenusClient {
     create(command: CreateAppMenuCommand): Observable<string>;
     update(command: UpdateAppMenuCommand): Observable<void>;
     delete(id: string): Observable<void>;
+    getMenuTreeSelect(): Observable<TreeNodeModel[]>;
+    reorderAppMenus(command: UpdateAppMenuOrderCommand): Observable<void>;
 }
 
 @Injectable()
@@ -8148,6 +8150,118 @@ export class AppMenusClient implements IAppMenusClient {
     }
 
     protected processDelete(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ProblemDetails.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    getMenuTreeSelect(): Observable<TreeNodeModel[]> {
+        let url_ = this.baseUrl + "/api/AppMenus/GetMenuTreeSelect";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            withCredentials: true,
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetMenuTreeSelect(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetMenuTreeSelect(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<TreeNodeModel[]>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<TreeNodeModel[]>;
+        }));
+    }
+
+    protected processGetMenuTreeSelect(response: HttpResponseBase): Observable<TreeNodeModel[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(TreeNodeModel.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    reorderAppMenus(command: UpdateAppMenuOrderCommand): Observable<void> {
+        let url_ = this.baseUrl + "/api/AppMenus/ReorderAppMenus";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            withCredentials: true,
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processReorderAppMenus(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processReorderAppMenus(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processReorderAppMenus(response: HttpResponseBase): Observable<void> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -8762,7 +8876,7 @@ export interface IRolesClient {
     get(id: string): Observable<RoleModel>;
     create(command: CreateRoleCommand): Observable<string>;
     update(command: UpdateRoleCommand): Observable<void>;
-    getRolePermissions(id: string): Observable<TreeNodeModel[]>;
+    getRolePermissions(id: string): Observable<DynamicTreeNodeModel[]>;
 }
 
 @Injectable()
@@ -9005,7 +9119,7 @@ export class RolesClient implements IRolesClient {
         return _observableOf(null as any);
     }
 
-    getRolePermissions(id: string): Observable<TreeNodeModel[]> {
+    getRolePermissions(id: string): Observable<DynamicTreeNodeModel[]> {
         let url_ = this.baseUrl + "/api/Roles/GetRolePermissions/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -9028,14 +9142,14 @@ export class RolesClient implements IRolesClient {
                 try {
                     return this.processGetRolePermissions(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<TreeNodeModel[]>;
+                    return _observableThrow(e) as any as Observable<DynamicTreeNodeModel[]>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<TreeNodeModel[]>;
+                return _observableThrow(response_) as any as Observable<DynamicTreeNodeModel[]>;
         }));
     }
 
-    protected processGetRolePermissions(response: HttpResponseBase): Observable<TreeNodeModel[]> {
+    protected processGetRolePermissions(response: HttpResponseBase): Observable<DynamicTreeNodeModel[]> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -9049,7 +9163,7 @@ export class RolesClient implements IRolesClient {
             if (Array.isArray(resultData200)) {
                 result200 = [] as any;
                 for (let item of resultData200)
-                    result200!.push(TreeNodeModel.fromJS(item));
+                    result200!.push(DynamicTreeNodeModel.fromJS(item));
             }
             else {
                 result200 = <any>null;
@@ -12494,7 +12608,7 @@ export interface IUpdatePurchaseCommand {
     cacheKey?: string;
 }
 
-export class TreeNodeModel implements ITreeNodeModel {
+export class DynamicTreeNodeModel implements IDynamicTreeNodeModel {
     key?: any;
     label?: string;
     icon?: string;
@@ -12505,7 +12619,105 @@ export class TreeNodeModel implements ITreeNodeModel {
     visible?: boolean;
     isActive?: boolean;
     partialSelected?: boolean;
+    orderNo?: number;
     leaf?: boolean;
+    parent?: DynamicTreeNodeModel | undefined;
+    children?: DynamicTreeNodeModel[];
+
+    constructor(data?: IDynamicTreeNodeModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.key = _data["key"];
+            this.label = _data["label"];
+            this.icon = _data["icon"];
+            this.parentId = _data["parentId"];
+            this.data = _data["data"];
+            this.disabledCheckbox = _data["disabledCheckbox"];
+            this.disabled = _data["disabled"];
+            this.visible = _data["visible"];
+            this.isActive = _data["isActive"];
+            this.partialSelected = _data["partialSelected"];
+            this.orderNo = _data["orderNo"];
+            this.leaf = _data["leaf"];
+            this.parent = _data["parent"] ? DynamicTreeNodeModel.fromJS(_data["parent"]) : <any>undefined;
+            if (Array.isArray(_data["children"])) {
+                this.children = [] as any;
+                for (let item of _data["children"])
+                    this.children!.push(DynamicTreeNodeModel.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): DynamicTreeNodeModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new DynamicTreeNodeModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["key"] = this.key;
+        data["label"] = this.label;
+        data["icon"] = this.icon;
+        data["parentId"] = this.parentId;
+        data["data"] = this.data;
+        data["disabledCheckbox"] = this.disabledCheckbox;
+        data["disabled"] = this.disabled;
+        data["visible"] = this.visible;
+        data["isActive"] = this.isActive;
+        data["partialSelected"] = this.partialSelected;
+        data["orderNo"] = this.orderNo;
+        data["leaf"] = this.leaf;
+        data["parent"] = this.parent ? this.parent.toJSON() : <any>undefined;
+        if (Array.isArray(this.children)) {
+            data["children"] = [];
+            for (let item of this.children)
+                data["children"].push(item.toJSON());
+        }
+        return data;
+    }
+}
+
+export interface IDynamicTreeNodeModel {
+    key?: any;
+    label?: string;
+    icon?: string;
+    parentId?: any | undefined;
+    data?: string;
+    disabledCheckbox?: boolean;
+    disabled?: boolean;
+    visible?: boolean;
+    isActive?: boolean;
+    partialSelected?: boolean;
+    orderNo?: number;
+    leaf?: boolean;
+    parent?: DynamicTreeNodeModel | undefined;
+    children?: DynamicTreeNodeModel[];
+}
+
+export class TreeNodeModel implements ITreeNodeModel {
+    key?: string;
+    label?: string;
+    icon?: string;
+    parentId?: string | undefined;
+    data?: string;
+    disabledCheckbox?: boolean;
+    disabled?: boolean;
+    visible?: boolean;
+    isActive?: boolean;
+    partialSelected?: boolean;
+    orderNo?: number;
+    leaf?: boolean;
+    parent?: TreeNodeModel | undefined;
     children?: TreeNodeModel[];
 
     constructor(data?: ITreeNodeModel) {
@@ -12529,7 +12741,9 @@ export class TreeNodeModel implements ITreeNodeModel {
             this.visible = _data["visible"];
             this.isActive = _data["isActive"];
             this.partialSelected = _data["partialSelected"];
+            this.orderNo = _data["orderNo"];
             this.leaf = _data["leaf"];
+            this.parent = _data["parent"] ? TreeNodeModel.fromJS(_data["parent"]) : <any>undefined;
             if (Array.isArray(_data["children"])) {
                 this.children = [] as any;
                 for (let item of _data["children"])
@@ -12557,7 +12771,9 @@ export class TreeNodeModel implements ITreeNodeModel {
         data["visible"] = this.visible;
         data["isActive"] = this.isActive;
         data["partialSelected"] = this.partialSelected;
+        data["orderNo"] = this.orderNo;
         data["leaf"] = this.leaf;
+        data["parent"] = this.parent ? this.parent.toJSON() : <any>undefined;
         if (Array.isArray(this.children)) {
             data["children"] = [];
             for (let item of this.children)
@@ -12568,17 +12784,19 @@ export class TreeNodeModel implements ITreeNodeModel {
 }
 
 export interface ITreeNodeModel {
-    key?: any;
+    key?: string;
     label?: string;
     icon?: string;
-    parentId?: any | undefined;
+    parentId?: string | undefined;
     data?: string;
     disabledCheckbox?: boolean;
     disabled?: boolean;
     visible?: boolean;
     isActive?: boolean;
     partialSelected?: boolean;
+    orderNo?: number;
     leaf?: boolean;
+    parent?: TreeNodeModel | undefined;
     children?: TreeNodeModel[];
 }
 
@@ -17299,6 +17517,54 @@ export interface IUpdateAppMenuCommand {
     description?: string;
     menuTypeId: string;
     parentId?: string | undefined;
+    cacheKey?: string;
+}
+
+export class UpdateAppMenuOrderCommand implements IUpdateAppMenuOrderCommand {
+    reorderedAppMenus?: TreeNodeModel[];
+    cacheKey?: string;
+
+    constructor(data?: IUpdateAppMenuOrderCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["reorderedAppMenus"])) {
+                this.reorderedAppMenus = [] as any;
+                for (let item of _data["reorderedAppMenus"])
+                    this.reorderedAppMenus!.push(TreeNodeModel.fromJS(item));
+            }
+            this.cacheKey = _data["cacheKey"];
+        }
+    }
+
+    static fromJS(data: any): UpdateAppMenuOrderCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdateAppMenuOrderCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.reorderedAppMenus)) {
+            data["reorderedAppMenus"] = [];
+            for (let item of this.reorderedAppMenus)
+                data["reorderedAppMenus"].push(item.toJSON());
+        }
+        data["cacheKey"] = this.cacheKey;
+        return data;
+    }
+}
+
+export interface IUpdateAppMenuOrderCommand {
+    reorderedAppMenus?: TreeNodeModel[];
     cacheKey?: string;
 }
 

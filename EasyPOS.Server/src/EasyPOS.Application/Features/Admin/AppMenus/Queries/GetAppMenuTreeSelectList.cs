@@ -36,7 +36,8 @@ internal sealed class GetAppMenuTreeSelectListHandler(ISqlConnectionFactory sqlC
                 M.Description AS {nameof(AppMenuModel.Description)},
                 M.Visible AS {nameof(AppMenuModel.Visible)},
                 M.IsActive AS {nameof(AppMenuModel.IsActive)},
-                M.Icon AS {nameof(AppMenuModel.Icon)}
+                M.Icon AS {nameof(AppMenuModel.Icon)},
+                M.OrderNo AS {nameof(AppMenuModel.OrderNo)}
             FROM dbo.AppMenus AS M
             """;
 
@@ -58,6 +59,7 @@ internal sealed class GetAppMenuTreeSelectListHandler(ISqlConnectionFactory sqlC
                     Visible = x.Visible,
                     IsActive = x.IsActive,
                     PartialSelected = false,
+                    OrderNo = x.OrderNo,
                     Children = BuildTree(x.Id)
                 })
                 .ToList();

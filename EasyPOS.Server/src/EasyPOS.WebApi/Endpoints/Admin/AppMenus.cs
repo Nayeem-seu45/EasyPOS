@@ -1,7 +1,9 @@
 ﻿using EasyPOS.Application.Common.Extensions;
+using EasyPOS.Application.Common.Models;
 using EasyPOS.Application.Features.Admin.AppMenus.Commands;
 using EasyPOS.Application.Features.Admin.AppMenus.Queries;
 using EasyPOS.Application.Features.Common.Queries;
+using EasyPOS.Domain.Shared;
 
 namespace EasyPOS.WebApi.Endpoints.Admin;
 
@@ -40,6 +42,16 @@ public class AppMenus : EndpointGroupBase
             .Produces(StatusCodes.Status204NoContent)
             .Produces<ProblemDetails>(StatusCodes.Status400BadRequest);
 
+        group.MapPost("GetMenuTreeSelect", GetMenuTreeSelect)
+            .WithName("GetMenuTreeSelect")
+            .Produces<List<TreeNodeModel>>(StatusCodes.Status200OK);
+
+        group.MapPost("ReorderAppMenus", ReorderAppMenus)
+            .WithName("ReorderAppMenus")
+            .Produces(StatusCodes.Status204NoContent)
+            .Produces<ProblemDetails>(StatusCodes.Status400BadRequest);
+
+
     }
 
     public async Task<IResult> GetAll(ISender sender, [FromBody] GetAppMenuListQuery query)
@@ -58,6 +70,12 @@ public class AppMenus : EndpointGroupBase
             result.Value.OptionsDataSources.Add("statusSelectList", UtilityExtensions.GetActiveInactiveSelectList());
         }
 
+        return TypedResults.Ok(result.Value);
+    }
+
+    public async Task<IResult> GetMenuTreeSelect(ISender sender)
+    {
+        var result = await sender.Send(new GetAppMenuTreeSelectList()).ConfigureAwait(false);
         return TypedResults.Ok(result.Value);
     }
 
@@ -112,6 +130,15 @@ public class AppMenus : EndpointGroupBase
 
         return result.Match(
              onSuccess: () => Results.Ok(result.Value),
+             onFailure: result.ToProblemDetails);
+    }
+
+    public async Task<IResult> ReorderAppMenus(ISender sender, UpdateAppMenuOrderCommand command)
+    {
+        var result = await sender.Send(command);
+
+        return result.Match(
+             onSuccess: () => Results.NoContent(),
              onFailure: result.ToProblemDetails);
     }
 

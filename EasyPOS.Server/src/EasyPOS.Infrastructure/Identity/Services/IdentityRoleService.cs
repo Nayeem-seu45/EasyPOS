@@ -174,7 +174,7 @@ internal class IdentityRoleService(
         return result ? Result.Success() : Result.Failure(Error.Failure("Role.Permission", ErrorMessages.UNABLE_UPDATE_PERMISSION));
     }
 
-    public Result<IList<TreeNodeModel>> GetAllPermissions()
+    public Result<IList<DynamicTreeNodeModel>> GetAllPermissions()
     {
         return Result.Success(PermissionHelper.MapPermissionsToTree());
     }

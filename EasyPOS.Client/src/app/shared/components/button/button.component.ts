@@ -42,16 +42,16 @@ export class ButtonComponent {
     return this.severity as SeverityType;
   }  
 
-  handleClick(event: MouseEvent) {
-    this.onClick.emit(event);
+  handleClick() {
+    this.onClick.emit();
   }
 
-  handleFocus(event: FocusEvent) {
-    this.onFocus.emit(event);
+  handleFocus() {
+    this.onFocus.emit();
   }
 
-  handleBlur(event: FocusEvent) {
-    this.onBlur.emit(event);
+  handleBlur() {
+    this.onBlur.emit();
   }
 }
 

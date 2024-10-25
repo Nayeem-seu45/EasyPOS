@@ -2087,7 +2087,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/TreeNodeModel"
+                    "$ref": "#/components/schemas/DynamicTreeNodeModel"
                   }
                 }
               }
@@ -5543,6 +5543,74 @@
         ]
       }
     },
+    "/api/AppMenus/GetMenuTreeSelect": {
+      "post": {
+        "tags": [
+          "AppMenus"
+        ],
+        "operationId": "GetMenuTreeSelect",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TreeNodeModel"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/AppMenus/ReorderAppMenus": {
+      "post": {
+        "tags": [
+          "AppMenus"
+        ],
+        "operationId": "ReorderAppMenus",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateAppMenuOrderCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
     "/api/AppNotifications/GetAll": {
       "post": {
         "tags": [
@@ -6116,7 +6184,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/TreeNodeModel"
+                    "$ref": "#/components/schemas/DynamicTreeNodeModel"
                   }
                 }
               }
@@ -8109,7 +8177,7 @@
           }
         }
       },
-      "TreeNodeModel": {
+      "DynamicTreeNodeModel": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -8141,8 +8209,80 @@
           "partialSelected": {
             "type": "boolean"
           },
+          "orderNo": {
+            "type": "integer",
+            "format": "int32"
+          },
           "leaf": {
             "type": "boolean"
+          },
+          "parent": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/DynamicTreeNodeModel"
+              }
+            ]
+          },
+          "children": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DynamicTreeNodeModel"
+            }
+          }
+        }
+      },
+      "TreeNodeModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "key": {
+            "type": "string",
+            "format": "guid"
+          },
+          "label": {
+            "type": "string"
+          },
+          "icon": {
+            "type": "string"
+          },
+          "parentId": {
+            "type": "string",
+            "format": "guid",
+            "nullable": true
+          },
+          "data": {
+            "type": "string"
+          },
+          "disabledCheckbox": {
+            "type": "boolean"
+          },
+          "disabled": {
+            "type": "boolean"
+          },
+          "visible": {
+            "type": "boolean"
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "partialSelected": {
+            "type": "boolean"
+          },
+          "orderNo": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "leaf": {
+            "type": "boolean"
+          },
+          "parent": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TreeNodeModel"
+              }
+            ]
           },
           "children": {
             "type": "array",
@@ -10827,6 +10967,21 @@
             "type": "string",
             "format": "guid",
             "nullable": true
+          },
+          "cacheKey": {
+            "type": "string"
+          }
+        }
+      },
+      "UpdateAppMenuOrderCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "reorderedAppMenus": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TreeNodeModel"
+            }
           },
           "cacheKey": {
             "type": "string"

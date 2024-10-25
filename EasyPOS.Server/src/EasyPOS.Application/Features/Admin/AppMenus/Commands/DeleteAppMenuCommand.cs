@@ -1,6 +1,4 @@
-﻿using EasyPOS.Application.Common.Constants;
-
-namespace EasyPOS.Application.Features.Admin.AppMenus.Commands;
+﻿namespace EasyPOS.Application.Features.Admin.AppMenus.Commands;
 
 public record DeleteAppMenuCommand(Guid Id) : ICacheInvalidatorCommand
 {

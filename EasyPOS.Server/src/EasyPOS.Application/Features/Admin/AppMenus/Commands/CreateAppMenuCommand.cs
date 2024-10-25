@@ -1,9 +1,4 @@
-﻿using EasyPOS.Application.Common.Abstractions;
-using EasyPOS.Application.Common.Abstractions.Caching;
-using EasyPOS.Application.Common.Abstractions.Messaging;
-using EasyPOS.Domain.Admin;
-using EasyPOS.Domain.Shared;
-using Mapster;
+﻿using EasyPOS.Domain.Admin;
 
 namespace EasyPOS.Application.Features.Admin.AppMenus.Commands;
 

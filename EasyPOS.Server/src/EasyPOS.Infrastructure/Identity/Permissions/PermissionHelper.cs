@@ -15,11 +15,11 @@ public static class PermissionHelper
         }
     }
 
-    public static IList<TreeNodeModel> MapPermissionsToTree()
+    public static IList<DynamicTreeNodeModel> MapPermissionsToTree()
     {
         var rootType = typeof(Application.Common.Security.Permissions);
-        var treeNodes = new List<TreeNodeModel>();
-        var rootNode = new TreeNodeModel
+        var treeNodes = new List<DynamicTreeNodeModel>();
+        var rootNode = new DynamicTreeNodeModel
         {
             Key = "Permissions",
             Label = "Permissions",
@@ -31,11 +31,11 @@ public static class PermissionHelper
         return treeNodes;
     }
 
-    private static void TraversePermissions(Type type, IList<TreeNodeModel> nodes, string parentKey)
+    private static void TraversePermissions(Type type, IList<DynamicTreeNodeModel> nodes, string parentKey)
     {
         foreach (var nestedType in type.GetNestedTypes(BindingFlags.Public | BindingFlags.Static))
         {
-            var node = new TreeNodeModel
+            var node = new DynamicTreeNodeModel
             {
                 Key = nestedType.Name,
                 Label = nestedType.Name,
@@ -47,7 +47,7 @@ public static class PermissionHelper
 
             foreach (var field in nestedType.GetFields(BindingFlags.Public | BindingFlags.Static))
             {
-                var childNode = new TreeNodeModel
+                var childNode = new DynamicTreeNodeModel
                 {
                     Key = field.GetValue(null).ToString(),
                     Label = field.GetValue(null).ToString(),

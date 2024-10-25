@@ -7,7 +7,7 @@ using EasyPOS.Domain.Shared;
 namespace EasyPOS.Application.Features.Admin.Roles.Queries;
 
 public record GetPermissionTreeSelectListQuery
-    : ICacheableQuery<List<TreeNodeModel>>
+    : ICacheableQuery<List<DynamicTreeNodeModel>>
 {
     [JsonIgnore]
     public string CacheKey => $"Role_Permissions";
@@ -18,9 +18,9 @@ public record GetPermissionTreeSelectListQuery
 }
 
 internal sealed class GetPermissionNodeListQueryHandler(IIdentityRoleService roleService)
-    : IQueryHandler<GetPermissionTreeSelectListQuery, List<TreeNodeModel>>
+    : IQueryHandler<GetPermissionTreeSelectListQuery, List<DynamicTreeNodeModel>>
 {
-    public async Task<Result<List<TreeNodeModel>>> Handle(GetPermissionTreeSelectListQuery request, CancellationToken cancellationToken)
+    public async Task<Result<List<DynamicTreeNodeModel>>> Handle(GetPermissionTreeSelectListQuery request, CancellationToken cancellationToken)
     {
         return await Task.FromResult(roleService.GetAllPermissions().Value.ToList());
     }

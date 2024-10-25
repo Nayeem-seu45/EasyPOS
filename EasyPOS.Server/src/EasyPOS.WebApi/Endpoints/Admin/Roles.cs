@@ -39,7 +39,7 @@ public class Roles : EndpointGroupBase
 
         group.MapGet("GetRolePermissions/{id}", GetRolePermissions)
             .WithName("GetRolePermissions")
-            .Produces<IList<TreeNodeModel>>(StatusCodes.Status200OK)
+            .Produces<IList<DynamicTreeNodeModel>>(StatusCodes.Status200OK)
             .Produces<ProblemDetails>(StatusCodes.Status400BadRequest);
     }
 

@@ -12,5 +12,5 @@ public interface IIdentityRoleService
     Task<Result<RoleModel>> GetRoleAsync(string id, CancellationToken cancellation = default);
     Task<Result> DeleteRoleAsync(string id, CancellationToken cancellation = default);
     Task<Result> AddOrRemoveClaimsToRoleAsync(string roleId, List<string> permissions, CancellationToken cancellation = default);
-    Result<IList<TreeNodeModel>> GetAllPermissions();
+    Result<IList<DynamicTreeNodeModel>> GetAllPermissions();
 }

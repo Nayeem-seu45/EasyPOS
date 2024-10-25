@@ -1,13 +1,9 @@
-﻿using System.Text.Json.Serialization;
-using EasyPOS.Application.Common.Abstractions.Identity;
-using EasyPOS.Application.Common.Abstractions.Messaging;
-using EasyPOS.Application.Common.Models;
-using EasyPOS.Domain.Shared;
+﻿using EasyPOS.Application.Common.Abstractions.Identity;
 
 namespace EasyPOS.Application.Features.Admin.Roles.Queries;
 
 public record GetPermissionsByRoleQuery(string RoleId)
-    : ICacheableQuery<IList<TreeNodeModel>>
+    : ICacheableQuery<IList<DynamicTreeNodeModel>>
 {
     [JsonIgnore]
     public string CacheKey => $"Role_{RoleId}_Permissions";
@@ -18,9 +14,9 @@ public record GetPermissionsByRoleQuery(string RoleId)
 }
 
 internal sealed class GetPermissionsByRoleQueryHandler(IIdentityRoleService roleService)
-    : IQueryHandler<GetPermissionsByRoleQuery, IList<TreeNodeModel>>
+    : IQueryHandler<GetPermissionsByRoleQuery, IList<DynamicTreeNodeModel>>
 {
-    public async Task<Result<IList<TreeNodeModel>>> Handle(GetPermissionsByRoleQuery request, CancellationToken cancellationToken)
+    public async Task<Result<IList<DynamicTreeNodeModel>>> Handle(GetPermissionsByRoleQuery request, CancellationToken cancellationToken)
     {
         return await Task.FromResult(roleService.GetAllPermissions());
     }

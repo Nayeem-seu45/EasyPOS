@@ -14,14 +14,14 @@ public class TreeNodeLists : EndpointGroupBase
 
         group.MapGet("GetAllPermissionNodeList", GetAllPermissionNodeList)
              .WithName("GetAllPermissionNodeList")
-             .Produces<List<TreeNodeModel>>(StatusCodes.Status200OK);
+             .Produces<List<DynamicTreeNodeModel>>(StatusCodes.Status200OK);
 
         group.MapGet("GetAllAppMenuTreeSelectList", GetAllAppMenuTreeSelectList)
              .WithName("GetAllAppMenuTreeSelectList")
              .Produces<List<TreeNodeModel>>(StatusCodes.Status200OK);
     }
 
-    private async Task<List<TreeNodeModel>> GetAllPermissionNodeList(ISender sender, [FromQuery] bool? allowCache = null)
+    private async Task<List<DynamicTreeNodeModel>> GetAllPermissionNodeList(ISender sender, [FromQuery] bool? allowCache = null)
     {
         var result = await sender.Send(new GetPermissionTreeSelectListQuery());
         return result.Value;

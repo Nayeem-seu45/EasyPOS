@@ -1,6 +1,4 @@
-﻿using EasyPOS.Application.Common.DapperQueries;
-
-namespace EasyPOS.Application.Features.Admin.AppMenus.Commands;
+﻿namespace EasyPOS.Application.Features.Admin.AppMenus.Commands;
 
 public class UpdateAppMenuCommandValidator : AbstractValidator<UpdateAppMenuCommand>
 {

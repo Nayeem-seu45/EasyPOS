@@ -12,6 +12,7 @@ import { UserProfileComponent } from "./components/user-profile/user-profile.com
 import { UserBasicComponent } from "./components/user-profile/components/user-basic/user-basic.component";
 import { ChangePasswordComponent } from "./components/user-profile/components/change-password/change-password.component";
 import { ChangeProfilePhotoComponent } from "./components/user-profile/components/change-profile-photo/change-profile-photo.component";
+import { ReorderAppMenusComponent } from "./components/reorder-app-menus/reorder-app-menus.component";
 
 const routes: Routes = [
   {path: 'users', component: UserListComponent},
@@ -42,6 +43,7 @@ export const adminRoutingComponents = [
   UserProfileComponent,
   UserBasicComponent,
   ChangePasswordComponent,
-  ChangeProfilePhotoComponent
+  ChangeProfilePhotoComponent,
+  ReorderAppMenusComponent
 
 ]
