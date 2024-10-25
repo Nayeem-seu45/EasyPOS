@@ -54,7 +54,6 @@ import { TreeSelectComponent } from './components/tree-select/tree-select.compon
 import { ToastService } from './services/toast.service';
 import { InputFileAdvComponent } from './components/input-file-advanced/input-file-adv.component';
 import { SelectButtonModule } from 'primeng/selectbutton';
-import { InputSelectButtonComponent } from './components/input-select-button/input-select-button.component';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { ProgressBarComponent } from './components/progress-bar/progress-bar.component';
@@ -101,7 +100,6 @@ import { SelectButtonComponent } from './components/select-button/select-button.
 		ButtonComponent,
 		TreeComponent,
 		TreeSelectComponent,
-		InputSelectButtonComponent,
 		ProgressBarComponent,
 		ImageComponent,
 		SplitButtonComponent,
@@ -186,7 +184,6 @@ import { SelectButtonComponent } from './components/select-button/select-button.
 		ButtonComponent,
 		TreeComponent,
 		TreeSelectComponent,
-		InputSelectButtonComponent,
 		ImageComponent,
 		SplitButtonComponent,
 		CustomMenuComponent,
