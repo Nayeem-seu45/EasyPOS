@@ -9,12 +9,14 @@ import { StyleClassModule } from 'primeng/styleclass';
 import { TableModule } from 'primeng/table';
 import { DashboardRouting, DashboardRoutingComponents } from './dashboard-routing.module';
 import { DragDropModule } from 'primeng/dragdrop';
+import { DragOverlayDirective } from 'src/app/shared/direvtives/drag-overlay.directive';
 
 
 
 @NgModule({
   declarations: [
-  ...DashboardRoutingComponents
+    ...DashboardRoutingComponents,
+    DragOverlayDirective
   ],
   imports: [
     CommonModule,
