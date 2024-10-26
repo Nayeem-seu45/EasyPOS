@@ -114,44 +114,40 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   // Drag & Drop
-  dragging = false;
-  draggingCardIndex: number | null = null;
+draggingCardIndex: number | null = null;
 
-  isDraggable: string = "false";
+onDragStart(index: number, event: MouseEvent) {
+  const target = event.target as HTMLElement;
+  const rect = target.getBoundingClientRect();
+  const draggableAreaStart = rect.top + 10; // 10px offset
+  const draggableAreaEnd = draggableAreaStart + 40; // 40px area
 
-  onDragStart(index: number, event: MouseEvent) {
-    const target = event.target as HTMLElement;
-    const rect = target.getBoundingClientRect();
-    const draggableHeight = rect.height * 0.25; // Top 25%
-  
-    if (event.clientY <= rect.top + draggableHeight) {
-      this.draggingCardIndex = index;
-      this.dragging = true;
-    } else {
-      // Prevent the drag if outside the top 25%
-      event.preventDefault();
-    }
+  if (event.clientY >= draggableAreaStart && event.clientY <= draggableAreaEnd) {
+    this.draggingCardIndex = index;
+  } else {
+    // Prevent the drag if outside the draggable area
+    event.preventDefault();
   }
-  
-  
-  onDragEnd() {
+}
+
+onDragEnd() {
+  this.draggingCardIndex = null; // Reset the dragging index
+}
+
+onCardDrop(targetIndex: number) {
+  if (this.draggingCardIndex !== null && this.draggingCardIndex !== targetIndex) {
+    const cardToMove = this.cardList[this.draggingCardIndex];
+
+    // Remove card from original position
+    this.cardList.splice(this.draggingCardIndex, 1);
+
+    // Insert card at target position
+    this.cardList.splice(targetIndex, 0, cardToMove);
+
+    // Reset the index
     this.draggingCardIndex = null;
   }
-
-  onCardDrop(targetIndex: number) {
-    if (this.draggingCardIndex !== null && this.draggingCardIndex !== targetIndex) {
-      const cardToMove = this.cardList[this.draggingCardIndex];
-      
-      // Remove card from original position
-      this.cardList.splice(this.draggingCardIndex, 1);
-      
-      // Insert card at target position
-      this.cardList.splice(targetIndex, 0, cardToMove);
-      
-      // Reset the index
-      this.draggingCardIndex = null;
-    }
-  }
+}
 
   initChart() {
     const documentStyle = getComputedStyle(document.documentElement);

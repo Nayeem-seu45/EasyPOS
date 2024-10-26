@@ -4,7 +4,8 @@ import { Directive, ElementRef, HostListener, Input, Renderer2 } from '@angular/
   selector: '[conditionalDraggable]'
 })
 export class ConditionalDraggableDirective {
-  @Input() draggableArea = 0.25; // Top 25% by default
+  @Input() draggableArea = 40; // Draggable area of 40px
+  private offsetTop = 10; // 10px offset from the top
 
   constructor(private el: ElementRef, private renderer: Renderer2) {}
 
@@ -20,7 +21,6 @@ export class ConditionalDraggableDirective {
 
   private isInDraggableArea(event: MouseEvent): boolean {
     const rect = this.el.nativeElement.getBoundingClientRect();
-    const draggableHeight = rect.height * this.draggableArea;
-    return event.clientY <= rect.top + draggableHeight;
+    return event.clientY >= rect.top + this.offsetTop && event.clientY <= rect.top + this.offsetTop + this.draggableArea;
   }
 }
