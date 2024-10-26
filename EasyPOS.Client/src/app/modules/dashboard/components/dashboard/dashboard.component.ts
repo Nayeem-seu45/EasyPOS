@@ -18,7 +18,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   subscription!: Subscription;
 
-  customCardOptions: any;
+  customCard: any;
+  revenueCard: any;
+  customerCard: any;
+  commentsCard: any;
+
+  cardList: any[] = [];
 
   constructor(public layoutService: LayoutService) {
     this.subscription = this.layoutService.configUpdate$
@@ -36,7 +41,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       { label: 'Remove', icon: 'pi pi-fw pi-minus' }
     ];
 
-    this.customCardOptions = {
+    this.customCard = {
       data: {
         title: 'Custom Card',
         content: '250.21',
@@ -51,6 +56,87 @@ export class DashboardComponent implements OnInit, OnDestroy {
         footerLeftClass: 'text-green-500 font-medium',
         footerRightClass: 'text-500'
       }
+    }
+
+    this.revenueCard = {
+      data: {
+        title: 'Revenue',
+        content: '$2,100',
+        footerLeft: '%52+',
+        footerRight: 'since last week',
+      },
+      options: {
+        titleClass: 'text-500 font-medium mb-3',
+        contentClass: 'text-900 font-medium text-xl',
+        icon: 'pi pi-map-marker text-orange-500 text-xl',
+        iconBgClass: 'bg-orange-100 border-round',
+        footerLeftClass: 'text-green-500 font-medium',
+        footerRightClass: 'text-500'
+      }
+    };
+
+    this.customerCard = {
+      data: {
+        title: 'Customers',
+        content: '28,441',
+        footerLeft: '520',
+        footerRight: 'newly registered',
+      },
+      options: {
+        titleClass: 'text-500 font-medium mb-3',
+        contentClass: 'text-900 font-medium text-xl',
+        icon: 'pi pi-inbox text-cyan-500 text-xl',
+        iconBgClass: 'bg-cyan-100 border-round',
+        footerLeftClass: 'text-green-500 font-medium',
+        footerRightClass: 'text-500'
+      }
+    };
+
+    this.commentsCard = {
+      data: {
+        title: 'Comments',
+        content: '152 Unread',
+        footerLeft: '85',
+        footerRight: 'responded',
+      },
+      options: {
+        titleClass: 'text-500 font-medium mb-3',
+        contentClass: 'text-900 font-medium text-xl',
+        icon: 'pi pi-comment text-purple-500 text-xl',
+        iconBgClass: 'bg-purple-100 border-round',
+        footerLeftClass: 'text-green-500 font-medium',
+        footerRightClass: 'text-500'
+      }
+    };
+
+    this.cardList = [this.customCard, this.revenueCard, this.customerCard, this.commentsCard];
+
+  }
+
+  // Drag & Drop
+  dragging = false;
+  draggingCardIndex: number | null = null;
+
+  onDragStart(index: number) {
+    this.draggingCardIndex = index;
+  }
+
+  onDragEnd() {
+    this.draggingCardIndex = null;
+  }
+
+  onCardDrop(targetIndex: number) {
+    if (this.draggingCardIndex !== null && this.draggingCardIndex !== targetIndex) {
+      const cardToMove = this.cardList[this.draggingCardIndex];
+      
+      // Remove card from original position
+      this.cardList.splice(this.draggingCardIndex, 1);
+      
+      // Insert card at target position
+      this.cardList.splice(targetIndex, 0, cardToMove);
+      
+      // Reset the index
+      this.draggingCardIndex = null;
     }
   }
 

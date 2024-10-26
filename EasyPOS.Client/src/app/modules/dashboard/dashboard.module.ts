@@ -8,6 +8,7 @@ import { PanelMenuModule } from 'primeng/panelmenu';
 import { StyleClassModule } from 'primeng/styleclass';
 import { TableModule } from 'primeng/table';
 import { DashboardRouting, DashboardRoutingComponents } from './dashboard-routing.module';
+import { DragDropModule } from 'primeng/dragdrop';
 
 
 
@@ -24,7 +25,8 @@ import { DashboardRouting, DashboardRoutingComponents } from './dashboard-routin
     StyleClassModule,
     PanelMenuModule,
     ButtonModule,
-    DashboardRouting
+    DashboardRouting,
+    DragDropModule 
   ]
 })
 export class DashboardModule { }
