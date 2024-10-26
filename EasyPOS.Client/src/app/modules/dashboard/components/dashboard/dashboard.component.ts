@@ -117,17 +117,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 draggingCardIndex: number | null = null;
 
 onDragStart(index: number, event: MouseEvent) {
-  const target = event.target as HTMLElement;
-  const rect = target.getBoundingClientRect();
-  const draggableAreaStart = rect.top + 10; // 10px offset
-  const draggableAreaEnd = draggableAreaStart + 40; // 40px area
-
-  if (event.clientY >= draggableAreaStart && event.clientY <= draggableAreaEnd) {
     this.draggingCardIndex = index;
-  } else {
-    // Prevent the drag if outside the draggable area
-    event.preventDefault();
-  }
 }
 
 onDragEnd() {
