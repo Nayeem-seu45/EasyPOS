@@ -1,15 +1,17 @@
 :host ::ng-deep {
   .drop-column {
+    position: relative; /* Ensure position relative for absolute overlay */
     border: 1px solid transparent;
     transition: border-color 0.2s;
-
     &.p-draggable-enter {
-      border-color: var(--primary-color); 
+      border-color: var(--primary-color);
     }
   }
-
-  // [pDraggable] {
-  //   cursor: move;
-  // }
+  .drag-overlay {
+    cursor: move; /* Move cursor for the overlay */
+  }
+  [pDraggable] {
+    cursor: default; /* Default cursor for the rest of the card */
+  }
 }
 

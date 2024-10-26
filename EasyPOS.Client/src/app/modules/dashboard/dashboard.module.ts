@@ -10,13 +10,15 @@ import { TableModule } from 'primeng/table';
 import { DashboardRouting, DashboardRoutingComponents } from './dashboard-routing.module';
 import { DragDropModule } from 'primeng/dragdrop';
 import { DragOverlayDirective } from 'src/app/shared/direvtives/drag-overlay.directive';
+import { ConditionalDraggableDirective } from 'src/app/shared/direvtives/conditional-draggable.directive';
 
 
 
 @NgModule({
   declarations: [
     ...DashboardRoutingComponents,
-    DragOverlayDirective
+    DragOverlayDirective,
+    ConditionalDraggableDirective
   ],
   imports: [
     CommonModule,

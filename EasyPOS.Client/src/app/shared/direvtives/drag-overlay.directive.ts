@@ -4,7 +4,6 @@ import { Directive, ElementRef, Renderer2, HostListener } from '@angular/core';
   selector: '[appDragOverlay]'
 })
 export class DragOverlayDirective {
-
   private overlay: HTMLElement;
 
   constructor(private el: ElementRef, private renderer: Renderer2) {
@@ -13,6 +12,7 @@ export class DragOverlayDirective {
 
   private createOverlay() {
     this.overlay = this.renderer.createElement('div');
+    this.renderer.addClass(this.overlay, 'drag-overlay'); // Add a class for styling
     this.renderer.setStyle(this.overlay, 'position', 'absolute');
     this.renderer.setStyle(this.overlay, 'top', '0');
     this.renderer.setStyle(this.overlay, 'left', '0');
@@ -29,6 +29,15 @@ export class DragOverlayDirective {
   onMouseDown(event: MouseEvent) {
     if (event.target === this.overlay) {
       this.el.nativeElement.dispatchEvent(new MouseEvent('mousedown', event));
+    } else {
+      event.preventDefault(); // Prevent dragging if not on the overlay
+    }
+  }
+
+  @HostListener('dragstart', ['$event'])
+  onDragStart(event: DragEvent) {
+    if (event.target !== this.overlay) {
+      event.preventDefault(); // Prevent dragging if not on the overlay
     }
   }
 }
