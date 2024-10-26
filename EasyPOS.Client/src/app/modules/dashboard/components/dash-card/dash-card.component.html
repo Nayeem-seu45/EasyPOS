@@ -1,0 +1,13 @@
+<div class="card mb-0">
+  <div class="flex justify-content-between mb-3">
+      <div>
+          <span class="block" [class]="options?.titleClass">{{data?.title}}</span>
+          <div [class]="options?.contentClass">{{data?.content}}</div>
+      </div>
+      <div class="flex align-items-center justify-content-center" [class]="options?.iconBgClass" [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
+          <i [class]="options?.icon"></i>
+      </div>
+  </div>
+  <span [class]="options?.footerLeftClass">{{data?.footerLeft}} </span>
+  <span  [class]="options?.footerRightClass">{{data?.footerRight}}</span>
+</div>

@@ -18,6 +18,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   subscription!: Subscription;
 
+  customCardOptions: any;
+
   constructor(public layoutService: LayoutService) {
     this.subscription = this.layoutService.configUpdate$
       .pipe(debounceTime(25))
@@ -33,6 +35,23 @@ export class DashboardComponent implements OnInit, OnDestroy {
       { label: 'Add New', icon: 'pi pi-fw pi-plus' },
       { label: 'Remove', icon: 'pi pi-fw pi-minus' }
     ];
+
+    this.customCardOptions = {
+      data: {
+        title: 'Custom Card',
+        content: '250.21',
+        footerLeft: '21.05% increased',
+        footerRight: 'last week',
+      },
+      options: {
+        titleClass: 'text-500 font-medium mb-3',
+        contentClass: 'text-blue-100 text-xl font-medium',
+        icon: 'pi pi-shopping-cart text-blue-500 text-xl',
+        iconBgClass: ' bg-blue-100 border-round',
+        footerLeftClass: 'text-green-500 font-medium',
+        footerRightClass: 'text-500'
+      }
+    }
   }
 
   initChart() {

@@ -71,6 +71,7 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { SidebarService } from './services/sidebar.service';
 import { SelectButtonComponent } from './components/select-button/select-button.component';
 import { TagComponent } from './components/tag/tag.component';
+import { ChartModule } from 'primeng/chart';
 
 
 @NgModule({
@@ -148,7 +149,8 @@ import { TagComponent } from './components/tag/tag.component';
 		MenuModule,
 		BadgeModule,
 		AvatarModule,
-		SidebarModule 
+		SidebarModule,
+		ChartModule 
 
 	],
 	providers: [
