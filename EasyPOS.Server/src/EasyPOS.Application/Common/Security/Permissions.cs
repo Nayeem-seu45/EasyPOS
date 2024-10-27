@@ -241,6 +241,14 @@ public static class Permissions
         public const string Edit = "Permissions.SalePayments.Edit";
         public const string Delete = "Permissions.SalePayments.Delete";
     }
+
+    public static class Couriers
+    {
+        public const string View = "Permissions.Couriers.View";
+        public const string Create = "Permissions.Couriers.Create";
+        public const string Edit = "Permissions.Couriers.Edit";
+        public const string Delete = "Permissions.Couriers.Delete";
+    }
     #endregion
 
     #region Accounts

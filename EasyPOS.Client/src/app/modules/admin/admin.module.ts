@@ -11,14 +11,11 @@ import { TabMenuModule } from 'primeng/tabmenu';
 import { InputTextModule } from 'primeng/inputtext';
 import { FileUploadModule } from 'primeng/fileupload';
 import { SelectButtonModule } from 'primeng/selectbutton';
-import { TabViewModule } from 'primeng/tabview';
 import { TreeModule } from 'primeng/tree';
-import { ConditionalDraggableDirective } from 'src/app/shared/direvtives/conditional-draggable.directive';
 
 @NgModule({
   declarations: [
     ...adminRoutingComponents,
-    ConditionalDraggableDirective
   ],
   imports: [
     CommonModule,

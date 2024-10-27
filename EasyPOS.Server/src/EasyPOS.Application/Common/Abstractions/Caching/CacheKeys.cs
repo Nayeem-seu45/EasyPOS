@@ -58,6 +58,7 @@ public static class CacheKeys
     public const string PurchasePayment_PurchaseId = nameof(PurchasePayment_PurchaseId);
     public const string Sale = nameof(Sale);
     public const string SalePayment = nameof(SalePayment);
+    public const string Courier = nameof(Courier);
 
     #endregion
 

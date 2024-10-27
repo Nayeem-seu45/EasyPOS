@@ -54,7 +54,7 @@ public interface IApplicationDbContext
     DbSet<Sale> Sales { get; }
     DbSet<SaleDetail> SaleDetails { get; }
     DbSet<SalePayment> SalePayments { get; }
-
+    DbSet<Courier> Couriers { get; }
 
 
     #endregion

@@ -55,6 +55,7 @@ public sealed class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<Sale> Sales => Set<Sale>();
     public DbSet<SaleDetail> SaleDetails => Set<SaleDetail>();
     public DbSet<SalePayment> SalePayments => Set<SalePayment>();
+    public DbSet<Courier> Couriers => Set<Courier>();
     #endregion
 
     #region Accounts
