@@ -10,7 +10,7 @@ import { CouponsClient } from 'src/app/modules/generated-clients/api-service';
   providers: [{provide: ENTITY_CLIENT, useClass: CouponsClient}]
 })
 export class CouponDetailComponent extends BaseDetailComponent {
-
+  activeTabIndex = 0;
   constructor(@Inject(ENTITY_CLIENT) entityClient: CouponsClient){
     super(entityClient)
   }

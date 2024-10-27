@@ -4,7 +4,7 @@ import { TradesRoutingComponents, TradesRoutingModule } from './trades-routing.m
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppSharedModule } from 'src/app/shared/app-shared.module';
 import { TableModule } from 'primeng/table';
-
+import { TabViewModule } from 'primeng/tabview';
 
 
 @NgModule({
@@ -17,7 +17,8 @@ import { TableModule } from 'primeng/table';
     ReactiveFormsModule,
     AppSharedModule,
     TradesRoutingModule,
-    TableModule 
+    TableModule,
+    TabViewModule  
   ]
 })
 export class TradesModule { }

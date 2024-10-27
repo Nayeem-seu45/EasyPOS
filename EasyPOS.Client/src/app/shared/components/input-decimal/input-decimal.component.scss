@@ -7,13 +7,18 @@
     box-shadow: none;
   }
 
-  app-input-decimal p-inputnumber input {
+  app-input-decimal p-inputnumber {
     width: 100%;
     box-sizing: border-box;
   }
 
-  .digit-right .p-inputnumber-input {
-    width: 1%;
+  app-input-decimal p-inputnumber input, span {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .decimal-comp .digit-right .p-inputnumber-input {
+    // width: 100%;
     text-align: right;
   }
 }

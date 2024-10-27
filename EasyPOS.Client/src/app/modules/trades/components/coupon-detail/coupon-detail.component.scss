@@ -1,1 +1,33 @@
-﻿
+﻿:host ::ng-deep {
+  .coupon-tab .orientation-right {
+    display: flex;
+
+    .p-tabview-nav {
+      flex-direction: column;
+      width: 10%;
+    }
+
+    .p-tabview-panels {
+      width: 100%; // to have content take up remainder of space
+    }
+  }
+
+  .p-tabview .p-tabview-panels {
+    background: #1f2d40;
+    padding: 1rem 0 1rem 1rem;
+    border: 0 none;
+    color: rgba(255, 255, 255, 0.87);
+    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 3px;
+  }
+}
+
+
+.card.coupon-tab {
+  background: var(--surface-card);
+  border: 1px solid var(--surface-border);
+  padding: 1rem;
+  margin-bottom: 2rem;
+  box-shadow: var(--card-shadow);
+  border-radius: 12px;
+}
