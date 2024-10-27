@@ -7,6 +7,7 @@ using EasyPOS.Domain.Products;
 using EasyPOS.Domain.Settings;
 using EasyPOS.Domain.Stakeholders;
 using EasyPOS.Domain.Trades;
+using static EasyPOS.Application.Common.Security.Permissions;
 
 namespace EasyPOS.Infrastructure.Persistence;
 
@@ -56,6 +57,7 @@ public sealed class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<SaleDetail> SaleDetails => Set<SaleDetail>();
     public DbSet<SalePayment> SalePayments => Set<SalePayment>();
     public DbSet<Courier> Couriers => Set<Courier>();
+    public DbSet<Coupon> Coupons => Set<Coupon>();
     #endregion
 
     #region Accounts

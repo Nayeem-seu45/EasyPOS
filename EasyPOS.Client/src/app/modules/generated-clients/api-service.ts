@@ -1036,6 +1036,364 @@ export class MoneyTransfersClient implements IMoneyTransfersClient {
     }
 }
 
+export interface ICouponsClient {
+    getAll(query: GetCouponListQuery): Observable<PaginatedResponseOfCouponModel>;
+    get(id: string): Observable<CouponModel>;
+    create(command: CreateCouponCommand): Observable<string>;
+    update(command: UpdateCouponCommand): Observable<void>;
+    delete(id: string): Observable<void>;
+    deleteMultiple(ids: string[]): Observable<void>;
+}
+
+@Injectable()
+export class CouponsClient implements ICouponsClient {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ?? "";
+    }
+
+    getAll(query: GetCouponListQuery): Observable<PaginatedResponseOfCouponModel> {
+        let url_ = this.baseUrl + "/api/Coupons/GetAll";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(query);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            withCredentials: true,
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAll(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAll(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<PaginatedResponseOfCouponModel>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<PaginatedResponseOfCouponModel>;
+        }));
+    }
+
+    protected processGetAll(response: HttpResponseBase): Observable<PaginatedResponseOfCouponModel> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = PaginatedResponseOfCouponModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    get(id: string): Observable<CouponModel> {
+        let url_ = this.baseUrl + "/api/Coupons/Get/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            withCredentials: true,
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGet(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGet(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<CouponModel>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<CouponModel>;
+        }));
+    }
+
+    protected processGet(response: HttpResponseBase): Observable<CouponModel> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CouponModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    create(command: CreateCouponCommand): Observable<string> {
+        let url_ = this.baseUrl + "/api/Coupons/Create";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            withCredentials: true,
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreate(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<string>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<string>;
+        }));
+    }
+
+    protected processCreate(response: HttpResponseBase): Observable<string> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 201) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result201: any = null;
+            let resultData201 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result201 = resultData201 !== undefined ? resultData201 : <any>null;
+    
+            return _observableOf(result201);
+            }));
+        } else if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ProblemDetails.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    update(command: UpdateCouponCommand): Observable<void> {
+        let url_ = this.baseUrl + "/api/Coupons/Update";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            withCredentials: true,
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+            })
+        };
+
+        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdate(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processUpdate(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ProblemDetails.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            }));
+        } else if (status === 404) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("A server side error occurred.", status, _responseText, _headers);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    delete(id: string): Observable<void> {
+        let url_ = this.baseUrl + "/api/Coupons/Delete/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            withCredentials: true,
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDelete(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDelete(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processDelete(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ProblemDetails.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    deleteMultiple(ids: string[]): Observable<void> {
+        let url_ = this.baseUrl + "/api/Coupons/DeleteMultiple";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(ids);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            withCredentials: true,
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDeleteMultiple(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDeleteMultiple(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processDeleteMultiple(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ProblemDetails.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+}
+
 export interface ICouriersClient {
     getAll(query: GetCourierListQuery): Observable<PaginatedResponseOfCourierModel>;
     get(id: string): Observable<CourierModel>;
@@ -10985,6 +11343,391 @@ export interface IUpdateMoneyTransferCommand {
     fromAccountId?: string;
     toAccountId?: string;
     amount?: number;
+    cacheKey?: string;
+}
+
+export class PaginatedResponseOfCouponModel implements IPaginatedResponseOfCouponModel {
+    items?: CouponModel[];
+    pageNumber?: number;
+    totalPages?: number;
+    totalCount?: number;
+    hasPreviousPage?: boolean;
+    hasNextPage?: boolean;
+    optionsDataSources?: { [key: string]: any; };
+
+    constructor(data?: IPaginatedResponseOfCouponModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["items"])) {
+                this.items = [] as any;
+                for (let item of _data["items"])
+                    this.items!.push(CouponModel.fromJS(item));
+            }
+            this.pageNumber = _data["pageNumber"];
+            this.totalPages = _data["totalPages"];
+            this.totalCount = _data["totalCount"];
+            this.hasPreviousPage = _data["hasPreviousPage"];
+            this.hasNextPage = _data["hasNextPage"];
+            if (_data["optionsDataSources"]) {
+                this.optionsDataSources = {} as any;
+                for (let key in _data["optionsDataSources"]) {
+                    if (_data["optionsDataSources"].hasOwnProperty(key))
+                        (<any>this.optionsDataSources)![key] = _data["optionsDataSources"][key];
+                }
+            }
+        }
+    }
+
+    static fromJS(data: any): PaginatedResponseOfCouponModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new PaginatedResponseOfCouponModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        data["pageNumber"] = this.pageNumber;
+        data["totalPages"] = this.totalPages;
+        data["totalCount"] = this.totalCount;
+        data["hasPreviousPage"] = this.hasPreviousPage;
+        data["hasNextPage"] = this.hasNextPage;
+        if (this.optionsDataSources) {
+            data["optionsDataSources"] = {};
+            for (let key in this.optionsDataSources) {
+                if (this.optionsDataSources.hasOwnProperty(key))
+                    (<any>data["optionsDataSources"])[key] = (<any>this.optionsDataSources)[key];
+            }
+        }
+        return data;
+    }
+}
+
+export interface IPaginatedResponseOfCouponModel {
+    items?: CouponModel[];
+    pageNumber?: number;
+    totalPages?: number;
+    totalCount?: number;
+    hasPreviousPage?: boolean;
+    hasNextPage?: boolean;
+    optionsDataSources?: { [key: string]: any; };
+}
+
+export class CouponModel implements ICouponModel {
+    id?: string;
+    code?: string | undefined;
+    name?: string;
+    description?: string | undefined;
+    discountType?: number;
+    amount?: number;
+    expiryDate?: Date;
+    allowFreeShipping?: boolean;
+    minimumSpend?: number | undefined;
+    maximumSpend?: number | undefined;
+    onlyIndivisual?: boolean;
+    perCouponUsageLimit?: number | undefined;
+    perUserUsageLimit?: number | undefined;
+    optionsDataSources?: { [key: string]: any; };
+
+    constructor(data?: ICouponModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.code = _data["code"];
+            this.name = _data["name"];
+            this.description = _data["description"];
+            this.discountType = _data["discountType"];
+            this.amount = _data["amount"];
+            this.expiryDate = _data["expiryDate"] ? new Date(_data["expiryDate"].toString()) : <any>undefined;
+            this.allowFreeShipping = _data["allowFreeShipping"];
+            this.minimumSpend = _data["minimumSpend"];
+            this.maximumSpend = _data["maximumSpend"];
+            this.onlyIndivisual = _data["onlyIndivisual"];
+            this.perCouponUsageLimit = _data["perCouponUsageLimit"];
+            this.perUserUsageLimit = _data["perUserUsageLimit"];
+            if (_data["optionsDataSources"]) {
+                this.optionsDataSources = {} as any;
+                for (let key in _data["optionsDataSources"]) {
+                    if (_data["optionsDataSources"].hasOwnProperty(key))
+                        (<any>this.optionsDataSources)![key] = _data["optionsDataSources"][key];
+                }
+            }
+        }
+    }
+
+    static fromJS(data: any): CouponModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new CouponModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["code"] = this.code;
+        data["name"] = this.name;
+        data["description"] = this.description;
+        data["discountType"] = this.discountType;
+        data["amount"] = this.amount;
+        data["expiryDate"] = this.expiryDate ? this.expiryDate.toISOString() : <any>undefined;
+        data["allowFreeShipping"] = this.allowFreeShipping;
+        data["minimumSpend"] = this.minimumSpend;
+        data["maximumSpend"] = this.maximumSpend;
+        data["onlyIndivisual"] = this.onlyIndivisual;
+        data["perCouponUsageLimit"] = this.perCouponUsageLimit;
+        data["perUserUsageLimit"] = this.perUserUsageLimit;
+        if (this.optionsDataSources) {
+            data["optionsDataSources"] = {};
+            for (let key in this.optionsDataSources) {
+                if (this.optionsDataSources.hasOwnProperty(key))
+                    (<any>data["optionsDataSources"])[key] = (<any>this.optionsDataSources)[key];
+            }
+        }
+        return data;
+    }
+}
+
+export interface ICouponModel {
+    id?: string;
+    code?: string | undefined;
+    name?: string;
+    description?: string | undefined;
+    discountType?: number;
+    amount?: number;
+    expiryDate?: Date;
+    allowFreeShipping?: boolean;
+    minimumSpend?: number | undefined;
+    maximumSpend?: number | undefined;
+    onlyIndivisual?: boolean;
+    perCouponUsageLimit?: number | undefined;
+    perUserUsageLimit?: number | undefined;
+    optionsDataSources?: { [key: string]: any; };
+}
+
+export class GetCouponListQuery extends DataGridModel implements IGetCouponListQuery {
+    cacheKey?: string;
+
+    constructor(data?: IGetCouponListQuery) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+        if (_data) {
+            this.cacheKey = _data["cacheKey"];
+        }
+    }
+
+    static override fromJS(data: any): GetCouponListQuery {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetCouponListQuery();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["cacheKey"] = this.cacheKey;
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IGetCouponListQuery extends IDataGridModel {
+    cacheKey?: string;
+}
+
+export class CreateCouponCommand implements ICreateCouponCommand {
+    code?: string | undefined;
+    name?: string;
+    description?: string | undefined;
+    discountType?: number;
+    amount?: number;
+    expiryDate?: Date;
+    allowFreeShipping?: boolean;
+    minimumSpend?: number | undefined;
+    maximumSpend?: number | undefined;
+    onlyIndivisual?: boolean;
+    perCouponUsageLimit?: number | undefined;
+    perUserUsageLimit?: number | undefined;
+    cacheKey?: string;
+
+    constructor(data?: ICreateCouponCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.code = _data["code"];
+            this.name = _data["name"];
+            this.description = _data["description"];
+            this.discountType = _data["discountType"];
+            this.amount = _data["amount"];
+            this.expiryDate = _data["expiryDate"] ? new Date(_data["expiryDate"].toString()) : <any>undefined;
+            this.allowFreeShipping = _data["allowFreeShipping"];
+            this.minimumSpend = _data["minimumSpend"];
+            this.maximumSpend = _data["maximumSpend"];
+            this.onlyIndivisual = _data["onlyIndivisual"];
+            this.perCouponUsageLimit = _data["perCouponUsageLimit"];
+            this.perUserUsageLimit = _data["perUserUsageLimit"];
+            this.cacheKey = _data["cacheKey"];
+        }
+    }
+
+    static fromJS(data: any): CreateCouponCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateCouponCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["code"] = this.code;
+        data["name"] = this.name;
+        data["description"] = this.description;
+        data["discountType"] = this.discountType;
+        data["amount"] = this.amount;
+        data["expiryDate"] = this.expiryDate ? this.expiryDate.toISOString() : <any>undefined;
+        data["allowFreeShipping"] = this.allowFreeShipping;
+        data["minimumSpend"] = this.minimumSpend;
+        data["maximumSpend"] = this.maximumSpend;
+        data["onlyIndivisual"] = this.onlyIndivisual;
+        data["perCouponUsageLimit"] = this.perCouponUsageLimit;
+        data["perUserUsageLimit"] = this.perUserUsageLimit;
+        data["cacheKey"] = this.cacheKey;
+        return data;
+    }
+}
+
+export interface ICreateCouponCommand {
+    code?: string | undefined;
+    name?: string;
+    description?: string | undefined;
+    discountType?: number;
+    amount?: number;
+    expiryDate?: Date;
+    allowFreeShipping?: boolean;
+    minimumSpend?: number | undefined;
+    maximumSpend?: number | undefined;
+    onlyIndivisual?: boolean;
+    perCouponUsageLimit?: number | undefined;
+    perUserUsageLimit?: number | undefined;
+    cacheKey?: string;
+}
+
+export class UpdateCouponCommand implements IUpdateCouponCommand {
+    id!: string;
+    code?: string | undefined;
+    name?: string;
+    description?: string | undefined;
+    discountType?: number;
+    amount?: number;
+    expiryDate?: Date;
+    allowFreeShipping?: boolean;
+    minimumSpend?: number | undefined;
+    maximumSpend?: number | undefined;
+    onlyIndivisual?: boolean;
+    perCouponUsageLimit?: number | undefined;
+    perUserUsageLimit?: number | undefined;
+    cacheKey?: string;
+
+    constructor(data?: IUpdateCouponCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.code = _data["code"];
+            this.name = _data["name"];
+            this.description = _data["description"];
+            this.discountType = _data["discountType"];
+            this.amount = _data["amount"];
+            this.expiryDate = _data["expiryDate"] ? new Date(_data["expiryDate"].toString()) : <any>undefined;
+            this.allowFreeShipping = _data["allowFreeShipping"];
+            this.minimumSpend = _data["minimumSpend"];
+            this.maximumSpend = _data["maximumSpend"];
+            this.onlyIndivisual = _data["onlyIndivisual"];
+            this.perCouponUsageLimit = _data["perCouponUsageLimit"];
+            this.perUserUsageLimit = _data["perUserUsageLimit"];
+            this.cacheKey = _data["cacheKey"];
+        }
+    }
+
+    static fromJS(data: any): UpdateCouponCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdateCouponCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["code"] = this.code;
+        data["name"] = this.name;
+        data["description"] = this.description;
+        data["discountType"] = this.discountType;
+        data["amount"] = this.amount;
+        data["expiryDate"] = this.expiryDate ? this.expiryDate.toISOString() : <any>undefined;
+        data["allowFreeShipping"] = this.allowFreeShipping;
+        data["minimumSpend"] = this.minimumSpend;
+        data["maximumSpend"] = this.maximumSpend;
+        data["onlyIndivisual"] = this.onlyIndivisual;
+        data["perCouponUsageLimit"] = this.perCouponUsageLimit;
+        data["perUserUsageLimit"] = this.perUserUsageLimit;
+        data["cacheKey"] = this.cacheKey;
+        return data;
+    }
+}
+
+export interface IUpdateCouponCommand {
+    id: string;
+    code?: string | undefined;
+    name?: string;
+    description?: string | undefined;
+    discountType?: number;
+    amount?: number;
+    expiryDate?: Date;
+    allowFreeShipping?: boolean;
+    minimumSpend?: number | undefined;
+    maximumSpend?: number | undefined;
+    onlyIndivisual?: boolean;
+    perCouponUsageLimit?: number | undefined;
+    perUserUsageLimit?: number | undefined;
     cacheKey?: string;
 }
 

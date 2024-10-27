@@ -695,6 +695,255 @@
         ]
       }
     },
+    "/api/Coupons/GetAll": {
+      "post": {
+        "tags": [
+          "Coupons"
+        ],
+        "operationId": "GetCoupons",
+        "requestBody": {
+          "x-name": "query",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetCouponListQuery"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedResponseOfCouponModel"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/Coupons/Get/{id}": {
+      "get": {
+        "tags": [
+          "Coupons"
+        ],
+        "operationId": "GetCoupon",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CouponModel"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/Coupons/Create": {
+      "post": {
+        "tags": [
+          "Coupons"
+        ],
+        "operationId": "CreateCoupon",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCouponCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "guid"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/Coupons/Update": {
+      "put": {
+        "tags": [
+          "Coupons"
+        ],
+        "operationId": "UpdateCoupon",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateCouponCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/Coupons/Delete/{id}": {
+      "delete": {
+        "tags": [
+          "Coupons"
+        ],
+        "operationId": "DeleteCoupon",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/Coupons/DeleteMultiple": {
+      "post": {
+        "tags": [
+          "Coupons"
+        ],
+        "operationId": "DeleteCoupons",
+        "requestBody": {
+          "x-name": "ids",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "guid"
+                }
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
     "/api/Couriers/GetAll": {
       "post": {
         "tags": [
@@ -7226,6 +7475,242 @@
           "amount": {
             "type": "number",
             "format": "decimal"
+          },
+          "cacheKey": {
+            "type": "string"
+          }
+        }
+      },
+      "PaginatedResponseOfCouponModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CouponModel"
+            }
+          },
+          "pageNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "hasPreviousPage": {
+            "type": "boolean"
+          },
+          "hasNextPage": {
+            "type": "boolean"
+          },
+          "optionsDataSources": {
+            "type": "object",
+            "additionalProperties": {}
+          }
+        }
+      },
+      "CouponModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "code": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "discountType": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "amount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "expiryDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "allowFreeShipping": {
+            "type": "boolean"
+          },
+          "minimumSpend": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "maximumSpend": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "onlyIndivisual": {
+            "type": "boolean"
+          },
+          "perCouponUsageLimit": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "perUserUsageLimit": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "optionsDataSources": {
+            "type": "object",
+            "additionalProperties": {}
+          }
+        }
+      },
+      "GetCouponListQuery": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/DataGridModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "cacheKey": {
+                "type": "string"
+              }
+            }
+          }
+        ]
+      },
+      "CreateCouponCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "discountType": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "amount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "expiryDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "allowFreeShipping": {
+            "type": "boolean"
+          },
+          "minimumSpend": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "maximumSpend": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "onlyIndivisual": {
+            "type": "boolean"
+          },
+          "perCouponUsageLimit": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "perUserUsageLimit": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "cacheKey": {
+            "type": "string"
+          }
+        }
+      },
+      "UpdateCouponCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "code": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "discountType": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "amount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "expiryDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "allowFreeShipping": {
+            "type": "boolean"
+          },
+          "minimumSpend": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "maximumSpend": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "onlyIndivisual": {
+            "type": "boolean"
+          },
+          "perCouponUsageLimit": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "perUserUsageLimit": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
           },
           "cacheKey": {
             "type": "string"

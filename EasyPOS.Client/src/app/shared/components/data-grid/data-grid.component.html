@@ -256,12 +256,12 @@
 
                  <ng-template pTemplate="header" let-columns>
                     <!-- Table Header With Basic Filter Start -->
-                    <tr *ngIf="filterType === 'basic' || filterType === 'basic-top'">
+                    <tr *ngIf="filterType === 'basic' || filterType === 'basic-top' || filterType === null">
                         <th style="width: 3rem" *ngIf="appPageLayout?.showSelectCheckbox && filterType === 'basic-top'">
                             <p-tableHeaderCheckbox />
                         </th>
                         <ng-container *ngFor="let col of columns">
-                            <th [pSortableColumn]="col.isSortable ? col.field : ''" pResizableColumn >
+                            <th [pSortableColumn]="col.isSortable ? col.field : ''" pResizableColumn class="text-center">
                                 <p-sortIcon 
                                     [hidden]="!col.isSortable" 
                                     [field]="col.field">
@@ -370,90 +370,90 @@
                         <ng-container *ngFor="let col of columns">
                             <th class="text-center" [pSortableColumn]="col.isSortable ? col.field : ''" pResizableColumn >
                             
-                            <!-- FieldType.string -->
-                            <p-columnFilter 
-                                type="text" 
-                                *ngIf="col.isFilterable && col.filterType === FilterType.string" 
-                                [field]="col.field" 
-                                display="menu" 
-                                [showAddButton]="false" 
-                                [showClearButton]="true"  />
+                                <!-- FieldType.string -->
+                                <p-columnFilter 
+                                    type="text" 
+                                    *ngIf="col.isFilterable && col.filterType === FilterType.string" 
+                                    [field]="col.field" 
+                                    display="menu" 
+                                    [showAddButton]="false" 
+                                    [showClearButton]="true"  />
 
-                            <!-- FieldType.select -->
-                            <p-columnFilter 
-                                *ngIf="col.isFilterable && col.filterType === FilterType.select" 
-                                [field]="col.field" 
-                                [showMenu]="true"
-                                [matchMode]="FilterMatchModes.EQUALS"
-                                display="menu"
-                                [showMatchModes]="false"
-                                [showOperator]="false"
-                                [showAddButton]="false"
-                                >
-                                <ng-template 
-                                    pTemplate="filter" 
-                                    let-value let-filter="filterCallback">
-                                    <p-dropdown 
-                                        [(ngModel)]="dynamicDropdownValues[generateDropdownKey(col.field, 'select')]"
-                                        [options]="optionsDataSources[col?.dsName]" 
-                                        (onChange)="filter($event.value?.id)" 
-                                        placeholder="Select One"
-                                        [optionLabel]="'name'" 
-                                        [showClear]="true">
-                                            <ng-template let-option pTemplate="item">
-                                                <p-tag 
-                                                    [value]="option.name" 
-                                                    [severity]="option.severity" />
-                                            </ng-template>
-                                    </p-dropdown>
-                                </ng-template>
-                            </p-columnFilter>   
+                                <!-- FieldType.select -->
+                                <p-columnFilter 
+                                    *ngIf="col.isFilterable && col.filterType === FilterType.select" 
+                                    [field]="col.field" 
+                                    [showMenu]="true"
+                                    [matchMode]="FilterMatchModes.EQUALS"
+                                    display="menu"
+                                    [showMatchModes]="false"
+                                    [showOperator]="false"
+                                    [showAddButton]="false"
+                                    >
+                                    <ng-template 
+                                        pTemplate="filter" 
+                                        let-value let-filter="filterCallback">
+                                        <p-dropdown 
+                                            [(ngModel)]="dynamicDropdownValues[generateDropdownKey(col.field, 'select')]"
+                                            [options]="optionsDataSources[col?.dsName]" 
+                                            (onChange)="filter($event.value?.id)" 
+                                            placeholder="Select One"
+                                            [optionLabel]="'name'" 
+                                            [showClear]="true">
+                                                <ng-template let-option pTemplate="item">
+                                                    <p-tag 
+                                                        [value]="option.name" 
+                                                        [severity]="option.severity" />
+                                                </ng-template>
+                                        </p-dropdown>
+                                    </ng-template>
+                                </p-columnFilter>   
 
-                            <!-- FieldType.multiSelect -->
-                            <p-columnFilter 
-                                *ngIf="col.isFilterable && col.filterType === FilterType.multiSelect" 
-                                [field]="col.field" 
-                                [showMenu]="true"
-                                [matchMode]="FilterMatchModes.IN"
-                                display="menu"
-                                [showMatchModes]="false"
-                                [showOperator]="false"
-                                [showAddButton]="false"
-                                >
-                                <ng-template 
-                                    pTemplate="filter" 
-                                    let-value let-filter="filterCallback">
-                                    <p-multiSelect 
-                                        [(ngModel)]="dynamicDropdownValues[generateDropdownKey(col.field, 'multiSelect')]"
-                                        [options]="optionsDataSources[col?.dsName]" 
-                                        placeholder="Select Any" 
-                                        (onChange)="filter($event.value)" 
-                                        optionLabel="name"
-                                        [showClear]="true">
-                                            <ng-template let-option pTemplate="item">
-                                                <div class="inline-block vertical-align-middle">
-                                                    <span class="ml-1 mt-1">{{ option.name }}</span>
-                                                </div>
-                                            </ng-template>
-                                    </p-multiSelect>
-                                </ng-template>
-                            </p-columnFilter>  
+                                <!-- FieldType.multiSelect -->
+                                <p-columnFilter 
+                                    *ngIf="col.isFilterable && col.filterType === FilterType.multiSelect" 
+                                    [field]="col.field" 
+                                    [showMenu]="true"
+                                    [matchMode]="FilterMatchModes.IN"
+                                    display="menu"
+                                    [showMatchModes]="false"
+                                    [showOperator]="false"
+                                    [showAddButton]="false"
+                                    >
+                                    <ng-template 
+                                        pTemplate="filter" 
+                                        let-value let-filter="filterCallback">
+                                        <p-multiSelect 
+                                            [(ngModel)]="dynamicDropdownValues[generateDropdownKey(col.field, 'multiSelect')]"
+                                            [options]="optionsDataSources[col?.dsName]" 
+                                            placeholder="Select Any" 
+                                            (onChange)="filter($event.value)" 
+                                            optionLabel="name"
+                                            [showClear]="true">
+                                                <ng-template let-option pTemplate="item">
+                                                    <div class="inline-block vertical-align-middle">
+                                                        <span class="ml-1 mt-1">{{ option.name }}</span>
+                                                    </div>
+                                                </ng-template>
+                                        </p-multiSelect>
+                                    </ng-template>
+                                </p-columnFilter>  
 
-                            <!-- FieldType.date -->
-                            <p-columnFilter 
-                                *ngIf="col.isFilterable && col.filterType === FilterType.date"
-                                type="date" 
-                                [field]="col.field" 
-                                display="menu">
-                            </p-columnFilter>
-                                                                               
-                            {{col.header}}
+                                <!-- FieldType.date -->
+                                <p-columnFilter 
+                                    *ngIf="col.isFilterable && col.filterType === FilterType.date"
+                                    type="date" 
+                                    [field]="col.field" 
+                                    display="menu">
+                                </p-columnFilter>
+                                                                                
+                                {{col.header}}
 
-                            <p-sortIcon 
-                                [hidden]="!col.isSortable" 
-                                [field]="col.field">
-                            </p-sortIcon>
-                        </th>
+                                <p-sortIcon 
+                                    [hidden]="!col.isSortable" 
+                                    [field]="col.field">
+                                </p-sortIcon>
+                            </th>
                         </ng-container>
                         <th *ngIf="appPageLayout?.showRowActionCol === true"></th>
                     </tr>

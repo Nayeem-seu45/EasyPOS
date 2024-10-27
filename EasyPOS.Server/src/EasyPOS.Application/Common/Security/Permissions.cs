@@ -249,6 +249,13 @@ public static class Permissions
         public const string Edit = "Permissions.Couriers.Edit";
         public const string Delete = "Permissions.Couriers.Delete";
     }
+    public static class Coupons
+    {
+        public const string View = "Permissions.Coupons.View";
+        public const string Create = "Permissions.Coupons.Create";
+        public const string Edit = "Permissions.Coupons.Edit";
+        public const string Delete = "Permissions.Coupons.Delete";
+    }
     #endregion
 
     #region Accounts

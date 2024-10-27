@@ -1,4 +1,6 @@
-﻿namespace EasyPOS.Application.Common.Abstractions.Caching;
+﻿using static EasyPOS.Application.Common.Security.Permissions;
+
+namespace EasyPOS.Application.Common.Abstractions.Caching;
 
 public static class CacheKeys
 {
@@ -59,6 +61,7 @@ public static class CacheKeys
     public const string Sale = nameof(Sale);
     public const string SalePayment = nameof(SalePayment);
     public const string Courier = nameof(Courier);
+    public const string Coupon = nameof(Coupon);
 
     #endregion
 
