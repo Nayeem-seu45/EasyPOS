@@ -368,7 +368,7 @@
                         </th>
 
                         <ng-container *ngFor="let col of columns">
-                            <th [pSortableColumn]="col.isSortable ? col.field : ''" pResizableColumn >
+                            <th class="text-center" [pSortableColumn]="col.isSortable ? col.field : ''" pResizableColumn >
                             
                             <!-- FieldType.string -->
                             <p-columnFilter 

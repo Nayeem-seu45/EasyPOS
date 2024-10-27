@@ -27,7 +27,7 @@ export class AppPageDetailComponent implements OnInit {
     'showRowActionCol': true,
     'showSelectCheckbox': false,
     'rowActionType': 'button',
-    'gridFilterType': 'basic-top',
+    'gridFilterType': null,
     'rowActions': [],
     'appPageFields': [],
   };
@@ -111,7 +111,7 @@ export class AppPageDetailComponent implements OnInit {
           this.item.showRowActionCol = this.pageLayout.showRowActionCol;
           this.item.showSelectCheckbox = this.pageLayout.showSelectCheckbox;
           this.item.rowActionType = this.pageLayout.rowActionType;
-          this.item.gridFilterType = this.pageLayout.gridFilterType || 'basic-top';
+          this.item.gridFilterType = this.pageLayout.gridFilterType;
           this.item.appPageFields?.forEach(() => {
             this.addAppPageField();
           });

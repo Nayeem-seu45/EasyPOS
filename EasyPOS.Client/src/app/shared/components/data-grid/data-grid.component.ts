@@ -68,7 +68,7 @@ export class DataGridComponent implements OnInit, OnDestroy {
   // Filtering Global
   globalFilterFields: string[] = [];
   globalFilterFieldModels: GlobalFilterFieldModel[] = [];
-  filterType: 'basic' | 'basic-top' | 'advanced' = 'basic-top';
+  filterType: 'basic' | 'basic-top' | 'advanced' | null = null;
   // globalFilterFieldNames: string[] = [];
 
   // Global filters
@@ -147,7 +147,7 @@ export class DataGridComponent implements OnInit, OnDestroy {
 
             this.appPageLayout = data.appPageLayout ? JSON.parse(data.appPageLayout) : null;
             
-            this.filterType = this.appPageLayout?.gridFilterType || this.filterType;
+            this.filterType = this.appPageLayout?.gridFilterType;
             
             this.pageTitle = this.pageTitle ?? this.appPageModel?.title ?? this.listComponent.constructor.name;
             
