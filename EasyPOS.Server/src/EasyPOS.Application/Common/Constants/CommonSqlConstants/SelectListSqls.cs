@@ -156,4 +156,13 @@ public static class SelectListSqls
         ORDER BY Name
         """;
     #endregion
+
+    #region Accounting
+    public const string AccountsSelectListSql = """
+        SELECT Id, Name 
+        FROM dbo.Accounts t
+        WHERE 1 = 1
+        ORDER BY Name
+        """;
+    #endregion
 }

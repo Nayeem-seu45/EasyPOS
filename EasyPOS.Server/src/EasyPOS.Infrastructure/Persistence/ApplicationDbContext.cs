@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 using EasyPOS.Application.Common.Abstractions;
-using EasyPOS.Domain.Accounts;
+using EasyPOS.Domain.Accounting;
 using EasyPOS.Domain.Admin;
 using EasyPOS.Domain.Common;
 using EasyPOS.Domain.Products;
@@ -60,9 +60,10 @@ public sealed class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<Coupon> Coupons => Set<Coupon>();
     #endregion
 
-    #region Accounts
+    #region Accounting
     public DbSet<Account> Accounts => Set<Account>();
     public DbSet<MoneyTransfer> MoneyTransfers => Set<MoneyTransfer>();
+    public DbSet<Expense> Expenses => Set<Expense>();
 
     #endregion
 

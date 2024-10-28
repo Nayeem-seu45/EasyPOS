@@ -14,7 +14,8 @@ const routes: Routes = [
             { path: 'product', loadChildren: () => import('./modules/products/products.module').then(m => m.ProductsModule), canActivateChild: [AuthGuard] },
             { path: 'stake', loadChildren: () => import('./modules/stakeholders/stakeholders.module').then(m => m.StakeholdersModule), canActivateChild: [AuthGuard] },
             { path: 'trade', loadChildren: () => import('./modules/trades/trades.module').then(m => m.TradesModule), canActivateChild: [AuthGuard] },
-            { path: 'setting', loadChildren: () => import('./modules/settings/settings.module').then(m => m.SettingsModule), canActivateChild: [AuthGuard] }
+            { path: 'setting', loadChildren: () => import('./modules/settings/settings.module').then(m => m.SettingsModule), canActivateChild: [AuthGuard] },
+            { path: 'acc', loadChildren: () => import('./modules/accounting/accounting.module').then(m => m.AccountingModule), canActivateChild: [AuthGuard] }
         ]
     },
     { path: 'auth', loadChildren: () => import('./modules/auth/auth.module').then(m => m.AuthModule) },

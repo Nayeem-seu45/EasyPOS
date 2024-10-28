@@ -1,4 +1,4 @@
-﻿using EasyPOS.Domain.Accounts;
+﻿using EasyPOS.Domain.Accounting;
 using EasyPOS.Domain.Admin;
 using EasyPOS.Domain.Common;
 using EasyPOS.Domain.Products;
@@ -61,9 +61,10 @@ public interface IApplicationDbContext
 
     #endregion
 
-    #region Accounts
+    #region Accounting
     DbSet<Account> Accounts { get; }
     DbSet<MoneyTransfer> MoneyTransfers { get; }
+    DbSet<Expense> Expenses { get; }
 
     #endregion
 

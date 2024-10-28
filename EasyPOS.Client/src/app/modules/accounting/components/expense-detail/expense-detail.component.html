@@ -1,0 +1,47 @@
+﻿<div class="col-12">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+    <div class="p-fluid p-formgrid grid">
+         <div class="field col-12 md:col-6">
+      <app-input-date label="ExpenseDate" formControlName="expenseDate" [required]="false" [autofocus]="false"  />
+    </div>
+    <div class="field col-12 md:col-6">
+        <app-input-text label="Title" formControlName="title" [required]="false" [readonly]="false" />
+        <app-validator-msg [control]="f['title']" />
+    </div>
+    <div class="field col-12 md:col-6">
+        <app-input-text label="ReferenceNo" formControlName="referenceNo" [required]="false" [readonly]="false" />
+        <app-validator-msg [control]="f['referenceno']" />
+    </div>
+    <div class="field col-12 md:col-6">
+      <app-input-select label="WarehouseId" formControlName="warehouseId" [options]="optionsDataSources?.['SelectList']"
+        [required]="false" />
+    </div>
+    <div class="field col-12 md:col-6">
+      <app-input-select label="CategoryId" formControlName="categoryId" [options]="optionsDataSources?.['SelectList']"
+        [required]="false" />
+    </div>
+    <div class="field col-12 md:col-6">
+      <app-input-decimal label="Amount" formControlName="amount" textAlign="right" [showButtons]="false" [required]="false" />
+    </div>
+    <div class="field col-12 md:col-6">
+      <app-input-select label="AccountId" formControlName="accountId" [options]="optionsDataSources?.['SelectList']"
+        [required]="false" />
+    </div>
+    <div class="field col-12 md:col-6">
+        <app-input-text label="Description" formControlName="description" [required]="false" [readonly]="false" />
+        <app-validator-msg [control]="f['description']" />
+    </div>
+    <div class="field col-12 md:col-6">
+        <app-input-text label="AttachmentUrl" formControlName="attachmentUrl" [required]="false" [readonly]="false" />
+        <app-validator-msg [control]="f['attachmenturl']" />
+    </div>
+
+    </div>
+
+    <div class="mt-3 p-dialog-footer">
+      <app-button label="Cancel" type="button" icon="pi pi-times" [text]="true" severity="warning"
+        (onClick)="cancel()" />
+      <app-button label="Save" type="submit" icon="pi pi-check" [text]="true" [disabled]="form.invalid" />
+    </div>
+  </form>
+</div>

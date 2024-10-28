@@ -275,6 +275,14 @@ public static class Permissions
         public const string Delete = "Permissions.MoneyTransfers.Delete";
     }
 
+    public static class Expenses
+    {
+        public const string View = "Permissions.Expenses.View";
+        public const string Create = "Permissions.Expenses.Create";
+        public const string Edit = "Permissions.Expenses.Edit";
+        public const string Delete = "Permissions.Expenses.Delete";
+    }
+
     #endregion
 
     #region Settings
