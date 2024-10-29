@@ -5,7 +5,6 @@ using EasyPOS.Domain.Products;
 using EasyPOS.Domain.Settings;
 using EasyPOS.Domain.Stakeholders;
 using EasyPOS.Domain.Trades;
-using static EasyPOS.Application.Common.Security.Permissions;
 using Unit = EasyPOS.Domain.Products.Unit;
 
 namespace EasyPOS.Application.Common.Abstractions;
@@ -57,6 +56,7 @@ public interface IApplicationDbContext
     DbSet<SalePayment> SalePayments { get; }
     DbSet<Courier> Couriers { get; }
     DbSet<Coupon> Coupons { get; }
+    DbSet<GiftCard> GiftCards { get; }
 
 
     #endregion

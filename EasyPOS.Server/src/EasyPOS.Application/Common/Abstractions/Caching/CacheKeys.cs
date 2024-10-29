@@ -62,6 +62,7 @@ public static class CacheKeys
     public const string SalePayment = nameof(SalePayment);
     public const string Courier = nameof(Courier);
     public const string Coupon = nameof(Coupon);
+    public const string GiftCard = nameof(GiftCard);
 
     #endregion
 

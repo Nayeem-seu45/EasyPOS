@@ -256,6 +256,13 @@ public static class Permissions
         public const string Edit = "Permissions.Coupons.Edit";
         public const string Delete = "Permissions.Coupons.Delete";
     }
+    public static class GiftCards
+    {
+        public const string View = "Permissions.GiftCards.View";
+        public const string Create = "Permissions.GiftCards.Create";
+        public const string Edit = "Permissions.GiftCards.Edit";
+        public const string Delete = "Permissions.GiftCards.Delete";
+    }
     #endregion
 
     #region Accounts

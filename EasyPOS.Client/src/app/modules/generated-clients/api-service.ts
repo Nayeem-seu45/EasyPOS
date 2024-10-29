@@ -3924,6 +3924,364 @@ export class CouriersClient implements ICouriersClient {
     }
 }
 
+export interface IGiftCardsClient {
+    getAll(query: GetGiftCardListQuery): Observable<PaginatedResponseOfGiftCardModel>;
+    get(id: string): Observable<GiftCardModel>;
+    create(command: CreateGiftCardCommand): Observable<string>;
+    update(command: UpdateGiftCardCommand): Observable<void>;
+    delete(id: string): Observable<void>;
+    deleteMultiple(ids: string[]): Observable<void>;
+}
+
+@Injectable()
+export class GiftCardsClient implements IGiftCardsClient {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ?? "";
+    }
+
+    getAll(query: GetGiftCardListQuery): Observable<PaginatedResponseOfGiftCardModel> {
+        let url_ = this.baseUrl + "/api/GiftCards/GetAll";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(query);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            withCredentials: true,
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAll(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAll(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<PaginatedResponseOfGiftCardModel>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<PaginatedResponseOfGiftCardModel>;
+        }));
+    }
+
+    protected processGetAll(response: HttpResponseBase): Observable<PaginatedResponseOfGiftCardModel> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = PaginatedResponseOfGiftCardModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    get(id: string): Observable<GiftCardModel> {
+        let url_ = this.baseUrl + "/api/GiftCards/Get/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            withCredentials: true,
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGet(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGet(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GiftCardModel>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GiftCardModel>;
+        }));
+    }
+
+    protected processGet(response: HttpResponseBase): Observable<GiftCardModel> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GiftCardModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    create(command: CreateGiftCardCommand): Observable<string> {
+        let url_ = this.baseUrl + "/api/GiftCards/Create";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            withCredentials: true,
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreate(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<string>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<string>;
+        }));
+    }
+
+    protected processCreate(response: HttpResponseBase): Observable<string> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 201) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result201: any = null;
+            let resultData201 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result201 = resultData201 !== undefined ? resultData201 : <any>null;
+    
+            return _observableOf(result201);
+            }));
+        } else if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ProblemDetails.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    update(command: UpdateGiftCardCommand): Observable<void> {
+        let url_ = this.baseUrl + "/api/GiftCards/Update";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            withCredentials: true,
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+            })
+        };
+
+        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdate(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processUpdate(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ProblemDetails.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            }));
+        } else if (status === 404) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("A server side error occurred.", status, _responseText, _headers);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    delete(id: string): Observable<void> {
+        let url_ = this.baseUrl + "/api/GiftCards/Delete/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            withCredentials: true,
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDelete(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDelete(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processDelete(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ProblemDetails.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    deleteMultiple(ids: string[]): Observable<void> {
+        let url_ = this.baseUrl + "/api/GiftCards/DeleteMultiple";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(ids);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            withCredentials: true,
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDeleteMultiple(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDeleteMultiple(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processDeleteMultiple(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ProblemDetails.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+}
+
 export interface IPurchasePaymentsClient {
     getAll(query: GetPurchasePaymentListQuery): Observable<PaginatedResponseOfPurchasePaymentModel>;
     getAllByPurchaseId(query: GetPaymentListByPurchaseIdQuery): Observable<PurchasePaymentModel[]>;
@@ -14617,6 +14975,331 @@ export interface IUpdateCourierCommand {
     mobileNo?: string | undefined;
     email?: string | undefined;
     address?: string | undefined;
+    cacheKey?: string;
+}
+
+export class PaginatedResponseOfGiftCardModel implements IPaginatedResponseOfGiftCardModel {
+    items?: GiftCardModel[];
+    pageNumber?: number;
+    totalPages?: number;
+    totalCount?: number;
+    hasPreviousPage?: boolean;
+    hasNextPage?: boolean;
+    optionsDataSources?: { [key: string]: any; };
+
+    constructor(data?: IPaginatedResponseOfGiftCardModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["items"])) {
+                this.items = [] as any;
+                for (let item of _data["items"])
+                    this.items!.push(GiftCardModel.fromJS(item));
+            }
+            this.pageNumber = _data["pageNumber"];
+            this.totalPages = _data["totalPages"];
+            this.totalCount = _data["totalCount"];
+            this.hasPreviousPage = _data["hasPreviousPage"];
+            this.hasNextPage = _data["hasNextPage"];
+            if (_data["optionsDataSources"]) {
+                this.optionsDataSources = {} as any;
+                for (let key in _data["optionsDataSources"]) {
+                    if (_data["optionsDataSources"].hasOwnProperty(key))
+                        (<any>this.optionsDataSources)![key] = _data["optionsDataSources"][key];
+                }
+            }
+        }
+    }
+
+    static fromJS(data: any): PaginatedResponseOfGiftCardModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new PaginatedResponseOfGiftCardModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        data["pageNumber"] = this.pageNumber;
+        data["totalPages"] = this.totalPages;
+        data["totalCount"] = this.totalCount;
+        data["hasPreviousPage"] = this.hasPreviousPage;
+        data["hasNextPage"] = this.hasNextPage;
+        if (this.optionsDataSources) {
+            data["optionsDataSources"] = {};
+            for (let key in this.optionsDataSources) {
+                if (this.optionsDataSources.hasOwnProperty(key))
+                    (<any>data["optionsDataSources"])[key] = (<any>this.optionsDataSources)[key];
+            }
+        }
+        return data;
+    }
+}
+
+export interface IPaginatedResponseOfGiftCardModel {
+    items?: GiftCardModel[];
+    pageNumber?: number;
+    totalPages?: number;
+    totalCount?: number;
+    hasPreviousPage?: boolean;
+    hasNextPage?: boolean;
+    optionsDataSources?: { [key: string]: any; };
+}
+
+export class GiftCardModel implements IGiftCardModel {
+    id?: string;
+    cardNo?: string | undefined;
+    amount?: number;
+    expense?: number;
+    balance?: number;
+    expiredDate?: Date;
+    customerId?: string | undefined;
+    allowMultipleTransac?: boolean;
+    giftCardType?: string;
+    status?: string;
+    optionsDataSources?: { [key: string]: any; };
+
+    constructor(data?: IGiftCardModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.cardNo = _data["cardNo"];
+            this.amount = _data["amount"];
+            this.expense = _data["expense"];
+            this.balance = _data["balance"];
+            this.expiredDate = _data["expiredDate"] ? new Date(_data["expiredDate"].toString()) : <any>undefined;
+            this.customerId = _data["customerId"];
+            this.allowMultipleTransac = _data["allowMultipleTransac"];
+            this.giftCardType = _data["giftCardType"];
+            this.status = _data["status"];
+            if (_data["optionsDataSources"]) {
+                this.optionsDataSources = {} as any;
+                for (let key in _data["optionsDataSources"]) {
+                    if (_data["optionsDataSources"].hasOwnProperty(key))
+                        (<any>this.optionsDataSources)![key] = _data["optionsDataSources"][key];
+                }
+            }
+        }
+    }
+
+    static fromJS(data: any): GiftCardModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new GiftCardModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["cardNo"] = this.cardNo;
+        data["amount"] = this.amount;
+        data["expense"] = this.expense;
+        data["balance"] = this.balance;
+        data["expiredDate"] = this.expiredDate ? this.expiredDate.toISOString() : <any>undefined;
+        data["customerId"] = this.customerId;
+        data["allowMultipleTransac"] = this.allowMultipleTransac;
+        data["giftCardType"] = this.giftCardType;
+        data["status"] = this.status;
+        if (this.optionsDataSources) {
+            data["optionsDataSources"] = {};
+            for (let key in this.optionsDataSources) {
+                if (this.optionsDataSources.hasOwnProperty(key))
+                    (<any>data["optionsDataSources"])[key] = (<any>this.optionsDataSources)[key];
+            }
+        }
+        return data;
+    }
+}
+
+export interface IGiftCardModel {
+    id?: string;
+    cardNo?: string | undefined;
+    amount?: number;
+    expense?: number;
+    balance?: number;
+    expiredDate?: Date;
+    customerId?: string | undefined;
+    allowMultipleTransac?: boolean;
+    giftCardType?: string;
+    status?: string;
+    optionsDataSources?: { [key: string]: any; };
+}
+
+export class GetGiftCardListQuery extends DataGridModel implements IGetGiftCardListQuery {
+    cacheKey?: string;
+
+    constructor(data?: IGetGiftCardListQuery) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+        if (_data) {
+            this.cacheKey = _data["cacheKey"];
+        }
+    }
+
+    static override fromJS(data: any): GetGiftCardListQuery {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetGiftCardListQuery();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["cacheKey"] = this.cacheKey;
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IGetGiftCardListQuery extends IDataGridModel {
+    cacheKey?: string;
+}
+
+export class CreateGiftCardCommand implements ICreateGiftCardCommand {
+    cardNo?: string | undefined;
+    amount?: number | undefined;
+    expiredDate?: Date | undefined;
+    customerId?: string | undefined;
+    allowMultipleTransac?: boolean;
+    giftCardType?: string;
+    cacheKey?: string;
+
+    constructor(data?: ICreateGiftCardCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.cardNo = _data["cardNo"];
+            this.amount = _data["amount"];
+            this.expiredDate = _data["expiredDate"] ? new Date(_data["expiredDate"].toString()) : <any>undefined;
+            this.customerId = _data["customerId"];
+            this.allowMultipleTransac = _data["allowMultipleTransac"];
+            this.giftCardType = _data["giftCardType"];
+            this.cacheKey = _data["cacheKey"];
+        }
+    }
+
+    static fromJS(data: any): CreateGiftCardCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateGiftCardCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["cardNo"] = this.cardNo;
+        data["amount"] = this.amount;
+        data["expiredDate"] = this.expiredDate ? this.expiredDate.toISOString() : <any>undefined;
+        data["customerId"] = this.customerId;
+        data["allowMultipleTransac"] = this.allowMultipleTransac;
+        data["giftCardType"] = this.giftCardType;
+        data["cacheKey"] = this.cacheKey;
+        return data;
+    }
+}
+
+export interface ICreateGiftCardCommand {
+    cardNo?: string | undefined;
+    amount?: number | undefined;
+    expiredDate?: Date | undefined;
+    customerId?: string | undefined;
+    allowMultipleTransac?: boolean;
+    giftCardType?: string;
+    cacheKey?: string;
+}
+
+export class UpdateGiftCardCommand implements IUpdateGiftCardCommand {
+    id!: string;
+    cardNo?: string | undefined;
+    amount?: number | undefined;
+    expiredDate?: Date | undefined;
+    customerId?: string | undefined;
+    allowMultipleTransac?: boolean;
+    giftCardType?: string;
+    cacheKey?: string;
+
+    constructor(data?: IUpdateGiftCardCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.cardNo = _data["cardNo"];
+            this.amount = _data["amount"];
+            this.expiredDate = _data["expiredDate"] ? new Date(_data["expiredDate"].toString()) : <any>undefined;
+            this.customerId = _data["customerId"];
+            this.allowMultipleTransac = _data["allowMultipleTransac"];
+            this.giftCardType = _data["giftCardType"];
+            this.cacheKey = _data["cacheKey"];
+        }
+    }
+
+    static fromJS(data: any): UpdateGiftCardCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdateGiftCardCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["cardNo"] = this.cardNo;
+        data["amount"] = this.amount;
+        data["expiredDate"] = this.expiredDate ? this.expiredDate.toISOString() : <any>undefined;
+        data["customerId"] = this.customerId;
+        data["allowMultipleTransac"] = this.allowMultipleTransac;
+        data["giftCardType"] = this.giftCardType;
+        data["cacheKey"] = this.cacheKey;
+        return data;
+    }
+}
+
+export interface IUpdateGiftCardCommand {
+    id: string;
+    cardNo?: string | undefined;
+    amount?: number | undefined;
+    expiredDate?: Date | undefined;
+    customerId?: string | undefined;
+    allowMultipleTransac?: boolean;
+    giftCardType?: string;
     cacheKey?: string;
 }
 

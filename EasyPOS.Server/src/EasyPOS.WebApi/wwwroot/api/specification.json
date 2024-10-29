@@ -2638,6 +2638,255 @@
         ]
       }
     },
+    "/api/GiftCards/GetAll": {
+      "post": {
+        "tags": [
+          "GiftCards"
+        ],
+        "operationId": "GetGiftCards",
+        "requestBody": {
+          "x-name": "query",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetGiftCardListQuery"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedResponseOfGiftCardModel"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/GiftCards/Get/{id}": {
+      "get": {
+        "tags": [
+          "GiftCards"
+        ],
+        "operationId": "GetGiftCard",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GiftCardModel"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/GiftCards/Create": {
+      "post": {
+        "tags": [
+          "GiftCards"
+        ],
+        "operationId": "CreateGiftCard",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateGiftCardCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "guid"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/GiftCards/Update": {
+      "put": {
+        "tags": [
+          "GiftCards"
+        ],
+        "operationId": "UpdateGiftCard",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateGiftCardCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/GiftCards/Delete/{id}": {
+      "delete": {
+        "tags": [
+          "GiftCards"
+        ],
+        "operationId": "DeleteGiftCard",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/GiftCards/DeleteMultiple": {
+      "post": {
+        "tags": [
+          "GiftCards"
+        ],
+        "operationId": "DeleteGiftCards",
+        "requestBody": {
+          "x-name": "ids",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "guid"
+                }
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
     "/api/PurchasePayments/GetAll": {
       "post": {
         "tags": [
@@ -9458,6 +9707,183 @@
           "address": {
             "type": "string",
             "nullable": true
+          },
+          "cacheKey": {
+            "type": "string"
+          }
+        }
+      },
+      "PaginatedResponseOfGiftCardModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GiftCardModel"
+            }
+          },
+          "pageNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "hasPreviousPage": {
+            "type": "boolean"
+          },
+          "hasNextPage": {
+            "type": "boolean"
+          },
+          "optionsDataSources": {
+            "type": "object",
+            "additionalProperties": {}
+          }
+        }
+      },
+      "GiftCardModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "cardNo": {
+            "type": "string",
+            "nullable": true
+          },
+          "amount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "expense": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "balance": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "expiredDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "customerId": {
+            "type": "string",
+            "format": "guid",
+            "nullable": true
+          },
+          "allowMultipleTransac": {
+            "type": "boolean"
+          },
+          "giftCardType": {
+            "type": "string",
+            "format": "guid"
+          },
+          "status": {
+            "type": "string",
+            "format": "guid"
+          },
+          "optionsDataSources": {
+            "type": "object",
+            "additionalProperties": {}
+          }
+        }
+      },
+      "GetGiftCardListQuery": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/DataGridModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "cacheKey": {
+                "type": "string"
+              }
+            }
+          }
+        ]
+      },
+      "CreateGiftCardCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "cardNo": {
+            "type": "string",
+            "nullable": true
+          },
+          "amount": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "expiredDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "customerId": {
+            "type": "string",
+            "format": "guid",
+            "nullable": true
+          },
+          "allowMultipleTransac": {
+            "type": "boolean"
+          },
+          "giftCardType": {
+            "type": "string",
+            "format": "guid"
+          },
+          "cacheKey": {
+            "type": "string"
+          }
+        }
+      },
+      "UpdateGiftCardCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "cardNo": {
+            "type": "string",
+            "nullable": true
+          },
+          "amount": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "expiredDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "customerId": {
+            "type": "string",
+            "format": "guid",
+            "nullable": true
+          },
+          "allowMultipleTransac": {
+            "type": "boolean"
+          },
+          "giftCardType": {
+            "type": "string",
+            "format": "guid"
           },
           "cacheKey": {
             "type": "string"
