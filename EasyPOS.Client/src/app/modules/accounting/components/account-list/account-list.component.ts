@@ -10,7 +10,7 @@ import { AccountsClient } from 'src/app/modules/generated-clients/api-service';
 })
 export class AccountListComponent {
   detailComponent = AccountDetailComponent;
-  pageId = 'e585a38a-f28a-42e3-b3bd-08dcf782b6da'
+  pageId = '95aa13ae-21ac-411a-0ed2-08dcf83acb50'
 
   entityClient: AccountsClient = inject(AccountsClient);
 }

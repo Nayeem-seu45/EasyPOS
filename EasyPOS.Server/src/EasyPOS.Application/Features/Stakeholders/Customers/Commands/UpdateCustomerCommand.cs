@@ -1,7 +1,4 @@
-﻿using EasyPOS.Application.Common.Constants;
-using Mapster;
-
-namespace EasyPOS.Application.Features.Customers.Commands;
+﻿namespace EasyPOS.Application.Features.Customers.Commands;
 
 public record UpdateCustomerCommand(
     Guid Id,

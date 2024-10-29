@@ -4,8 +4,8 @@ using EasyPOS.Application.Common.Extensions;
 using EasyPOS.Application.Common.Models;
 using EasyPOS.Application.Features.Admin.AppNotifications.Queries;
 using EasyPOS.Application.Features.Common.Queries;
-using EasyPOS.Application.Features.Lookups.Commands;
-using EasyPOS.Application.Features.Lookups.Queries;
+using EasyPOS.Application.Features.Setups.Lookups.Commands;
+using EasyPOS.Application.Features.Setups.Lookups.Queries;
 using EasyPOS.Infrastructure.Communications;
 using Microsoft.AspNetCore.SignalR;
 

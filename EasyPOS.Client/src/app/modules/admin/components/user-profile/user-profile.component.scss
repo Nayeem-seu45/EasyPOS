@@ -1,14 +1,14 @@
-:host ::ng-deep {
-  .orientation-right{
-      display: flex;
+// :host ::ng-deep {
+//   .orientation-right{
+//       display: flex;
 
-      .p-tabview-nav {
-          flex-direction: column;
-          width: 10%;
-      }
+//       .p-tabview-nav {
+//           flex-direction: column;
+//           width: 10%;
+//       }
 
-      .p-tabview-panels {
-          width: 100%; // to have content take up remainder of space
-      }
-  }
-}
+//       .p-tabview-panels {
+//           width: 100%; // to have content take up remainder of space
+//       }
+//   }
+// }

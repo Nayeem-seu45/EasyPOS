@@ -5,7 +5,7 @@ using EasyPOS.Domain.Common;
 using EasyPOS.Domain.Shared;
 using Mapster;
 
-namespace EasyPOS.Application.Features.LookupDetails.Commands;
+namespace EasyPOS.Application.Features.Setups.LookupDetails.Commands;
 
 public record CreateLookupDetailCommand(
     string Name,

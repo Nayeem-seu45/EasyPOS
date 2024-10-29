@@ -20,6 +20,11 @@
     border-bottom-right-radius: 3px;
     border-bottom-left-radius: 3px;
   }
+
+  app-input-decimal p-inputnumber input, span {
+    width: 100%;
+    box-sizing: border-box;
+  }
 }
 
 .coupon-tab{

@@ -36,6 +36,13 @@ public class AppPages : EndpointGroupBase
             .WithName("UpsertAppPage")
             .Produces<string>(StatusCodes.Status200OK)
             .Produces<ProblemDetails>(StatusCodes.Status400BadRequest);
+
+        group.MapGet("Delete/{id}", Delete)
+            .WithName("DeleteAppPage")
+            .Produces(StatusCodes.Status204NoContent)
+            .Produces<ProblemDetails>(StatusCodes.Status400BadRequest);
+
+
     }
 
     private async Task<IResult> GetAll(ISender sender, [FromBody] GetAppPageListQuery query)
@@ -75,5 +82,14 @@ public class AppPages : EndpointGroupBase
         var result = await sender.Send(command);
 
         return Results.Ok(result);
+    }
+
+    private async Task<IResult> Delete(ISender sender, Guid id)
+    {
+        var result = await sender.Send(new DeleteAppPageCommand(id));
+
+        return result.Match(
+            onSuccess: () => Results.NoContent(),
+            onFailure: result.ToProblemDetails);
     }
 }

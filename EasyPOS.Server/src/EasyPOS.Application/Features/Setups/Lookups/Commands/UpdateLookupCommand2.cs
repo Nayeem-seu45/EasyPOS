@@ -7,7 +7,7 @@ using EasyPOS.Application.Common.Constants;
 using EasyPOS.Domain.Shared;
 using EasyPOS.Domain.Common.DomainEvents;
 
-namespace EasyPOS.Application.Features.Lookups.Commands;
+namespace EasyPOS.Application.Features.Setups.Lookups.Commands;
 
 public record UpdateLookupCommand2(
     Guid Id,

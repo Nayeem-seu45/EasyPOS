@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 
-namespace EasyPOS.Application.Features.Lookups.Queries;
+namespace EasyPOS.Application.Features.Setups.Lookups.Queries;
 
 public record LookupModel
 {

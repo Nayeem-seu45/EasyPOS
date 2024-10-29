@@ -1,7 +1,7 @@
 ﻿using static EasyPOS.Application.Common.DapperQueries.SqlConstants;
 using static EasyPOS.Application.Common.Security.Permissions;
 
-namespace EasyPOS.Application.Features.Lookups.Queries;
+namespace EasyPOS.Application.Features.Setups.Lookups.Queries;
 
 [Authorize(Policy = CommonSetup.Lookups.View)]
 public record GetLookupListQuery

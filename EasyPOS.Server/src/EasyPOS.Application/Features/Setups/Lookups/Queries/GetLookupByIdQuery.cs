@@ -1,4 +1,4 @@
-﻿namespace EasyPOS.Application.Features.Lookups.Queries;
+﻿namespace EasyPOS.Application.Features.Setups.Lookups.Queries;
 
 [Authorize(Policy = Permissions.CommonSetup.Lookups.View)]
 public record GetLookupByIdQuery(Guid? Id) : ICacheableQuery<LookupModel>
@@ -18,7 +18,7 @@ internal sealed class GetLookupByIdQueryHandler(ISqlConnectionFactory sqlConnect
     {
         if (query.Id.IsNullOrEmpty())
         {
-            return new LookupModel() { Status = true};
+            return new LookupModel() { Status = true };
         }
         var connection = sqlConnection.GetOpenConnection();
 

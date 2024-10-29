@@ -1,4 +1,4 @@
-﻿namespace EasyPOS.Application.Features.LookupDetails.Queries;
+﻿namespace EasyPOS.Application.Features.Setups.LookupDetails.Queries;
 
 public record LookupDetailModel
 {

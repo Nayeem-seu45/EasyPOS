@@ -1,6 +1,6 @@
 ﻿using EasyPOS.Application.Common.DapperQueries;
 
-namespace EasyPOS.Application.Features.LookupDetails.Commands;
+namespace EasyPOS.Application.Features.Setups.LookupDetails.Commands;
 
 public class CreateLookupDetailCommandValidator : AbstractValidator<CreateLookupDetailCommand>
 {
@@ -12,7 +12,7 @@ public class CreateLookupDetailCommandValidator : AbstractValidator<CreateLookup
 
         RuleFor(v => v.Code)
             .MaximumLength(20)
-            //.MinimumLength(3)
+              //.MinimumLength(3)
               .WithMessage("'{PropertyName}' allow max 20 characters.");
 
         //RuleFor(v => v.Code)
@@ -23,7 +23,7 @@ public class CreateLookupDetailCommandValidator : AbstractValidator<CreateLookup
         RuleFor(v => v.Name)
             .NotEmpty()
             .MaximumLength(200)
-            .MustAsync(async(command, name, cancellationToken) => await BeUniqueName(name, command.LookupId, cancellationToken ))
+            .MustAsync(async (command, name, cancellationToken) => await BeUniqueName(name, command.LookupId, cancellationToken))
                 .WithMessage("'{PropertyName}' must be unique.")
                 .WithErrorCode("Unique");
 
@@ -34,7 +34,7 @@ public class CreateLookupDetailCommandValidator : AbstractValidator<CreateLookup
 
     public async Task<bool> BeUniqueName(string name, Guid lookupId, CancellationToken cancellationToken = default)
     {
-        return !await _commonQuery.IsExistAsync("dbo.LookupDetails", ["Name", "lookupId"], new { Name = name, LookupId =  lookupId});
+        return !await _commonQuery.IsExistAsync("dbo.LookupDetails", ["Name", "lookupId"], new { Name = name, LookupId = lookupId });
     }
     public async Task<bool> BeUniqueCode(string code, CancellationToken cancellationToken = default)
     {

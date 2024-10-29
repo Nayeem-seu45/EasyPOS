@@ -1,4 +1,4 @@
-﻿namespace EasyPOS.Application.Features.LookupDetails.Queries;
+﻿namespace EasyPOS.Application.Features.Setups.LookupDetails.Queries;
 
 [Authorize(Policy = Permissions.CommonSetup.LookupDetails.View)]
 public record GetLookupDetailListQuery

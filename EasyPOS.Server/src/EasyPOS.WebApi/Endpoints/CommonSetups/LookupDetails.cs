@@ -1,13 +1,7 @@
-﻿using EasyPOS.Application.Features.Common.Queries;
-using EasyPOS.Application.Common.Abstractions.Caching;
-using EasyPOS.Application.Common.Constants.CommonSqlConstants;
-using EasyPOS.Application.Common.DapperQueries;
-using EasyPOS.Application.Common.Extensions;
-using EasyPOS.Application.Features.LookupDetails.Commands;
-using EasyPOS.Application.Features.LookupDetails.Queries;
-using EasyPOS.Domain.Shared;
-using EasyPOS.WebApi.Extensions;
-using EasyPOS.WebApi.Infrastructure;
+﻿using EasyPOS.Application.Common.Extensions;
+using EasyPOS.Application.Features.Common.Queries;
+using EasyPOS.Application.Features.Setups.LookupDetails.Commands;
+using EasyPOS.Application.Features.Setups.LookupDetails.Queries;
 
 namespace EasyPOS.WebApi.Endpoints.CommonSetups;
 

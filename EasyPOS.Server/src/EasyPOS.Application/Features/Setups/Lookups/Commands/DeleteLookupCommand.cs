@@ -4,7 +4,7 @@ using EasyPOS.Application.Common.Abstractions.Messaging;
 using EasyPOS.Application.Common.Constants;
 using EasyPOS.Domain.Shared;
 
-namespace EasyPOS.Application.Features.Lookups.Commands;
+namespace EasyPOS.Application.Features.Setups.Lookups.Commands;
 
 public record DeleteLookupCommand(Guid Id) : ICacheInvalidatorCommand
 {

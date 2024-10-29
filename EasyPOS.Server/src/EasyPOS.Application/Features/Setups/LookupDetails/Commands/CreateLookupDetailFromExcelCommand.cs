@@ -2,7 +2,7 @@
 using EasyPOS.Domain.Common;
 using Microsoft.AspNetCore.Http;
 
-namespace EasyPOS.Application.Features.LookupDetails.Commands;
+namespace EasyPOS.Application.Features.Setups.LookupDetails.Commands;
 
 
 public record CreateLookupDetailFromExcelCommand(

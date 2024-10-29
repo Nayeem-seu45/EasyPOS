@@ -1,7 +1,7 @@
 ﻿using EasyPOS.Application.Common.Events;
 using EasyPOS.Domain.Common.DomainEvents;
 
-namespace EasyPOS.Application.Features.LookupDetails.EventHandlers;
+namespace EasyPOS.Application.Features.Setups.LookupDetails.EventHandlers;
 
 internal sealed class LookupUpdatedEventHandler(
     ISqlConnectionFactory sqlConnection,

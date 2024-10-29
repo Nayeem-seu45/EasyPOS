@@ -1,7 +1,7 @@
 ﻿using EasyPOS.Domain.Common;
 using Mapster;
 
-namespace EasyPOS.Application.Features.Lookups.Commands;
+namespace EasyPOS.Application.Features.Setups.Lookups.Commands;
 
 public record CreateLookupCommand(
     string Name,

@@ -1,6 +1,6 @@
 ﻿using EasyPOS.Application.Common.DapperQueries;
 
-namespace EasyPOS.Application.Features.Lookups.Commands;
+namespace EasyPOS.Application.Features.Setups.Lookups.Commands;
 
 public class UpdateLookupCommandValidator : AbstractValidator<UpdateLookupCommand>
 {

@@ -1,7 +1,7 @@
 ﻿using EasyPOS.Application.Common.Constants;
 using Mapster;
 
-namespace EasyPOS.Application.Features.LookupDetails.Commands;
+namespace EasyPOS.Application.Features.Setups.LookupDetails.Commands;
 
 public record UpdateLookupDetailCommand(
     Guid Id,
