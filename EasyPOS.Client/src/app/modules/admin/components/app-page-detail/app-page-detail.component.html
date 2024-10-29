@@ -31,7 +31,7 @@
         </div>
 
         <div formArrayName="toolbarActions" class=" drop-column" *ngFor="let field of toolbarActions.controls; let i = index" pDroppable (onDrop)="drop($event, i, toolbarActions)"  >
-          <div [formGroupName]="i" class="col-12 group-row" conditionalDraggable pDraggable (onDragStart)="dragStart($event, i, toolbarActions)" (onDragEnd)="dragEnd($event)"  >
+          <div [formGroupName]="i" class="col-12 group-row" appDraggableArea pDraggable (onDragStart)="dragStart($event, i, toolbarActions)" (onDragEnd)="dragEnd($event)"  >
             <div class="div-caption">
               Action Item
               <a class="expand-field" *ngIf="!showPropertyStatus(field)" (click)="showProperty(field, true)">
@@ -157,7 +157,7 @@
           </div>
         </div>
         <div formArrayName="rowActions" *ngFor="let field of rowActions.controls; let i = index" pDroppable (onDrop)="drop($event, i, rowActions)">
-          <div [formGroupName]="i" class="col-12 group-row" conditionalDraggable pDraggable (onDragStart)="dragStart($event, i, rowActions)" (onDragEnd)="dragEnd($event)">
+          <div [formGroupName]="i" class="col-12 group-row" appDraggableArea pDraggable (onDragStart)="dragStart($event, i, rowActions)" (onDragEnd)="dragEnd($event)">
             <div class="div-caption">
               Action Items
               <a class="expand-field" *ngIf="!showPropertyStatus(field)" (click)="showProperty(field, true)">
@@ -264,7 +264,7 @@
         </div>
 
         <div formArrayName="appPageFields" *ngFor="let field of appPageFields.controls; let i = index"  pDroppable (onDrop)="drop($event, i, appPageFields)">
-          <div [formGroupName]="i" class="col-12 group-row" conditionalDraggable pDraggable (onDragStart)="dragStart($event, i, appPageFields)" (onDragEnd)="dragEnd($event)">
+          <div [formGroupName]="i" class="col-12 group-row" appDraggableArea pDraggable (onDragStart)="dragStart($event, i, appPageFields)" (onDragEnd)="dragEnd($event)">
             <div class="div-caption">
               Field
               <a class="expand-field" *ngIf="!showPropertyStatus(field)" (click)="showProperty(field, true)">

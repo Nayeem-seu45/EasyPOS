@@ -12,12 +12,11 @@ import { InputTextModule } from 'primeng/inputtext';
 import { FileUploadModule } from 'primeng/fileupload';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { TreeModule } from 'primeng/tree';
-import { ConditionalDraggableDirective } from 'src/app/shared/direvtives/conditional-draggable.directive';
+import { DraggablePositionModule } from 'src/app/others/draggable-position/draggable-position.module';
 
 @NgModule({
   declarations: [
     ...adminRoutingComponents,
-    ConditionalDraggableDirective
   ],
   imports: [
     CommonModule,
@@ -32,6 +31,7 @@ import { ConditionalDraggableDirective } from 'src/app/shared/direvtives/conditi
     FileUploadModule,
     SelectButtonModule,
     TreeModule,
+    DraggablePositionModule
   ],
   providers: [
     { provide: API_BASE_URL, useValue: environment.API_BASE_URL },

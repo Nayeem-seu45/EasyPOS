@@ -1,9 +1,9 @@
 import { Directive, ElementRef, HostListener, Input, Renderer2, Output, EventEmitter } from '@angular/core';
 
 @Directive({
-  selector: '[conditionalDraggable]'
+  selector: '[appDraggableArea]'
 })
-export class ConditionalDraggableDirective {
+export class DraggableAreaDirective {
   @Input() draggableArea = 40; // Draggable area height
   private offsetTop = 10; // Offset from the top
   @Output() dragStart = new EventEmitter<DragEvent>(); // Event emitter for drag start

@@ -7,13 +7,11 @@ import { NotfoundComponent } from './demo/components/notfound/notfound.component
 import { IconService } from './demo/service/icon.service';
 import { PhotoService } from './demo/service/photo.service';
 import { CoreModule } from './core/core.module';
-import { ConditionalDraggableDirective } from './shared/direvtives/conditional-draggable.directive';
 
 @NgModule({
     declarations: [
         AppComponent, 
         NotfoundComponent,
-        ConditionalDraggableDirective
     ],
     imports: [
         AppRoutingModule, 

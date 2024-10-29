@@ -9,16 +9,12 @@ import { StyleClassModule } from 'primeng/styleclass';
 import { TableModule } from 'primeng/table';
 import { DashboardRouting, DashboardRoutingComponents } from './dashboard-routing.module';
 import { DragDropModule } from 'primeng/dragdrop';
-import { DragOverlayDirective } from 'src/app/shared/direvtives/drag-overlay.directive';
-import { ConditionalDraggableDirective } from 'src/app/shared/direvtives/conditional-draggable.directive';
-
+import { DraggablePositionModule } from 'src/app/others/draggable-position/draggable-position.module';
 
 
 @NgModule({
   declarations: [
     ...DashboardRoutingComponents,
-    DragOverlayDirective,
-    ConditionalDraggableDirective
   ],
   imports: [
     CommonModule,
@@ -30,7 +26,8 @@ import { ConditionalDraggableDirective } from 'src/app/shared/direvtives/conditi
     PanelMenuModule,
     ButtonModule,
     DashboardRouting,
-    DragDropModule 
+    DragDropModule,
+    DraggablePositionModule,
   ]
 })
 export class DashboardModule { }
