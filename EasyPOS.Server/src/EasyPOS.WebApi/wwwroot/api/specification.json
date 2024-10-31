@@ -9780,12 +9780,11 @@
             "format": "guid",
             "nullable": true
           },
+          "customer": {
+            "type": "string"
+          },
           "allowMultipleTransac": {
             "type": "boolean"
-          },
-          "giftCardType": {
-            "type": "string",
-            "format": "guid"
           },
           "status": {
             "type": "string",
@@ -9833,15 +9832,10 @@
           },
           "customerId": {
             "type": "string",
-            "format": "guid",
-            "nullable": true
+            "format": "guid"
           },
           "allowMultipleTransac": {
             "type": "boolean"
-          },
-          "giftCardType": {
-            "type": "string",
-            "format": "guid"
           },
           "cacheKey": {
             "type": "string"
@@ -9875,15 +9869,10 @@
           },
           "customerId": {
             "type": "string",
-            "format": "guid",
-            "nullable": true
+            "format": "guid"
           },
           "allowMultipleTransac": {
             "type": "boolean"
-          },
-          "giftCardType": {
-            "type": "string",
-            "format": "guid"
           },
           "cacheKey": {
             "type": "string"

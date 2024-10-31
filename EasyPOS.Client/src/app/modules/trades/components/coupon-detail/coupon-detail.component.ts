@@ -1,7 +1,8 @@
 ﻿import { Component, Inject } from '@angular/core';
 import { BaseDetailComponent } from 'src/app/shared/components/base-detail/base-detail.component';
 import { ENTITY_CLIENT } from 'src/app/shared/injection-tokens/tokens';
-import { CouponsClient } from 'src/app/modules/generated-clients/api-service';
+import { CouponsClient, DiscountType } from 'src/app/modules/generated-clients/api-service';
+import { CommonUtils } from 'src/app/shared/Utilities/common-utilities';
 
 @Component({
   selector: 'app-coupon-detail',
@@ -11,8 +12,13 @@ import { CouponsClient } from 'src/app/modules/generated-clients/api-service';
 })
 export class CouponDetailComponent extends BaseDetailComponent {
   activeTabIndex = 0;
+  discountTypesSelectList: { id: number, name: string }[] = [];
+
   constructor(@Inject(ENTITY_CLIENT) entityClient: CouponsClient){
     super(entityClient)
+
+    this.discountTypesSelectList = CommonUtils.enumToArray(DiscountType);
+
   }
 
   override initializeFormGroup() {

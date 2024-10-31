@@ -15066,8 +15066,8 @@ export class GiftCardModel implements IGiftCardModel {
     balance?: number;
     expiredDate?: Date;
     customerId?: string | undefined;
+    customer?: string;
     allowMultipleTransac?: boolean;
-    giftCardType?: string;
     status?: string;
     optionsDataSources?: { [key: string]: any; };
 
@@ -15089,8 +15089,8 @@ export class GiftCardModel implements IGiftCardModel {
             this.balance = _data["balance"];
             this.expiredDate = _data["expiredDate"] ? new Date(_data["expiredDate"].toString()) : <any>undefined;
             this.customerId = _data["customerId"];
+            this.customer = _data["customer"];
             this.allowMultipleTransac = _data["allowMultipleTransac"];
-            this.giftCardType = _data["giftCardType"];
             this.status = _data["status"];
             if (_data["optionsDataSources"]) {
                 this.optionsDataSources = {} as any;
@@ -15118,8 +15118,8 @@ export class GiftCardModel implements IGiftCardModel {
         data["balance"] = this.balance;
         data["expiredDate"] = this.expiredDate ? this.expiredDate.toISOString() : <any>undefined;
         data["customerId"] = this.customerId;
+        data["customer"] = this.customer;
         data["allowMultipleTransac"] = this.allowMultipleTransac;
-        data["giftCardType"] = this.giftCardType;
         data["status"] = this.status;
         if (this.optionsDataSources) {
             data["optionsDataSources"] = {};
@@ -15140,8 +15140,8 @@ export interface IGiftCardModel {
     balance?: number;
     expiredDate?: Date;
     customerId?: string | undefined;
+    customer?: string;
     allowMultipleTransac?: boolean;
-    giftCardType?: string;
     status?: string;
     optionsDataSources?: { [key: string]: any; };
 }
@@ -15183,9 +15183,8 @@ export class CreateGiftCardCommand implements ICreateGiftCardCommand {
     cardNo?: string | undefined;
     amount?: number | undefined;
     expiredDate?: Date | undefined;
-    customerId?: string | undefined;
+    customerId?: string;
     allowMultipleTransac?: boolean;
-    giftCardType?: string;
     cacheKey?: string;
 
     constructor(data?: ICreateGiftCardCommand) {
@@ -15204,7 +15203,6 @@ export class CreateGiftCardCommand implements ICreateGiftCardCommand {
             this.expiredDate = _data["expiredDate"] ? new Date(_data["expiredDate"].toString()) : <any>undefined;
             this.customerId = _data["customerId"];
             this.allowMultipleTransac = _data["allowMultipleTransac"];
-            this.giftCardType = _data["giftCardType"];
             this.cacheKey = _data["cacheKey"];
         }
     }
@@ -15223,7 +15221,6 @@ export class CreateGiftCardCommand implements ICreateGiftCardCommand {
         data["expiredDate"] = this.expiredDate ? this.expiredDate.toISOString() : <any>undefined;
         data["customerId"] = this.customerId;
         data["allowMultipleTransac"] = this.allowMultipleTransac;
-        data["giftCardType"] = this.giftCardType;
         data["cacheKey"] = this.cacheKey;
         return data;
     }
@@ -15233,9 +15230,8 @@ export interface ICreateGiftCardCommand {
     cardNo?: string | undefined;
     amount?: number | undefined;
     expiredDate?: Date | undefined;
-    customerId?: string | undefined;
+    customerId?: string;
     allowMultipleTransac?: boolean;
-    giftCardType?: string;
     cacheKey?: string;
 }
 
@@ -15244,9 +15240,8 @@ export class UpdateGiftCardCommand implements IUpdateGiftCardCommand {
     cardNo?: string | undefined;
     amount?: number | undefined;
     expiredDate?: Date | undefined;
-    customerId?: string | undefined;
+    customerId?: string;
     allowMultipleTransac?: boolean;
-    giftCardType?: string;
     cacheKey?: string;
 
     constructor(data?: IUpdateGiftCardCommand) {
@@ -15266,7 +15261,6 @@ export class UpdateGiftCardCommand implements IUpdateGiftCardCommand {
             this.expiredDate = _data["expiredDate"] ? new Date(_data["expiredDate"].toString()) : <any>undefined;
             this.customerId = _data["customerId"];
             this.allowMultipleTransac = _data["allowMultipleTransac"];
-            this.giftCardType = _data["giftCardType"];
             this.cacheKey = _data["cacheKey"];
         }
     }
@@ -15286,7 +15280,6 @@ export class UpdateGiftCardCommand implements IUpdateGiftCardCommand {
         data["expiredDate"] = this.expiredDate ? this.expiredDate.toISOString() : <any>undefined;
         data["customerId"] = this.customerId;
         data["allowMultipleTransac"] = this.allowMultipleTransac;
-        data["giftCardType"] = this.giftCardType;
         data["cacheKey"] = this.cacheKey;
         return data;
     }
@@ -15297,9 +15290,8 @@ export interface IUpdateGiftCardCommand {
     cardNo?: string | undefined;
     amount?: number | undefined;
     expiredDate?: Date | undefined;
-    customerId?: string | undefined;
+    customerId?: string;
     allowMultipleTransac?: boolean;
-    giftCardType?: string;
     cacheKey?: string;
 }
 

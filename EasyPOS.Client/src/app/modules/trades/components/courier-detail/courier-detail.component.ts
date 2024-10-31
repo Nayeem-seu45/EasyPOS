@@ -10,7 +10,7 @@ import { CouriersClient } from 'src/app/modules/generated-clients/api-service';
   providers: [{provide: ENTITY_CLIENT, useClass: CouriersClient}]
 })
 export class CourierDetailComponent extends BaseDetailComponent {
-
+  
   constructor(@Inject(ENTITY_CLIENT) entityClient: CouriersClient){
     super(entityClient)
   }

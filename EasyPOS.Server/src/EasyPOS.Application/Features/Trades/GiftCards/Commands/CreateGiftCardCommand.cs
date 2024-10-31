@@ -6,9 +6,8 @@ public record CreateGiftCardCommand(
     string? CardNo, 
     decimal? Amount, 
     DateTime? ExpiredDate, 
-    Guid? CustomerId, 
-    bool AllowMultipleTransac, 
-    Guid GiftCardType
+    Guid CustomerId, 
+    bool AllowMultipleTransac
     ): ICacheInvalidatorCommand<Guid>
 {
     public string CacheKey => CacheKeys.GiftCard;

@@ -20,9 +20,9 @@
         <p-tabPanel header="General">
           <div class="field grid md:mb-2">
             <label for="discountType" class="col-12 mb-2 md:col-4">Discount Type</label>
-            <div class="col-12 md:col-8">
-              <app-input-decimal  formControlName="discountType" textAlign="right"
-                [showButtons]="false" [required]="false" id="discountType" />
+            <div class="field col-12 md:col-8">
+              <app-input-select label="Discount Type" formControlName="discountType"
+                [options]="discountTypesSelectList" [required]="true" />
             </div>
           </div>
           <div class="field grid md:mb-2">

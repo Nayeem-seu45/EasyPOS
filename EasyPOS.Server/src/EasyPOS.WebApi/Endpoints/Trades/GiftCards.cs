@@ -57,14 +57,6 @@ public class GiftCards : EndpointGroupBase
             AllowCacheList: true)
         );
 
-        var giftCardTypeSelectList = await sender.Send(new GetSelectListQuery(
-            Sql: SelectListSqls.GetLookupDetailSelectListByDevCodeSql,
-            Parameters: new { DevCode = LookupDevCode.GiftCardType },
-            Key: $"{CacheKeys.LookupDetail}_{LookupDevCode.GiftCardType}",
-            AllowCacheList: false)
-        );
-
-        result.Value.OptionsDataSources.Add("giftCardTypeSelectList", giftCardTypeSelectList.Value);
         result.Value.OptionsDataSources.Add("customersSelectList", customersSelectList.Value);
 
         return TypedResults.Ok(result.Value);

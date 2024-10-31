@@ -24,9 +24,7 @@ export class GiftCardDetailComponent extends BaseDetailComponent {
       balance: [null],
       expiredDate: [null],
       customerId: [null],
-      allowMultipleTransac: [false],
-      giftCardType: [null],
-      status: [null]
+      allowMultipleTransac: [true],
 
     });
   }

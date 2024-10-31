@@ -12,7 +12,6 @@ public class GiftCardConfiguration : IEntityTypeConfiguration<GiftCard>
                .HasDefaultValueSql("NEWSEQUENTIALID()")
                .ValueGeneratedOnAdd();
 
-
         builder.Property(t => t.CardNo)
             .HasMaxLength(250)
             .IsRequired();

@@ -5,9 +5,8 @@ public record UpdateGiftCardCommand(
     string? CardNo,
     decimal? Amount,
     DateTime? ExpiredDate,
-    Guid? CustomerId,
-    bool AllowMultipleTransac,
-    Guid GiftCardType
+    Guid CustomerId,
+    bool AllowMultipleTransac
     ) : ICacheInvalidatorCommand
 {
     public string CacheKey => CacheKeys.GiftCard;

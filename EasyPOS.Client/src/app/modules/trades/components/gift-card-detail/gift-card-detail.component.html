@@ -2,10 +2,6 @@
   <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
     <div class="p-fluid p-formgrid grid">
       <div class="field col-12 md:col-6">
-        <app-input-select label="Gift Card Type" formControlName="giftCardType"
-          [options]="optionsDataSources?.['giftCardTypeSelectList']" [required]="false" />
-      </div>
-      <div class="field col-12 md:col-6">
         <app-input-text label="Card No" formControlName="cardNo" [required]="false" [readonly]="false" />
         <app-validator-msg [control]="f['cardno']" />
       </div>
@@ -14,17 +10,15 @@
           [required]="false" />
       </div>    
       <div class="field col-12 md:col-6">
-        <app-input-date label="Expired Date" formControlName="expiredDate" [required]="false" />
-      </div>
-      <div class="field col-12 md:col-6">
         <app-input-select label="Customer" formControlName="customerId"
           [options]="optionsDataSources?.['customersSelectList']" [required]="false" />
+      </div>
+      <div class="field col-12 md:col-6">
+        <app-input-date label="Expired Date" formControlName="expiredDate" [required]="false" />
       </div>
       <div class="field col-12 md:col-6 md:flex align-items-center md:mt-4">
         <app-input-switch label="AllowMultipleTransac" formControlName="allowMultipleTransac" />
       </div>
-
-
     </div>
 
     <div class="mt-3 p-dialog-footer">

@@ -26,9 +26,10 @@ internal sealed class GetGiftCardQueryHandler(ISqlConnectionFactory sqlConnectio
                 t.ExpiredDate AS {nameof(GiftCardModel.ExpiredDate)},
                 t.CustomerId AS {nameof(GiftCardModel.CustomerId)},
                 t.AllowMultipleTransac AS {nameof(GiftCardModel.AllowMultipleTransac)},
-                t.GiftCardType AS {nameof(GiftCardModel.GiftCardType)},
-                t.Status AS {nameof(GiftCardModel.Status)}
+                t.Status AS {nameof(GiftCardModel.Status)},
+                c.Name AS {nameof(GiftCardModel.Customer)}
             FROM dbo.GiftCards AS t
+            LEFT JOIN dbo.Customers AS c ON c.Id = t.CustomerId
             WHERE 1 = 1
             """;
 

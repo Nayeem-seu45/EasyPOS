@@ -9,8 +9,8 @@ public record GiftCardModel
     public decimal Balance {get;set;} 
     public DateTime ExpiredDate {get;set;} 
     public Guid? CustomerId {get;set;} 
+    public string Customer {get;set;} 
     public bool AllowMultipleTransac {get;set;} 
-    public Guid GiftCardType {get;set;} 
     public Guid Status {get;set;} 
 
 

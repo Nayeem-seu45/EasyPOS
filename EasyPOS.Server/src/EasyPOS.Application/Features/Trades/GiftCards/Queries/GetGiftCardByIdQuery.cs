@@ -31,7 +31,6 @@ internal sealed class GetGiftCardByIdQueryHandler(ISqlConnectionFactory sqlConne
                 t.ExpiredDate AS {nameof(GiftCardModel.ExpiredDate)},
                 t.CustomerId AS {nameof(GiftCardModel.CustomerId)},
                 t.AllowMultipleTransac AS {nameof(GiftCardModel.AllowMultipleTransac)},
-                t.GiftCardType AS {nameof(GiftCardModel.GiftCardType)},
                 t.Status AS {nameof(GiftCardModel.Status)}
             FROM dbo.GiftCards AS t
             WHERE t.Id = @Id

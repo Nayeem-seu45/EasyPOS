@@ -7,8 +7,7 @@ public class GiftCard: BaseAuditableEntity
     public decimal Expense { get; set; }
     public decimal Balance { get; set; }
     public DateTime ExpiredDate { get; set; }
-    public Guid? CustomerId { get; set; }
+    public Guid CustomerId { get; set; }
     public bool AllowMultipleTransac { get; set; }
-    public Guid GiftCardType { get; set; }
-    public Guid Status { get; set; }
+    public Guid? Status { get; set; }
 }
