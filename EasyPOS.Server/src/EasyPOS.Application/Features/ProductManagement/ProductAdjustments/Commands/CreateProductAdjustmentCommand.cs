@@ -24,7 +24,7 @@ internal sealed class CreateProductAdjustmentCommandHandler(
 
         dbContext.ProductAdjustments.Add(entity);
 
-        entity.TotalQuantity = entity.ProductAdjustmentDetails.Count;
+        entity.TotalQuantity = entity.ProductAdjustmentDetails.Sum(x => x.Quantity);
         entity.ReferenceNo = DateTime.Now.ToString("yyyyMMddHHmmssfff");
 
         await dbContext.SaveChangesAsync(cancellationToken);

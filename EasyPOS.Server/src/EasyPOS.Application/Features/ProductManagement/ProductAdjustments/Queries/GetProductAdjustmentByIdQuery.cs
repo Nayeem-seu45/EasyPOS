@@ -8,7 +8,7 @@ public record GetProductAdjustmentByIdQuery(Guid Id) : ICacheableQuery<ProductAd
     public string CacheKey => $"{CacheKeys.ProductAdjustment}_{Id}";
     [JsonIgnore]
     public TimeSpan? Expiration => null;
-    public bool? AllowCache => true;
+    public bool? AllowCache => false;
 }
 
 internal sealed class GetProductAdjustmentByIdQueryHandler(ISqlConnectionFactory sqlConnection)

@@ -26,7 +26,7 @@ internal sealed class UpdateProductAdjustmentCommandHandler(
 
         request.Adapt(entity);
 
-        entity.TotalQuantity = entity.ProductAdjustmentDetails.Count;
+        entity.TotalQuantity = entity.ProductAdjustmentDetails.Sum(x => x.Quantity);
 
         await dbContext.SaveChangesAsync(cancellationToken);
 
