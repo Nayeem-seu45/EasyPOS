@@ -12,6 +12,8 @@ import { UnitListComponent } from "./components/unit-list/unit-list.component"
 import { UnitDetailComponent } from "./components/unit-detail/unit-detail.component"
 import { TaxDetailComponent } from "./components/tax-detail/tax-detail.component"
 import { TaxListComponent } from "./components/tax-list/tax-list.component"
+import { ProductAdjustmentListComponent } from "./components/product-adjustment-list/product-adjustment-list.component"
+import { ProductAdjustmentDetailComponent } from "./components/product-adjustment-detail/product-adjustment-detail.component"
 
 const routes: Routes = [
   {path: 'categories', component: CategoryListComponent},
@@ -24,6 +26,7 @@ const routes: Routes = [
   {path: 'brands', component: BrandListComponent  },
   {path: 'units', component: UnitListComponent  },
   {path: 'taxes', component: TaxListComponent  },
+  {path: 'adjustments', component: ProductAdjustmentListComponent  },
 ]
 
 @NgModule({
@@ -44,5 +47,7 @@ export const ProductsRoutingComponents = [
   UnitListComponent,
   UnitDetailComponent,
   TaxListComponent,
-  TaxDetailComponent
+  TaxDetailComponent,
+  ProductAdjustmentListComponent,
+  ProductAdjustmentDetailComponent
 ]

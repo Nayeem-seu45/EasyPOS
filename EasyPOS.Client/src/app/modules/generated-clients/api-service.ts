@@ -6550,6 +6550,364 @@ export class CategoriesClient implements ICategoriesClient {
     }
 }
 
+export interface IProductAdjustmentsClient {
+    getAll(query: GetProductAdjustmentListQuery): Observable<PaginatedResponseOfProductAdjustmentModel>;
+    get(id: string): Observable<ProductAdjustmentModel>;
+    create(command: CreateProductAdjustmentCommand): Observable<string>;
+    update(command: UpdateProductAdjustmentCommand): Observable<void>;
+    delete(id: string): Observable<void>;
+    deleteMultiple(ids: string[]): Observable<void>;
+}
+
+@Injectable()
+export class ProductAdjustmentsClient implements IProductAdjustmentsClient {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ?? "";
+    }
+
+    getAll(query: GetProductAdjustmentListQuery): Observable<PaginatedResponseOfProductAdjustmentModel> {
+        let url_ = this.baseUrl + "/api/ProductAdjustments/GetAll";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(query);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            withCredentials: true,
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAll(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAll(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<PaginatedResponseOfProductAdjustmentModel>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<PaginatedResponseOfProductAdjustmentModel>;
+        }));
+    }
+
+    protected processGetAll(response: HttpResponseBase): Observable<PaginatedResponseOfProductAdjustmentModel> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = PaginatedResponseOfProductAdjustmentModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    get(id: string): Observable<ProductAdjustmentModel> {
+        let url_ = this.baseUrl + "/api/ProductAdjustments/Get/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            withCredentials: true,
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGet(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGet(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<ProductAdjustmentModel>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<ProductAdjustmentModel>;
+        }));
+    }
+
+    protected processGet(response: HttpResponseBase): Observable<ProductAdjustmentModel> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ProductAdjustmentModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    create(command: CreateProductAdjustmentCommand): Observable<string> {
+        let url_ = this.baseUrl + "/api/ProductAdjustments/Create";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            withCredentials: true,
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreate(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<string>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<string>;
+        }));
+    }
+
+    protected processCreate(response: HttpResponseBase): Observable<string> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 201) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result201: any = null;
+            let resultData201 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result201 = resultData201 !== undefined ? resultData201 : <any>null;
+    
+            return _observableOf(result201);
+            }));
+        } else if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ProblemDetails.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    update(command: UpdateProductAdjustmentCommand): Observable<void> {
+        let url_ = this.baseUrl + "/api/ProductAdjustments/Update";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            withCredentials: true,
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+            })
+        };
+
+        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdate(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processUpdate(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ProblemDetails.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            }));
+        } else if (status === 404) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("A server side error occurred.", status, _responseText, _headers);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    delete(id: string): Observable<void> {
+        let url_ = this.baseUrl + "/api/ProductAdjustments/Delete/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            withCredentials: true,
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDelete(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDelete(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processDelete(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ProblemDetails.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    deleteMultiple(ids: string[]): Observable<void> {
+        let url_ = this.baseUrl + "/api/ProductAdjustments/DeleteMultiple";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(ids);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            withCredentials: true,
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDeleteMultiple(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDeleteMultiple(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processDeleteMultiple(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ProblemDetails.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+}
+
 export interface IProductsClient {
     getAll(query: GetProductListQuery): Observable<PaginatedResponseOfProductModel>;
     get(id: string): Observable<ProductModel>;
@@ -17439,6 +17797,408 @@ export interface IUpdateCategoryCommand {
     description?: string;
     photoUrl?: string;
     parentId?: string | undefined;
+    cacheKey?: string;
+}
+
+export class PaginatedResponseOfProductAdjustmentModel implements IPaginatedResponseOfProductAdjustmentModel {
+    items?: ProductAdjustmentModel[];
+    pageNumber?: number;
+    totalPages?: number;
+    totalCount?: number;
+    hasPreviousPage?: boolean;
+    hasNextPage?: boolean;
+    optionsDataSources?: { [key: string]: any; };
+
+    constructor(data?: IPaginatedResponseOfProductAdjustmentModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["items"])) {
+                this.items = [] as any;
+                for (let item of _data["items"])
+                    this.items!.push(ProductAdjustmentModel.fromJS(item));
+            }
+            this.pageNumber = _data["pageNumber"];
+            this.totalPages = _data["totalPages"];
+            this.totalCount = _data["totalCount"];
+            this.hasPreviousPage = _data["hasPreviousPage"];
+            this.hasNextPage = _data["hasNextPage"];
+            if (_data["optionsDataSources"]) {
+                this.optionsDataSources = {} as any;
+                for (let key in _data["optionsDataSources"]) {
+                    if (_data["optionsDataSources"].hasOwnProperty(key))
+                        (<any>this.optionsDataSources)![key] = _data["optionsDataSources"][key];
+                }
+            }
+        }
+    }
+
+    static fromJS(data: any): PaginatedResponseOfProductAdjustmentModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new PaginatedResponseOfProductAdjustmentModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        data["pageNumber"] = this.pageNumber;
+        data["totalPages"] = this.totalPages;
+        data["totalCount"] = this.totalCount;
+        data["hasPreviousPage"] = this.hasPreviousPage;
+        data["hasNextPage"] = this.hasNextPage;
+        if (this.optionsDataSources) {
+            data["optionsDataSources"] = {};
+            for (let key in this.optionsDataSources) {
+                if (this.optionsDataSources.hasOwnProperty(key))
+                    (<any>data["optionsDataSources"])[key] = (<any>this.optionsDataSources)[key];
+            }
+        }
+        return data;
+    }
+}
+
+export interface IPaginatedResponseOfProductAdjustmentModel {
+    items?: ProductAdjustmentModel[];
+    pageNumber?: number;
+    totalPages?: number;
+    totalCount?: number;
+    hasPreviousPage?: boolean;
+    hasNextPage?: boolean;
+    optionsDataSources?: { [key: string]: any; };
+}
+
+export class ProductAdjustmentModel implements IProductAdjustmentModel {
+    id?: string;
+    referenceNo?: string;
+    warehouseId?: string;
+    attachmentUrl?: string | undefined;
+    note?: string | undefined;
+    adjDate?: Date;
+    productAdjustmentDetails?: ProductAdjustmentDetailModel[];
+    optionsDataSources?: { [key: string]: any; };
+
+    constructor(data?: IProductAdjustmentModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.referenceNo = _data["referenceNo"];
+            this.warehouseId = _data["warehouseId"];
+            this.attachmentUrl = _data["attachmentUrl"];
+            this.note = _data["note"];
+            this.adjDate = _data["adjDate"] ? new Date(_data["adjDate"].toString()) : <any>undefined;
+            if (Array.isArray(_data["productAdjustmentDetails"])) {
+                this.productAdjustmentDetails = [] as any;
+                for (let item of _data["productAdjustmentDetails"])
+                    this.productAdjustmentDetails!.push(ProductAdjustmentDetailModel.fromJS(item));
+            }
+            if (_data["optionsDataSources"]) {
+                this.optionsDataSources = {} as any;
+                for (let key in _data["optionsDataSources"]) {
+                    if (_data["optionsDataSources"].hasOwnProperty(key))
+                        (<any>this.optionsDataSources)![key] = _data["optionsDataSources"][key];
+                }
+            }
+        }
+    }
+
+    static fromJS(data: any): ProductAdjustmentModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new ProductAdjustmentModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["referenceNo"] = this.referenceNo;
+        data["warehouseId"] = this.warehouseId;
+        data["attachmentUrl"] = this.attachmentUrl;
+        data["note"] = this.note;
+        data["adjDate"] = this.adjDate ? this.adjDate.toISOString() : <any>undefined;
+        if (Array.isArray(this.productAdjustmentDetails)) {
+            data["productAdjustmentDetails"] = [];
+            for (let item of this.productAdjustmentDetails)
+                data["productAdjustmentDetails"].push(item.toJSON());
+        }
+        if (this.optionsDataSources) {
+            data["optionsDataSources"] = {};
+            for (let key in this.optionsDataSources) {
+                if (this.optionsDataSources.hasOwnProperty(key))
+                    (<any>data["optionsDataSources"])[key] = (<any>this.optionsDataSources)[key];
+            }
+        }
+        return data;
+    }
+}
+
+export interface IProductAdjustmentModel {
+    id?: string;
+    referenceNo?: string;
+    warehouseId?: string;
+    attachmentUrl?: string | undefined;
+    note?: string | undefined;
+    adjDate?: Date;
+    productAdjustmentDetails?: ProductAdjustmentDetailModel[];
+    optionsDataSources?: { [key: string]: any; };
+}
+
+export class ProductAdjustmentDetailModel implements IProductAdjustmentDetailModel {
+    id?: string;
+    productAdjustmentId?: string;
+    productId?: string;
+    productName?: string;
+    productCode?: string;
+    unitCost?: number;
+    quantity?: number;
+    stock?: number;
+    actionType?: ProductAdjAction;
+
+    constructor(data?: IProductAdjustmentDetailModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.productAdjustmentId = _data["productAdjustmentId"];
+            this.productId = _data["productId"];
+            this.productName = _data["productName"];
+            this.productCode = _data["productCode"];
+            this.unitCost = _data["unitCost"];
+            this.quantity = _data["quantity"];
+            this.stock = _data["stock"];
+            this.actionType = _data["actionType"];
+        }
+    }
+
+    static fromJS(data: any): ProductAdjustmentDetailModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new ProductAdjustmentDetailModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["productAdjustmentId"] = this.productAdjustmentId;
+        data["productId"] = this.productId;
+        data["productName"] = this.productName;
+        data["productCode"] = this.productCode;
+        data["unitCost"] = this.unitCost;
+        data["quantity"] = this.quantity;
+        data["stock"] = this.stock;
+        data["actionType"] = this.actionType;
+        return data;
+    }
+}
+
+export interface IProductAdjustmentDetailModel {
+    id?: string;
+    productAdjustmentId?: string;
+    productId?: string;
+    productName?: string;
+    productCode?: string;
+    unitCost?: number;
+    quantity?: number;
+    stock?: number;
+    actionType?: ProductAdjAction;
+}
+
+export enum ProductAdjAction {
+    Addition = 1,
+    Subtraction = 2,
+}
+
+export class GetProductAdjustmentListQuery extends DataGridModel implements IGetProductAdjustmentListQuery {
+    cacheKey?: string;
+
+    constructor(data?: IGetProductAdjustmentListQuery) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+        if (_data) {
+            this.cacheKey = _data["cacheKey"];
+        }
+    }
+
+    static override fromJS(data: any): GetProductAdjustmentListQuery {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetProductAdjustmentListQuery();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["cacheKey"] = this.cacheKey;
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IGetProductAdjustmentListQuery extends IDataGridModel {
+    cacheKey?: string;
+}
+
+export class CreateProductAdjustmentCommand implements ICreateProductAdjustmentCommand {
+    warehouseId?: string;
+    attachmentUrl?: string | undefined;
+    note?: string | undefined;
+    adjDate?: Date;
+    productAdjustmentDetails?: ProductAdjustmentDetailModel[];
+    cacheKey?: string;
+
+    constructor(data?: ICreateProductAdjustmentCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.warehouseId = _data["warehouseId"];
+            this.attachmentUrl = _data["attachmentUrl"];
+            this.note = _data["note"];
+            this.adjDate = _data["adjDate"] ? new Date(_data["adjDate"].toString()) : <any>undefined;
+            if (Array.isArray(_data["productAdjustmentDetails"])) {
+                this.productAdjustmentDetails = [] as any;
+                for (let item of _data["productAdjustmentDetails"])
+                    this.productAdjustmentDetails!.push(ProductAdjustmentDetailModel.fromJS(item));
+            }
+            this.cacheKey = _data["cacheKey"];
+        }
+    }
+
+    static fromJS(data: any): CreateProductAdjustmentCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateProductAdjustmentCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["warehouseId"] = this.warehouseId;
+        data["attachmentUrl"] = this.attachmentUrl;
+        data["note"] = this.note;
+        data["adjDate"] = this.adjDate ? this.adjDate.toISOString() : <any>undefined;
+        if (Array.isArray(this.productAdjustmentDetails)) {
+            data["productAdjustmentDetails"] = [];
+            for (let item of this.productAdjustmentDetails)
+                data["productAdjustmentDetails"].push(item.toJSON());
+        }
+        data["cacheKey"] = this.cacheKey;
+        return data;
+    }
+}
+
+export interface ICreateProductAdjustmentCommand {
+    warehouseId?: string;
+    attachmentUrl?: string | undefined;
+    note?: string | undefined;
+    adjDate?: Date;
+    productAdjustmentDetails?: ProductAdjustmentDetailModel[];
+    cacheKey?: string;
+}
+
+export class UpdateProductAdjustmentCommand implements IUpdateProductAdjustmentCommand {
+    id!: string;
+    warehouseId?: string;
+    attachmentUrl?: string | undefined;
+    note?: string | undefined;
+    adjDate?: Date;
+    productAdjustmentDetails?: ProductAdjustmentDetailModel[];
+    cacheKey?: string;
+
+    constructor(data?: IUpdateProductAdjustmentCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.warehouseId = _data["warehouseId"];
+            this.attachmentUrl = _data["attachmentUrl"];
+            this.note = _data["note"];
+            this.adjDate = _data["adjDate"] ? new Date(_data["adjDate"].toString()) : <any>undefined;
+            if (Array.isArray(_data["productAdjustmentDetails"])) {
+                this.productAdjustmentDetails = [] as any;
+                for (let item of _data["productAdjustmentDetails"])
+                    this.productAdjustmentDetails!.push(ProductAdjustmentDetailModel.fromJS(item));
+            }
+            this.cacheKey = _data["cacheKey"];
+        }
+    }
+
+    static fromJS(data: any): UpdateProductAdjustmentCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdateProductAdjustmentCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["warehouseId"] = this.warehouseId;
+        data["attachmentUrl"] = this.attachmentUrl;
+        data["note"] = this.note;
+        data["adjDate"] = this.adjDate ? this.adjDate.toISOString() : <any>undefined;
+        if (Array.isArray(this.productAdjustmentDetails)) {
+            data["productAdjustmentDetails"] = [];
+            for (let item of this.productAdjustmentDetails)
+                data["productAdjustmentDetails"].push(item.toJSON());
+        }
+        data["cacheKey"] = this.cacheKey;
+        return data;
+    }
+}
+
+export interface IUpdateProductAdjustmentCommand {
+    id: string;
+    warehouseId?: string;
+    attachmentUrl?: string | undefined;
+    note?: string | undefined;
+    adjDate?: Date;
+    productAdjustmentDetails?: ProductAdjustmentDetailModel[];
     cacheKey?: string;
 }
 

@@ -193,7 +193,8 @@ import { ChartModule } from 'primeng/chart';
 		CustomMenuComponent,
 		SidebarComponent,
 		SelectButtonComponent,
-		TagComponent
+		TagComponent,
+		TableModule
 	]
 })
 export class AppSharedModule { }

@@ -36,6 +36,8 @@ public interface IApplicationDbContext
     DbSet<Brand> Brands { get; }
     DbSet<Unit> Units { get; }
     DbSet<Tax> Taxes { get; }
+    DbSet<ProductAdjustment> ProductAdjustments { get; }
+    DbSet<ProductAdjustmentDetail> ProductAdjustmentDetails { get; }
 
     #endregion
 

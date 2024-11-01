@@ -14,6 +14,10 @@ internal sealed class UpdateAppMenuOrderCommandHandler(
 {
     public async Task<Result> Handle(UpdateAppMenuOrderCommand request, CancellationToken cancellationToken)
     {
+        if(request.ReorderedAppMenus is null || request.ReorderedAppMenus.Count == 0)
+        {
+            return Result.Failure(Error.Failure(nameof(AppMenu), "Reordered Menus not found."));
+        }
         var entities = await dbContext.AppMenus
             .ToListAsync(cancellationToken);
 
