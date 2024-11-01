@@ -4690,6 +4690,46 @@
         ]
       }
     },
+    "/api/ProductAdjustments/DeleteAdjDetail/{id}": {
+      "delete": {
+        "tags": [
+          "ProductAdjustments"
+        ],
+        "operationId": "DeleteProductAdjustmentDetail",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
     "/api/Products/GetAll": {
       "post": {
         "tags": [
@@ -11429,6 +11469,13 @@
           "adjDate": {
             "type": "string",
             "format": "date-time"
+          },
+          "totalQuantity": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "warehouse": {
+            "type": "string"
           },
           "productAdjustmentDetails": {
             "type": "array",

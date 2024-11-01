@@ -30,7 +30,8 @@ internal sealed class GetProductAdjustmentByIdQueryHandler(ISqlConnectionFactory
                 t.WarehouseId AS {nameof(ProductAdjustmentModel.WarehouseId)},
                 t.AttachmentUrl AS {nameof(ProductAdjustmentModel.AttachmentUrl)},
                 t.Note AS {nameof(ProductAdjustmentModel.Note)},
-                t.AdjDate AS {nameof(ProductAdjustmentModel.AdjDate)}
+                t.AdjDate AS {nameof(ProductAdjustmentModel.AdjDate)},
+                t.TotalQuantity AS {nameof(ProductAdjustmentModel.TotalQuantity)},
 
                 pad.Id {nameof(ProductAdjustmentDetailModel.Id)},
                 pad.ProductAdjustmentId {nameof(ProductAdjustmentDetailModel.ProductAdjustmentId)},

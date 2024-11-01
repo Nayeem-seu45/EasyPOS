@@ -261,7 +261,7 @@
                             <p-tableHeaderCheckbox />
                         </th>
                         <ng-container *ngFor="let col of columns">
-                            <th [pSortableColumn]="col.isSortable ? col.field : ''" pResizableColumn class="text-center">
+                            <th [pSortableColumn]="col.isSortable ? col.field : ''" pResizableColumn class="text-left">
                                 <p-sortIcon 
                                     [hidden]="!col.isSortable" 
                                     [field]="col.field">
@@ -368,7 +368,7 @@
                         </th>
 
                         <ng-container *ngFor="let col of columns">
-                            <th class="text-center" [pSortableColumn]="col.isSortable ? col.field : ''" pResizableColumn >
+                            <th class="text-left" [pSortableColumn]="col.isSortable ? col.field : ''" pResizableColumn >
                             
                                 <!-- FieldType.string -->
                                 <p-columnFilter 

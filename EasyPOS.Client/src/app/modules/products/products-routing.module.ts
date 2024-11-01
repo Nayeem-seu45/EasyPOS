@@ -23,10 +23,12 @@ const routes: Routes = [
   {path: 'add-product', component: ProductDetailComponent  },
   {path: 'edit-product/:id', component: ProductDetailComponent  },
   {path: 'warehouses', component: WarehouseListComponent  },
-  {path: 'brands', component: BrandListComponent  },
-  {path: 'units', component: UnitListComponent  },
-  {path: 'taxes', component: TaxListComponent  },
-  {path: 'adjustments', component: ProductAdjustmentListComponent  },
+  {path: 'brands', component: BrandListComponent },
+  {path: 'units', component: UnitListComponent },
+  {path: 'taxes', component: TaxListComponent },
+  {path: 'adjustments', component: ProductAdjustmentListComponent },
+  {path: 'adjustments/create', component: ProductAdjustmentDetailComponent},
+  {path: 'adjustments/:id', component: ProductAdjustmentDetailComponent },
 ]
 
 @NgModule({

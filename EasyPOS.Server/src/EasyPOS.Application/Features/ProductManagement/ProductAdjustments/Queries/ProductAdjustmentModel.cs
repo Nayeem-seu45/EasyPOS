@@ -10,6 +10,8 @@ public record ProductAdjustmentModel
     public string? AttachmentUrl {get;set;} 
     public string? Note {get;set;} 
     public DateTime AdjDate {get;set;}
+    public decimal TotalQuantity { get; set; }
+    public string Warehouse { get; set; }
 
     public List<ProductAdjustmentDetailModel> ProductAdjustmentDetails { get; set; } = [];
     public Dictionary<string, object> OptionsDataSources { get; set; } = [];

@@ -4,30 +4,31 @@ using EasyPOS.Domain.Products;
 namespace EasyPOS.Application.Features.ProductManagement.ProductAdjustments.Commands;
 
 public record CreateProductAdjustmentCommand(
-    Guid WarehouseId, 
-    string? AttachmentUrl, 
-    string? Note, 
+    Guid WarehouseId,
+    string? AttachmentUrl,
+    string? Note,
     DateTime AdjDate,
     List<ProductAdjustmentDetailModel> ProductAdjustmentDetails
-    ): ICacheInvalidatorCommand<Guid>
+    ) : ICacheInvalidatorCommand<Guid>
 {
     public string CacheKey => CacheKeys.ProductAdjustment;
 }
-    
+
 internal sealed class CreateProductAdjustmentCommandHandler(
-    IApplicationDbContext dbContext) 
+    IApplicationDbContext dbContext)
     : ICommandHandler<CreateProductAdjustmentCommand, Guid>
 {
     public async Task<Result<Guid>> Handle(CreateProductAdjustmentCommand request, CancellationToken cancellationToken)
     {
-       var entity = request.Adapt<ProductAdjustment>();
+        var entity = request.Adapt<ProductAdjustment>();
 
-       dbContext.ProductAdjustments.Add(entity);
+        dbContext.ProductAdjustments.Add(entity);
 
-       entity.TotalQuantity = entity.ProductAdjustmentDetails.Count;
+        entity.TotalQuantity = entity.ProductAdjustmentDetails.Count;
+        entity.ReferenceNo = DateTime.Now.ToString("yyyyMMddHHmmssfff");
 
-       await dbContext.SaveChangesAsync(cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
 
-       return  entity.Id;
+        return entity.Id;
     }
 }

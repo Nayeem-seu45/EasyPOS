@@ -20,10 +20,13 @@ internal sealed class GetProductAdjustmentQueryHandler(ISqlConnectionFactory sql
             SELECT
                 t.Id AS {nameof(ProductAdjustmentModel.Id)},
                 t.WarehouseId AS {nameof(ProductAdjustmentModel.WarehouseId)},
-                t.AttachmentUrl AS {nameof(ProductAdjustmentModel.AttachmentUrl)},
-                t.Note AS {nameof(ProductAdjustmentModel.Note)},
-                t.AdjDate AS {nameof(ProductAdjustmentModel.AdjDate)}
+                t.ReferenceNo AS {nameof(ProductAdjustmentModel.ReferenceNo)},
+                t.TotalQuantity AS {nameof(ProductAdjustmentModel.TotalQuantity)},
+                --t.Note AS {nameof(ProductAdjustmentModel.Note)},
+                t.AdjDate AS {nameof(ProductAdjustmentModel.AdjDate)},
+                w.Name AS {nameof(ProductAdjustmentModel.Warehouse)}
             FROM dbo.ProductAdjustments AS t
+            LEFT JOIN dbo.Warehouses AS w ON w.Id = t.WarehouseId
             WHERE 1 = 1
             """;
 

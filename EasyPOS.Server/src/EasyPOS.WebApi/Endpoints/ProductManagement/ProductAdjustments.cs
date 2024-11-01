@@ -1,5 +1,7 @@
-﻿using EasyPOS.Application.Features.ProductManagement.ProductAdjustments.Commands;
+﻿using EasyPOS.Application.Features.Common.Queries;
+using EasyPOS.Application.Features.ProductManagement.ProductAdjustments.Commands;
 using EasyPOS.Application.Features.ProductManagement.ProductAdjustments.Queries;
+using EasyPOS.Application.Features.ProductManagement.Queries;
 
 namespace EasyPOS.WebApi.Endpoints.ProductManagement;
 
@@ -37,6 +39,11 @@ public class ProductAdjustments : EndpointGroupBase
              .WithName("DeleteProductAdjustments")
              .Produces(StatusCodes.Status204NoContent)
              .Produces<ProblemDetails>(StatusCodes.Status400BadRequest);
+
+        group.MapDelete("DeleteAdjDetail/{id:Guid}", DeleteAdjDetail)
+             .WithName("DeleteProductAdjustmentDetail")
+             .Produces(StatusCodes.Status204NoContent)
+             .Produces<ProblemDetails>(StatusCodes.Status400BadRequest);
     }
 
     private async Task<IResult> GetAll(ISender sender, GetProductAdjustmentListQuery query)
@@ -48,6 +55,20 @@ public class ProductAdjustments : EndpointGroupBase
     private async Task<IResult> Get(ISender sender, Guid id)
     {
         var result = await sender.Send(new GetProductAdjustmentByIdQuery(id));
+
+        var warehousesSelectList = await sender.Send(new GetSelectListQuery(
+            Sql: SelectListSqls.WarehouseSelectListSql,
+            Parameters: new { },
+            Key: $"{CacheKeys.Warehouse_All_SelectList}",
+            AllowCacheList: true)
+        );
+
+        var productsSelectList = await sender.Send(new GetProductSelectListQuery(
+            AllowCacheList: false)
+        );
+
+        result.Value.OptionsDataSources.Add("warehousesSelectList", warehousesSelectList.Value);
+        result.Value.OptionsDataSources.Add("productsSelectList", productsSelectList.Value);
         return TypedResults.Ok(result.Value);
     }
 
@@ -85,5 +106,14 @@ public class ProductAdjustments : EndpointGroupBase
         return result!.Match(
             onSuccess: Results.NoContent,
             onFailure: result!.ToProblemDetails);
+    }
+
+    private async Task<IResult> DeleteAdjDetail(ISender sender, Guid id)
+    {
+        var result = await sender.Send(new DeleteProductAdjustmentDetailCommand(id));
+
+        return result.Match(
+            onSuccess: Results.NoContent,
+            onFailure: result.ToProblemDetails);
     }
 }

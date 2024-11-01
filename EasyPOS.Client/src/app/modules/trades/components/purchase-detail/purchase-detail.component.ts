@@ -207,7 +207,7 @@ export class PurchaseDetailComponent implements OnInit {
 
     this.purchaseDetails.removeAt(index);
 
-    this.deletePurchaseDelete(product?.id)
+    this.deletePurchaseDetail(product?.id)
 
     this.calculateGrandTotal();
   }
@@ -239,7 +239,7 @@ export class PurchaseDetailComponent implements OnInit {
     this.calculateTaxAndTotalPrice(this.purchaseDetails.length - 1, productFormGroup.value);
   }
 
-  private deletePurchaseDelete(id: string) {
+  private deletePurchaseDetail(id: string) {
     if (!id) {
       return;
     }
