@@ -31,11 +31,11 @@ internal sealed class ProductAdjustmentDetailConfiguration : IEntityTypeConfigur
                .IsRequired();
 
         builder.Property(x => x.Quantity)
-               .HasColumnType("decimal(18, 2)")
+               .HasColumnType("decimal(10, 2)")
                .IsRequired();
 
-        builder.Property(x => x.Stock)
-               .HasColumnType("decimal(18, 2)")
+        builder.Property(x => x.CurrentStock)
+               .HasColumnType("decimal(10, 2)")
                .IsRequired();
 
         builder.HasOne(x => x.ProductAdjustment)

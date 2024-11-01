@@ -26,7 +26,7 @@ public class ProductAdjustmentDetailModel
     public string ProductCode { get; set; }
     public decimal UnitCost { get; set; }
     public decimal Quantity { get; set; }
-    public decimal Stock { get; set; }
+    public decimal CurrentStock { get; set; }
     public ProductAdjAction ActionType { get; set; }
 }
 

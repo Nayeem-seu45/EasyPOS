@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EasyPOS.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241101071012_ProductAdjustAdded2")]
-    partial class ProductAdjustAdded2
+    [Migration("20241101175808_ProductAdjustAdded4")]
+    partial class ProductAdjustAdded4
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -640,12 +640,16 @@ namespace EasyPOS.Infrastructure.Persistence.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Note")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("ReferenceNo")
                         .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
 
-                    b.Property<string>("ReferenceNo")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<decimal>("TotalQuantity")
+                        .HasColumnType("decimal(10, 2)");
 
                     b.Property<Guid>("WarehouseId")
                         .HasColumnType("uniqueidentifier");
@@ -665,6 +669,9 @@ namespace EasyPOS.Infrastructure.Persistence.Migrations
                     b.Property<int>("ActionType")
                         .HasColumnType("int");
 
+                    b.Property<decimal>("CurrentStock")
+                        .HasColumnType("decimal(10, 2)");
+
                     b.Property<Guid>("ProductAdjustmentId")
                         .HasColumnType("uniqueidentifier");
 
@@ -680,10 +687,7 @@ namespace EasyPOS.Infrastructure.Persistence.Migrations
                         .HasColumnType("nvarchar(250)");
 
                     b.Property<decimal>("Quantity")
-                        .HasColumnType("decimal(18, 2)");
-
-                    b.Property<decimal>("CurrentStock")
-                        .HasColumnType("decimal(18, 2)");
+                        .HasColumnType("decimal(10, 2)");
 
                     b.Property<decimal>("UnitCost")
                         .HasColumnType("decimal(18, 2)");

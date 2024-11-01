@@ -60,7 +60,7 @@ export class ProductAdjustmentDetailComponent {
       productName: this.selectedProduct.name,
       productCode: this.selectedProduct.code,
       unitCost: this.selectedProduct.costPrice,
-      stock: 0,
+      currentStock: 0,
     });
 
     this.productAdjustmentDetails.push(newAdjustProduct);
@@ -174,7 +174,7 @@ export class ProductAdjustmentDetailComponent {
       productCode: [null],
       unitCost: [0],
       quantity: [1],
-      stock: [0],
+      currentStock: [0],
       actionType: [ProductAdjAction.Subtraction] 
     });
   }

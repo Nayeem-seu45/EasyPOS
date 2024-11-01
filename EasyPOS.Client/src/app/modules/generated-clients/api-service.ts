@@ -18036,7 +18036,7 @@ export class ProductAdjustmentDetailModel implements IProductAdjustmentDetailMod
     productCode?: string;
     unitCost?: number;
     quantity?: number;
-    stock?: number;
+    currentStock?: number;
     actionType?: ProductAdjAction;
 
     constructor(data?: IProductAdjustmentDetailModel) {
@@ -18057,7 +18057,7 @@ export class ProductAdjustmentDetailModel implements IProductAdjustmentDetailMod
             this.productCode = _data["productCode"];
             this.unitCost = _data["unitCost"];
             this.quantity = _data["quantity"];
-            this.stock = _data["stock"];
+            this.currentStock = _data["currentStock"];
             this.actionType = _data["actionType"];
         }
     }
@@ -18078,7 +18078,7 @@ export class ProductAdjustmentDetailModel implements IProductAdjustmentDetailMod
         data["productCode"] = this.productCode;
         data["unitCost"] = this.unitCost;
         data["quantity"] = this.quantity;
-        data["stock"] = this.stock;
+        data["currentStock"] = this.currentStock;
         data["actionType"] = this.actionType;
         return data;
     }
@@ -18092,7 +18092,7 @@ export interface IProductAdjustmentDetailModel {
     productCode?: string;
     unitCost?: number;
     quantity?: number;
-    stock?: number;
+    currentStock?: number;
     actionType?: ProductAdjAction;
 }
 

@@ -32,7 +32,7 @@
               <th style="min-width:150px">Name</th>
               <th style="min-width:70px">Code</th>
               <th style="min-width:100px">Unit Cost</th>
-              <th style="min-width:50px">Stock</th>
+              <th style="min-width:50px">Current Stock</th>
               <th style="min-width:130px; max-width: 170px;">Quantity</th>
               <th style="min-width:150px">Action</th>
               <th style="min-width:50px"></th>
@@ -43,7 +43,7 @@
               <td>{{ field.get('productName').value }}</td>
               <td>{{ field.get('productCode').value }}</td>
               <td>{{ field.get('unitCost').value }}</td>
-              <td>{{ field.get('stock').value }}</td>
+              <td>{{ field.get('currentStock').value }}</td>
               <td>
                 <app-input-number formControlName="quantity" textAlign="center" [showButtons]="true" buttonLayout="horizontal" [min]="1" />
               </td>

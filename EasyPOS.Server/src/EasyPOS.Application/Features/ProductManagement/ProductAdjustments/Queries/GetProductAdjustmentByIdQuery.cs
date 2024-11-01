@@ -39,7 +39,7 @@ internal sealed class GetProductAdjustmentByIdQueryHandler(ISqlConnectionFactory
                 pad.ProductName {nameof(ProductAdjustmentDetailModel.ProductName)},
                 pad.ProductCode {nameof(ProductAdjustmentDetailModel.ProductCode)},
                 pad.UnitCost {nameof(ProductAdjustmentDetailModel.UnitCost)},
-                pad.Stock {nameof(ProductAdjustmentDetailModel.Stock)},
+                pad.CurrentStock {nameof(ProductAdjustmentDetailModel.CurrentStock)},
                 pad.Quantity {nameof(ProductAdjustmentDetailModel.Quantity)},
                 pad.ActionType {nameof(ProductAdjustmentDetailModel.ActionType)}
             FROM dbo.ProductAdjustments AS t

@@ -686,7 +686,7 @@ namespace EasyPOS.Infrastructure.Persistence.Migrations
                     b.Property<decimal>("Quantity")
                         .HasColumnType("decimal(18, 2)");
 
-                    b.Property<decimal>("Stock")
+                    b.Property<decimal>("CurrentStock")
                         .HasColumnType("decimal(18, 2)");
 
                     b.Property<decimal>("UnitCost")

@@ -666,6 +666,9 @@ namespace EasyPOS.Infrastructure.Persistence.Migrations
                     b.Property<int>("ActionType")
                         .HasColumnType("int");
 
+                    b.Property<decimal>("CurrentStock")
+                        .HasColumnType("decimal(10, 2)");
+
                     b.Property<Guid>("ProductAdjustmentId")
                         .HasColumnType("uniqueidentifier");
 
@@ -681,10 +684,7 @@ namespace EasyPOS.Infrastructure.Persistence.Migrations
                         .HasColumnType("nvarchar(250)");
 
                     b.Property<decimal>("Quantity")
-                        .HasColumnType("decimal(18, 2)");
-
-                    b.Property<decimal>("Stock")
-                        .HasColumnType("decimal(18, 2)");
+                        .HasColumnType("decimal(10, 2)");
 
                     b.Property<decimal>("UnitCost")
                         .HasColumnType("decimal(18, 2)");
