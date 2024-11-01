@@ -42,6 +42,7 @@ public static class CacheKeys
     public const string Tax_All_SelectList = nameof(Tax_All_SelectList);
     public const string ProductAdjustment = nameof(ProductAdjustment);
     public const string ProductAdjustment_All_SelectList = nameof(ProductAdjustment_All_SelectList);
+    public const string CountStock = nameof(CountStock);
     #endregion
 
     #region Stakeholders

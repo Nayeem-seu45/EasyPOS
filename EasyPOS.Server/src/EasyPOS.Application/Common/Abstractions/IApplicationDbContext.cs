@@ -38,6 +38,9 @@ public interface IApplicationDbContext
     DbSet<Tax> Taxes { get; }
     DbSet<ProductAdjustment> ProductAdjustments { get; }
     DbSet<ProductAdjustmentDetail> ProductAdjustmentDetails { get; }
+    DbSet<CountStock> CountStocks { get; }
+    DbSet<CountStockCategory> CountStockCategories { get; }
+    DbSet<CountStockBrand> CountStockBrands { get; }
 
     #endregion
 

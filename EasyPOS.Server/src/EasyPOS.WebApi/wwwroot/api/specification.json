@@ -4441,6 +4441,255 @@
         ]
       }
     },
+    "/api/CountStocks/GetAll": {
+      "post": {
+        "tags": [
+          "CountStocks"
+        ],
+        "operationId": "GetCountStocks",
+        "requestBody": {
+          "x-name": "query",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetCountStockListQuery"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedResponseOfCountStockModel"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/CountStocks/Get/{id}": {
+      "get": {
+        "tags": [
+          "CountStocks"
+        ],
+        "operationId": "GetCountStock",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CountStockModel"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/CountStocks/Create": {
+      "post": {
+        "tags": [
+          "CountStocks"
+        ],
+        "operationId": "CreateCountStock",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCountStockCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "guid"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/CountStocks/Update": {
+      "put": {
+        "tags": [
+          "CountStocks"
+        ],
+        "operationId": "UpdateCountStock",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateCountStockCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/CountStocks/Delete/{id}": {
+      "delete": {
+        "tags": [
+          "CountStocks"
+        ],
+        "operationId": "DeleteCountStock",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/CountStocks/DeleteMultiple": {
+      "post": {
+        "tags": [
+          "CountStocks"
+        ],
+        "operationId": "DeleteCountStocks",
+        "requestBody": {
+          "x-name": "ids",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "guid"
+                }
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
     "/api/ProductAdjustments/GetAll": {
       "post": {
         "tags": [
@@ -11403,6 +11652,156 @@
             "type": "string",
             "format": "guid",
             "nullable": true
+          },
+          "cacheKey": {
+            "type": "string"
+          }
+        }
+      },
+      "PaginatedResponseOfCountStockModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CountStockModel"
+            }
+          },
+          "pageNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "hasPreviousPage": {
+            "type": "boolean"
+          },
+          "hasNextPage": {
+            "type": "boolean"
+          },
+          "optionsDataSources": {
+            "type": "object",
+            "additionalProperties": {}
+          }
+        }
+      },
+      "CountStockModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "referenceNo": {
+            "type": "string"
+          },
+          "warehouseId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "warehouse": {
+            "type": "string"
+          },
+          "countingDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "type": {
+            "$ref": "#/components/schemas/CountStockType"
+          },
+          "typeName": {
+            "type": "string"
+          },
+          "optionsDataSources": {
+            "type": "object",
+            "additionalProperties": {}
+          }
+        }
+      },
+      "CountStockType": {
+        "type": "integer",
+        "description": "",
+        "x-enumNames": [
+          "Full",
+          "Partial"
+        ],
+        "enum": [
+          1,
+          2
+        ]
+      },
+      "GetCountStockListQuery": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/DataGridModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "cacheKey": {
+                "type": "string"
+              }
+            }
+          }
+        ]
+      },
+      "CreateCountStockCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "warehouseId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "type": {
+            "$ref": "#/components/schemas/CountStockType"
+          },
+          "categoryIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "guid"
+            }
+          },
+          "brandIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "guid"
+            }
+          },
+          "cacheKey": {
+            "type": "string"
+          }
+        }
+      },
+      "UpdateCountStockCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "warehouseId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "countingDate": {
+            "type": "string",
+            "format": "date-time"
           },
           "cacheKey": {
             "type": "string"

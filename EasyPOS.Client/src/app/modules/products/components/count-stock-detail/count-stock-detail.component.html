@@ -1,0 +1,28 @@
+﻿<div class="col-12">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+    <div class="p-fluid p-formgrid grid">
+      <div class="field col-12 md:col-6">
+        <app-input-select label="Warehouse" formControlName="warehouseId"
+          [options]="optionsDataSources?.['warehousesSelectList']" [required]="false" appendTo="body" />
+      </div>
+      <div class="field col-12 md:col-6">
+        <app-input-select label="Type" formControlName="type"
+          [options]="countStockTypeSelectList" [required]="false" [showClear]="false"  />
+      </div>
+      <div class="field col-12 md:col-6" *ngIf="f['type']?.value === CountStockType.Partial">
+        <app-input-multiselect label="Category" formControlName="categoryIds"
+        [options]="optionsDataSources?.['categorySelectList']" [required]="false" appendTo="body" [showAllItems]="true" />
+      </div>
+      <div class="field col-12 md:col-6" *ngIf="f['type']?.value === CountStockType.Partial">
+        <app-input-multiselect label="Brand" formControlName="brandIds"
+        [options]="optionsDataSources?.['brandSelectList']" [required]="false" appendTo="body" [showAllItems]="true" />
+      </div>
+    </div>
+
+    <div class="mt-3 p-dialog-footer">
+      <app-button label="Cancel" type="button" icon="pi pi-times" [text]="true" severity="warning"
+        (onClick)="cancel()" />
+      <app-button label="Save" type="submit" icon="pi pi-check" [text]="true" [disabled]="form.invalid" />
+    </div>
+  </form>
+</div>

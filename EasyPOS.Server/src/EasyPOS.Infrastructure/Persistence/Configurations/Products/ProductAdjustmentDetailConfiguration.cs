@@ -40,6 +40,7 @@ internal sealed class ProductAdjustmentDetailConfiguration : IEntityTypeConfigur
 
         builder.HasOne(x => x.ProductAdjustment)
             .WithMany(x => x.ProductAdjustmentDetails)
+            .HasForeignKey(x => x.ProductAdjustmentId)
             .OnDelete(DeleteBehavior.NoAction);
 
     }

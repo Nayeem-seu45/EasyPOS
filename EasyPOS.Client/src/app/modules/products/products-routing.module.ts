@@ -14,6 +14,8 @@ import { TaxDetailComponent } from "./components/tax-detail/tax-detail.component
 import { TaxListComponent } from "./components/tax-list/tax-list.component"
 import { ProductAdjustmentListComponent } from "./components/product-adjustment-list/product-adjustment-list.component"
 import { ProductAdjustmentDetailComponent } from "./components/product-adjustment-detail/product-adjustment-detail.component"
+import { CountStockDetailComponent } from "./components/count-stock-detail/count-stock-detail.component"
+import { CountStockListComponent } from "./components/count-stock-list/count-stock-list.component"
 
 const routes: Routes = [
   {path: 'categories', component: CategoryListComponent},
@@ -29,6 +31,7 @@ const routes: Routes = [
   {path: 'adjustments', component: ProductAdjustmentListComponent },
   {path: 'adjustments/create', component: ProductAdjustmentDetailComponent},
   {path: 'adjustments/:id', component: ProductAdjustmentDetailComponent },
+  {path: 'countstocks', component: CountStockListComponent },
 ]
 
 @NgModule({
@@ -51,5 +54,7 @@ export const ProductsRoutingComponents = [
   TaxListComponent,
   TaxDetailComponent,
   ProductAdjustmentListComponent,
-  ProductAdjustmentDetailComponent
+  ProductAdjustmentDetailComponent,
+  CountStockListComponent,
+  CountStockDetailComponent
 ]

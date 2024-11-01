@@ -41,7 +41,9 @@ public sealed class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<Tax> Taxes => Set<Tax>();
     public DbSet<ProductAdjustment> ProductAdjustments => Set<ProductAdjustment>();
     public DbSet<ProductAdjustmentDetail> ProductAdjustmentDetails => Set<ProductAdjustmentDetail>();
-
+    public DbSet<CountStock> CountStocks => Set<CountStock>();
+    public DbSet<CountStockCategory> CountStockCategories => Set<CountStockCategory>();
+    public DbSet<CountStockBrand> CountStockBrands => Set<CountStockBrand>();
 
     #endregion
 

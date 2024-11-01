@@ -4,6 +4,7 @@ using EasyPOS.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EasyPOS.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241101182958_CountStockAdded")]
+    partial class CountStockAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -556,8 +559,7 @@ namespace EasyPOS.Infrastructure.Persistence.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("NEWSEQUENTIALID()");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("BrandId")
                         .HasColumnType("uniqueidentifier");
@@ -567,8 +569,6 @@ namespace EasyPOS.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CountStockId");
-
                     b.ToTable("CountStockBrands");
                 });
 
@@ -576,8 +576,7 @@ namespace EasyPOS.Infrastructure.Persistence.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("NEWSEQUENTIALID()");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("CategoryId")
                         .HasColumnType("uniqueidentifier");
@@ -586,8 +585,6 @@ namespace EasyPOS.Infrastructure.Persistence.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CountStockId");
 
                     b.ToTable("CountStockCategories");
                 });
@@ -1801,28 +1798,6 @@ namespace EasyPOS.Infrastructure.Persistence.Migrations
                     b.Navigation("Parent");
                 });
 
-            modelBuilder.Entity("EasyPOS.Domain.Products.CountStockBrand", b =>
-                {
-                    b.HasOne("EasyPOS.Domain.Products.CountStock", "CountStock")
-                        .WithMany("CountStockBrands")
-                        .HasForeignKey("CountStockId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("CountStock");
-                });
-
-            modelBuilder.Entity("EasyPOS.Domain.Products.CountStockCategory", b =>
-                {
-                    b.HasOne("EasyPOS.Domain.Products.CountStock", "CountStock")
-                        .WithMany("CountStockCategories")
-                        .HasForeignKey("CountStockId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("CountStock");
-                });
-
             modelBuilder.Entity("EasyPOS.Domain.Products.Product", b =>
                 {
                     b.HasOne("EasyPOS.Domain.Products.Category", "Category")
@@ -1887,13 +1862,6 @@ namespace EasyPOS.Infrastructure.Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("Sale");
-                });
-
-            modelBuilder.Entity("EasyPOS.Domain.Products.CountStock", b =>
-                {
-                    b.Navigation("CountStockBrands");
-
-                    b.Navigation("CountStockCategories");
                 });
 
             modelBuilder.Entity("EasyPOS.Domain.Products.ProductAdjustment", b =>

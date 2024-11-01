@@ -188,6 +188,14 @@ public static class Permissions
         public const string Edit = "Permissions.ProductAdjustments.Edit";
         public const string Delete = "Permissions.ProductAdjustments.Delete";
     }
+
+    public static class CountStocks
+    {
+        public const string View = "Permissions.CountStocks.View";
+        public const string Create = "Permissions.CountStocks.Create";
+        public const string Edit = "Permissions.CountStocks.Edit";
+        public const string Delete = "Permissions.CountStocks.Delete";
+    }
     #endregion
 
     #region Stakeholders
