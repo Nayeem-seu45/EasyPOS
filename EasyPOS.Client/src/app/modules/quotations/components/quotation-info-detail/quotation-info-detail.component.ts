@@ -1,22 +1,22 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CommonConstants } from 'src/app/core/contants/common';
-import { SaleInfoModel, SalesClient } from 'src/app/modules/generated-clients/api-service';
+import { QuotationInfoModel, QuotationsClient } from 'src/app/modules/generated-clients/api-service';
 import { CustomDialogService } from 'src/app/shared/services/custom-dialog.service';
 import { ToastService } from 'src/app/shared/services/toast.service';
 import { CommonUtils } from 'src/app/shared/Utilities/common-utilities';
 
 @Component({
-  selector: 'app-sale-info-detail',
-  templateUrl: './sale-info-detail.component.html',
-  styleUrl: './sale-info-detail.component.scss',
-  providers: [SalesClient]
+  selector: 'app-quotation-info-detail',
+  templateUrl: './quotation-info-detail.component.html',
+  styleUrl: './quotation-info-detail.component.scss',
+  providers: [QuotationsClient]
 })
-export class SaleInfoDetailComponent {
+export class QuotationInfoDetailComponent {
   id: string;
-  item: SaleInfoModel;
+  item: QuotationInfoModel;
 
-  constructor(private entityClient: SalesClient,
+  constructor(private entityClient: QuotationsClient,
     private activatedRoute: ActivatedRoute,
     private customDialogService: CustomDialogService,
     private toast: ToastService
