@@ -20,10 +20,7 @@ public record QuotationModel
     public DiscountType DiscountType { get; set; }
     public decimal? ShippingCost { get; set; }
     public decimal GrandTotal { get; set; }
-    public decimal PaidAmount { get; set; }
-    public decimal DueAmount { get; set; }
     public string? QuotationNote { get; set; }
-    public string? StaffNote { get; set; }
 
     public string WarehouseName { get; set; }
     public string CustomerName { get; set; }
@@ -55,7 +52,6 @@ public record UpsertQuotationModel
     public decimal? ShippingCost { get; set; }
     public decimal GrandTotal { get; set; }
     public string? QuotationNote { get; set; }
-    public string? StaffNote { get; set; }
 
     public List<QuotationDetailModel> QuotationDetails { get; set; } = [];
     public Dictionary<string, object> OptionsDataSources { get; set; } = [];

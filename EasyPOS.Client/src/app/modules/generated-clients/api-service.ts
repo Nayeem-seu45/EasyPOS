@@ -18220,10 +18220,7 @@ export class QuotationModel implements IQuotationModel {
     discountType?: DiscountType;
     shippingCost?: number | undefined;
     grandTotal?: number;
-    paidAmount?: number;
-    dueAmount?: number;
     quotationNote?: string | undefined;
-    staffNote?: string | undefined;
     warehouseName?: string;
     customerName?: string;
     quotationStatus?: string;
@@ -18256,10 +18253,7 @@ export class QuotationModel implements IQuotationModel {
             this.discountType = _data["discountType"];
             this.shippingCost = _data["shippingCost"];
             this.grandTotal = _data["grandTotal"];
-            this.paidAmount = _data["paidAmount"];
-            this.dueAmount = _data["dueAmount"];
             this.quotationNote = _data["quotationNote"];
-            this.staffNote = _data["staffNote"];
             this.warehouseName = _data["warehouseName"];
             this.customerName = _data["customerName"];
             this.quotationStatus = _data["quotationStatus"];
@@ -18302,10 +18296,7 @@ export class QuotationModel implements IQuotationModel {
         data["discountType"] = this.discountType;
         data["shippingCost"] = this.shippingCost;
         data["grandTotal"] = this.grandTotal;
-        data["paidAmount"] = this.paidAmount;
-        data["dueAmount"] = this.dueAmount;
         data["quotationNote"] = this.quotationNote;
-        data["staffNote"] = this.staffNote;
         data["warehouseName"] = this.warehouseName;
         data["customerName"] = this.customerName;
         data["quotationStatus"] = this.quotationStatus;
@@ -18341,10 +18332,7 @@ export interface IQuotationModel {
     discountType?: DiscountType;
     shippingCost?: number | undefined;
     grandTotal?: number;
-    paidAmount?: number;
-    dueAmount?: number;
     quotationNote?: string | undefined;
-    staffNote?: string | undefined;
     warehouseName?: string;
     customerName?: string;
     quotationStatus?: string;
@@ -18523,7 +18511,6 @@ export class UpsertQuotationModel implements IUpsertQuotationModel {
     shippingCost?: number | undefined;
     grandTotal?: number;
     quotationNote?: string | undefined;
-    staffNote?: string | undefined;
     quotationDetails?: QuotationDetailModel[];
     optionsDataSources?: { [key: string]: any; };
 
@@ -18555,7 +18542,6 @@ export class UpsertQuotationModel implements IUpsertQuotationModel {
             this.shippingCost = _data["shippingCost"];
             this.grandTotal = _data["grandTotal"];
             this.quotationNote = _data["quotationNote"];
-            this.staffNote = _data["staffNote"];
             if (Array.isArray(_data["quotationDetails"])) {
                 this.quotationDetails = [] as any;
                 for (let item of _data["quotationDetails"])
@@ -18597,7 +18583,6 @@ export class UpsertQuotationModel implements IUpsertQuotationModel {
         data["shippingCost"] = this.shippingCost;
         data["grandTotal"] = this.grandTotal;
         data["quotationNote"] = this.quotationNote;
-        data["staffNote"] = this.staffNote;
         if (Array.isArray(this.quotationDetails)) {
             data["quotationDetails"] = [];
             for (let item of this.quotationDetails)
@@ -18632,7 +18617,6 @@ export interface IUpsertQuotationModel {
     shippingCost?: number | undefined;
     grandTotal?: number;
     quotationNote?: string | undefined;
-    staffNote?: string | undefined;
     quotationDetails?: QuotationDetailModel[];
     optionsDataSources?: { [key: string]: any; };
 }

@@ -29,7 +29,7 @@ export class AppMenuDetailComponent extends BaseDetailComponent {
       description: [''],
       isActive: [true],
       visible: [true],
-      orderNo: [''],
+      orderNo: [0],
       parentId: [null],
       menuTypeId: [null]
     });

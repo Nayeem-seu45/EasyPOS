@@ -68,7 +68,6 @@ internal sealed class GetQuotationDetailByIdQueryHandler(
 
             FROM dbo.Quotations t
             LEFT JOIN dbo.QuotationDetails pd ON pd.QuotationId = t.Id
-            LEFT JOIN dbo.LookupDetails pt ON pt.Id = pp.PaymentType
             WHERE t.Id = @Id
             """;
 

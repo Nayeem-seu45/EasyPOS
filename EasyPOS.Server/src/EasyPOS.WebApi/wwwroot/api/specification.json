@@ -11823,19 +11823,7 @@
             "type": "number",
             "format": "decimal"
           },
-          "paidAmount": {
-            "type": "number",
-            "format": "decimal"
-          },
-          "dueAmount": {
-            "type": "number",
-            "format": "decimal"
-          },
           "quotationNote": {
-            "type": "string",
-            "nullable": true
-          },
-          "staffNote": {
             "type": "string",
             "nullable": true
           },
@@ -12046,10 +12034,6 @@
             "format": "decimal"
           },
           "quotationNote": {
-            "type": "string",
-            "nullable": true
-          },
-          "staffNote": {
             "type": "string",
             "nullable": true
           },

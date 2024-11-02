@@ -52,7 +52,6 @@ internal sealed class GetQuotationByIdQueryHandler(ISqlConnectionFactory sqlConn
                 s.ShippingCost AS {nameof(UpsertQuotationModel.ShippingCost)},
                 s.GrandTotal AS {nameof(UpsertQuotationModel.GrandTotal)},
                 s.QuotationNote AS {nameof(UpsertQuotationModel.QuotationNote)},
-                s.StaffNote AS {nameof(UpsertQuotationModel.StaffNote)},
 
                 -- QuotationDetailModel fields (detail)
                 d.Id AS {nameof(QuotationDetailModel.Id)},

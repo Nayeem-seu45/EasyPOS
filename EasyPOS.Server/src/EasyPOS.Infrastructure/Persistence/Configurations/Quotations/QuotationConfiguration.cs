@@ -54,20 +54,7 @@ internal sealed class QuotationConfiguration : IEntityTypeConfiguration<Quotatio
               .HasColumnType("decimal(18, 2)")
               .IsRequired();
 
-        builder.Property(x => x.PaidAmount)
-              .HasColumnType("decimal(18, 2)")
-              .HasDefaultValue(0)
-              .IsRequired();
-
-        builder.Property(x => x.DueAmount)
-              .HasColumnType("decimal(18, 2)")
-              .HasDefaultValue(0)
-              .IsRequired();
-
         builder.Property(x => x.QuotationNote)
-               .HasMaxLength(500);
-
-        builder.Property(x => x.StaffNote)
                .HasMaxLength(500);
 
         builder.HasMany(x => x.QuotationDetails)

@@ -31,10 +31,7 @@ internal sealed class GetQuotationQueryHandler(ISqlConnectionFactory sqlConnecti
                 t.DiscountAmount AS {nameof(QuotationModel.DiscountAmount)},
                 t.ShippingCost AS {nameof(QuotationModel.ShippingCost)},
                 t.GrandTotal AS {nameof(QuotationModel.GrandTotal)},
-                t.PaidAmount AS {nameof(PurchaseModel.PaidAmount)},
-                t.DueAmount AS {nameof(PurchaseModel.DueAmount)},
                 t.QuotationNote AS {nameof(QuotationModel.QuotationNote)},
-                t.StaffNote AS {nameof(QuotationModel.StaffNote)},
                 w.Name AS {nameof(QuotationModel.WarehouseName)},
                 c.Name AS {nameof(QuotationModel.CustomerName)},
                 ss.Name AS {nameof(QuotationModel.QuotationStatus)}

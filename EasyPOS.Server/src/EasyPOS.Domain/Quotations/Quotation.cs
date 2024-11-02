@@ -11,7 +11,6 @@ public class Quotation : BaseAuditableEntity
     public Guid? BillerId { get; set; }
     public string? AttachmentUrl { get; set; }
     public Guid QuotationStatusId { get; set; }
-    public Guid PaymentStatusId { get; set; }
     public decimal SubTotal { get; set; }
     public decimal? TaxRate { get; set; }
     public decimal? TaxAmount { get; set; }
@@ -21,9 +20,6 @@ public class Quotation : BaseAuditableEntity
     public decimal? ShippingCost { get; set; }
     public decimal GrandTotal { get; set; }
     public string? QuotationNote { get; set; }
-    public string? StaffNote { get; set; }
-    public decimal PaidAmount { get; set; }
-    public decimal DueAmount { get; set; }
 
     public virtual List<QuotationDetail> QuotationDetails { get; set; } = [];
 }
