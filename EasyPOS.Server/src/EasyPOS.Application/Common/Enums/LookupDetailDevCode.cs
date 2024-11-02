@@ -22,5 +22,11 @@ public enum PaymentType
 {
     Cach = 109101,
     Card = 109102,
-    Cheque = 109102
+    Cheque = 109103
+}
+
+public enum QuotationStatus
+{
+    Pending = 12313123,
+    Send = 23434234
 }

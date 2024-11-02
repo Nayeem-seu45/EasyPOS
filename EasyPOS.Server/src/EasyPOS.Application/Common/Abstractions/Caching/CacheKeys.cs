@@ -80,6 +80,10 @@ public static class CacheKeys
 
     #endregion
 
+    #region Quotations
+    public const string Quotation = nameof(Quotation);
+    #endregion
+
     #region Settings
     public const string CompanyInfo = nameof(CompanyInfo);
     #endregion

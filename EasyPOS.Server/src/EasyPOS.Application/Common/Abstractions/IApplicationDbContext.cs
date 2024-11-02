@@ -2,6 +2,7 @@
 using EasyPOS.Domain.Admin;
 using EasyPOS.Domain.Common;
 using EasyPOS.Domain.Products;
+using EasyPOS.Domain.Quotations;
 using EasyPOS.Domain.Settings;
 using EasyPOS.Domain.Stakeholders;
 using EasyPOS.Domain.Trades;
@@ -64,6 +65,12 @@ public interface IApplicationDbContext
     DbSet<GiftCard> GiftCards { get; }
 
 
+    #endregion
+
+
+    #region Quotations
+    DbSet<Quotation> Quotations { get; }
+    DbSet<QuotationDetail> QuotationDetails { get; }
     #endregion
 
     #region Accounting

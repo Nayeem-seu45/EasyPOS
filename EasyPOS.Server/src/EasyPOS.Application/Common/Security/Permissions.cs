@@ -198,6 +198,16 @@ public static class Permissions
     }
     #endregion
 
+    #region Quotations
+    public static class Quotations
+    {
+        public const string View = "Permissions.Quotations.View";
+        public const string Create = "Permissions.Quotations.Create";
+        public const string Edit = "Permissions.Quotations.Edit";
+        public const string Delete = "Permissions.Quotations.Delete";
+    }
+    #endregion
+
     #region Stakeholders
     public static class Customers
     {

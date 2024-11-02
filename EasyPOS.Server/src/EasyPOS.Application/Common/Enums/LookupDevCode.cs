@@ -13,5 +13,6 @@ public enum LookupDevCode
     PaymentType = 109,
     Country = 110,
     District = 111,
-    GiftCardType = 112
+    GiftCardType = 112,
+    QuotationStatus = 113
 }

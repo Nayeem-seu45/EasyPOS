@@ -4,6 +4,7 @@ using EasyPOS.Domain.Accounting;
 using EasyPOS.Domain.Admin;
 using EasyPOS.Domain.Common;
 using EasyPOS.Domain.Products;
+using EasyPOS.Domain.Quotations;
 using EasyPOS.Domain.Settings;
 using EasyPOS.Domain.Stakeholders;
 using EasyPOS.Domain.Trades;
@@ -64,6 +65,11 @@ public sealed class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<Courier> Couriers => Set<Courier>();
     public DbSet<Coupon> Coupons => Set<Coupon>();
     public DbSet<GiftCard> GiftCards => Set<GiftCard>();
+    #endregion
+
+    #region Quotations
+    public DbSet<Quotation> Quotations => Set<Quotation>();
+    public DbSet<QuotationDetail> QuotationDetails => Set<QuotationDetail>();
     #endregion
 
     #region Accounting

@@ -5776,6 +5776,474 @@ export class CompanyInfosClient implements ICompanyInfosClient {
     }
 }
 
+export interface IQuotationsClient {
+    getAll(query: GetQuotationListQuery): Observable<PaginatedResponseOfQuotationModel>;
+    get(id: string): Observable<UpsertQuotationModel>;
+    getDetail(id: string): Observable<QuotationInfoModel>;
+    create(command: CreateQuotationCommand): Observable<string>;
+    update(command: UpdateQuotationCommand): Observable<void>;
+    delete(id: string): Observable<void>;
+    deleteMultiple(ids: string[]): Observable<void>;
+    deleteQuotationDetail(id: string): Observable<void>;
+}
+
+@Injectable()
+export class QuotationsClient implements IQuotationsClient {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ?? "";
+    }
+
+    getAll(query: GetQuotationListQuery): Observable<PaginatedResponseOfQuotationModel> {
+        let url_ = this.baseUrl + "/api/Quotations/GetAll";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(query);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            withCredentials: true,
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAll(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAll(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<PaginatedResponseOfQuotationModel>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<PaginatedResponseOfQuotationModel>;
+        }));
+    }
+
+    protected processGetAll(response: HttpResponseBase): Observable<PaginatedResponseOfQuotationModel> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = PaginatedResponseOfQuotationModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    get(id: string): Observable<UpsertQuotationModel> {
+        let url_ = this.baseUrl + "/api/Quotations/Get/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            withCredentials: true,
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGet(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGet(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<UpsertQuotationModel>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<UpsertQuotationModel>;
+        }));
+    }
+
+    protected processGet(response: HttpResponseBase): Observable<UpsertQuotationModel> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = UpsertQuotationModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    getDetail(id: string): Observable<QuotationInfoModel> {
+        let url_ = this.baseUrl + "/api/Quotations/GetDetail/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            withCredentials: true,
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetDetail(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetDetail(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<QuotationInfoModel>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<QuotationInfoModel>;
+        }));
+    }
+
+    protected processGetDetail(response: HttpResponseBase): Observable<QuotationInfoModel> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = QuotationInfoModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    create(command: CreateQuotationCommand): Observable<string> {
+        let url_ = this.baseUrl + "/api/Quotations/Create";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            withCredentials: true,
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreate(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<string>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<string>;
+        }));
+    }
+
+    protected processCreate(response: HttpResponseBase): Observable<string> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 201) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result201: any = null;
+            let resultData201 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result201 = resultData201 !== undefined ? resultData201 : <any>null;
+    
+            return _observableOf(result201);
+            }));
+        } else if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ProblemDetails.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    update(command: UpdateQuotationCommand): Observable<void> {
+        let url_ = this.baseUrl + "/api/Quotations/Update";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            withCredentials: true,
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+            })
+        };
+
+        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdate(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processUpdate(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ProblemDetails.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            }));
+        } else if (status === 404) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("A server side error occurred.", status, _responseText, _headers);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    delete(id: string): Observable<void> {
+        let url_ = this.baseUrl + "/api/Quotations/Delete/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            withCredentials: true,
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDelete(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDelete(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processDelete(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ProblemDetails.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    deleteMultiple(ids: string[]): Observable<void> {
+        let url_ = this.baseUrl + "/api/Quotations/DeleteMultiple";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(ids);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            withCredentials: true,
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDeleteMultiple(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDeleteMultiple(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processDeleteMultiple(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ProblemDetails.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    deleteQuotationDetail(id: string): Observable<void> {
+        let url_ = this.baseUrl + "/api/Quotations/DeleteQuotationDetail?";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined and cannot be null.");
+        else
+            url_ += "id=" + encodeURIComponent("" + id) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            withCredentials: true,
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDeleteQuotationDetail(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDeleteQuotationDetail(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processDeleteQuotationDetail(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ProblemDetails.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+}
+
 export interface IBrandsClient {
     getAll(query: GetBrandListQuery): Observable<PaginatedResponseOfBrandModel>;
     get(id: string): Observable<BrandModel>;
@@ -17653,6 +18121,745 @@ export interface IUpdateCompanyInfoCommand {
     logoUrl?: string | undefined;
     signatureUrl?: string | undefined;
     website?: string | undefined;
+    cacheKey?: string;
+}
+
+export class PaginatedResponseOfQuotationModel implements IPaginatedResponseOfQuotationModel {
+    items?: QuotationModel[];
+    pageNumber?: number;
+    totalPages?: number;
+    totalCount?: number;
+    hasPreviousPage?: boolean;
+    hasNextPage?: boolean;
+    optionsDataSources?: { [key: string]: any; };
+
+    constructor(data?: IPaginatedResponseOfQuotationModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["items"])) {
+                this.items = [] as any;
+                for (let item of _data["items"])
+                    this.items!.push(QuotationModel.fromJS(item));
+            }
+            this.pageNumber = _data["pageNumber"];
+            this.totalPages = _data["totalPages"];
+            this.totalCount = _data["totalCount"];
+            this.hasPreviousPage = _data["hasPreviousPage"];
+            this.hasNextPage = _data["hasNextPage"];
+            if (_data["optionsDataSources"]) {
+                this.optionsDataSources = {} as any;
+                for (let key in _data["optionsDataSources"]) {
+                    if (_data["optionsDataSources"].hasOwnProperty(key))
+                        (<any>this.optionsDataSources)![key] = _data["optionsDataSources"][key];
+                }
+            }
+        }
+    }
+
+    static fromJS(data: any): PaginatedResponseOfQuotationModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new PaginatedResponseOfQuotationModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        data["pageNumber"] = this.pageNumber;
+        data["totalPages"] = this.totalPages;
+        data["totalCount"] = this.totalCount;
+        data["hasPreviousPage"] = this.hasPreviousPage;
+        data["hasNextPage"] = this.hasNextPage;
+        if (this.optionsDataSources) {
+            data["optionsDataSources"] = {};
+            for (let key in this.optionsDataSources) {
+                if (this.optionsDataSources.hasOwnProperty(key))
+                    (<any>data["optionsDataSources"])[key] = (<any>this.optionsDataSources)[key];
+            }
+        }
+        return data;
+    }
+}
+
+export interface IPaginatedResponseOfQuotationModel {
+    items?: QuotationModel[];
+    pageNumber?: number;
+    totalPages?: number;
+    totalCount?: number;
+    hasPreviousPage?: boolean;
+    hasNextPage?: boolean;
+    optionsDataSources?: { [key: string]: any; };
+}
+
+export class QuotationModel implements IQuotationModel {
+    id?: string;
+    quotationDate?: Date;
+    referenceNo?: string | undefined;
+    warehouseId?: string;
+    customerId?: string;
+    billerId?: string;
+    attachmentUrl?: string | undefined;
+    quotationStatusId?: string | undefined;
+    taxRate?: number | undefined;
+    taxAmount?: number | undefined;
+    discountAmount?: number | undefined;
+    discountRate?: number | undefined;
+    discountType?: DiscountType;
+    shippingCost?: number | undefined;
+    grandTotal?: number;
+    paidAmount?: number;
+    dueAmount?: number;
+    quotationNote?: string | undefined;
+    staffNote?: string | undefined;
+    warehouseName?: string;
+    customerName?: string;
+    quotationStatus?: string;
+    quotationDetails?: QuotationDetailModel[];
+    optionsDataSources?: { [key: string]: any; };
+
+    constructor(data?: IQuotationModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.quotationDate = _data["quotationDate"] ? new Date(_data["quotationDate"].toString()) : <any>undefined;
+            this.referenceNo = _data["referenceNo"];
+            this.warehouseId = _data["warehouseId"];
+            this.customerId = _data["customerId"];
+            this.billerId = _data["billerId"];
+            this.attachmentUrl = _data["attachmentUrl"];
+            this.quotationStatusId = _data["quotationStatusId"];
+            this.taxRate = _data["taxRate"];
+            this.taxAmount = _data["taxAmount"];
+            this.discountAmount = _data["discountAmount"];
+            this.discountRate = _data["discountRate"];
+            this.discountType = _data["discountType"];
+            this.shippingCost = _data["shippingCost"];
+            this.grandTotal = _data["grandTotal"];
+            this.paidAmount = _data["paidAmount"];
+            this.dueAmount = _data["dueAmount"];
+            this.quotationNote = _data["quotationNote"];
+            this.staffNote = _data["staffNote"];
+            this.warehouseName = _data["warehouseName"];
+            this.customerName = _data["customerName"];
+            this.quotationStatus = _data["quotationStatus"];
+            if (Array.isArray(_data["quotationDetails"])) {
+                this.quotationDetails = [] as any;
+                for (let item of _data["quotationDetails"])
+                    this.quotationDetails!.push(QuotationDetailModel.fromJS(item));
+            }
+            if (_data["optionsDataSources"]) {
+                this.optionsDataSources = {} as any;
+                for (let key in _data["optionsDataSources"]) {
+                    if (_data["optionsDataSources"].hasOwnProperty(key))
+                        (<any>this.optionsDataSources)![key] = _data["optionsDataSources"][key];
+                }
+            }
+        }
+    }
+
+    static fromJS(data: any): QuotationModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new QuotationModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["quotationDate"] = this.quotationDate ? formatDate(this.quotationDate) : <any>undefined;
+        data["referenceNo"] = this.referenceNo;
+        data["warehouseId"] = this.warehouseId;
+        data["customerId"] = this.customerId;
+        data["billerId"] = this.billerId;
+        data["attachmentUrl"] = this.attachmentUrl;
+        data["quotationStatusId"] = this.quotationStatusId;
+        data["taxRate"] = this.taxRate;
+        data["taxAmount"] = this.taxAmount;
+        data["discountAmount"] = this.discountAmount;
+        data["discountRate"] = this.discountRate;
+        data["discountType"] = this.discountType;
+        data["shippingCost"] = this.shippingCost;
+        data["grandTotal"] = this.grandTotal;
+        data["paidAmount"] = this.paidAmount;
+        data["dueAmount"] = this.dueAmount;
+        data["quotationNote"] = this.quotationNote;
+        data["staffNote"] = this.staffNote;
+        data["warehouseName"] = this.warehouseName;
+        data["customerName"] = this.customerName;
+        data["quotationStatus"] = this.quotationStatus;
+        if (Array.isArray(this.quotationDetails)) {
+            data["quotationDetails"] = [];
+            for (let item of this.quotationDetails)
+                data["quotationDetails"].push(item.toJSON());
+        }
+        if (this.optionsDataSources) {
+            data["optionsDataSources"] = {};
+            for (let key in this.optionsDataSources) {
+                if (this.optionsDataSources.hasOwnProperty(key))
+                    (<any>data["optionsDataSources"])[key] = (<any>this.optionsDataSources)[key];
+            }
+        }
+        return data;
+    }
+}
+
+export interface IQuotationModel {
+    id?: string;
+    quotationDate?: Date;
+    referenceNo?: string | undefined;
+    warehouseId?: string;
+    customerId?: string;
+    billerId?: string;
+    attachmentUrl?: string | undefined;
+    quotationStatusId?: string | undefined;
+    taxRate?: number | undefined;
+    taxAmount?: number | undefined;
+    discountAmount?: number | undefined;
+    discountRate?: number | undefined;
+    discountType?: DiscountType;
+    shippingCost?: number | undefined;
+    grandTotal?: number;
+    paidAmount?: number;
+    dueAmount?: number;
+    quotationNote?: string | undefined;
+    staffNote?: string | undefined;
+    warehouseName?: string;
+    customerName?: string;
+    quotationStatus?: string;
+    quotationDetails?: QuotationDetailModel[];
+    optionsDataSources?: { [key: string]: any; };
+}
+
+export class QuotationDetailModel implements IQuotationDetailModel {
+    id?: string;
+    quotationId?: string;
+    productId?: string;
+    productCode?: string;
+    productName?: string;
+    productUnitCost?: number;
+    productUnitPrice?: number;
+    productUnitId?: string;
+    productUnit?: number;
+    productUnitDiscount?: number;
+    quantity?: number;
+    batchNo?: string;
+    expiredDate?: Date | undefined;
+    netUnitPrice?: number;
+    discountType?: DiscountType;
+    discountRate?: number | undefined;
+    discountAmount?: number;
+    taxMethod?: TaxMethod;
+    taxRate?: number;
+    taxAmount?: number;
+    totalPrice?: number;
+    remarks?: string | undefined;
+
+    constructor(data?: IQuotationDetailModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.quotationId = _data["quotationId"];
+            this.productId = _data["productId"];
+            this.productCode = _data["productCode"];
+            this.productName = _data["productName"];
+            this.productUnitCost = _data["productUnitCost"];
+            this.productUnitPrice = _data["productUnitPrice"];
+            this.productUnitId = _data["productUnitId"];
+            this.productUnit = _data["productUnit"];
+            this.productUnitDiscount = _data["productUnitDiscount"];
+            this.quantity = _data["quantity"];
+            this.batchNo = _data["batchNo"];
+            this.expiredDate = _data["expiredDate"] ? new Date(_data["expiredDate"].toString()) : <any>undefined;
+            this.netUnitPrice = _data["netUnitPrice"];
+            this.discountType = _data["discountType"];
+            this.discountRate = _data["discountRate"];
+            this.discountAmount = _data["discountAmount"];
+            this.taxMethod = _data["taxMethod"];
+            this.taxRate = _data["taxRate"];
+            this.taxAmount = _data["taxAmount"];
+            this.totalPrice = _data["totalPrice"];
+            this.remarks = _data["remarks"];
+        }
+    }
+
+    static fromJS(data: any): QuotationDetailModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new QuotationDetailModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["quotationId"] = this.quotationId;
+        data["productId"] = this.productId;
+        data["productCode"] = this.productCode;
+        data["productName"] = this.productName;
+        data["productUnitCost"] = this.productUnitCost;
+        data["productUnitPrice"] = this.productUnitPrice;
+        data["productUnitId"] = this.productUnitId;
+        data["productUnit"] = this.productUnit;
+        data["productUnitDiscount"] = this.productUnitDiscount;
+        data["quantity"] = this.quantity;
+        data["batchNo"] = this.batchNo;
+        data["expiredDate"] = this.expiredDate ? formatDate(this.expiredDate) : <any>undefined;
+        data["netUnitPrice"] = this.netUnitPrice;
+        data["discountType"] = this.discountType;
+        data["discountRate"] = this.discountRate;
+        data["discountAmount"] = this.discountAmount;
+        data["taxMethod"] = this.taxMethod;
+        data["taxRate"] = this.taxRate;
+        data["taxAmount"] = this.taxAmount;
+        data["totalPrice"] = this.totalPrice;
+        data["remarks"] = this.remarks;
+        return data;
+    }
+}
+
+export interface IQuotationDetailModel {
+    id?: string;
+    quotationId?: string;
+    productId?: string;
+    productCode?: string;
+    productName?: string;
+    productUnitCost?: number;
+    productUnitPrice?: number;
+    productUnitId?: string;
+    productUnit?: number;
+    productUnitDiscount?: number;
+    quantity?: number;
+    batchNo?: string;
+    expiredDate?: Date | undefined;
+    netUnitPrice?: number;
+    discountType?: DiscountType;
+    discountRate?: number | undefined;
+    discountAmount?: number;
+    taxMethod?: TaxMethod;
+    taxRate?: number;
+    taxAmount?: number;
+    totalPrice?: number;
+    remarks?: string | undefined;
+}
+
+export class GetQuotationListQuery extends DataGridModel implements IGetQuotationListQuery {
+    cacheKey?: string;
+
+    constructor(data?: IGetQuotationListQuery) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+        if (_data) {
+            this.cacheKey = _data["cacheKey"];
+        }
+    }
+
+    static override fromJS(data: any): GetQuotationListQuery {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetQuotationListQuery();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["cacheKey"] = this.cacheKey;
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IGetQuotationListQuery extends IDataGridModel {
+    cacheKey?: string;
+}
+
+export class UpsertQuotationModel implements IUpsertQuotationModel {
+    id?: string;
+    quotationDate?: Date;
+    referenceNo?: string | undefined;
+    warehouseId?: string;
+    customerId?: string;
+    billerId?: string;
+    attachmentUrl?: string | undefined;
+    quotationStatusId?: string | undefined;
+    subTotal?: number;
+    taxRate?: number | undefined;
+    taxAmount?: number | undefined;
+    discountType?: DiscountType | undefined;
+    discountAmount?: number | undefined;
+    discountRate?: number | undefined;
+    shippingCost?: number | undefined;
+    grandTotal?: number;
+    quotationNote?: string | undefined;
+    staffNote?: string | undefined;
+    quotationDetails?: QuotationDetailModel[];
+    optionsDataSources?: { [key: string]: any; };
+
+    constructor(data?: IUpsertQuotationModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.quotationDate = _data["quotationDate"] ? new Date(_data["quotationDate"].toString()) : <any>undefined;
+            this.referenceNo = _data["referenceNo"];
+            this.warehouseId = _data["warehouseId"];
+            this.customerId = _data["customerId"];
+            this.billerId = _data["billerId"];
+            this.attachmentUrl = _data["attachmentUrl"];
+            this.quotationStatusId = _data["quotationStatusId"];
+            this.subTotal = _data["subTotal"];
+            this.taxRate = _data["taxRate"];
+            this.taxAmount = _data["taxAmount"];
+            this.discountType = _data["discountType"];
+            this.discountAmount = _data["discountAmount"];
+            this.discountRate = _data["discountRate"];
+            this.shippingCost = _data["shippingCost"];
+            this.grandTotal = _data["grandTotal"];
+            this.quotationNote = _data["quotationNote"];
+            this.staffNote = _data["staffNote"];
+            if (Array.isArray(_data["quotationDetails"])) {
+                this.quotationDetails = [] as any;
+                for (let item of _data["quotationDetails"])
+                    this.quotationDetails!.push(QuotationDetailModel.fromJS(item));
+            }
+            if (_data["optionsDataSources"]) {
+                this.optionsDataSources = {} as any;
+                for (let key in _data["optionsDataSources"]) {
+                    if (_data["optionsDataSources"].hasOwnProperty(key))
+                        (<any>this.optionsDataSources)![key] = _data["optionsDataSources"][key];
+                }
+            }
+        }
+    }
+
+    static fromJS(data: any): UpsertQuotationModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpsertQuotationModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["quotationDate"] = this.quotationDate ? formatDate(this.quotationDate) : <any>undefined;
+        data["referenceNo"] = this.referenceNo;
+        data["warehouseId"] = this.warehouseId;
+        data["customerId"] = this.customerId;
+        data["billerId"] = this.billerId;
+        data["attachmentUrl"] = this.attachmentUrl;
+        data["quotationStatusId"] = this.quotationStatusId;
+        data["subTotal"] = this.subTotal;
+        data["taxRate"] = this.taxRate;
+        data["taxAmount"] = this.taxAmount;
+        data["discountType"] = this.discountType;
+        data["discountAmount"] = this.discountAmount;
+        data["discountRate"] = this.discountRate;
+        data["shippingCost"] = this.shippingCost;
+        data["grandTotal"] = this.grandTotal;
+        data["quotationNote"] = this.quotationNote;
+        data["staffNote"] = this.staffNote;
+        if (Array.isArray(this.quotationDetails)) {
+            data["quotationDetails"] = [];
+            for (let item of this.quotationDetails)
+                data["quotationDetails"].push(item.toJSON());
+        }
+        if (this.optionsDataSources) {
+            data["optionsDataSources"] = {};
+            for (let key in this.optionsDataSources) {
+                if (this.optionsDataSources.hasOwnProperty(key))
+                    (<any>data["optionsDataSources"])[key] = (<any>this.optionsDataSources)[key];
+            }
+        }
+        return data;
+    }
+}
+
+export interface IUpsertQuotationModel {
+    id?: string;
+    quotationDate?: Date;
+    referenceNo?: string | undefined;
+    warehouseId?: string;
+    customerId?: string;
+    billerId?: string;
+    attachmentUrl?: string | undefined;
+    quotationStatusId?: string | undefined;
+    subTotal?: number;
+    taxRate?: number | undefined;
+    taxAmount?: number | undefined;
+    discountType?: DiscountType | undefined;
+    discountAmount?: number | undefined;
+    discountRate?: number | undefined;
+    shippingCost?: number | undefined;
+    grandTotal?: number;
+    quotationNote?: string | undefined;
+    staffNote?: string | undefined;
+    quotationDetails?: QuotationDetailModel[];
+    optionsDataSources?: { [key: string]: any; };
+}
+
+export class QuotationInfoModel implements IQuotationInfoModel {
+    id?: string;
+    quotationDate?: Date;
+    referenceNo?: string | undefined;
+    warehouseId?: string;
+    customerId?: string;
+    billerId?: string;
+    attachmentUrl?: string | undefined;
+    quotationStatusId?: string | undefined;
+    paymentStatusId?: string | undefined;
+    taxRate?: number | undefined;
+    taxAmount?: number | undefined;
+    discountAmount?: number | undefined;
+    discountRate?: number | undefined;
+    discountType?: DiscountType;
+    shippingCost?: number | undefined;
+    subTotal?: number;
+    grandTotal?: number;
+    quotationNote?: string | undefined;
+    staffNote?: string | undefined;
+    warehouseName?: string;
+    customerName?: string;
+    quotationStatus?: string;
+    paymentStatus?: string;
+    totalQuantity?: number;
+    totalDiscount?: number;
+    totalTaxAmount?: number;
+    totalItems?: string;
+    companyInfo?: CompanyInfoModel;
+    customer?: CustomerModel;
+    quotationDetails?: QuotationDetailModel[];
+
+    constructor(data?: IQuotationInfoModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.quotationDate = _data["quotationDate"] ? new Date(_data["quotationDate"].toString()) : <any>undefined;
+            this.referenceNo = _data["referenceNo"];
+            this.warehouseId = _data["warehouseId"];
+            this.customerId = _data["customerId"];
+            this.billerId = _data["billerId"];
+            this.attachmentUrl = _data["attachmentUrl"];
+            this.quotationStatusId = _data["quotationStatusId"];
+            this.paymentStatusId = _data["paymentStatusId"];
+            this.taxRate = _data["taxRate"];
+            this.taxAmount = _data["taxAmount"];
+            this.discountAmount = _data["discountAmount"];
+            this.discountRate = _data["discountRate"];
+            this.discountType = _data["discountType"];
+            this.shippingCost = _data["shippingCost"];
+            this.subTotal = _data["subTotal"];
+            this.grandTotal = _data["grandTotal"];
+            this.quotationNote = _data["quotationNote"];
+            this.staffNote = _data["staffNote"];
+            this.warehouseName = _data["warehouseName"];
+            this.customerName = _data["customerName"];
+            this.quotationStatus = _data["quotationStatus"];
+            this.paymentStatus = _data["paymentStatus"];
+            this.totalQuantity = _data["totalQuantity"];
+            this.totalDiscount = _data["totalDiscount"];
+            this.totalTaxAmount = _data["totalTaxAmount"];
+            this.totalItems = _data["totalItems"];
+            this.companyInfo = _data["companyInfo"] ? CompanyInfoModel.fromJS(_data["companyInfo"]) : <any>undefined;
+            this.customer = _data["customer"] ? CustomerModel.fromJS(_data["customer"]) : <any>undefined;
+            if (Array.isArray(_data["quotationDetails"])) {
+                this.quotationDetails = [] as any;
+                for (let item of _data["quotationDetails"])
+                    this.quotationDetails!.push(QuotationDetailModel.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): QuotationInfoModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new QuotationInfoModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["quotationDate"] = this.quotationDate ? formatDate(this.quotationDate) : <any>undefined;
+        data["referenceNo"] = this.referenceNo;
+        data["warehouseId"] = this.warehouseId;
+        data["customerId"] = this.customerId;
+        data["billerId"] = this.billerId;
+        data["attachmentUrl"] = this.attachmentUrl;
+        data["quotationStatusId"] = this.quotationStatusId;
+        data["paymentStatusId"] = this.paymentStatusId;
+        data["taxRate"] = this.taxRate;
+        data["taxAmount"] = this.taxAmount;
+        data["discountAmount"] = this.discountAmount;
+        data["discountRate"] = this.discountRate;
+        data["discountType"] = this.discountType;
+        data["shippingCost"] = this.shippingCost;
+        data["subTotal"] = this.subTotal;
+        data["grandTotal"] = this.grandTotal;
+        data["quotationNote"] = this.quotationNote;
+        data["staffNote"] = this.staffNote;
+        data["warehouseName"] = this.warehouseName;
+        data["customerName"] = this.customerName;
+        data["quotationStatus"] = this.quotationStatus;
+        data["paymentStatus"] = this.paymentStatus;
+        data["totalQuantity"] = this.totalQuantity;
+        data["totalDiscount"] = this.totalDiscount;
+        data["totalTaxAmount"] = this.totalTaxAmount;
+        data["totalItems"] = this.totalItems;
+        data["companyInfo"] = this.companyInfo ? this.companyInfo.toJSON() : <any>undefined;
+        data["customer"] = this.customer ? this.customer.toJSON() : <any>undefined;
+        if (Array.isArray(this.quotationDetails)) {
+            data["quotationDetails"] = [];
+            for (let item of this.quotationDetails)
+                data["quotationDetails"].push(item.toJSON());
+        }
+        return data;
+    }
+}
+
+export interface IQuotationInfoModel {
+    id?: string;
+    quotationDate?: Date;
+    referenceNo?: string | undefined;
+    warehouseId?: string;
+    customerId?: string;
+    billerId?: string;
+    attachmentUrl?: string | undefined;
+    quotationStatusId?: string | undefined;
+    paymentStatusId?: string | undefined;
+    taxRate?: number | undefined;
+    taxAmount?: number | undefined;
+    discountAmount?: number | undefined;
+    discountRate?: number | undefined;
+    discountType?: DiscountType;
+    shippingCost?: number | undefined;
+    subTotal?: number;
+    grandTotal?: number;
+    quotationNote?: string | undefined;
+    staffNote?: string | undefined;
+    warehouseName?: string;
+    customerName?: string;
+    quotationStatus?: string;
+    paymentStatus?: string;
+    totalQuantity?: number;
+    totalDiscount?: number;
+    totalTaxAmount?: number;
+    totalItems?: string;
+    companyInfo?: CompanyInfoModel;
+    customer?: CustomerModel;
+    quotationDetails?: QuotationDetailModel[];
+}
+
+export class CreateQuotationCommand extends UpsertQuotationModel implements ICreateQuotationCommand {
+    cacheKey?: string;
+
+    constructor(data?: ICreateQuotationCommand) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+        if (_data) {
+            this.cacheKey = _data["cacheKey"];
+        }
+    }
+
+    static override fromJS(data: any): CreateQuotationCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateQuotationCommand();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["cacheKey"] = this.cacheKey;
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface ICreateQuotationCommand extends IUpsertQuotationModel {
+    cacheKey?: string;
+}
+
+export class UpdateQuotationCommand extends UpsertQuotationModel implements IUpdateQuotationCommand {
+    cacheKey?: string;
+
+    constructor(data?: IUpdateQuotationCommand) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+        if (_data) {
+            this.cacheKey = _data["cacheKey"];
+        }
+    }
+
+    static override fromJS(data: any): UpdateQuotationCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdateQuotationCommand();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["cacheKey"] = this.cacheKey;
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IUpdateQuotationCommand extends IUpsertQuotationModel {
     cacheKey?: string;
 }
 
