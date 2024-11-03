@@ -1,4 +1,5 @@
-﻿using EasyPOS.Application.Features.Trades.Purchases.Queries;
+﻿using EasyPOS.Application.Features.ProductTransfers.Queries;
+using EasyPOS.Application.Features.Trades.Purchases.Queries;
 using EasyPOS.Application.Features.Trades.Purchases.Shared;
 using EasyPOS.Domain.Common.Enums;
 

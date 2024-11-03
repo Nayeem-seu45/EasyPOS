@@ -2,6 +2,7 @@
 using EasyPOS.Domain.Admin;
 using EasyPOS.Domain.Common;
 using EasyPOS.Domain.Products;
+using EasyPOS.Domain.ProductTransfers;
 using EasyPOS.Domain.Quotations;
 using EasyPOS.Domain.Settings;
 using EasyPOS.Domain.Stakeholders;
@@ -43,6 +44,11 @@ public interface IApplicationDbContext
     DbSet<CountStockCategory> CountStockCategories { get; }
     DbSet<CountStockBrand> CountStockBrands { get; }
 
+    #endregion
+
+    #region Product Transfer
+    DbSet<ProductTransfer> ProductTransfers { get; }
+    DbSet<ProductTransferDetail> ProductTransferDetails { get; }
     #endregion
 
     #region Stakeholders

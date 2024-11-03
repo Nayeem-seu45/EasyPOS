@@ -45,6 +45,10 @@ public static class CacheKeys
     public const string CountStock = nameof(CountStock);
     #endregion
 
+    #region Product Transfers
+    public const string ProductTransfer = nameof(ProductTransfer);
+    #endregion
+
     #region Stakeholders
     public const string Customer = nameof(Customer);
     public const string Customer_All_SelectList = nameof(Customer_All_SelectList);

@@ -198,6 +198,16 @@ public static class Permissions
     }
     #endregion
 
+    #region Product Transfers
+    public static class ProductTransfers
+    {
+        public const string View = "Permissions.ProductTransfers.View";
+        public const string Create = "Permissions.ProductTransfers.Create";
+        public const string Edit = "Permissions.ProductTransfers.Edit";
+        public const string Delete = "Permissions.ProductTransfers.Delete";
+    }
+    #endregion
+
     #region Quotations
     public static class Quotations
     {

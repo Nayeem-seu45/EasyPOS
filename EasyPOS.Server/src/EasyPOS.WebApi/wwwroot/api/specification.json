@@ -4233,6 +4233,368 @@
         ]
       }
     },
+    "/api/ProductTransfers/GetAll": {
+      "post": {
+        "tags": [
+          "ProductTransfers"
+        ],
+        "operationId": "GetProductTransfers",
+        "requestBody": {
+          "x-name": "query",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetProductTransferListQuery"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedResponseOfProductTransferModel"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/ProductTransfers/Get/{id}": {
+      "get": {
+        "tags": [
+          "ProductTransfers"
+        ],
+        "operationId": "GetProductTransfer",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductTransferModel"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/ProductTransfers/GetDetail/{id}": {
+      "get": {
+        "tags": [
+          "ProductTransfers"
+        ],
+        "operationId": "GetProductTransferDetail",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductTransferInfoModel"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/ProductTransfers/Create": {
+      "post": {
+        "tags": [
+          "ProductTransfers"
+        ],
+        "operationId": "CreateProductTransfer",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateProductTransferCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "guid"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/ProductTransfers/Update": {
+      "put": {
+        "tags": [
+          "ProductTransfers"
+        ],
+        "operationId": "UpdateProductTransfer",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateProductTransferCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/ProductTransfers/Delete/{id}": {
+      "delete": {
+        "tags": [
+          "ProductTransfers"
+        ],
+        "operationId": "DeleteProductTransfer",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/ProductTransfers/DeleteMultiple": {
+      "post": {
+        "tags": [
+          "ProductTransfers"
+        ],
+        "operationId": "DeleteProductTransfers",
+        "requestBody": {
+          "x-name": "ids",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "guid"
+                }
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/ProductTransfers/Upload": {
+      "post": {
+        "tags": [
+          "ProductTransfers"
+        ],
+        "operationId": "ProductTransferUpload",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/ProductTransfers/DeleteProductTransferDetail": {
+      "post": {
+        "tags": [
+          "ProductTransfers"
+        ],
+        "operationId": "DeleteProductTransferDetail",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
     "/api/Brands/GetAll": {
       "post": {
         "tags": [
@@ -12207,6 +12569,494 @@
             }
           }
         ]
+      },
+      "PaginatedResponseOfProductTransferModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProductTransferModel"
+            }
+          },
+          "pageNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "hasPreviousPage": {
+            "type": "boolean"
+          },
+          "hasNextPage": {
+            "type": "boolean"
+          },
+          "optionsDataSources": {
+            "type": "object",
+            "additionalProperties": {}
+          }
+        }
+      },
+      "ProductTransferModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "transferDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "referenceNo": {
+            "type": "string"
+          },
+          "fromWarehouseId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "toWarehouseId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "supplierId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "transferStatusId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "attachmentUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "subTotal": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "taxRate": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "taxAmount": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "discountType": {
+            "$ref": "#/components/schemas/DiscountType"
+          },
+          "discountRate": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "discountAmount": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "shippingCost": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "grandTotal": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "note": {
+            "type": "string",
+            "nullable": true
+          },
+          "transferStatus": {
+            "type": "string"
+          },
+          "productTransferDetails": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProductTransferDetailModel"
+            }
+          },
+          "optionsDataSources": {
+            "type": "object",
+            "additionalProperties": {}
+          }
+        }
+      },
+      "ProductTransferDetailModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "productTransferId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "productId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "productCode": {
+            "type": "string"
+          },
+          "productName": {
+            "type": "string"
+          },
+          "productUnitCost": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "productUnitPrice": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "productUnitId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "productUnit": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "productUnitDiscount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "quantity": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "batchNo": {
+            "type": "string"
+          },
+          "expiredDate": {
+            "type": "string",
+            "format": "date",
+            "nullable": true
+          },
+          "netUnitCost": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "discountType": {
+            "$ref": "#/components/schemas/DiscountType"
+          },
+          "discountRate": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "discountAmount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "taxMethod": {
+            "$ref": "#/components/schemas/TaxMethod"
+          },
+          "taxRate": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "taxAmount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "totalPrice": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "remarks": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "GetProductTransferListQuery": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/DataGridModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "cacheKey": {
+                "type": "string"
+              }
+            }
+          }
+        ]
+      },
+      "ProductTransferInfoModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "transferDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "referenceNo": {
+            "type": "string"
+          },
+          "fromWarehouseId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "toWarehouseId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "transferStatusId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "attachmentUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "subTotal": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "taxRate": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "taxAmount": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "discountType": {
+            "$ref": "#/components/schemas/DiscountType"
+          },
+          "discountRate": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "discountAmount": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "shippingCost": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "grandTotal": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "note": {
+            "type": "string",
+            "nullable": true
+          },
+          "transferStatus": {
+            "type": "string"
+          },
+          "totalQuantity": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "totalDiscount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "totalTaxAmount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "totalItems": {
+            "type": "string"
+          },
+          "productTransferDetails": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProductTransferDetailModel"
+            }
+          }
+        }
+      },
+      "CreateProductTransferCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "transferDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "referenceNo": {
+            "type": "string"
+          },
+          "warehouseId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "supplierId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "transferStatusId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "attachmentUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "subTotal": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "taxRate": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "taxAmount": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "discountType": {
+            "$ref": "#/components/schemas/DiscountType"
+          },
+          "discountRate": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "discountAmount": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "shippingCost": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "grandTotal": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "note": {
+            "type": "string",
+            "nullable": true
+          },
+          "productTransferDetails": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProductTransferDetailModel"
+            }
+          },
+          "cacheKey": {
+            "type": "string"
+          }
+        }
+      },
+      "UpdateProductTransferCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "transferDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "referenceNo": {
+            "type": "string"
+          },
+          "warehouseId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "supplierId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "transferStatusId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "attachmentUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "subTotal": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "taxRate": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "taxAmount": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "discountType": {
+            "$ref": "#/components/schemas/DiscountType"
+          },
+          "discountRate": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "discountAmount": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "shippingCost": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "grandTotal": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "note": {
+            "type": "string",
+            "nullable": true
+          },
+          "productTransferDetails": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProductTransferDetailModel"
+            }
+          },
+          "cacheKey": {
+            "type": "string"
+          }
+        }
       },
       "PaginatedResponseOfBrandModel": {
         "type": "object",

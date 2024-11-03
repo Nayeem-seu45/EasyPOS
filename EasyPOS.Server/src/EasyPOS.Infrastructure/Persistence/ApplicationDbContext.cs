@@ -4,6 +4,7 @@ using EasyPOS.Domain.Accounting;
 using EasyPOS.Domain.Admin;
 using EasyPOS.Domain.Common;
 using EasyPOS.Domain.Products;
+using EasyPOS.Domain.ProductTransfers;
 using EasyPOS.Domain.Quotations;
 using EasyPOS.Domain.Settings;
 using EasyPOS.Domain.Stakeholders;
@@ -46,6 +47,11 @@ public sealed class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<CountStockCategory> CountStockCategories => Set<CountStockCategory>();
     public DbSet<CountStockBrand> CountStockBrands => Set<CountStockBrand>();
 
+    #endregion
+
+    #region Product Transfer
+    public DbSet<ProductTransfer> ProductTransfers => Set<ProductTransfer>();
+    public DbSet<ProductTransferDetail> ProductTransferDetails => Set<ProductTransferDetail>();
     #endregion
 
     #region Stakeholders
