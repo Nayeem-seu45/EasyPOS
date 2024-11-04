@@ -1,4 +1,4 @@
-import { NgModule } from "@angular/core";
+import { Component, NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 import { ProductTransferDetailComponent } from "./components/product-transfer-detail/product-transfer-detail.component";
 import { ProductTransferInfoDetailComponent } from "./components/product-transfer-info-detail/product-transfer-info-detail.component";
@@ -6,7 +6,9 @@ import { ProductTransferListComponent } from "./components/product-transfer-list
 import { UpdateProductTransferOrderDetailComponent } from "./components/update-product-transfer-order-detail/update-product-transfer-order-detail.component";
 
 const routes: Routes = [
-  
+  {path: 'list', component: ProductTransferListComponent},
+  {path: 'create', component: ProductTransferDetailComponent},
+  {path: 'edit/:id', component: ProductTransferDetailComponent},
 ]
 
 @NgModule({

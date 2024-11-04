@@ -7,8 +7,8 @@ namespace EasyPOS.Application.Features.ProductTransfers.Commands;
 public record CreateProductTransferCommand(
     DateOnly TransferDate,
     string ReferenceNo,
-    Guid WarehouseId,
-    Guid SupplierId,
+    Guid FromWarehouseId,
+    Guid ToWarehouseId,
     Guid TransferStatusId,
     string? AttachmentUrl,
     decimal SubTotal,

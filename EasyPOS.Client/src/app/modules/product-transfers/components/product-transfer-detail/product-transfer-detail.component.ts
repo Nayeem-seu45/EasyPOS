@@ -116,7 +116,7 @@ export class ProductTransferDetailComponent implements OnInit {
 
   save() {
     const createCommand = { ...this.form.value };
-    createCommand.productTransferDate = this.datePipe.transform(createCommand.productTransferDate, 'yyyy-MM-dd');
+    createCommand.transferDate = this.datePipe.transform(createCommand.transferDate, 'yyyy-MM-dd');
     console.log(createCommand)
     this.entityClient.create(createCommand).subscribe({
       next: () => {
@@ -130,7 +130,8 @@ export class ProductTransferDetailComponent implements OnInit {
 
   update() {
     const updateCommand = { ...this.form.value };
-    updateCommand.productTransferDate = this.datePipe.transform(updateCommand.productTansferDate, 'yyyy-MM-dd');
+    updateCommand.transferDate = this.datePipe.transform(updateCommand.transferDate, 'yyyy-MM-dd');
+    console.log(updateCommand.transferDate)
     this.entityClient.update(updateCommand).subscribe({
       next: () => {
         this.toast.updated();
@@ -146,8 +147,8 @@ export class ProductTransferDetailComponent implements OnInit {
       id: [null],
       transferDate: [null],
       referenceNo: [null],
-      warehouseId: [null],
-      supplierId: [null],
+      fromWarehouseId: [null],
+      toWarehouseId: [null],
       transferStatusId: [null],
       attachmentUrl: [null],
       subTotal: [0],
@@ -349,9 +350,7 @@ export class ProductTransferDetailComponent implements OnInit {
         if (succeeded) {
           this.closeDialogsubscription = this.customDialogService.closeDataSubject.subscribe((updatedProductTransferDetail: ProductTransferDetailModel) => {
             const productTransferDetailFormGroup = this.productTransferDetails.at(index) as FormGroup; 
-            console.log(index)
-            console.log(updatedProductTransferDetail)
-            console.log(productTransferDetailFormGroup)
+
            
             productTransferDetailFormGroup.patchValue({
               productUnitCost: updatedProductTransferDetail.productUnitCost,
@@ -432,10 +431,6 @@ export class ProductTransferDetailComponent implements OnInit {
 
   onFileUpload(fileUrl) {
 
-  }
-
-  protected getErrorMessage(error: any): string {
-    return error?.errors?.[0]?.description || 'An unexpected error occurred';
   }
 
 }

@@ -12,8 +12,13 @@ export class LoggingInterceptor implements HttpInterceptor {
     // Combine request headers and body into a single JSON object
     const requestLog = {
       headers: Object.fromEntries(req.headers.keys().map(key => [key, req.headers.get(key)])),
-      body: this.isFormData(req.body) ? '[FormData]' : req.body
+      body: this.isFormData(req.body)
+        ? '[FormData]'
+        : typeof req.body === 'string'
+          ? JSON.parse(req.body)  // Parse if it's a JSON string
+          : req.body              // Use directly if it's already an object
     };
+
 
     // Log the combined request object
     console.log(`Requesting to --> ${correlationId} -->  ${req.url}:`, requestLog);
@@ -26,9 +31,9 @@ export class LoggingInterceptor implements HttpInterceptor {
           // Check if the response is a Blob
           if (event.body instanceof Blob) {
             this.readBlobContent(event.body)
-            .then((responseData) => {
-              console.log(`Response from --> ${this.apiPostfix(req.url)} --> ${correlationId} -> after ${elapsed} ms:`, responseData);
-            });
+              .then((responseData) => {
+                console.log(`Response from --> ${this.apiPostfix(req.url)} --> ${correlationId} -> after ${elapsed} ms:`, responseData);
+              });
           } else {
             console.log(`Response from --> ${this.apiPostfix(req.url)} --> [${correlationId}] -> after ${elapsed} ms:`, event.body);
           }
@@ -37,11 +42,11 @@ export class LoggingInterceptor implements HttpInterceptor {
       catchError((error) => {
         const elapsed = Date.now() - started;
         console.error(`Request to ${req.url} failed after ${elapsed} ms:`, error);
-        if(error?.error instanceof Blob){
+        if (error?.error instanceof Blob) {
           this.readBlobContent(error.error)
-          .then((jsonError) => {
-            console.log(`Problem Details: `, jsonError)
-          });
+            .then((jsonError) => {
+              console.log(`Problem Details: `, jsonError)
+            });
         } else {
           console.log(`Problem Details: `, error.error)
         }
@@ -56,7 +61,7 @@ export class LoggingInterceptor implements HttpInterceptor {
       reader.onload = () => {
         try {
           const contentType = blob.type;
-          if(contentType === 'application/json' || contentType === 'application/problem+json'){
+          if (contentType === 'application/json' || contentType === 'application/problem+json') {
             resolve(JSON.parse(reader.result as string));
           } else {
             resolve(reader.result)

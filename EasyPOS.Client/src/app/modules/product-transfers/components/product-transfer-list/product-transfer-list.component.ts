@@ -17,7 +17,7 @@ import autoTable from 'jspdf-autotable';
 })
 export class ProductTransferListComponent {
   detailComponent = ProductTransferDetailComponent;
-  pageId = 'e6a24c4e-13aa-4862-b415-08dce587d160'
+  pageId = '4a237234-2c2d-415d-9131-08dcfc7bd72a'
 
   item: ProductTransferInfoModel;
 

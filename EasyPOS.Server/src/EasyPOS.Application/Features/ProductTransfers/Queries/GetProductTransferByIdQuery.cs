@@ -25,12 +25,11 @@ internal sealed class GetProductTransferByIdQueryHandler(ISqlConnectionFactory s
         var sql = $"""
             SELECT 
                 t.Id AS {nameof(ProductTransferModel.Id)},
-                t.ProductTransferDate AS {nameof(ProductTransferModel.TransferDate)},
+                t.TransferDate AS {nameof(ProductTransferModel.TransferDate)},
                 t.ReferenceNo AS {nameof(ProductTransferModel.ReferenceNo)},
                 t.FromWarehouseId AS {nameof(ProductTransferModel.FromWarehouseId)},
                 t.ToWarehouseId AS {nameof(ProductTransferModel.ToWarehouseId)},
-                t.SupplierId AS {nameof(ProductTransferModel.SupplierId)},
-                t.ProductTransferStatusId AS {nameof(ProductTransferModel.TransferStatusId)},
+                t.TransferStatusId AS {nameof(ProductTransferModel.TransferStatusId)},
                 t.AttachmentUrl AS {nameof(ProductTransferModel.AttachmentUrl)},
                 t.SubTotal AS {nameof(ProductTransferModel.SubTotal)},
                 t.TaxRate AS {nameof(ProductTransferModel.TaxRate)},

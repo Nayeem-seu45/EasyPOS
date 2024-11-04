@@ -14,12 +14,12 @@
         </div>
 
         <div class="field col-12 md:col-4">
-          <app-input-select label="Warehouse" formControlName="warehouseId"
+          <app-input-select label="From Warehouse" formControlName="fromWarehouseId"
             [options]="optionsDataSources?.['warehousesSelectList']" [required]="true" />
         </div>
         <div class="field col-12 md:col-4">
-          <app-input-select label="Supplier" formControlName="supplierId"
-            [options]="optionsDataSources?.['suppliersSelectList']" [required]="true" />
+          <app-input-select label="To Warehouse" formControlName="toWarehouseId"
+            [options]="optionsDataSources?.['warehousesSelectList']" [required]="true" />
         </div>
 
         <div class="field col-12 md:col-4">

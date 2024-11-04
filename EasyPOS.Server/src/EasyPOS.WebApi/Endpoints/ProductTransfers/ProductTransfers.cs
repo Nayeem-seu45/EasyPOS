@@ -74,10 +74,10 @@ public class ProductTransfers : EndpointGroupBase
             Sql: SelectListSqls.WarehouseSelectListSql,
             Parameters: new { },
             Key: $"{CacheKeys.Warehouse_All_SelectList}",
-            AllowCacheList: true)
+            AllowCacheList: false)
         );
 
-        var productTransferStatusSelectList = await sender.Send(new GetSelectListQuery(
+        var transferStatusSelectList = await sender.Send(new GetSelectListQuery(
             Sql: SelectListSqls.GetLookupDetailSelectListByDevCodeSql,
             Parameters: new { DevCode = (int)LookupDevCode.ProductTransferStatus },
             Key: $"{CacheKeys.LookupDetail}_{(int)LookupDevCode.ProductTransferStatus}",
@@ -88,7 +88,7 @@ public class ProductTransfers : EndpointGroupBase
            Sql: SelectListSqls.TaxesSelectListSql,
            Parameters: new { },
            Key: CacheKeys.Tax_All_SelectList,
-           AllowCacheList: true)
+           AllowCacheList: false)
         );
 
         var productsSelectList = await sender.Send(new GetProductSelectListQuery(
@@ -100,7 +100,7 @@ public class ProductTransfers : EndpointGroupBase
         );
 
         result.Value.OptionsDataSources.Add("warehousesSelectList", warehousesSelectList.Value);
-        result.Value.OptionsDataSources.Add("productTransferStatusSelectList", productTransferStatusSelectList.Value);
+        result.Value.OptionsDataSources.Add("transferStatusSelectList", transferStatusSelectList.Value);
         result.Value.OptionsDataSources.Add("productsSelectList", productsSelectList.Value);
         result.Value.OptionsDataSources.Add("taxesSelectList", taxesSelectList.Value);
         result.Value.OptionsDataSources.Add("productUnitSelectList", productUnitSelectList.Value);

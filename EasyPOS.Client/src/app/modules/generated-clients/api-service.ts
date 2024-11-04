@@ -19472,6 +19472,8 @@ export class ProductTransferModel implements IProductTransferModel {
     grandTotal?: number;
     note?: string | undefined;
     transferStatus?: string;
+    fromWarehouse?: string;
+    toWarehouse?: string;
     productTransferDetails?: ProductTransferDetailModel[];
     optionsDataSources?: { [key: string]: any; };
 
@@ -19504,6 +19506,8 @@ export class ProductTransferModel implements IProductTransferModel {
             this.grandTotal = _data["grandTotal"];
             this.note = _data["note"];
             this.transferStatus = _data["transferStatus"];
+            this.fromWarehouse = _data["fromWarehouse"];
+            this.toWarehouse = _data["toWarehouse"];
             if (Array.isArray(_data["productTransferDetails"])) {
                 this.productTransferDetails = [] as any;
                 for (let item of _data["productTransferDetails"])
@@ -19546,6 +19550,8 @@ export class ProductTransferModel implements IProductTransferModel {
         data["grandTotal"] = this.grandTotal;
         data["note"] = this.note;
         data["transferStatus"] = this.transferStatus;
+        data["fromWarehouse"] = this.fromWarehouse;
+        data["toWarehouse"] = this.toWarehouse;
         if (Array.isArray(this.productTransferDetails)) {
             data["productTransferDetails"] = [];
             for (let item of this.productTransferDetails)
@@ -19581,6 +19587,8 @@ export interface IProductTransferModel {
     grandTotal?: number;
     note?: string | undefined;
     transferStatus?: string;
+    fromWarehouse?: string;
+    toWarehouse?: string;
     productTransferDetails?: ProductTransferDetailModel[];
     optionsDataSources?: { [key: string]: any; };
 }
@@ -19869,8 +19877,8 @@ export interface IProductTransferInfoModel {
 export class CreateProductTransferCommand implements ICreateProductTransferCommand {
     transferDate?: Date;
     referenceNo?: string;
-    warehouseId?: string;
-    supplierId?: string;
+    fromWarehouseId?: string;
+    toWarehouseId?: string;
     transferStatusId?: string;
     attachmentUrl?: string | undefined;
     subTotal?: number;
@@ -19898,8 +19906,8 @@ export class CreateProductTransferCommand implements ICreateProductTransferComma
         if (_data) {
             this.transferDate = _data["transferDate"] ? new Date(_data["transferDate"].toString()) : <any>undefined;
             this.referenceNo = _data["referenceNo"];
-            this.warehouseId = _data["warehouseId"];
-            this.supplierId = _data["supplierId"];
+            this.fromWarehouseId = _data["fromWarehouseId"];
+            this.toWarehouseId = _data["toWarehouseId"];
             this.transferStatusId = _data["transferStatusId"];
             this.attachmentUrl = _data["attachmentUrl"];
             this.subTotal = _data["subTotal"];
@@ -19931,8 +19939,8 @@ export class CreateProductTransferCommand implements ICreateProductTransferComma
         data = typeof data === 'object' ? data : {};
         data["transferDate"] = this.transferDate ? formatDate(this.transferDate) : <any>undefined;
         data["referenceNo"] = this.referenceNo;
-        data["warehouseId"] = this.warehouseId;
-        data["supplierId"] = this.supplierId;
+        data["fromWarehouseId"] = this.fromWarehouseId;
+        data["toWarehouseId"] = this.toWarehouseId;
         data["transferStatusId"] = this.transferStatusId;
         data["attachmentUrl"] = this.attachmentUrl;
         data["subTotal"] = this.subTotal;
@@ -19957,8 +19965,8 @@ export class CreateProductTransferCommand implements ICreateProductTransferComma
 export interface ICreateProductTransferCommand {
     transferDate?: Date;
     referenceNo?: string;
-    warehouseId?: string;
-    supplierId?: string;
+    fromWarehouseId?: string;
+    toWarehouseId?: string;
     transferStatusId?: string;
     attachmentUrl?: string | undefined;
     subTotal?: number;
@@ -19978,8 +19986,8 @@ export class UpdateProductTransferCommand implements IUpdateProductTransferComma
     id?: string;
     transferDate?: Date;
     referenceNo?: string;
-    warehouseId?: string;
-    supplierId?: string;
+    fromWarehouseId?: string;
+    toWarehouseId?: string;
     transferStatusId?: string;
     attachmentUrl?: string | undefined;
     subTotal?: number;
@@ -20008,8 +20016,8 @@ export class UpdateProductTransferCommand implements IUpdateProductTransferComma
             this.id = _data["id"];
             this.transferDate = _data["transferDate"] ? new Date(_data["transferDate"].toString()) : <any>undefined;
             this.referenceNo = _data["referenceNo"];
-            this.warehouseId = _data["warehouseId"];
-            this.supplierId = _data["supplierId"];
+            this.fromWarehouseId = _data["fromWarehouseId"];
+            this.toWarehouseId = _data["toWarehouseId"];
             this.transferStatusId = _data["transferStatusId"];
             this.attachmentUrl = _data["attachmentUrl"];
             this.subTotal = _data["subTotal"];
@@ -20042,8 +20050,8 @@ export class UpdateProductTransferCommand implements IUpdateProductTransferComma
         data["id"] = this.id;
         data["transferDate"] = this.transferDate ? formatDate(this.transferDate) : <any>undefined;
         data["referenceNo"] = this.referenceNo;
-        data["warehouseId"] = this.warehouseId;
-        data["supplierId"] = this.supplierId;
+        data["fromWarehouseId"] = this.fromWarehouseId;
+        data["toWarehouseId"] = this.toWarehouseId;
         data["transferStatusId"] = this.transferStatusId;
         data["attachmentUrl"] = this.attachmentUrl;
         data["subTotal"] = this.subTotal;
@@ -20069,8 +20077,8 @@ export interface IUpdateProductTransferCommand {
     id?: string;
     transferDate?: Date;
     referenceNo?: string;
-    warehouseId?: string;
-    supplierId?: string;
+    fromWarehouseId?: string;
+    toWarehouseId?: string;
     transferStatusId?: string;
     attachmentUrl?: string | undefined;
     subTotal?: number;

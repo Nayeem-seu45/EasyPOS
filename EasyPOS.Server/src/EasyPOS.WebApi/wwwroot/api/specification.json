@@ -12682,6 +12682,12 @@
           "transferStatus": {
             "type": "string"
           },
+          "fromWarehouse": {
+            "type": "string"
+          },
+          "toWarehouse": {
+            "type": "string"
+          },
           "productTransferDetails": {
             "type": "array",
             "items": {
@@ -12909,11 +12915,11 @@
           "referenceNo": {
             "type": "string"
           },
-          "warehouseId": {
+          "fromWarehouseId": {
             "type": "string",
             "format": "guid"
           },
-          "supplierId": {
+          "toWarehouseId": {
             "type": "string",
             "format": "guid"
           },
@@ -12991,11 +12997,11 @@
           "referenceNo": {
             "type": "string"
           },
-          "warehouseId": {
+          "fromWarehouseId": {
             "type": "string",
             "format": "guid"
           },
-          "supplierId": {
+          "toWarehouseId": {
             "type": "string",
             "format": "guid"
           },

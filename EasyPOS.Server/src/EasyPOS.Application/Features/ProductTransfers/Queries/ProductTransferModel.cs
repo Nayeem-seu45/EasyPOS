@@ -24,6 +24,8 @@ public record ProductTransferModel
     public string? Note { get; set; }
 
     public string TransferStatus { get; set; }
+    public string FromWarehouse { get; set; }
+    public string ToWarehouse { get; set; }
 
     public List<ProductTransferDetailModel> ProductTransferDetails { get; set; } = [];
 
