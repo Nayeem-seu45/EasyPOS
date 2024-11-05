@@ -12896,6 +12896,24 @@
           "totalItems": {
             "type": "string"
           },
+          "fromWarehouse": {
+            "type": "string"
+          },
+          "fromWarehousePhone": {
+            "type": "string"
+          },
+          "fromWarehouseEmail": {
+            "type": "string"
+          },
+          "toWarehouse": {
+            "type": "string"
+          },
+          "toWarehousePhone": {
+            "type": "string"
+          },
+          "toWarehouseEmail": {
+            "type": "string"
+          },
           "productTransferDetails": {
             "type": "array",
             "items": {

@@ -8,6 +8,7 @@ import { DatePipe } from '@angular/common';
 
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import { ProductTransferInfoDetailComponent } from '../product-transfer-info-detail/product-transfer-info-detail.component';
 
 @Component({
   selector: 'app-product-transfer-list',
@@ -30,15 +31,17 @@ export class ProductTransferListComponent {
   }
 
   onhandleGridRowAction(event) {
-
-    if (event.action.actionName === 'pdf') {
+    console.log(event)
+    if (event.action.actionName === 'detail') {
+      this.customDialogService.openDialog(ProductTransferInfoDetailComponent, event.data.id, "Transfer Detail", { 'width': '70vw' });
+    } else if (event.action.actionName === 'pdf') {
       this.generateProductTransferDetailPdf(event);
     }
   }
 
 
   //#region PDF GENERATE
-  
+
   private async generateProductTransferDetailPdf(event: any) {
 
     await this.getDetailById(event.data.id);
@@ -72,12 +75,14 @@ export class ProductTransferListComponent {
     doc.setTextColor(40);
     doc.text('ProductTransfer Details', 10, 15);
 
-    // // Section: Company and Supplier Info
-    // const companyText = `From:\n${this.item.companyInfo.name}\n${this.item.companyInfo.address}, ${this.item.companyInfo.city}, ${this.item.companyInfo.country}\nPhone: ${this.item.companyInfo.phone}\nMobile: ${this.item.companyInfo.mobile}\nEmail: ${this.item.companyInfo.email}`;
-    // const supplierText = `Supplier:\n${this.item.supplier.name}\n${this.item.supplier.address}, ${this.item.supplier.city}, ${this.item.supplier.country}\nPhone: ${this.item.supplier.phoneNo}\nMobile: ${this.item.supplier.mobile}\nEmail: ${this.item.supplier.email}`;
-    // const referenceText = `Reference: ${this.item.referenceNo}\nProductTransfer Status: ${this.item.product-transferStatus}\nPayment Status: ${this.item.paymentStatusId}`;
+    const transferDate = this.datePipe.transform(this.item.transferDate, 'dd/MM/yyyy');
 
-    // Display company, supplier, and reference info
+    // Section: From and To Warehouse Info
+    const fromWarehouseText = `From Warehouse:\n${this.item.fromWarehouse}\nPhone: ${this.item.fromWarehousePhone}\nEmail: ${this.item.fromWarehouseEmail}`;
+    const toWarehouseText = `To Warehouse:\n${this.item.toWarehouse}\nPhone: ${this.item.toWarehousePhone}\nEmail: ${this.item.toWarehouseEmail}`;
+    const referenceText = `Reference: ${this.item.referenceNo}\nDate: ${transferDate}\nStatus: ${this.item.transferStatus}`;
+
+    // Display warehouse and reference info
     doc.setFontSize(10);
     doc.setTextColor(0);
 
@@ -85,11 +90,10 @@ export class ProductTransferListComponent {
     const leftMargin = 10;
     const sectionWidth = (doc.internal.pageSize.getWidth() - leftMargin * 2) / 3; // 3 equal sections
 
-    // // Positioning the texts
-    // doc.text(companyText, leftMargin, 30);                     // Company Info
-    // doc.text(supplierText, leftMargin + sectionWidth, 30);    // Supplier Info
-    // doc.text(referenceText, leftMargin + sectionWidth * 2, 30); // Reference Info
-
+    // Positioning the texts
+    doc.text(fromWarehouseText, leftMargin, 30);                  // From Warehouse Info
+    doc.text(toWarehouseText, leftMargin + sectionWidth, 30);     // To Warehouse Info
+    doc.text(referenceText, leftMargin + sectionWidth * 2, 30);   // Reference Info
 
     // Section: Items Table
     const itemHeaders = ['#', 'Name', 'Price', 'Quantity', 'Unit Price', 'Discount', 'Tax', 'Sub Total'];

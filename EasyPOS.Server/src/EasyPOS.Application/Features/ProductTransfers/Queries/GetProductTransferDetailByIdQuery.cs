@@ -27,7 +27,7 @@ internal sealed class GetProductTransferDetailByIdQueryHandler(
         var sql = $"""
             SELECT 
                 t.Id AS {nameof(ProductTransferInfoModel.Id)},
-                t.ProductTransferDate AS {nameof(ProductTransferInfoModel.TransferDate)},
+                t.TransferDate AS {nameof(ProductTransferInfoModel.TransferDate)},
                 t.ReferenceNo AS {nameof(ProductTransferInfoModel.ReferenceNo)},
                 t.FromWarehouseId AS {nameof(ProductTransferInfoModel.FromWarehouseId)},
                 t.ToWarehouseId AS {nameof(ProductTransferInfoModel.ToWarehouseId)},
@@ -42,6 +42,13 @@ internal sealed class GetProductTransferDetailByIdQueryHandler(
                 t.ShippingCost AS {nameof(ProductTransferInfoModel.ShippingCost)},
                 t.GrandTotal AS {nameof(ProductTransferInfoModel.GrandTotal)},
                 t.Note AS {nameof(ProductTransferInfoModel.Note)},
+                fw.Name AS {nameof(ProductTransferInfoModel.FromWarehouse)},
+                fw.PhoneNo AS {nameof(ProductTransferInfoModel.FromWarehousePhone)},
+                fw.Email AS {nameof(ProductTransferInfoModel.FromWarehouseEmail)},
+                tw.Name AS {nameof(ProductTransferInfoModel.ToWarehouse)},
+                tw.PhoneNo AS {nameof(ProductTransferInfoModel.ToWarehousePhone)},
+                tw.Email AS {nameof(ProductTransferInfoModel.ToWarehouseEmail)},
+                stat.Name AS {nameof(ProductTransferInfoModel.TransferStatus)},
 
                 -- ProductTransferDetails
                 pd.Id AS {nameof(ProductTransferDetailModel.Id)},
@@ -67,6 +74,9 @@ internal sealed class GetProductTransferDetailByIdQueryHandler(
 
             FROM dbo.ProductTransfers t
             LEFT JOIN dbo.ProductTransferDetails pd ON pd.ProductTransferId = t.Id
+            LEFT JOIN dbo.Warehouses fw ON fw.Id = t.FromWarehouseId
+            LEFT JOIN dbo.Warehouses tw ON tw.Id = t.ToWarehouseId
+            LEFT JOIN dbo.LookupDetails stat ON stat.Id = t.TransferStatusId
             WHERE t.Id = @Id
             """;
 
@@ -103,7 +113,7 @@ internal sealed class GetProductTransferDetailByIdQueryHandler(
             productTransfer.TotalQuantity = productTransfer.ProductTransferDetails.Count;
             productTransfer.TotalDiscount = productTransfer.ProductTransferDetails.Sum(x => x.DiscountAmount);
             productTransfer.TotalTaxAmount = productTransfer.ProductTransferDetails.Sum(x => x.TaxAmount);
-            productTransfer.TotalItems = $"{productTransfer.TotalQuantity} ({productTransfer.ProductTransferDetails.Sum(x => x.Quantity)})";
+            productTransfer.TotalItems = $"{productTransfer.TotalQuantity} ({productTransfer.ProductTransferDetails?.Sum(x => x.Quantity)})";
             return productTransfer;
         }
         else

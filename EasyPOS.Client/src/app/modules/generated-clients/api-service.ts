@@ -19768,6 +19768,12 @@ export class ProductTransferInfoModel implements IProductTransferInfoModel {
     totalDiscount?: number;
     totalTaxAmount?: number;
     totalItems?: string;
+    fromWarehouse?: string;
+    fromWarehousePhone?: string;
+    fromWarehouseEmail?: string;
+    toWarehouse?: string;
+    toWarehousePhone?: string;
+    toWarehouseEmail?: string;
     productTransferDetails?: ProductTransferDetailModel[];
 
     constructor(data?: IProductTransferInfoModel) {
@@ -19802,6 +19808,12 @@ export class ProductTransferInfoModel implements IProductTransferInfoModel {
             this.totalDiscount = _data["totalDiscount"];
             this.totalTaxAmount = _data["totalTaxAmount"];
             this.totalItems = _data["totalItems"];
+            this.fromWarehouse = _data["fromWarehouse"];
+            this.fromWarehousePhone = _data["fromWarehousePhone"];
+            this.fromWarehouseEmail = _data["fromWarehouseEmail"];
+            this.toWarehouse = _data["toWarehouse"];
+            this.toWarehousePhone = _data["toWarehousePhone"];
+            this.toWarehouseEmail = _data["toWarehouseEmail"];
             if (Array.isArray(_data["productTransferDetails"])) {
                 this.productTransferDetails = [] as any;
                 for (let item of _data["productTransferDetails"])
@@ -19840,6 +19852,12 @@ export class ProductTransferInfoModel implements IProductTransferInfoModel {
         data["totalDiscount"] = this.totalDiscount;
         data["totalTaxAmount"] = this.totalTaxAmount;
         data["totalItems"] = this.totalItems;
+        data["fromWarehouse"] = this.fromWarehouse;
+        data["fromWarehousePhone"] = this.fromWarehousePhone;
+        data["fromWarehouseEmail"] = this.fromWarehouseEmail;
+        data["toWarehouse"] = this.toWarehouse;
+        data["toWarehousePhone"] = this.toWarehousePhone;
+        data["toWarehouseEmail"] = this.toWarehouseEmail;
         if (Array.isArray(this.productTransferDetails)) {
             data["productTransferDetails"] = [];
             for (let item of this.productTransferDetails)
@@ -19871,6 +19889,12 @@ export interface IProductTransferInfoModel {
     totalDiscount?: number;
     totalTaxAmount?: number;
     totalItems?: string;
+    fromWarehouse?: string;
+    fromWarehousePhone?: string;
+    fromWarehouseEmail?: string;
+    toWarehouse?: string;
+    toWarehousePhone?: string;
+    toWarehouseEmail?: string;
     productTransferDetails?: ProductTransferDetailModel[];
 }
 

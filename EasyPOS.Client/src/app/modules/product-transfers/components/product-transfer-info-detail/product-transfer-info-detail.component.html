@@ -1,38 +1,38 @@
-<div class="card">
-  <h3>ProductTransfer Details</h3>
+<div class="card" *ngIf="item">
+  <!-- <h3>Transfer Details</h3> -->
   <div class="grid p-fluid">
-    <!-- <div *ngIf="item?.companyInfo" class="col-12 md:col-4">
+    <div class="col-12 md:col-4">
       <div>
-        <span>From:</span>
+        <span>From Warehouse:</span>
       </div>
       <div>
-        <span>{{item.companyInfo.name}}</span>
+        <span>{{item?.fromWarehouse}}</span>
+      </div>
+      <!-- <div>
+        <span>{{item?.fromWarehousePhone}} {{item.companyInfo.city}} {{item.companyInfo.country}}</span>
+      </div> -->
+      <div>
+        <span>Phone: {{item?.fromWarehousePhone}} </span>
       </div>
       <div>
-        <span>{{item.companyInfo.address}} {{item.companyInfo.city}} {{item.companyInfo.country}}</span>
-      </div>
-      <div>
-        <span>Phone: {{item.companyInfo.phone}}, {{item.companyInfo.mobile}} </span>
-      </div>
-      <div>
-        <span>Email: {{item.companyInfo.email}}</span>
+        <span>Email: {{item?.fromWarehouseEmail}} </span>
       </div>
     </div>
-    <div *ngIf="item?.supplier" class="col-12 md:col-4">
+    <div class="col-12 md:col-4">
       <div>
-        <span>Supplier Details:</span>
+        <span>To Warehouse:</span>
       </div>
       <div>
-        <span>{{item.supplier.name}}</span>
+        <span>{{item?.toWarehouse}}</span>
+      </div>
+      <!-- <div>
+        <span>{{item?.toWarehousePhone}} {{item.companyInfo.city}} {{item.companyInfo.country}}</span>
+      </div> -->
+      <div>
+        <span>Phone: {{item?.toWarehousePhone}} </span>
       </div>
       <div>
-        <span>{{item.supplier.address}} {{item.supplier.city}} {{item.supplier.country}}</span>
-      </div>
-      <div>
-        <span>Phone: {{item.supplier.phoneNo}}, {{item.supplier.mobile}} </span>
-      </div>
-      <div>
-        <span>Email: {{item.supplier.email}}</span>
+        <span>Email: {{item?.toWarehouseEmail}} </span>
       </div>
     </div>
     <div class="col-12 md:col-4">
@@ -40,10 +40,13 @@
         <span>Reference: {{item?.referenceNo}}</span>
       </div>
       <div>
-        <span>ProductTransfer Status: {{item?.transferStatus}}</span>
+        <span>Date: {{item?.transferDate | date: 'dd/MM/yyyy'}}</span>
+      </div>
+      <div>
+        <span>Status: {{item?.transferStatus}}</span>
       </div>
 
-    </div> -->
+    </div>
   </div>
 
   <!-- Sale Details List -->
@@ -105,7 +108,7 @@
   </div>
 
   <div class="grid">
-    <div class="col-12 md:col-5">
+    <div class="col-12 md:col-offset-7 md:col-5">
       <table width="100%" style="text-align: right;">
         <tbody>
           <tr>

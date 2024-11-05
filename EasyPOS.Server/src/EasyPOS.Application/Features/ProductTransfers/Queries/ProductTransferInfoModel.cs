@@ -26,6 +26,12 @@ public class ProductTransferInfoModel
     public decimal TotalDiscount { get; set; } = 0;
     public decimal TotalTaxAmount { get; set; } = 0;
     public string TotalItems { get; set; } = "0";
+    public string FromWarehouse { get; set; }
+    public string FromWarehousePhone { get; set; }
+    public string FromWarehouseEmail { get; set; }
+    public string ToWarehouse { get; set; }
+    public string ToWarehousePhone { get; set; }
+    public string ToWarehouseEmail { get; set; }
 
     public List<ProductTransferDetailModel> ProductTransferDetails { get; set; } = [];
 

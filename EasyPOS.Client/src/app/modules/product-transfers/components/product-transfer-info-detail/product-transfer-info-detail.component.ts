@@ -20,15 +20,17 @@ export class ProductTransferInfoDetailComponent {
     private activatedRoute: ActivatedRoute,
     private customDialogService: CustomDialogService,
     private toast: ToastService
-  ) { 
+  ) {
+    this.id = this.customDialogService.getConfigData();
 
-    this.activatedRoute.paramMap.subscribe(params => {
-      this.id = params.get('id')
-    });
-
-    if (this.id && this.id != CommonConstants.EmptyGuid) {
-      this.getDetailById(this.id)
+    if (!this.id || this.id === CommonConstants.EmptyGuid) {
+      this.toast.showError("Transfer record not found");
+      return;
     }
+    // this.activatedRoute.paramMap.subscribe(params => {
+    //   this.id = params.get('id')
+    // });
+    this.getDetailById(this.id)
   }
 
   ngOnInit(): void {
