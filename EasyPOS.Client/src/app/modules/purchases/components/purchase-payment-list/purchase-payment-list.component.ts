@@ -4,9 +4,9 @@ import { GetPaymentListByPurchaseIdQuery, PurchaseModel, PurchasePaymentModel, P
 import { CustomDialogService } from 'src/app/shared/services/custom-dialog.service';
 import { ToastService } from 'src/app/shared/services/toast.service';
 import { CommonUtils } from 'src/app/shared/Utilities/common-utilities';
-import { PurchasePaymentDetailComponent } from '../purchase-payment-detail/purchase-payment-detail.component';
 import { CommonConstants } from 'src/app/core/contants/common';
 import { ConfirmDialogService } from 'src/app/shared/services/confirm-dialog.service';
+import { PurchasePaymentDetailComponent } from '../purchase-payment-detail/purchase-payment-detail.component';
 
 interface Column {
   field: string;

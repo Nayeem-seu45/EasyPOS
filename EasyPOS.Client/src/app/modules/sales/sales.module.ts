@@ -1,24 +1,25 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TradesRoutingComponents, TradesRoutingModule } from './trades-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { AppSharedModule } from 'src/app/shared/app-shared.module';
 import { TableModule } from 'primeng/table';
 import { TabViewModule } from 'primeng/tabview';
+import { AppSharedModule } from 'src/app/shared/app-shared.module';
+import { salesRoutingComponents, SalesRoutingModule } from './sales-routing.module';
+
 
 
 @NgModule({
   declarations: [
-    ...TradesRoutingComponents
+    ...salesRoutingComponents
   ],
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
     AppSharedModule,
-    TradesRoutingModule,
+    SalesRoutingModule,
     TableModule,
     TabViewModule  
   ]
 })
-export class TradesModule { }
+export class SalesModule { }
