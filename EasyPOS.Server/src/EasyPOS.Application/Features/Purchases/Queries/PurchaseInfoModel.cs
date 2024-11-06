@@ -1,6 +1,6 @@
-﻿using EasyPOS.Application.Features.Settings.CompanyInfos.Queries;
+﻿using EasyPOS.Application.Features.Purchases.PurchasePayments.Queries;
+using EasyPOS.Application.Features.Settings.CompanyInfos.Queries;
 using EasyPOS.Application.Features.Suppliers.Queries;
-using EasyPOS.Application.Features.Trades.PurchasePayments.Queries;
 using EasyPOS.Domain.Common.Enums;
 using EasyPOS.Domain.Settings;
 

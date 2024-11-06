@@ -7,9 +7,9 @@ using EasyPOS.Domain.Products;
 using EasyPOS.Domain.ProductTransfers;
 using EasyPOS.Domain.Purchases;
 using EasyPOS.Domain.Quotations;
+using EasyPOS.Domain.Sales;
 using EasyPOS.Domain.Settings;
 using EasyPOS.Domain.Stakeholders;
-using EasyPOS.Domain.Trades;
 using static EasyPOS.Application.Common.Security.Permissions;
 
 namespace EasyPOS.Infrastructure.Persistence;

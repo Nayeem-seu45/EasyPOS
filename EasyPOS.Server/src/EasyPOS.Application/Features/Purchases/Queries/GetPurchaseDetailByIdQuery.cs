@@ -1,5 +1,4 @@
-﻿using EasyPOS.Application.Features.Trades.PurchasePayments.Queries;
-using EasyPOS.Domain.Trades;
+﻿using EasyPOS.Application.Features.Purchases.PurchasePayments.Queries;
 
 namespace EasyPOS.Application.Features.Purchases.Queries;
 
