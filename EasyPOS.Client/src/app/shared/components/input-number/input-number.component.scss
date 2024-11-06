@@ -7,10 +7,15 @@
     box-shadow: none;
   }
 
-  app-input-number p-inputnumber {
+  .cust-field p-inputnumber {
     width: 100%;
     box-sizing: border-box;
   }
+
+  // app-input-number p-inputnumber {
+  //   width: 100%;
+  //   box-sizing: border-box;
+  // }
   
   app-input-number p-inputnumber span, input {
     width: 100%;

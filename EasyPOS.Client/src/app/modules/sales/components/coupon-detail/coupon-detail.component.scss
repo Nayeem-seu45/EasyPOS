@@ -1,46 +1,76 @@
-﻿:host ::ng-deep {
+﻿
+.coupon-tab{
+  min-height: 250px;
+}
+:host ::ng-deep {
   .coupon-tab .orientation-right {
     display: flex;
 
     .p-tabview-nav {
       flex-direction: column;
       width: 10%;
+      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Shadow separator */
+      border: none; /* Remove any border */
+    }
+
+    .p-tabview-nav li {
+      outline: none; /* Remove dotted outline */
+      border: none; /* Remove default border */
+      position: relative; /* For underline styling */
+      margin-bottom: -1px; /* Prevent bottom border of adjacent tabs */
+    }
+
+    .p-tabview-nav li.p-highlight {
+      border-left: 3px solid #007ad9; /* Active tab underline */
+      font-weight: bold;
+      background-color: rgba(0, 0, 0, 0.15); /* Background color for active tab */
+      border-bottom: none; /* Ensure no bottom border on active tab */
+    }
+
+    .p-tabview-nav li.p-highlight .p-tabview-nav-link {
+      border: none; /* Remove border from active tab link */
+    }
+
+    .p-tabview-nav li:not(.p-highlight):hover {
+      background-color: rgba(165, 23, 23, 0.05); /* Hover effect */
+    }
+
+    /* Align icon and text to the left */
+    .p-tabview-nav-link {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start; /* Align both icon and text to the left */
+    }
+
+    .p-tabview-nav-link .p-tabview-left-icon {
+      margin-right: 8px; /* Add spacing between icon and text */
     }
 
     .p-tabview-panels {
-      width: 100%; // to have content take up remainder of space
+      width: 90%; /* Content width */
+      background: #1f2d40;
+      padding: 1rem;
+      color: rgba(255, 255, 255, 0.87);
+      border-radius: 3px;
+      border-bottom: none; /* Remove bottom border */
+    }
+
+    app-input-decimal p-inputnumber input, span {
+      // width: 100%;
+      box-sizing: border-box;
     }
   }
 
-  .p-tabview .p-tabview-panels {
-    background: #1f2d40;
-    padding: 1rem 0 1rem 1rem;
-    border: 0 none;
-    color: rgba(255, 255, 255, 0.87);
-    border-bottom-right-radius: 3px;
-    border-bottom-left-radius: 3px;
+  .p-tabview {
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.15); /* Tabview container shadow */
   }
 
-  app-input-decimal p-inputnumber input, span {
-    width: 100%;
-    box-sizing: border-box;
+  /* Additional styling to ensure no unwanted borders or outlines */
+  .p-tabview .p-tabview-nav {
+    border: none;
   }
 
-  // app-input-select p-dropdown  span {
-  //   width: 100%;
-  //   box-sizing: border-box;
-  // }
-}
-
-.coupon-tab{
-  min-height: 250px;
-}
-
-.card.coupon-tab {
-  background: var(--surface-card);
-  border: 1px solid var(--surface-border);
-  padding: 1rem;
-  margin-bottom: 2rem;
-  box-shadow: var(--card-shadow);
-  border-radius: 12px;
+  .p-tabview .p-tabview-panel {
+    border: none; /* Ensure no border around the panel */
+  }
 }

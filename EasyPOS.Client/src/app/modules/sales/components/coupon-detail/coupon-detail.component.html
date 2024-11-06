@@ -15,20 +15,20 @@
       </div>
     </div>
 
-    <div class="card coupon-tab">
+    <div class=" coupon-tab">
       <p-tabView [(activeIndex)]="activeTabIndex" styleClass="orientation-right">
-        <p-tabPanel header="General">
+        <p-tabPanel header="General" leftIcon="pi pi-bell">
           <div class="field grid md:mb-2">
             <label for="discountType" class="col-12 mb-2 md:col-4">Discount Type</label>
             <div class="field col-12 md:col-8">
-              <app-input-select label="Discount Type" formControlName="discountType"
+              <app-input-select formControlName="discountType"
                 [options]="discountTypesSelectList" [required]="true" />
             </div>
           </div>
           <div class="field grid md:mb-2">
             <label for="amount" class="col-12 mb-2 md:col-4">Amount</label>
             <div class="col-12 md:col-8">
-              <app-input-decimal formControlName="amount" textAlign="right"
+              <app-input-decimal formControlName="amount" textAlign="right" 
                 [showButtons]="false" [required]="false" id="amount" />
             </div>
           </div>
@@ -47,7 +47,7 @@
           </div>
         </p-tabPanel>
 
-        <p-tabPanel header="Usage Restriction">
+        <p-tabPanel header="Usage Restriction" leftIcon="pi pi-bookmark">
           <div class="field grid md:mb-2">
             <label for="minimumSpend" class="col-12 mb-2 md:col-4">Minimum Spend</label>
             <div class="col-12 md:col-8">

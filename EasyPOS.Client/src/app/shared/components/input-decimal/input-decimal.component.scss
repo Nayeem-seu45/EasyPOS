@@ -1,4 +1,4 @@
-::ng-deep {
+:host::ng-deep {
   app-input-decimal.ng-invalid.ng-touched input {
     border: 1px solid #f19ea6;
   }
@@ -7,25 +7,41 @@
     box-shadow: none;
   }
 
-  app-input-decimal p-inputnumber {
+  .cust-field p-inputnumber {
     width: 100%;
     box-sizing: border-box;
   }
 
-  // app-input-decimal p-inputnumber input, span {
+  // app-input-decimal .p-inputnumber {
   //   width: 100%;
   //   box-sizing: border-box;
   // }
 
-  app-input-decimal p-inputnumber input {
-    width: 100%;
-    box-sizing: border-box;
-  }
+  // app-input-decimal p-inputnumber input {
+  //   width: 100%;
+  //   box-sizing: border-box;
+  // }
 
   .decimal-comp .digit-right .p-inputnumber-input {
-    // width: 100%;
     text-align: right;
   }
+}
+
+
+
+
+
+:host::ng-deep{
+  p-inputnumber {
+    width: 100%;
+  }
+}
+
+::ng-deep .cust-field.decimal-comp,
+::ng-deep .p-inputnumber,
+::ng-deep .p-inputnumber .p-inputtext {
+    width: 100%;
+    box-sizing: border-box;
 }
 
 
