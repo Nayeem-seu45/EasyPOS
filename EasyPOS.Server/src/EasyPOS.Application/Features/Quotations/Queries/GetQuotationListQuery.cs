@@ -1,6 +1,4 @@
-﻿using EasyPOS.Application.Features.Trades.Purchases.Queries;
-
-namespace EasyPOS.Application.Features.Quotations.Queries;
+﻿namespace EasyPOS.Application.Features.Quotations.Queries;
 
 [Authorize(Policy = Permissions.Quotations.View)]
 public record GetQuotationListQuery

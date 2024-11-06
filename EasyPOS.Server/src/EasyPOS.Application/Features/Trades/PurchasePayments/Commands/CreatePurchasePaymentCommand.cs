@@ -1,5 +1,5 @@
-﻿using EasyPOS.Application.Features.Trades.Purchases.Shared;
-using EasyPOS.Domain.Trades;
+﻿using EasyPOS.Application.Features.Purchases.Shared;
+using EasyPOS.Domain.Purchases;
 
 namespace EasyPOS.Application.Features.Trades.PurchasePayments.Commands;
 

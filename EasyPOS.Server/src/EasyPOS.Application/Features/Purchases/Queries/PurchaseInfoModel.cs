@@ -4,7 +4,7 @@ using EasyPOS.Application.Features.Trades.PurchasePayments.Queries;
 using EasyPOS.Domain.Common.Enums;
 using EasyPOS.Domain.Settings;
 
-namespace EasyPOS.Application.Features.Trades.Purchases.Queries;
+namespace EasyPOS.Application.Features.Purchases.Queries;
 
 public class PurchaseInfoModel
 {

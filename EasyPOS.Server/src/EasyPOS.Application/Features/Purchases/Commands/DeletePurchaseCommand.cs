@@ -1,6 +1,6 @@
 ﻿using EasyPOS.Application.Common.Constants;
 
-namespace EasyPOS.Application.Features.Trades.Purchases.Commands;
+namespace EasyPOS.Application.Features.Purchases.Commands;
 
 public record DeletePurchaseCommand(Guid Id) : ICacheInvalidatorCommand
 {

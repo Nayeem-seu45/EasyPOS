@@ -1,11 +1,11 @@
 ﻿using EasyPOS.Application.Features.Common.Queries;
 using EasyPOS.Application.Features.ProductManagement.Queries;
 using EasyPOS.Application.Features.ProductTransfers.Queries;
-using EasyPOS.Application.Features.Trades.Purchases.Commands;
-using EasyPOS.Application.Features.Trades.Purchases.Queries;
+using EasyPOS.Application.Features.Purchases.Commands;
+using EasyPOS.Application.Features.Purchases.Queries;
 using EasyPOS.Application.Features.UnitManagement.Queries;
 
-namespace EasyPOS.WebApi.Endpoints;
+namespace EasyPOS.WebApi.Endpoints.Purchases;
 
 public class Purchases : EndpointGroupBase
 {

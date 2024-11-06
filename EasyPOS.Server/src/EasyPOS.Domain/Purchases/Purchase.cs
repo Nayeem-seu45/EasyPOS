@@ -1,6 +1,6 @@
 ﻿using EasyPOS.Domain.Common.Enums;
 
-namespace EasyPOS.Domain.Trades;
+namespace EasyPOS.Domain.Purchases;
 
 public class Purchase : BaseAuditableEntity
 {

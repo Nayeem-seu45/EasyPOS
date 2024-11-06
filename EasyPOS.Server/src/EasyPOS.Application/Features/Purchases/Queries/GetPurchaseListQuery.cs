@@ -1,4 +1,4 @@
-﻿namespace EasyPOS.Application.Features.Trades.Purchases.Queries;
+﻿namespace EasyPOS.Application.Features.Purchases.Queries;
 
 [Authorize(Policy = Permissions.Purchases.View)]
 public record GetPurchaseListQuery

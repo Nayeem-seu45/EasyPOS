@@ -2,7 +2,7 @@
 using EasyPOS.Domain.Common.Enums;
 using EasyPOS.Domain.Enums;
 
-namespace EasyPOS.Application.Features.Trades.Purchases.Queries;
+namespace EasyPOS.Application.Features.Purchases.Queries;
 
 public record PurchaseModel
 {

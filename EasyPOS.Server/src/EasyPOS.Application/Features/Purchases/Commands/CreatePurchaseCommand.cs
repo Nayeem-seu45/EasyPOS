@@ -1,9 +1,9 @@
 ﻿using EasyPOS.Application.Features.ProductTransfers.Queries;
-using EasyPOS.Application.Features.Trades.Purchases.Queries;
+using EasyPOS.Application.Features.Purchases.Queries;
 using EasyPOS.Domain.Common.Enums;
-using EasyPOS.Domain.Trades;
+using EasyPOS.Domain.Purchases;
 
-namespace EasyPOS.Application.Features.Trades.Purchases.Commands;
+namespace EasyPOS.Application.Features.Purchases.Commands;
 
 public record CreatePurchaseCommand(
     DateOnly PurchaseDate,

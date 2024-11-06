@@ -1,7 +1,7 @@
-﻿using EasyPOS.Domain.Trades;
+﻿using EasyPOS.Domain.Purchases;
 using Microsoft.AspNetCore.Http;
 
-namespace EasyPOS.Application.Features.Trades.Purchases.Commands;
+namespace EasyPOS.Application.Features.Purchases.Commands;
 
 
 public record CreatePurchaseFromExcelCommand(
@@ -28,18 +28,18 @@ internal sealed class CreatePurchaseFromExcelCommandHandler(
         //        .Select(x => x.Id)
         //        .SingleOrDefaultAsync();
 
-            //if (countryId.IsNullOrEmpty()) continue;
+        //if (countryId.IsNullOrEmpty()) continue;
 
-            //entities.Add(new Purchase
-            //{
-            //    Name = item.Name,
-            //    Email = item.Email,
-            //    PhoneNo = item.PhoneNo,
-            //    Mobile = item.Mobile,
-            //    CountryId = item.CountryId,
-            //    City = item.City,
-            //    Address = item.Address,
-            //});
+        //entities.Add(new Purchase
+        //{
+        //    Name = item.Name,
+        //    Email = item.Email,
+        //    PhoneNo = item.PhoneNo,
+        //    Mobile = item.Mobile,
+        //    CountryId = item.CountryId,
+        //    City = item.City,
+        //    Address = item.Address,
+        //});
 
         //}
 

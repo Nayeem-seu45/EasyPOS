@@ -3,6 +3,7 @@ using EasyPOS.Domain.Admin;
 using EasyPOS.Domain.Common;
 using EasyPOS.Domain.Products;
 using EasyPOS.Domain.ProductTransfers;
+using EasyPOS.Domain.Purchases;
 using EasyPOS.Domain.Quotations;
 using EasyPOS.Domain.Settings;
 using EasyPOS.Domain.Stakeholders;

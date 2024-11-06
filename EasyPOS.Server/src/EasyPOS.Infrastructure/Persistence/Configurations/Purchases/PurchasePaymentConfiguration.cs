@@ -1,6 +1,6 @@
-﻿using EasyPOS.Domain.Trades;
+﻿using EasyPOS.Domain.Purchases;
 
-namespace EasyPOS.Infrastructure.Persistence.Configurations.Trades;
+namespace EasyPOS.Infrastructure.Persistence.Configurations.Purchases;
 
 internal sealed class PurchasePaymentConfiguration : IEntityTypeConfiguration<PurchasePayment>
 {
@@ -36,7 +36,7 @@ internal sealed class PurchasePaymentConfiguration : IEntityTypeConfiguration<Pu
                .HasMaxLength(500);
 
         builder.HasOne(x => x.Purchase)
-               .WithMany(x => x.PurchasePayments) 
+               .WithMany(x => x.PurchasePayments)
                .HasForeignKey(x => x.PurchaseId);
     }
 }

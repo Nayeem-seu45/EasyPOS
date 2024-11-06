@@ -1,6 +1,4 @@
-﻿using EasyPOS.Application.Features.Trades.Purchases.Queries;
-
-namespace EasyPOS.Application.Features.Trades.Sales.Queries;
+﻿namespace EasyPOS.Application.Features.Trades.Sales.Queries;
 
 [Authorize(Policy = Permissions.Sales.View)]
 public record GetSaleListQuery

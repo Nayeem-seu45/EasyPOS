@@ -1,7 +1,7 @@
 ﻿using EasyPOS.Application.Common.Enums;
-using EasyPOS.Domain.Trades;
+using EasyPOS.Domain.Purchases;
 
-namespace EasyPOS.Application.Features.Trades.Purchases.Shared;
+namespace EasyPOS.Application.Features.Purchases.Shared;
 
 internal static class PurchaseSharedService
 {

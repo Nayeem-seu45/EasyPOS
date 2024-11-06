@@ -1,4 +1,4 @@
-﻿namespace EasyPOS.Application.Features.Trades.Purchases.Queries;
+﻿namespace EasyPOS.Application.Features.Purchases.Queries;
 
 public record GetPurchaseByIdQuery(Guid Id) : ICacheableQuery<PurchaseModel>
 {
@@ -9,7 +9,7 @@ public record GetPurchaseByIdQuery(Guid Id) : ICacheableQuery<PurchaseModel>
     public bool? AllowCache => false;
 }
 
-internal sealed class GetPurchaseByIdQueryHandler(ISqlConnectionFactory sqlConnectionFactory) 
+internal sealed class GetPurchaseByIdQueryHandler(ISqlConnectionFactory sqlConnectionFactory)
     : IQueryHandler<GetPurchaseByIdQuery, PurchaseModel>
 {
     public async Task<Result<PurchaseModel>> Handle(GetPurchaseByIdQuery request, CancellationToken cancellationToken)
@@ -92,7 +92,7 @@ internal sealed class GetPurchaseByIdQueryHandler(ISqlConnectionFactory sqlConne
         );
 
         var purchase = purchaseDictionary.Values.FirstOrDefault();
-        return purchase != null ? Result.Success(purchase) : Result.Failure<PurchaseModel>(Error.Failure(nameof(PurchaseModel),ErrorMessages.NotFound));
+        return purchase != null ? Result.Success(purchase) : Result.Failure<PurchaseModel>(Error.Failure(nameof(PurchaseModel), ErrorMessages.NotFound));
     }
 }
 

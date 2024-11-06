@@ -1,4 +1,4 @@
-﻿namespace EasyPOS.Application.Features.Trades.Purchases.Commands;
+﻿namespace EasyPOS.Application.Features.Purchases.Commands;
 
 public class UpdatPurchaseCommandValidator : AbstractValidator<UpdatePurchaseCommand>
 {

@@ -1,4 +1,4 @@
-﻿namespace EasyPOS.Domain.Trades;
+﻿namespace EasyPOS.Domain.Purchases;
 
 public class PurchasePayment : BaseAuditableEntity
 {

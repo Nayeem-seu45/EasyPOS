@@ -1700,368 +1700,6 @@
         ]
       }
     },
-    "/api/Purchases/GetAll": {
-      "post": {
-        "tags": [
-          "Purchases"
-        ],
-        "operationId": "GetPurchases",
-        "requestBody": {
-          "x-name": "query",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/GetPurchaseListQuery"
-              }
-            }
-          },
-          "required": true,
-          "x-position": 1
-        },
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PaginatedResponseOfPurchaseModel"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "JWT": []
-          }
-        ]
-      }
-    },
-    "/api/Purchases/Get/{id}": {
-      "get": {
-        "tags": [
-          "Purchases"
-        ],
-        "operationId": "GetPurchase",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "guid"
-            },
-            "x-position": 1
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PurchaseModel"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "JWT": []
-          }
-        ]
-      }
-    },
-    "/api/Purchases/GetDetail/{id}": {
-      "get": {
-        "tags": [
-          "Purchases"
-        ],
-        "operationId": "GetPurchaseDetail",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "guid"
-            },
-            "x-position": 1
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PurchaseInfoModel"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "JWT": []
-          }
-        ]
-      }
-    },
-    "/api/Purchases/Create": {
-      "post": {
-        "tags": [
-          "Purchases"
-        ],
-        "operationId": "CreatePurchase",
-        "requestBody": {
-          "x-name": "command",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreatePurchaseCommand"
-              }
-            }
-          },
-          "required": true,
-          "x-position": 1
-        },
-        "responses": {
-          "201": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "string",
-                  "format": "guid"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "JWT": []
-          }
-        ]
-      }
-    },
-    "/api/Purchases/Update": {
-      "put": {
-        "tags": [
-          "Purchases"
-        ],
-        "operationId": "UpdatePurchase",
-        "requestBody": {
-          "x-name": "command",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdatePurchaseCommand"
-              }
-            }
-          },
-          "required": true,
-          "x-position": 1
-        },
-        "responses": {
-          "200": {
-            "description": ""
-          },
-          "400": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": ""
-          }
-        },
-        "security": [
-          {
-            "JWT": []
-          }
-        ]
-      }
-    },
-    "/api/Purchases/Delete/{id}": {
-      "delete": {
-        "tags": [
-          "Purchases"
-        ],
-        "operationId": "DeletePurchase",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "guid"
-            },
-            "x-position": 1
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": ""
-          },
-          "400": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "JWT": []
-          }
-        ]
-      }
-    },
-    "/api/Purchases/DeleteMultiple": {
-      "post": {
-        "tags": [
-          "Purchases"
-        ],
-        "operationId": "DeletePurchases",
-        "requestBody": {
-          "x-name": "ids",
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "array",
-                "items": {
-                  "type": "string",
-                  "format": "guid"
-                }
-              }
-            }
-          },
-          "required": true,
-          "x-position": 1
-        },
-        "responses": {
-          "204": {
-            "description": ""
-          },
-          "400": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "JWT": []
-          }
-        ]
-      }
-    },
-    "/api/Purchases/Upload": {
-      "post": {
-        "tags": [
-          "Purchases"
-        ],
-        "operationId": "PurchaseUpload",
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "integer",
-                  "format": "int32"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "JWT": []
-          }
-        ]
-      }
-    },
-    "/api/Purchases/DeletePurchaseDetail": {
-      "post": {
-        "tags": [
-          "Purchases"
-        ],
-        "operationId": "DeletePurchaseDetail",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "guid"
-            },
-            "x-position": 1
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": ""
-          },
-          "400": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "JWT": []
-          }
-        ]
-      }
-    },
     "/api/TreeNodeLists/GetAllPermissionNodeList": {
       "get": {
         "tags": [
@@ -4199,6 +3837,368 @@
           "Quotations"
         ],
         "operationId": "DeleteQuotationDetail",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/Purchases/GetAll": {
+      "post": {
+        "tags": [
+          "Purchases"
+        ],
+        "operationId": "GetPurchases",
+        "requestBody": {
+          "x-name": "query",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetPurchaseListQuery"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedResponseOfPurchaseModel"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/Purchases/Get/{id}": {
+      "get": {
+        "tags": [
+          "Purchases"
+        ],
+        "operationId": "GetPurchase",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PurchaseModel"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/Purchases/GetDetail/{id}": {
+      "get": {
+        "tags": [
+          "Purchases"
+        ],
+        "operationId": "GetPurchaseDetail",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PurchaseInfoModel"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/Purchases/Create": {
+      "post": {
+        "tags": [
+          "Purchases"
+        ],
+        "operationId": "CreatePurchase",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePurchaseCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "guid"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/Purchases/Update": {
+      "put": {
+        "tags": [
+          "Purchases"
+        ],
+        "operationId": "UpdatePurchase",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePurchaseCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/Purchases/Delete/{id}": {
+      "delete": {
+        "tags": [
+          "Purchases"
+        ],
+        "operationId": "DeletePurchase",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/Purchases/DeleteMultiple": {
+      "post": {
+        "tags": [
+          "Purchases"
+        ],
+        "operationId": "DeletePurchases",
+        "requestBody": {
+          "x-name": "ids",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "guid"
+                }
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/Purchases/Upload": {
+      "post": {
+        "tags": [
+          "Purchases"
+        ],
+        "operationId": "PurchaseUpload",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/Purchases/DeletePurchaseDetail": {
+      "post": {
+        "tags": [
+          "Purchases"
+        ],
+        "operationId": "DeletePurchaseDetail",
         "parameters": [
           {
             "name": "id",
@@ -9771,677 +9771,6 @@
           }
         }
       },
-      "PaginatedResponseOfPurchaseModel": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "items": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/PurchaseModel"
-            }
-          },
-          "pageNumber": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "totalPages": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "totalCount": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "hasPreviousPage": {
-            "type": "boolean"
-          },
-          "hasNextPage": {
-            "type": "boolean"
-          },
-          "optionsDataSources": {
-            "type": "object",
-            "additionalProperties": {}
-          }
-        }
-      },
-      "PurchaseModel": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "guid"
-          },
-          "purchaseDate": {
-            "type": "string",
-            "format": "date"
-          },
-          "referenceNo": {
-            "type": "string"
-          },
-          "warehouseId": {
-            "type": "string",
-            "format": "guid"
-          },
-          "supplierId": {
-            "type": "string",
-            "format": "guid"
-          },
-          "purchaseStatusId": {
-            "type": "string",
-            "format": "guid"
-          },
-          "attachmentUrl": {
-            "type": "string",
-            "nullable": true
-          },
-          "subTotal": {
-            "type": "number",
-            "format": "decimal"
-          },
-          "taxRate": {
-            "type": "number",
-            "format": "decimal",
-            "nullable": true
-          },
-          "taxAmount": {
-            "type": "number",
-            "format": "decimal",
-            "nullable": true
-          },
-          "discountType": {
-            "$ref": "#/components/schemas/DiscountType"
-          },
-          "discountRate": {
-            "type": "number",
-            "format": "decimal",
-            "nullable": true
-          },
-          "discountAmount": {
-            "type": "number",
-            "format": "decimal",
-            "nullable": true
-          },
-          "shippingCost": {
-            "type": "number",
-            "format": "decimal",
-            "nullable": true
-          },
-          "grandTotal": {
-            "type": "number",
-            "format": "decimal"
-          },
-          "paidAmount": {
-            "type": "number",
-            "format": "decimal"
-          },
-          "dueAmount": {
-            "type": "number",
-            "format": "decimal"
-          },
-          "note": {
-            "type": "string",
-            "nullable": true
-          },
-          "supplierName": {
-            "type": "string"
-          },
-          "purchaseStatus": {
-            "type": "string"
-          },
-          "paymentStatus": {
-            "type": "string"
-          },
-          "paymentStatusTag": {
-            "type": "string"
-          },
-          "purchaseDetails": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/PurchaseDetailModel"
-            }
-          },
-          "paymentDetails": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/PurchasePaymentModel"
-            }
-          },
-          "optionsDataSources": {
-            "type": "object",
-            "additionalProperties": {}
-          }
-        }
-      },
-      "DiscountType": {
-        "type": "integer",
-        "description": "",
-        "x-enumNames": [
-          "Fixed",
-          "Percentage"
-        ],
-        "enum": [
-          1,
-          2
-        ]
-      },
-      "PurchaseDetailModel": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "guid"
-          },
-          "purchaseId": {
-            "type": "string",
-            "format": "guid"
-          },
-          "productId": {
-            "type": "string",
-            "format": "guid"
-          },
-          "productCode": {
-            "type": "string"
-          },
-          "productName": {
-            "type": "string"
-          },
-          "productUnitCost": {
-            "type": "number",
-            "format": "decimal"
-          },
-          "productUnitPrice": {
-            "type": "number",
-            "format": "decimal"
-          },
-          "productUnitId": {
-            "type": "string",
-            "format": "guid"
-          },
-          "productUnit": {
-            "type": "number",
-            "format": "decimal"
-          },
-          "productUnitDiscount": {
-            "type": "number",
-            "format": "decimal"
-          },
-          "quantity": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "batchNo": {
-            "type": "string"
-          },
-          "expiredDate": {
-            "type": "string",
-            "format": "date",
-            "nullable": true
-          },
-          "netUnitCost": {
-            "type": "number",
-            "format": "decimal"
-          },
-          "discountType": {
-            "$ref": "#/components/schemas/DiscountType"
-          },
-          "discountRate": {
-            "type": "number",
-            "format": "decimal",
-            "nullable": true
-          },
-          "discountAmount": {
-            "type": "number",
-            "format": "decimal"
-          },
-          "taxMethod": {
-            "$ref": "#/components/schemas/TaxMethod"
-          },
-          "taxRate": {
-            "type": "number",
-            "format": "decimal"
-          },
-          "taxAmount": {
-            "type": "number",
-            "format": "decimal"
-          },
-          "totalPrice": {
-            "type": "number",
-            "format": "decimal"
-          },
-          "remarks": {
-            "type": "string",
-            "nullable": true
-          }
-        }
-      },
-      "TaxMethod": {
-        "type": "integer",
-        "description": "",
-        "x-enumNames": [
-          "Exclusive",
-          "Inclusive"
-        ],
-        "enum": [
-          1,
-          2
-        ]
-      },
-      "PurchasePaymentModel": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "guid"
-          },
-          "purchaseId": {
-            "type": "string",
-            "format": "guid"
-          },
-          "paymentDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "receivedAmount": {
-            "type": "number",
-            "format": "decimal"
-          },
-          "payingAmount": {
-            "type": "number",
-            "format": "decimal"
-          },
-          "changeAmount": {
-            "type": "number",
-            "format": "decimal"
-          },
-          "paymentType": {
-            "type": "string",
-            "format": "guid",
-            "nullable": true
-          },
-          "paymentTypeName": {
-            "type": "string"
-          },
-          "createdBy": {
-            "type": "string"
-          },
-          "note": {
-            "type": "string",
-            "nullable": true
-          },
-          "paymentDateString": {
-            "type": "string",
-            "nullable": true
-          },
-          "optionsDataSources": {
-            "type": "object",
-            "additionalProperties": {}
-          }
-        }
-      },
-      "GetPurchaseListQuery": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/DataGridModel"
-          },
-          {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-              "cacheKey": {
-                "type": "string"
-              }
-            }
-          }
-        ]
-      },
-      "PurchaseInfoModel": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "guid"
-          },
-          "purchaseDate": {
-            "type": "string",
-            "format": "date"
-          },
-          "referenceNo": {
-            "type": "string"
-          },
-          "warehouseId": {
-            "type": "string",
-            "format": "guid"
-          },
-          "supplierId": {
-            "type": "string",
-            "format": "guid"
-          },
-          "purchaseStatusId": {
-            "type": "string",
-            "format": "guid"
-          },
-          "attachmentUrl": {
-            "type": "string",
-            "nullable": true
-          },
-          "subTotal": {
-            "type": "number",
-            "format": "decimal"
-          },
-          "taxRate": {
-            "type": "number",
-            "format": "decimal",
-            "nullable": true
-          },
-          "taxAmount": {
-            "type": "number",
-            "format": "decimal",
-            "nullable": true
-          },
-          "discountType": {
-            "$ref": "#/components/schemas/DiscountType"
-          },
-          "discountRate": {
-            "type": "number",
-            "format": "decimal",
-            "nullable": true
-          },
-          "discountAmount": {
-            "type": "number",
-            "format": "decimal",
-            "nullable": true
-          },
-          "shippingCost": {
-            "type": "number",
-            "format": "decimal",
-            "nullable": true
-          },
-          "grandTotal": {
-            "type": "number",
-            "format": "decimal"
-          },
-          "paidAmount": {
-            "type": "number",
-            "format": "decimal"
-          },
-          "dueAmount": {
-            "type": "number",
-            "format": "decimal"
-          },
-          "note": {
-            "type": "string",
-            "nullable": true
-          },
-          "supplierName": {
-            "type": "string"
-          },
-          "purchaseStatus": {
-            "type": "string"
-          },
-          "paymentStatusId": {
-            "type": "string"
-          },
-          "totalQuantity": {
-            "type": "number",
-            "format": "decimal"
-          },
-          "totalDiscount": {
-            "type": "number",
-            "format": "decimal"
-          },
-          "totalTaxAmount": {
-            "type": "number",
-            "format": "decimal"
-          },
-          "totalItems": {
-            "type": "string"
-          },
-          "companyInfo": {
-            "$ref": "#/components/schemas/CompanyInfoModel"
-          },
-          "supplier": {
-            "$ref": "#/components/schemas/SupplierModel"
-          },
-          "purchaseDetails": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/PurchaseDetailModel"
-            }
-          },
-          "paymentDetails": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/PurchasePaymentModel"
-            }
-          }
-        }
-      },
-      "CompanyInfoModel": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "guid"
-          },
-          "name": {
-            "type": "string"
-          },
-          "phone": {
-            "type": "string",
-            "nullable": true
-          },
-          "mobile": {
-            "type": "string",
-            "nullable": true
-          },
-          "email": {
-            "type": "string",
-            "nullable": true
-          },
-          "country": {
-            "type": "string",
-            "nullable": true
-          },
-          "state": {
-            "type": "string",
-            "nullable": true
-          },
-          "city": {
-            "type": "string",
-            "nullable": true
-          },
-          "postalCode": {
-            "type": "string",
-            "nullable": true
-          },
-          "address": {
-            "type": "string",
-            "nullable": true
-          },
-          "logoUrl": {
-            "type": "string",
-            "nullable": true
-          },
-          "signatureUrl": {
-            "type": "string",
-            "nullable": true
-          },
-          "website": {
-            "type": "string",
-            "nullable": true
-          },
-          "optionsDataSources": {
-            "type": "object",
-            "additionalProperties": {}
-          }
-        }
-      },
-      "CreatePurchaseCommand": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "purchaseDate": {
-            "type": "string",
-            "format": "date"
-          },
-          "referenceNo": {
-            "type": "string"
-          },
-          "warehouseId": {
-            "type": "string",
-            "format": "guid"
-          },
-          "supplierId": {
-            "type": "string",
-            "format": "guid"
-          },
-          "purchaseStatusId": {
-            "type": "string",
-            "format": "guid"
-          },
-          "attachmentUrl": {
-            "type": "string",
-            "nullable": true
-          },
-          "subTotal": {
-            "type": "number",
-            "format": "decimal"
-          },
-          "taxRate": {
-            "type": "number",
-            "format": "decimal",
-            "nullable": true
-          },
-          "taxAmount": {
-            "type": "number",
-            "format": "decimal",
-            "nullable": true
-          },
-          "discountType": {
-            "$ref": "#/components/schemas/DiscountType"
-          },
-          "discountRate": {
-            "type": "number",
-            "format": "decimal",
-            "nullable": true
-          },
-          "discountAmount": {
-            "type": "number",
-            "format": "decimal",
-            "nullable": true
-          },
-          "shippingCost": {
-            "type": "number",
-            "format": "decimal",
-            "nullable": true
-          },
-          "grandTotal": {
-            "type": "number",
-            "format": "decimal"
-          },
-          "note": {
-            "type": "string",
-            "nullable": true
-          },
-          "purchaseDetails": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/PurchaseDetailModel"
-            }
-          },
-          "cacheKey": {
-            "type": "string"
-          }
-        }
-      },
-      "UpdatePurchaseCommand": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "guid"
-          },
-          "purchaseDate": {
-            "type": "string",
-            "format": "date"
-          },
-          "referenceNo": {
-            "type": "string"
-          },
-          "warehouseId": {
-            "type": "string",
-            "format": "guid"
-          },
-          "supplierId": {
-            "type": "string",
-            "format": "guid"
-          },
-          "purchaseStatusId": {
-            "type": "string",
-            "format": "guid"
-          },
-          "attachmentUrl": {
-            "type": "string",
-            "nullable": true
-          },
-          "subTotal": {
-            "type": "number",
-            "format": "decimal"
-          },
-          "taxRate": {
-            "type": "number",
-            "format": "decimal",
-            "nullable": true
-          },
-          "taxAmount": {
-            "type": "number",
-            "format": "decimal",
-            "nullable": true
-          },
-          "discountType": {
-            "$ref": "#/components/schemas/DiscountType"
-          },
-          "discountRate": {
-            "type": "number",
-            "format": "decimal",
-            "nullable": true
-          },
-          "discountAmount": {
-            "type": "number",
-            "format": "decimal",
-            "nullable": true
-          },
-          "shippingCost": {
-            "type": "number",
-            "format": "decimal",
-            "nullable": true
-          },
-          "grandTotal": {
-            "type": "number",
-            "format": "decimal"
-          },
-          "note": {
-            "type": "string",
-            "nullable": true
-          },
-          "purchaseDetails": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/PurchaseDetailModel"
-            }
-          },
-          "cacheKey": {
-            "type": "string"
-          }
-        }
-      },
       "DynamicTreeNodeModel": {
         "type": "object",
         "additionalProperties": false,
@@ -11139,6 +10468,59 @@
           }
         }
       },
+      "PurchasePaymentModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "purchaseId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "paymentDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "receivedAmount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "payingAmount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "changeAmount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "paymentType": {
+            "type": "string",
+            "format": "guid",
+            "nullable": true
+          },
+          "paymentTypeName": {
+            "type": "string"
+          },
+          "createdBy": {
+            "type": "string"
+          },
+          "note": {
+            "type": "string",
+            "nullable": true
+          },
+          "paymentDateString": {
+            "type": "string",
+            "nullable": true
+          },
+          "optionsDataSources": {
+            "type": "object",
+            "additionalProperties": {}
+          }
+        }
+      },
       "GetPurchasePaymentListQuery": {
         "allOf": [
           {
@@ -11588,6 +10970,18 @@
           }
         }
       },
+      "DiscountType": {
+        "type": "integer",
+        "description": "",
+        "x-enumNames": [
+          "Fixed",
+          "Percentage"
+        ],
+        "enum": [
+          1,
+          2
+        ]
+      },
       "SaleDetailModel": {
         "type": "object",
         "additionalProperties": false,
@@ -11678,6 +11072,18 @@
             "nullable": true
           }
         }
+      },
+      "TaxMethod": {
+        "type": "integer",
+        "description": "",
+        "x-enumNames": [
+          "Exclusive",
+          "Inclusive"
+        ],
+        "enum": [
+          1,
+          2
+        ]
       },
       "GetSaleListQuery": {
         "allOf": [
@@ -11928,6 +11334,67 @@
             "items": {
               "$ref": "#/components/schemas/SalePaymentModel"
             }
+          }
+        }
+      },
+      "CompanyInfoModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string",
+            "nullable": true
+          },
+          "mobile": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "country": {
+            "type": "string",
+            "nullable": true
+          },
+          "state": {
+            "type": "string",
+            "nullable": true
+          },
+          "city": {
+            "type": "string",
+            "nullable": true
+          },
+          "postalCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "address": {
+            "type": "string",
+            "nullable": true
+          },
+          "logoUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "signatureUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "website": {
+            "type": "string",
+            "nullable": true
+          },
+          "optionsDataSources": {
+            "type": "object",
+            "additionalProperties": {}
           }
         }
       },
@@ -12569,6 +12036,539 @@
             }
           }
         ]
+      },
+      "PaginatedResponseOfPurchaseModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PurchaseModel"
+            }
+          },
+          "pageNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "hasPreviousPage": {
+            "type": "boolean"
+          },
+          "hasNextPage": {
+            "type": "boolean"
+          },
+          "optionsDataSources": {
+            "type": "object",
+            "additionalProperties": {}
+          }
+        }
+      },
+      "PurchaseModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "purchaseDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "referenceNo": {
+            "type": "string"
+          },
+          "warehouseId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "supplierId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "purchaseStatusId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "attachmentUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "subTotal": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "taxRate": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "taxAmount": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "discountType": {
+            "$ref": "#/components/schemas/DiscountType"
+          },
+          "discountRate": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "discountAmount": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "shippingCost": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "grandTotal": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "paidAmount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "dueAmount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "note": {
+            "type": "string",
+            "nullable": true
+          },
+          "supplierName": {
+            "type": "string"
+          },
+          "purchaseStatus": {
+            "type": "string"
+          },
+          "paymentStatus": {
+            "type": "string"
+          },
+          "paymentStatusTag": {
+            "type": "string"
+          },
+          "purchaseDetails": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PurchaseDetailModel"
+            }
+          },
+          "paymentDetails": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PurchasePaymentModel"
+            }
+          },
+          "optionsDataSources": {
+            "type": "object",
+            "additionalProperties": {}
+          }
+        }
+      },
+      "PurchaseDetailModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "purchaseId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "productId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "productCode": {
+            "type": "string"
+          },
+          "productName": {
+            "type": "string"
+          },
+          "productUnitCost": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "productUnitPrice": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "productUnitId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "productUnit": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "productUnitDiscount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "quantity": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "batchNo": {
+            "type": "string"
+          },
+          "expiredDate": {
+            "type": "string",
+            "format": "date",
+            "nullable": true
+          },
+          "netUnitCost": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "discountType": {
+            "$ref": "#/components/schemas/DiscountType"
+          },
+          "discountRate": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "discountAmount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "taxMethod": {
+            "$ref": "#/components/schemas/TaxMethod"
+          },
+          "taxRate": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "taxAmount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "totalPrice": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "remarks": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "GetPurchaseListQuery": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/DataGridModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "cacheKey": {
+                "type": "string"
+              }
+            }
+          }
+        ]
+      },
+      "PurchaseInfoModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "purchaseDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "referenceNo": {
+            "type": "string"
+          },
+          "warehouseId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "supplierId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "purchaseStatusId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "attachmentUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "subTotal": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "taxRate": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "taxAmount": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "discountType": {
+            "$ref": "#/components/schemas/DiscountType"
+          },
+          "discountRate": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "discountAmount": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "shippingCost": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "grandTotal": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "paidAmount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "dueAmount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "note": {
+            "type": "string",
+            "nullable": true
+          },
+          "supplierName": {
+            "type": "string"
+          },
+          "purchaseStatus": {
+            "type": "string"
+          },
+          "paymentStatusId": {
+            "type": "string"
+          },
+          "totalQuantity": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "totalDiscount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "totalTaxAmount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "totalItems": {
+            "type": "string"
+          },
+          "companyInfo": {
+            "$ref": "#/components/schemas/CompanyInfoModel"
+          },
+          "supplier": {
+            "$ref": "#/components/schemas/SupplierModel"
+          },
+          "purchaseDetails": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PurchaseDetailModel"
+            }
+          },
+          "paymentDetails": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PurchasePaymentModel"
+            }
+          }
+        }
+      },
+      "CreatePurchaseCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "purchaseDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "referenceNo": {
+            "type": "string"
+          },
+          "warehouseId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "supplierId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "purchaseStatusId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "attachmentUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "subTotal": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "taxRate": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "taxAmount": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "discountType": {
+            "$ref": "#/components/schemas/DiscountType"
+          },
+          "discountRate": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "discountAmount": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "shippingCost": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "grandTotal": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "note": {
+            "type": "string",
+            "nullable": true
+          },
+          "purchaseDetails": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PurchaseDetailModel"
+            }
+          },
+          "cacheKey": {
+            "type": "string"
+          }
+        }
+      },
+      "UpdatePurchaseCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "purchaseDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "referenceNo": {
+            "type": "string"
+          },
+          "warehouseId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "supplierId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "purchaseStatusId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "attachmentUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "subTotal": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "taxRate": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "taxAmount": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "discountType": {
+            "$ref": "#/components/schemas/DiscountType"
+          },
+          "discountRate": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "discountAmount": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "shippingCost": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "grandTotal": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "note": {
+            "type": "string",
+            "nullable": true
+          },
+          "purchaseDetails": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PurchaseDetailModel"
+            }
+          },
+          "cacheKey": {
+            "type": "string"
+          }
+        }
       },
       "PaginatedResponseOfProductTransferModel": {
         "type": "object",

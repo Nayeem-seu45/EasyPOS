@@ -1,10 +1,6 @@
 ﻿using EasyPOS.Application.Features.Common.Queries;
 using EasyPOS.Application.Features.Suppliers.Commands;
 using EasyPOS.Application.Features.Suppliers.Queries;
-using EasyPOS.Application.Features.Trades.Purchases.Commands;
-using EasyPOS.Application.Features.Trades.Purchases.Queries;
-using EasyPOS.Application.Features.Trades.Sales.Commands;
-using EasyPOS.Application.Features.Trades.Sales.Queries;
 
 namespace EasyPOS.WebApi.Endpoints;
 

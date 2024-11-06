@@ -1,6 +1,6 @@
-﻿using EasyPOS.Domain.Trades;
+﻿using EasyPOS.Domain.Purchases;
 
-namespace EasyPOS.Infrastructure.Persistence.Configurations.Trades;
+namespace EasyPOS.Infrastructure.Persistence.Configurations.Purchases;
 
 internal sealed class PurchaseDetailConfiguration : IEntityTypeConfiguration<PurchaseDetail>
 {

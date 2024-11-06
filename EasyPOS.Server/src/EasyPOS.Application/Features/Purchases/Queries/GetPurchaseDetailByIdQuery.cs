@@ -1,7 +1,7 @@
 ﻿using EasyPOS.Application.Features.Trades.PurchasePayments.Queries;
 using EasyPOS.Domain.Trades;
 
-namespace EasyPOS.Application.Features.Trades.Purchases.Queries;
+namespace EasyPOS.Application.Features.Purchases.Queries;
 
 public record GetPurchaseDetailByIdQuery(Guid Id) : ICacheableQuery<PurchaseInfoModel>
 {
@@ -14,7 +14,7 @@ public record GetPurchaseDetailByIdQuery(Guid Id) : ICacheableQuery<PurchaseInfo
 
 internal sealed class GetPurchaseDetailByIdQueryHandler(
     ISqlConnectionFactory sqlConnectionFactory,
-    ICommonQueryService commonQueryService) 
+    ICommonQueryService commonQueryService)
     : IQueryHandler<GetPurchaseDetailByIdQuery, PurchaseInfoModel>
 {
     public async Task<Result<PurchaseInfoModel>> Handle(GetPurchaseDetailByIdQuery request, CancellationToken cancellationToken)
@@ -122,7 +122,7 @@ internal sealed class GetPurchaseDetailByIdQueryHandler(
         );
 
         var purchase = purchaseDictionary.Values.FirstOrDefault();
-        if(purchase is not null)
+        if (purchase is not null)
         {
             purchase.TotalQuantity = purchase.PurchaseDetails.Count;
             purchase.TotalDiscount = purchase.PurchaseDetails.Sum(x => x.DiscountAmount);
