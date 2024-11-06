@@ -6,4 +6,10 @@
       cursor: move;
     }
   }
+
+  .p-tree .p-treenode-droppoint.ng-star-inserted.p-treenode-droppoint-active {
+    height: 0.8rem;
+    list-style-type: none;
+    background-color: var(--primary-color);
+}
 }
