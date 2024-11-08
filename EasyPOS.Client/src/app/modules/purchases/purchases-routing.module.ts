@@ -6,12 +6,17 @@ import { PurchaseListComponent } from "./components/purchase-list/purchase-list.
 import { UpdatePurchaseOrderDetailComponent } from "./components/update-purchase-order-detail/update-purchase-order-detail.component";
 import { PurchasePaymentDetailComponent } from "./components/purchase-payment-detail/purchase-payment-detail.component";
 import { PurchasePaymentListComponent } from "./components/purchase-payment-list/purchase-payment-list.component";
+import { PurchaseReturnListComponent } from "./components/purchase-return-return-list/purchase-return-list.component";
+import { PurchaseReturnDetailComponent } from "./components/purchase-return-return-detail/purchase-return-detail.component";
 
 const routes: Routes = [
   {path: 'list', component: PurchaseListComponent},
   {path: 'create', component: PurchaseDetailComponent},
   {path: 'edit/:id', component: PurchaseDetailComponent},
   {path: 'detail/:id', component: PurchaseInfoDetailComponent},
+  {path: 'return-list', component: PurchaseReturnListComponent},
+  {path: 'return/create/:purchaseId', component: PurchaseReturnDetailComponent, data: {processFrom: 'purchase-list'}},
+  {path: 'return/edit/:id', component: PurchaseReturnDetailComponent, data: {processFrom: 'return-list'}},
 ]
 
 @NgModule({
@@ -28,4 +33,6 @@ export const purchaseRoutingComponents = [
   UpdatePurchaseOrderDetailComponent,
   PurchasePaymentDetailComponent,
   PurchasePaymentListComponent,
+  PurchaseReturnListComponent,
+  PurchaseReturnDetailComponent
 ]

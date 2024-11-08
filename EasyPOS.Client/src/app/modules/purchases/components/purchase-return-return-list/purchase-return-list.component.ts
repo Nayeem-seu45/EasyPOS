@@ -1,108 +1,57 @@
 import { Component, inject, ViewChild } from '@angular/core';
-import { PurchaseInfoModel, PurchaseModel, PurchasesClient } from 'src/app/modules/generated-clients/api-service';
-import { PurchaseDetailComponent } from '../purchase-detail/purchase-detail.component';
+import { PurchaseReturnInfoModel, PurchaseReturnModel, PurchaseReturnsClient } from 'src/app/modules/generated-clients/api-service';
 import { CustomDialogService } from 'src/app/shared/services/custom-dialog.service';
-import { PurchasePaymentDetailComponent } from '../purchase-payment-detail/purchase-payment-detail.component';
 import { DataGridComponent } from 'src/app/shared/components/data-grid/data-grid.component';
-import { PurchasePaymentListComponent } from '../purchase-payment-list/purchase-payment-list.component';
 import { CommonConstants } from 'src/app/core/contants/common';
 import { CommonUtils } from 'src/app/shared/Utilities/common-utilities';
 import { DatePipe } from '@angular/common';
-
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
-import { NavigationService } from 'src/app/shared/services/navigation.service';
+import { PurchaseReturnDetailComponent } from '../purchase-return-return-detail/purchase-return-detail.component';
 
 @Component({
-  selector: 'app-purchase-list',
-  templateUrl: './purchase-list.component.html',
-  styleUrl: './purchase-list.component.scss',
-  providers: [PurchasesClient, DatePipe, NavigationService]
+  selector: 'app-purchase-return-list',
+  templateUrl: './purchase-return-list.component.html',
+  styleUrl: './purchase-return-list.component.scss',
+  providers: [PurchaseReturnsClient, DatePipe]
 })
-export class PurchaseListComponent {
-  detailComponent = PurchaseDetailComponent;
-  pageId = 'e6a24c4e-13aa-4862-b415-08dce587d160'
+export class PurchaseReturnListComponent {
+  detailComponent = PurchaseReturnDetailComponent;
+  pageId = '90019f10-65ff-4baf-2b4a-08dd001bc922'
 
-  item: PurchaseInfoModel;
+  item: PurchaseReturnInfoModel;
 
   @ViewChild('grid') grid: DataGridComponent;
-  entityClient: PurchasesClient = inject(PurchasesClient);
+  entityClient: PurchaseReturnsClient = inject(PurchaseReturnsClient);
   constructor(private customDialogService: CustomDialogService,
-    private navigationService: NavigationService,
     private datePipe: DatePipe
   ) {
 
   }
 
   onhandleGridRowAction(event) {
-
-    if (event.action.actionName === 'addPayment') {
-      this.addPayment(event);
-    } else if (event.action.actionName === 'paymentList') {
-      this.openPaymentList(event);
-    } else if (event.action.actionName === 'pdf') {
-      this.generatePurchaseDetailPdf(event);
-    } else if (event.action.actionName === 'return') {
-      console.log('return', event)
-      this.navigationService.navigateWithRouteData(`/purchases/return/create/${event.data.id}`)
+  if (event.action.actionName === 'pdf') {
+      this.generatePurchaseReturnDetailPdf(event);
     }
   }
 
-  private openPaymentList(event: any) {
-    this.customDialogService.handleCloseIcon = false;
-    const paymentListDialogRef = this.customDialogService.openDialog<PurchaseModel>(
-      PurchasePaymentListComponent,
-      event.data,
-      'Payment List',
-      { width: '60vw' },
-      // null,
-      true
-    );
-    paymentListDialogRef.onClose.subscribe((succeeded) => {
-      this.grid.refreshGrid();
-    });
-
-    // this.customDialogService.handelCloseIconClick.subscribe((succeeded) => {
-    //   if(this.customDialogService?.handleCloseIcon){
-    //     console.log('refresh grid')
-    //     this.grid.refreshGrid();
-    //   }
-    // });
-  }
-
-  private addPayment(event: any) {
-    this.customDialogService.open<{ id: string; purchase: PurchaseModel; }>(
-      PurchasePaymentDetailComponent,
-      { id: CommonConstants.EmptyGuid, purchase: event.data },
-      'Add Payment').subscribe((succeeded) => {
-        if (succeeded) {
-          this.grid.refreshGrid();
-        }
-      });
-  }
-
-  private async generatePurchaseDetailPdf(event: any) {
-
+  private async generatePurchaseReturnDetailPdf(event: any) {
     await this.getDetailById(event.data.id);
-
     this.exportPdf();
-
   }
-
-
 
   private exportPdf() {
     const doc = new jsPDF('p', 'mm', 'a4'); // Create jsPDF instance
 
-    // Header: Purchase Details
+    // Header: PurchaseReturn Details
     doc.setFontSize(16);
     doc.setTextColor(40);
-    doc.text('Purchase Details', 10, 15);
+    doc.text('PurchaseReturn Details', 10, 15);
 
     // Section: Company and Supplier Info
     const companyText = `From:\n${this.item.companyInfo.name}\n${this.item.companyInfo.address}, ${this.item.companyInfo.city}, ${this.item.companyInfo.country}\nPhone: ${this.item.companyInfo.phone}\nMobile: ${this.item.companyInfo.mobile}\nEmail: ${this.item.companyInfo.email}`;
     const supplierText = `Supplier:\n${this.item.supplier.name}\n${this.item.supplier.address}, ${this.item.supplier.city}, ${this.item.supplier.country}\nPhone: ${this.item.supplier.phoneNo}\nMobile: ${this.item.supplier.mobile}\nEmail: ${this.item.supplier.email}`;
-    const referenceText = `Reference: ${this.item.referenceNo}\nPurchase Status: ${this.item.purchaseStatus}\nPayment Status: ${this.item.paymentStatusId}`;
+    const referenceText = `Reference: ${this.item.referenceNo}\nPurchaseReturn Status: ${this.item.purchaseReturnStatus}\nPayment Status: ${this.item.paymentStatusId}`;
 
     // Display company, supplier, and reference info
     doc.setFontSize(10);
@@ -120,11 +69,11 @@ export class PurchaseListComponent {
 
     // Section: Items Table
     const itemHeaders = ['#', 'Name', 'Price', 'Quantity', 'Unit Price', 'Discount', 'Tax', 'Sub Total'];
-    const itemBody = this.item.purchaseDetails.map((detail, index) => [
+    const itemBody = this.item.purchaseReturnDetails.map((detail, index) => [
       index + 1,
       `${detail.productName} (${detail.productCode})`,
       detail.productUnitCost,
-      detail.quantity,
+      detail.returnedQuantity,
       detail.netUnitCost.toFixed(2),
       detail.discountAmount.toFixed(2),
       detail.taxAmount.toFixed(2),
@@ -202,7 +151,7 @@ export class PurchaseListComponent {
           margin: { left: footerLeftMargin }, // Set left margin for the table
           didDrawPage: () => {
             // Save the PDF
-            doc.save('purchase-details.pdf');
+            doc.save('purchaseReturn-details.pdf');
           }
         });
       },
@@ -213,15 +162,15 @@ export class PurchaseListComponent {
   private exportPdf2() {
     const doc = new jsPDF('p', 'mm', 'a4'); // Create jsPDF instance
 
-    // Header: Purchase Details
+    // Header: PurchaseReturn Details
     doc.setFontSize(16);
     doc.setTextColor(40);
-    doc.text('Purchase Details', 10, 15);
+    doc.text('PurchaseReturn Details', 10, 15);
 
     // Section: Company and Supplier Info
     const companyText = `From:\n${this.item.companyInfo.name}\n${this.item.companyInfo.address}, ${this.item.companyInfo.city}, ${this.item.companyInfo.country}\nPhone: ${this.item.companyInfo.phone}\nMobile: ${this.item.companyInfo.mobile}\nEmail: ${this.item.companyInfo.email}`;
     const supplierText = `Supplier:\n${this.item.supplier.name}\n${this.item.supplier.address}, ${this.item.supplier.city}, ${this.item.supplier.country}\nPhone: ${this.item.supplier.phoneNo}\nMobile: ${this.item.supplier.mobile}\nEmail: ${this.item.supplier.email}`;
-    const referenceText = `Reference: ${this.item.referenceNo}\nPurchase Status: ${this.item.purchaseStatus}\nPayment Status: ${this.item.paymentStatusId}`;
+    const referenceText = `Reference: ${this.item.referenceNo}\nPurchaseReturn Status: ${this.item.purchaseReturnStatus}\nPayment Status: ${this.item.paymentStatusId}`;
 
     // Display company, supplier, and reference info
     doc.setFontSize(10);
@@ -239,11 +188,11 @@ export class PurchaseListComponent {
 
     // Section: Items Table
     const itemHeaders = ['#', 'Name', 'Price', 'Quantity', 'Unit Price', 'Discount', 'Tax', 'Sub Total'];
-    const itemBody = this.item.purchaseDetails.map((detail, index) => [
+    const itemBody = this.item.purchaseReturnDetails.map((detail, index) => [
       index + 1,
       `${detail.productName} (${detail.productCode})`,
       detail.productUnitCost,
-      detail.quantity,
+      detail.returnedQuantity,
       detail.netUnitCost.toFixed(2),
       detail.discountAmount.toFixed(2),
       detail.taxAmount.toFixed(2),
@@ -261,19 +210,19 @@ export class PurchaseListComponent {
         const finalYAfterItemsTable = data.cursor.y + 10; // Get the Y position after items table
 
         // Section: Payment Table
-        const paymentHeaders = ['#', 'Date', 'Payment Type', 'Note', 'Amount'];
-        const paymentBody = this.item.paymentDetails.map((payment, index) => [
-          index + 1,
-          this.datePipe.transform(payment.paymentDate, 'dd/MM/yyyy'),
-          payment.paymentTypeName,
-          payment.note,
-          payment.payingAmount.toFixed(2)
-        ]);
+        // const paymentHeaders = ['#', 'Date', 'Payment Type', 'Note', 'Amount'];
+        // const paymentBody = this.item.paymentDetails.map((payment, index) => [
+        //   index + 1,
+        //   this.datePipe.transform(payment.paymentDate, 'dd/MM/yyyy'),
+        //   payment.paymentTypeName,
+        //   payment.note,
+        //   payment.payingAmount.toFixed(2)
+        // ]);
 
         // Generate Payment Table using autoTable
         autoTable(doc, {
-          head: [paymentHeaders],
-          body: paymentBody,
+          // head: [paymentHeaders],
+          // body: paymentBody,
           startY: finalYAfterItemsTable, // Adjust startY to be below the items table
           styles: { fontSize: 9 },
           didDrawPage: (paymentData) => {
@@ -289,15 +238,12 @@ export class PurchaseListComponent {
             doc.text(`Grand Total: ${this.item.grandTotal.toFixed(2)}`, 10, finalYAfterPaymentsTable + 60);
 
             // Save the PDF
-            doc.save('purchase-details.pdf');
+            doc.save('purchaseReturn-details.pdf');
           }
         });
       }
     });
   }
-
-
-
 
   // Fetches the item details and calculates the footer section
   private async getDetailById(id: string) {

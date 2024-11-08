@@ -1,14 +1,16 @@
 ﻿using EasyPOS.Domain.Common.Enums;
 
-namespace EasyPOS.Domain.Purchases;
+namespace EasyPOS.Application.Features.PurchaseReturns.Models;
 
-public class Purchase : BaseAuditableEntity
+public record PurchaseReturnModel
 {
-    public DateOnly PurchaseDate { get; set; }
+    public Guid Id { get; set; }
+    public Guid PurchaseId { get; set; }
+    public DateOnly ReturnDate { get; set; }
     public string ReferenceNo { get; set; }
     public Guid WarehouseId { get; set; }
     public Guid SupplierId { get; set; }
-    public Guid PurchaseStatusId { get; set; }
+    public Guid ReturnStatusId { get; set; }
     public string? AttachmentUrl { get; set; }
     public decimal SubTotal { get; set; }
     public decimal? TaxRate { get; set; }
@@ -19,12 +21,12 @@ public class Purchase : BaseAuditableEntity
     public decimal? ShippingCost { get; set; }
     public decimal GrandTotal { get; set; }
     public string? Note { get; set; }
-    public decimal PaidAmount { get; set; }
-    public decimal DueAmount { get; set; }
-    public Guid? PaymentStatusId { get; set; }
 
-    public virtual List<PurchaseDetail> PurchaseDetails { get; set; } = [];
-    public virtual List<PurchasePayment> PurchasePayments { get; set; } = [];
-    public virtual List<PurchaseReturn> PurchaseReturns { get; set; } = [];
+    public string SupplierName { get; set; }
+    public string ReturnStatus { get; set; }
+
+    public List<PurchaseReturnDetailModel> PurchaseReturnDetails { get; set; } = [];
+
+    public Dictionary<string, object> OptionsDataSources { get; set; } = [];
 
 }

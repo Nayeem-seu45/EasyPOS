@@ -10,7 +10,6 @@ using EasyPOS.Domain.Quotations;
 using EasyPOS.Domain.Sales;
 using EasyPOS.Domain.Settings;
 using EasyPOS.Domain.Stakeholders;
-using static EasyPOS.Application.Common.Security.Permissions;
 
 namespace EasyPOS.Infrastructure.Persistence;
 
@@ -62,10 +61,16 @@ public sealed class ApplicationDbContext : DbContext, IApplicationDbContext
 
     #endregion
 
-    #region Trades
+    #region Purchase
     public DbSet<Purchase> Purchases => Set<Purchase>();
     public DbSet<PurchaseDetail> PurchaseDetails => Set<PurchaseDetail>();
     public DbSet<PurchasePayment> PurchasePayments => Set<PurchasePayment>();
+    public DbSet<PurchaseReturn> PurchaseReturns => Set<PurchaseReturn>();
+    public DbSet<PurchaseReturnDetail> PurchaseReturnDetails => Set<PurchaseReturnDetail>();
+
+    #endregion
+
+    #region Sales
     public DbSet<Sale> Sales => Set<Sale>();
     public DbSet<SaleDetail> SaleDetails => Set<SaleDetail>();
     public DbSet<SalePayment> SalePayments => Set<SalePayment>();

@@ -1,0 +1,23 @@
+::ng-deep {
+  .p-datatable .p-datatable-header {
+    padding: .5rem .5rem;
+  }
+
+  .p-datatable .p-datatable-thead>tr>th {
+    padding: .5rem .5rem;
+  }
+
+  .p-datatable .p-datatable-tbody>tr>td {
+    padding: .2rem .2rem;
+  }
+
+  .p-datatable .p-datatable-tfoot>tr>td {
+    padding: .5rem .5rem;
+  }
+}
+
+.product-edit-icon{
+  color: var(--primary-color);
+  cursor: pointer;
+  margin-left: 5px;
+}

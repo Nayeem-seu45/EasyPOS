@@ -245,7 +245,7 @@ public static class Permissions
 
     #endregion
 
-    #region Trades
+    #region Purchase
     public static class Purchases
     {
         public const string View = "Permissions.Purchases.View";
@@ -261,6 +261,17 @@ public static class Permissions
         public const string Edit = "Permissions.PurchasePayments.Edit";
         public const string Delete = "Permissions.PurchasePayments.Delete";
     }
+
+    public static class PurchaseReturns
+    {
+        public const string View = "Permissions.PurchaseReturns.View";
+        public const string Create = "Permissions.PurchaseReturns.Create";
+        public const string Edit = "Permissions.PurchaseReturns.Edit";
+        public const string Delete = "Permissions.PurchaseReturns.Delete";
+    }
+    #endregion
+
+    #region Sales
 
     public static class Sales
     {

@@ -59,10 +59,16 @@ public interface IApplicationDbContext
 
     #endregion
 
-    #region Trades
+    #region Purchase
     DbSet<Purchase> Purchases { get; }
     DbSet<PurchaseDetail> PurchaseDetails { get; }
     DbSet<PurchasePayment> PurchasePayments { get; }
+    DbSet<PurchaseReturn> PurchaseReturns { get; }
+    DbSet<PurchaseReturnDetail> PurchaseReturnDetails { get; }
+
+    #endregion
+
+    #region Sales
 
     DbSet<Sale> Sales { get; }
     DbSet<SaleDetail> SaleDetails { get; }

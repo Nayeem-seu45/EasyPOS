@@ -15,5 +15,6 @@ public enum LookupDevCode
     District = 111,
     GiftCardType = 112,
     QuotationStatus = 113,
-    ProductTransferStatus = 114
+    ProductTransferStatus = 114,
+    PurchaseReturnStatus = 115,
 }

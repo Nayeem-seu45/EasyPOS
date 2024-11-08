@@ -5299,6 +5299,585 @@ export class QuotationsClient implements IQuotationsClient {
     }
 }
 
+export interface IPurchaseReturnsClient {
+    getAll(query: GetPurchaseReturnListQuery): Observable<PaginatedResponseOfPurchaseReturnModel>;
+    get(id: string): Observable<PurchaseReturnModel>;
+    getByPurchaseId(purchaseId: string): Observable<PurchaseReturnModel>;
+    getDetail(id: string): Observable<PurchaseReturnInfoModel>;
+    create(command: CreatePurchaseReturnCommand): Observable<string>;
+    update(command: UpdatePurchaseReturnCommand): Observable<void>;
+    delete(id: string): Observable<void>;
+    deleteMultiple(ids: string[]): Observable<void>;
+    upload(): Observable<number>;
+    deletePurchaseReturnDetail(id: string): Observable<void>;
+}
+
+@Injectable()
+export class PurchaseReturnsClient implements IPurchaseReturnsClient {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ?? "";
+    }
+
+    getAll(query: GetPurchaseReturnListQuery): Observable<PaginatedResponseOfPurchaseReturnModel> {
+        let url_ = this.baseUrl + "/api/PurchaseReturns/GetAll";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(query);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            withCredentials: true,
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAll(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAll(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<PaginatedResponseOfPurchaseReturnModel>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<PaginatedResponseOfPurchaseReturnModel>;
+        }));
+    }
+
+    protected processGetAll(response: HttpResponseBase): Observable<PaginatedResponseOfPurchaseReturnModel> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = PaginatedResponseOfPurchaseReturnModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    get(id: string): Observable<PurchaseReturnModel> {
+        let url_ = this.baseUrl + "/api/PurchaseReturns/Get/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            withCredentials: true,
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGet(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGet(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<PurchaseReturnModel>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<PurchaseReturnModel>;
+        }));
+    }
+
+    protected processGet(response: HttpResponseBase): Observable<PurchaseReturnModel> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = PurchaseReturnModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    getByPurchaseId(purchaseId: string): Observable<PurchaseReturnModel> {
+        let url_ = this.baseUrl + "/api/PurchaseReturns/GetByPurchaseId/{purchaseId}";
+        if (purchaseId === undefined || purchaseId === null)
+            throw new Error("The parameter 'purchaseId' must be defined.");
+        url_ = url_.replace("{purchaseId}", encodeURIComponent("" + purchaseId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            withCredentials: true,
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetByPurchaseId(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetByPurchaseId(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<PurchaseReturnModel>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<PurchaseReturnModel>;
+        }));
+    }
+
+    protected processGetByPurchaseId(response: HttpResponseBase): Observable<PurchaseReturnModel> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = PurchaseReturnModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    getDetail(id: string): Observable<PurchaseReturnInfoModel> {
+        let url_ = this.baseUrl + "/api/PurchaseReturns/GetDetail/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            withCredentials: true,
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetDetail(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetDetail(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<PurchaseReturnInfoModel>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<PurchaseReturnInfoModel>;
+        }));
+    }
+
+    protected processGetDetail(response: HttpResponseBase): Observable<PurchaseReturnInfoModel> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = PurchaseReturnInfoModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    create(command: CreatePurchaseReturnCommand): Observable<string> {
+        let url_ = this.baseUrl + "/api/PurchaseReturns/Create";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            withCredentials: true,
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreate(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<string>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<string>;
+        }));
+    }
+
+    protected processCreate(response: HttpResponseBase): Observable<string> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 201) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result201: any = null;
+            let resultData201 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result201 = resultData201 !== undefined ? resultData201 : <any>null;
+    
+            return _observableOf(result201);
+            }));
+        } else if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ProblemDetails.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    update(command: UpdatePurchaseReturnCommand): Observable<void> {
+        let url_ = this.baseUrl + "/api/PurchaseReturns/Update";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            withCredentials: true,
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+            })
+        };
+
+        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdate(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processUpdate(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ProblemDetails.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            }));
+        } else if (status === 404) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("A server side error occurred.", status, _responseText, _headers);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    delete(id: string): Observable<void> {
+        let url_ = this.baseUrl + "/api/PurchaseReturns/Delete/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            withCredentials: true,
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDelete(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDelete(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processDelete(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ProblemDetails.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    deleteMultiple(ids: string[]): Observable<void> {
+        let url_ = this.baseUrl + "/api/PurchaseReturns/DeleteMultiple";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(ids);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            withCredentials: true,
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDeleteMultiple(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDeleteMultiple(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processDeleteMultiple(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ProblemDetails.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    upload(): Observable<number> {
+        let url_ = this.baseUrl + "/api/PurchaseReturns/Upload";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            withCredentials: true,
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpload(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpload(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<number>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<number>;
+        }));
+    }
+
+    protected processUpload(response: HttpResponseBase): Observable<number> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : <any>null;
+    
+            return _observableOf(result200);
+            }));
+        } else if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ProblemDetails.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    deletePurchaseReturnDetail(id: string): Observable<void> {
+        let url_ = this.baseUrl + "/api/PurchaseReturns/DeletePurchaseReturnDetail?";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined and cannot be null.");
+        else
+            url_ += "id=" + encodeURIComponent("" + id) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            withCredentials: true,
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDeletePurchaseReturnDetail(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDeletePurchaseReturnDetail(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processDeletePurchaseReturnDetail(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ProblemDetails.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+}
+
 export interface IPurchasePaymentsClient {
     getAll(query: GetPurchasePaymentListQuery): Observable<PaginatedResponseOfPurchasePaymentModel>;
     getAllByPurchaseId(query: GetPaymentListByPurchaseIdQuery): Observable<PurchasePaymentModel[]>;
@@ -18220,6 +18799,751 @@ export class UpdateQuotationCommand extends UpsertQuotationModel implements IUpd
 }
 
 export interface IUpdateQuotationCommand extends IUpsertQuotationModel {
+    cacheKey?: string;
+}
+
+export class PaginatedResponseOfPurchaseReturnModel implements IPaginatedResponseOfPurchaseReturnModel {
+    items?: PurchaseReturnModel[];
+    pageNumber?: number;
+    totalPages?: number;
+    totalCount?: number;
+    hasPreviousPage?: boolean;
+    hasNextPage?: boolean;
+    optionsDataSources?: { [key: string]: any; };
+
+    constructor(data?: IPaginatedResponseOfPurchaseReturnModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["items"])) {
+                this.items = [] as any;
+                for (let item of _data["items"])
+                    this.items!.push(PurchaseReturnModel.fromJS(item));
+            }
+            this.pageNumber = _data["pageNumber"];
+            this.totalPages = _data["totalPages"];
+            this.totalCount = _data["totalCount"];
+            this.hasPreviousPage = _data["hasPreviousPage"];
+            this.hasNextPage = _data["hasNextPage"];
+            if (_data["optionsDataSources"]) {
+                this.optionsDataSources = {} as any;
+                for (let key in _data["optionsDataSources"]) {
+                    if (_data["optionsDataSources"].hasOwnProperty(key))
+                        (<any>this.optionsDataSources)![key] = _data["optionsDataSources"][key];
+                }
+            }
+        }
+    }
+
+    static fromJS(data: any): PaginatedResponseOfPurchaseReturnModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new PaginatedResponseOfPurchaseReturnModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        data["pageNumber"] = this.pageNumber;
+        data["totalPages"] = this.totalPages;
+        data["totalCount"] = this.totalCount;
+        data["hasPreviousPage"] = this.hasPreviousPage;
+        data["hasNextPage"] = this.hasNextPage;
+        if (this.optionsDataSources) {
+            data["optionsDataSources"] = {};
+            for (let key in this.optionsDataSources) {
+                if (this.optionsDataSources.hasOwnProperty(key))
+                    (<any>data["optionsDataSources"])[key] = (<any>this.optionsDataSources)[key];
+            }
+        }
+        return data;
+    }
+}
+
+export interface IPaginatedResponseOfPurchaseReturnModel {
+    items?: PurchaseReturnModel[];
+    pageNumber?: number;
+    totalPages?: number;
+    totalCount?: number;
+    hasPreviousPage?: boolean;
+    hasNextPage?: boolean;
+    optionsDataSources?: { [key: string]: any; };
+}
+
+export class PurchaseReturnModel implements IPurchaseReturnModel {
+    id?: string;
+    purchaseId?: string;
+    returnDate?: Date;
+    referenceNo?: string;
+    warehouseId?: string;
+    supplierId?: string;
+    returnStatusId?: string;
+    attachmentUrl?: string | undefined;
+    subTotal?: number;
+    taxRate?: number | undefined;
+    taxAmount?: number | undefined;
+    discountType?: DiscountType;
+    discountRate?: number | undefined;
+    discountAmount?: number | undefined;
+    shippingCost?: number | undefined;
+    grandTotal?: number;
+    note?: string | undefined;
+    supplierName?: string;
+    returnStatus?: string;
+    purchaseReturnDetails?: PurchaseReturnDetailModel[];
+    optionsDataSources?: { [key: string]: any; };
+
+    constructor(data?: IPurchaseReturnModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.purchaseId = _data["purchaseId"];
+            this.returnDate = _data["returnDate"] ? new Date(_data["returnDate"].toString()) : <any>undefined;
+            this.referenceNo = _data["referenceNo"];
+            this.warehouseId = _data["warehouseId"];
+            this.supplierId = _data["supplierId"];
+            this.returnStatusId = _data["returnStatusId"];
+            this.attachmentUrl = _data["attachmentUrl"];
+            this.subTotal = _data["subTotal"];
+            this.taxRate = _data["taxRate"];
+            this.taxAmount = _data["taxAmount"];
+            this.discountType = _data["discountType"];
+            this.discountRate = _data["discountRate"];
+            this.discountAmount = _data["discountAmount"];
+            this.shippingCost = _data["shippingCost"];
+            this.grandTotal = _data["grandTotal"];
+            this.note = _data["note"];
+            this.supplierName = _data["supplierName"];
+            this.returnStatus = _data["returnStatus"];
+            if (Array.isArray(_data["purchaseReturnDetails"])) {
+                this.purchaseReturnDetails = [] as any;
+                for (let item of _data["purchaseReturnDetails"])
+                    this.purchaseReturnDetails!.push(PurchaseReturnDetailModel.fromJS(item));
+            }
+            if (_data["optionsDataSources"]) {
+                this.optionsDataSources = {} as any;
+                for (let key in _data["optionsDataSources"]) {
+                    if (_data["optionsDataSources"].hasOwnProperty(key))
+                        (<any>this.optionsDataSources)![key] = _data["optionsDataSources"][key];
+                }
+            }
+        }
+    }
+
+    static fromJS(data: any): PurchaseReturnModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new PurchaseReturnModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["purchaseId"] = this.purchaseId;
+        data["returnDate"] = this.returnDate ? formatDate(this.returnDate) : <any>undefined;
+        data["referenceNo"] = this.referenceNo;
+        data["warehouseId"] = this.warehouseId;
+        data["supplierId"] = this.supplierId;
+        data["returnStatusId"] = this.returnStatusId;
+        data["attachmentUrl"] = this.attachmentUrl;
+        data["subTotal"] = this.subTotal;
+        data["taxRate"] = this.taxRate;
+        data["taxAmount"] = this.taxAmount;
+        data["discountType"] = this.discountType;
+        data["discountRate"] = this.discountRate;
+        data["discountAmount"] = this.discountAmount;
+        data["shippingCost"] = this.shippingCost;
+        data["grandTotal"] = this.grandTotal;
+        data["note"] = this.note;
+        data["supplierName"] = this.supplierName;
+        data["returnStatus"] = this.returnStatus;
+        if (Array.isArray(this.purchaseReturnDetails)) {
+            data["purchaseReturnDetails"] = [];
+            for (let item of this.purchaseReturnDetails)
+                data["purchaseReturnDetails"].push(item.toJSON());
+        }
+        if (this.optionsDataSources) {
+            data["optionsDataSources"] = {};
+            for (let key in this.optionsDataSources) {
+                if (this.optionsDataSources.hasOwnProperty(key))
+                    (<any>data["optionsDataSources"])[key] = (<any>this.optionsDataSources)[key];
+            }
+        }
+        return data;
+    }
+}
+
+export interface IPurchaseReturnModel {
+    id?: string;
+    purchaseId?: string;
+    returnDate?: Date;
+    referenceNo?: string;
+    warehouseId?: string;
+    supplierId?: string;
+    returnStatusId?: string;
+    attachmentUrl?: string | undefined;
+    subTotal?: number;
+    taxRate?: number | undefined;
+    taxAmount?: number | undefined;
+    discountType?: DiscountType;
+    discountRate?: number | undefined;
+    discountAmount?: number | undefined;
+    shippingCost?: number | undefined;
+    grandTotal?: number;
+    note?: string | undefined;
+    supplierName?: string;
+    returnStatus?: string;
+    purchaseReturnDetails?: PurchaseReturnDetailModel[];
+    optionsDataSources?: { [key: string]: any; };
+}
+
+export class PurchaseReturnDetailModel implements IPurchaseReturnDetailModel {
+    id?: string;
+    purchaseReturnId?: string;
+    productId?: string;
+    productCode?: string;
+    productName?: string;
+    productUnitCost?: number;
+    productUnitPrice?: number;
+    productUnitId?: string;
+    productUnit?: number;
+    productUnitDiscount?: number;
+    purchasedQuantity?: number;
+    returnedQuantity?: number;
+    stockQuantity?: number;
+    batchNo?: string;
+    expiredDate?: Date | undefined;
+    netUnitCost?: number;
+    discountType?: DiscountType;
+    discountRate?: number | undefined;
+    discountAmount?: number;
+    taxMethod?: TaxMethod;
+    taxRate?: number;
+    taxAmount?: number;
+    totalPrice?: number;
+    remarks?: string | undefined;
+
+    constructor(data?: IPurchaseReturnDetailModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.purchaseReturnId = _data["purchaseReturnId"];
+            this.productId = _data["productId"];
+            this.productCode = _data["productCode"];
+            this.productName = _data["productName"];
+            this.productUnitCost = _data["productUnitCost"];
+            this.productUnitPrice = _data["productUnitPrice"];
+            this.productUnitId = _data["productUnitId"];
+            this.productUnit = _data["productUnit"];
+            this.productUnitDiscount = _data["productUnitDiscount"];
+            this.purchasedQuantity = _data["purchasedQuantity"];
+            this.returnedQuantity = _data["returnedQuantity"];
+            this.stockQuantity = _data["stockQuantity"];
+            this.batchNo = _data["batchNo"];
+            this.expiredDate = _data["expiredDate"] ? new Date(_data["expiredDate"].toString()) : <any>undefined;
+            this.netUnitCost = _data["netUnitCost"];
+            this.discountType = _data["discountType"];
+            this.discountRate = _data["discountRate"];
+            this.discountAmount = _data["discountAmount"];
+            this.taxMethod = _data["taxMethod"];
+            this.taxRate = _data["taxRate"];
+            this.taxAmount = _data["taxAmount"];
+            this.totalPrice = _data["totalPrice"];
+            this.remarks = _data["remarks"];
+        }
+    }
+
+    static fromJS(data: any): PurchaseReturnDetailModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new PurchaseReturnDetailModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["purchaseReturnId"] = this.purchaseReturnId;
+        data["productId"] = this.productId;
+        data["productCode"] = this.productCode;
+        data["productName"] = this.productName;
+        data["productUnitCost"] = this.productUnitCost;
+        data["productUnitPrice"] = this.productUnitPrice;
+        data["productUnitId"] = this.productUnitId;
+        data["productUnit"] = this.productUnit;
+        data["productUnitDiscount"] = this.productUnitDiscount;
+        data["purchasedQuantity"] = this.purchasedQuantity;
+        data["returnedQuantity"] = this.returnedQuantity;
+        data["stockQuantity"] = this.stockQuantity;
+        data["batchNo"] = this.batchNo;
+        data["expiredDate"] = this.expiredDate ? formatDate(this.expiredDate) : <any>undefined;
+        data["netUnitCost"] = this.netUnitCost;
+        data["discountType"] = this.discountType;
+        data["discountRate"] = this.discountRate;
+        data["discountAmount"] = this.discountAmount;
+        data["taxMethod"] = this.taxMethod;
+        data["taxRate"] = this.taxRate;
+        data["taxAmount"] = this.taxAmount;
+        data["totalPrice"] = this.totalPrice;
+        data["remarks"] = this.remarks;
+        return data;
+    }
+}
+
+export interface IPurchaseReturnDetailModel {
+    id?: string;
+    purchaseReturnId?: string;
+    productId?: string;
+    productCode?: string;
+    productName?: string;
+    productUnitCost?: number;
+    productUnitPrice?: number;
+    productUnitId?: string;
+    productUnit?: number;
+    productUnitDiscount?: number;
+    purchasedQuantity?: number;
+    returnedQuantity?: number;
+    stockQuantity?: number;
+    batchNo?: string;
+    expiredDate?: Date | undefined;
+    netUnitCost?: number;
+    discountType?: DiscountType;
+    discountRate?: number | undefined;
+    discountAmount?: number;
+    taxMethod?: TaxMethod;
+    taxRate?: number;
+    taxAmount?: number;
+    totalPrice?: number;
+    remarks?: string | undefined;
+}
+
+export class GetPurchaseReturnListQuery extends DataGridModel implements IGetPurchaseReturnListQuery {
+    cacheKey?: string;
+
+    constructor(data?: IGetPurchaseReturnListQuery) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+        if (_data) {
+            this.cacheKey = _data["cacheKey"];
+        }
+    }
+
+    static override fromJS(data: any): GetPurchaseReturnListQuery {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPurchaseReturnListQuery();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["cacheKey"] = this.cacheKey;
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IGetPurchaseReturnListQuery extends IDataGridModel {
+    cacheKey?: string;
+}
+
+export class PurchaseReturnInfoModel implements IPurchaseReturnInfoModel {
+    id?: string;
+    purchaseReturnDate?: Date;
+    referenceNo?: string;
+    warehouseId?: string;
+    supplierId?: string;
+    purchaseReturnStatusId?: string;
+    attachmentUrl?: string | undefined;
+    subTotal?: number;
+    taxRate?: number | undefined;
+    taxAmount?: number | undefined;
+    discountType?: DiscountType;
+    discountRate?: number | undefined;
+    discountAmount?: number | undefined;
+    shippingCost?: number | undefined;
+    grandTotal?: number;
+    paidAmount?: number;
+    dueAmount?: number;
+    note?: string | undefined;
+    supplierName?: string;
+    purchaseReturnStatus?: string;
+    paymentStatusId?: string;
+    totalQuantity?: number;
+    totalDiscount?: number;
+    totalTaxAmount?: number;
+    totalItems?: string;
+    companyInfo?: CompanyInfoModel;
+    supplier?: SupplierModel;
+    purchaseReturnDetails?: PurchaseReturnDetailModel[];
+
+    constructor(data?: IPurchaseReturnInfoModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.purchaseReturnDate = _data["purchaseReturnDate"] ? new Date(_data["purchaseReturnDate"].toString()) : <any>undefined;
+            this.referenceNo = _data["referenceNo"];
+            this.warehouseId = _data["warehouseId"];
+            this.supplierId = _data["supplierId"];
+            this.purchaseReturnStatusId = _data["purchaseReturnStatusId"];
+            this.attachmentUrl = _data["attachmentUrl"];
+            this.subTotal = _data["subTotal"];
+            this.taxRate = _data["taxRate"];
+            this.taxAmount = _data["taxAmount"];
+            this.discountType = _data["discountType"];
+            this.discountRate = _data["discountRate"];
+            this.discountAmount = _data["discountAmount"];
+            this.shippingCost = _data["shippingCost"];
+            this.grandTotal = _data["grandTotal"];
+            this.paidAmount = _data["paidAmount"];
+            this.dueAmount = _data["dueAmount"];
+            this.note = _data["note"];
+            this.supplierName = _data["supplierName"];
+            this.purchaseReturnStatus = _data["purchaseReturnStatus"];
+            this.paymentStatusId = _data["paymentStatusId"];
+            this.totalQuantity = _data["totalQuantity"];
+            this.totalDiscount = _data["totalDiscount"];
+            this.totalTaxAmount = _data["totalTaxAmount"];
+            this.totalItems = _data["totalItems"];
+            this.companyInfo = _data["companyInfo"] ? CompanyInfoModel.fromJS(_data["companyInfo"]) : <any>undefined;
+            this.supplier = _data["supplier"] ? SupplierModel.fromJS(_data["supplier"]) : <any>undefined;
+            if (Array.isArray(_data["purchaseReturnDetails"])) {
+                this.purchaseReturnDetails = [] as any;
+                for (let item of _data["purchaseReturnDetails"])
+                    this.purchaseReturnDetails!.push(PurchaseReturnDetailModel.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): PurchaseReturnInfoModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new PurchaseReturnInfoModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["purchaseReturnDate"] = this.purchaseReturnDate ? formatDate(this.purchaseReturnDate) : <any>undefined;
+        data["referenceNo"] = this.referenceNo;
+        data["warehouseId"] = this.warehouseId;
+        data["supplierId"] = this.supplierId;
+        data["purchaseReturnStatusId"] = this.purchaseReturnStatusId;
+        data["attachmentUrl"] = this.attachmentUrl;
+        data["subTotal"] = this.subTotal;
+        data["taxRate"] = this.taxRate;
+        data["taxAmount"] = this.taxAmount;
+        data["discountType"] = this.discountType;
+        data["discountRate"] = this.discountRate;
+        data["discountAmount"] = this.discountAmount;
+        data["shippingCost"] = this.shippingCost;
+        data["grandTotal"] = this.grandTotal;
+        data["paidAmount"] = this.paidAmount;
+        data["dueAmount"] = this.dueAmount;
+        data["note"] = this.note;
+        data["supplierName"] = this.supplierName;
+        data["purchaseReturnStatus"] = this.purchaseReturnStatus;
+        data["paymentStatusId"] = this.paymentStatusId;
+        data["totalQuantity"] = this.totalQuantity;
+        data["totalDiscount"] = this.totalDiscount;
+        data["totalTaxAmount"] = this.totalTaxAmount;
+        data["totalItems"] = this.totalItems;
+        data["companyInfo"] = this.companyInfo ? this.companyInfo.toJSON() : <any>undefined;
+        data["supplier"] = this.supplier ? this.supplier.toJSON() : <any>undefined;
+        if (Array.isArray(this.purchaseReturnDetails)) {
+            data["purchaseReturnDetails"] = [];
+            for (let item of this.purchaseReturnDetails)
+                data["purchaseReturnDetails"].push(item.toJSON());
+        }
+        return data;
+    }
+}
+
+export interface IPurchaseReturnInfoModel {
+    id?: string;
+    purchaseReturnDate?: Date;
+    referenceNo?: string;
+    warehouseId?: string;
+    supplierId?: string;
+    purchaseReturnStatusId?: string;
+    attachmentUrl?: string | undefined;
+    subTotal?: number;
+    taxRate?: number | undefined;
+    taxAmount?: number | undefined;
+    discountType?: DiscountType;
+    discountRate?: number | undefined;
+    discountAmount?: number | undefined;
+    shippingCost?: number | undefined;
+    grandTotal?: number;
+    paidAmount?: number;
+    dueAmount?: number;
+    note?: string | undefined;
+    supplierName?: string;
+    purchaseReturnStatus?: string;
+    paymentStatusId?: string;
+    totalQuantity?: number;
+    totalDiscount?: number;
+    totalTaxAmount?: number;
+    totalItems?: string;
+    companyInfo?: CompanyInfoModel;
+    supplier?: SupplierModel;
+    purchaseReturnDetails?: PurchaseReturnDetailModel[];
+}
+
+export class CreatePurchaseReturnCommand implements ICreatePurchaseReturnCommand {
+    returnDate?: Date;
+    referenceNo?: string;
+    purchaseId?: string;
+    returnStatusId?: string;
+    attachmentUrl?: string | undefined;
+    subTotal?: number;
+    taxRate?: number | undefined;
+    taxAmount?: number | undefined;
+    discountType?: DiscountType;
+    discountRate?: number | undefined;
+    discountAmount?: number | undefined;
+    shippingCost?: number | undefined;
+    grandTotal?: number;
+    note?: string | undefined;
+    purchaseReturnDetails?: PurchaseReturnDetailModel[];
+    cacheKey?: string;
+
+    constructor(data?: ICreatePurchaseReturnCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.returnDate = _data["returnDate"] ? new Date(_data["returnDate"].toString()) : <any>undefined;
+            this.referenceNo = _data["referenceNo"];
+            this.purchaseId = _data["purchaseId"];
+            this.returnStatusId = _data["returnStatusId"];
+            this.attachmentUrl = _data["attachmentUrl"];
+            this.subTotal = _data["subTotal"];
+            this.taxRate = _data["taxRate"];
+            this.taxAmount = _data["taxAmount"];
+            this.discountType = _data["discountType"];
+            this.discountRate = _data["discountRate"];
+            this.discountAmount = _data["discountAmount"];
+            this.shippingCost = _data["shippingCost"];
+            this.grandTotal = _data["grandTotal"];
+            this.note = _data["note"];
+            if (Array.isArray(_data["purchaseReturnDetails"])) {
+                this.purchaseReturnDetails = [] as any;
+                for (let item of _data["purchaseReturnDetails"])
+                    this.purchaseReturnDetails!.push(PurchaseReturnDetailModel.fromJS(item));
+            }
+            this.cacheKey = _data["cacheKey"];
+        }
+    }
+
+    static fromJS(data: any): CreatePurchaseReturnCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreatePurchaseReturnCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["returnDate"] = this.returnDate ? formatDate(this.returnDate) : <any>undefined;
+        data["referenceNo"] = this.referenceNo;
+        data["purchaseId"] = this.purchaseId;
+        data["returnStatusId"] = this.returnStatusId;
+        data["attachmentUrl"] = this.attachmentUrl;
+        data["subTotal"] = this.subTotal;
+        data["taxRate"] = this.taxRate;
+        data["taxAmount"] = this.taxAmount;
+        data["discountType"] = this.discountType;
+        data["discountRate"] = this.discountRate;
+        data["discountAmount"] = this.discountAmount;
+        data["shippingCost"] = this.shippingCost;
+        data["grandTotal"] = this.grandTotal;
+        data["note"] = this.note;
+        if (Array.isArray(this.purchaseReturnDetails)) {
+            data["purchaseReturnDetails"] = [];
+            for (let item of this.purchaseReturnDetails)
+                data["purchaseReturnDetails"].push(item.toJSON());
+        }
+        data["cacheKey"] = this.cacheKey;
+        return data;
+    }
+}
+
+export interface ICreatePurchaseReturnCommand {
+    returnDate?: Date;
+    referenceNo?: string;
+    purchaseId?: string;
+    returnStatusId?: string;
+    attachmentUrl?: string | undefined;
+    subTotal?: number;
+    taxRate?: number | undefined;
+    taxAmount?: number | undefined;
+    discountType?: DiscountType;
+    discountRate?: number | undefined;
+    discountAmount?: number | undefined;
+    shippingCost?: number | undefined;
+    grandTotal?: number;
+    note?: string | undefined;
+    purchaseReturnDetails?: PurchaseReturnDetailModel[];
+    cacheKey?: string;
+}
+
+export class UpdatePurchaseReturnCommand implements IUpdatePurchaseReturnCommand {
+    id?: string;
+    purchaseReturnDate?: Date;
+    referenceNo?: string;
+    warehouseId?: string;
+    supplierId?: string;
+    purchaseReturnStatusId?: string;
+    attachmentUrl?: string | undefined;
+    subTotal?: number;
+    taxRate?: number | undefined;
+    taxAmount?: number | undefined;
+    discountType?: DiscountType;
+    discountRate?: number | undefined;
+    discountAmount?: number | undefined;
+    shippingCost?: number | undefined;
+    grandTotal?: number;
+    note?: string | undefined;
+    purchaseReturnDetails?: PurchaseReturnDetailModel[];
+    cacheKey?: string;
+
+    constructor(data?: IUpdatePurchaseReturnCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.purchaseReturnDate = _data["purchaseReturnDate"] ? new Date(_data["purchaseReturnDate"].toString()) : <any>undefined;
+            this.referenceNo = _data["referenceNo"];
+            this.warehouseId = _data["warehouseId"];
+            this.supplierId = _data["supplierId"];
+            this.purchaseReturnStatusId = _data["purchaseReturnStatusId"];
+            this.attachmentUrl = _data["attachmentUrl"];
+            this.subTotal = _data["subTotal"];
+            this.taxRate = _data["taxRate"];
+            this.taxAmount = _data["taxAmount"];
+            this.discountType = _data["discountType"];
+            this.discountRate = _data["discountRate"];
+            this.discountAmount = _data["discountAmount"];
+            this.shippingCost = _data["shippingCost"];
+            this.grandTotal = _data["grandTotal"];
+            this.note = _data["note"];
+            if (Array.isArray(_data["purchaseReturnDetails"])) {
+                this.purchaseReturnDetails = [] as any;
+                for (let item of _data["purchaseReturnDetails"])
+                    this.purchaseReturnDetails!.push(PurchaseReturnDetailModel.fromJS(item));
+            }
+            this.cacheKey = _data["cacheKey"];
+        }
+    }
+
+    static fromJS(data: any): UpdatePurchaseReturnCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdatePurchaseReturnCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["purchaseReturnDate"] = this.purchaseReturnDate ? formatDate(this.purchaseReturnDate) : <any>undefined;
+        data["referenceNo"] = this.referenceNo;
+        data["warehouseId"] = this.warehouseId;
+        data["supplierId"] = this.supplierId;
+        data["purchaseReturnStatusId"] = this.purchaseReturnStatusId;
+        data["attachmentUrl"] = this.attachmentUrl;
+        data["subTotal"] = this.subTotal;
+        data["taxRate"] = this.taxRate;
+        data["taxAmount"] = this.taxAmount;
+        data["discountType"] = this.discountType;
+        data["discountRate"] = this.discountRate;
+        data["discountAmount"] = this.discountAmount;
+        data["shippingCost"] = this.shippingCost;
+        data["grandTotal"] = this.grandTotal;
+        data["note"] = this.note;
+        if (Array.isArray(this.purchaseReturnDetails)) {
+            data["purchaseReturnDetails"] = [];
+            for (let item of this.purchaseReturnDetails)
+                data["purchaseReturnDetails"].push(item.toJSON());
+        }
+        data["cacheKey"] = this.cacheKey;
+        return data;
+    }
+}
+
+export interface IUpdatePurchaseReturnCommand {
+    id?: string;
+    purchaseReturnDate?: Date;
+    referenceNo?: string;
+    warehouseId?: string;
+    supplierId?: string;
+    purchaseReturnStatusId?: string;
+    attachmentUrl?: string | undefined;
+    subTotal?: number;
+    taxRate?: number | undefined;
+    taxAmount?: number | undefined;
+    discountType?: DiscountType;
+    discountRate?: number | undefined;
+    discountAmount?: number | undefined;
+    shippingCost?: number | undefined;
+    grandTotal?: number;
+    note?: string | undefined;
+    purchaseReturnDetails?: PurchaseReturnDetailModel[];
     cacheKey?: string;
 }
 

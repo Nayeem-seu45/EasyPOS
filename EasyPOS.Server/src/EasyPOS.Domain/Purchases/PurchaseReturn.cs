@@ -2,13 +2,14 @@
 
 namespace EasyPOS.Domain.Purchases;
 
-public class Purchase : BaseAuditableEntity
+public class PurchaseReturn : BaseAuditableEntity
 {
-    public DateOnly PurchaseDate { get; set; }
+    public DateOnly ReturnDate { get; set; }
+    public string PurchaseReferenceNo { get; set; }
     public string ReferenceNo { get; set; }
-    public Guid WarehouseId { get; set; }
+    public Guid? WarehouseId { get; set; }
     public Guid SupplierId { get; set; }
-    public Guid PurchaseStatusId { get; set; }
+    public Guid PurchaseId { get; set; }
     public string? AttachmentUrl { get; set; }
     public decimal SubTotal { get; set; }
     public decimal? TaxRate { get; set; }
@@ -19,12 +20,9 @@ public class Purchase : BaseAuditableEntity
     public decimal? ShippingCost { get; set; }
     public decimal GrandTotal { get; set; }
     public string? Note { get; set; }
-    public decimal PaidAmount { get; set; }
-    public decimal DueAmount { get; set; }
-    public Guid? PaymentStatusId { get; set; }
+    public Guid? ReturnStatusId { get; set; }
 
-    public virtual List<PurchaseDetail> PurchaseDetails { get; set; } = [];
-    public virtual List<PurchasePayment> PurchasePayments { get; set; } = [];
-    public virtual List<PurchaseReturn> PurchaseReturns { get; set; } = [];
+    public Purchase Purchase { get; set; } = default!;
+    public virtual List<PurchaseReturnDetail> PurchaseReturnDetails { get; set; } = [];
 
 }

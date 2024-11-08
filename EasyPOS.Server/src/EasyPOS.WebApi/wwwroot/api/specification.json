@@ -3582,6 +3582,405 @@
         ]
       }
     },
+    "/api/PurchaseReturns/GetAll": {
+      "post": {
+        "tags": [
+          "PurchaseReturns"
+        ],
+        "operationId": "GetPurchaseReturns",
+        "requestBody": {
+          "x-name": "query",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetPurchaseReturnListQuery"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedResponseOfPurchaseReturnModel"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/PurchaseReturns/Get/{id}": {
+      "get": {
+        "tags": [
+          "PurchaseReturns"
+        ],
+        "operationId": "GetPurchaseReturn",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PurchaseReturnModel"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/PurchaseReturns/GetByPurchaseId/{purchaseId}": {
+      "get": {
+        "tags": [
+          "PurchaseReturns"
+        ],
+        "operationId": "GetByPurchaseId",
+        "parameters": [
+          {
+            "name": "purchaseId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PurchaseReturnModel"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/PurchaseReturns/GetDetail/{id}": {
+      "get": {
+        "tags": [
+          "PurchaseReturns"
+        ],
+        "operationId": "GetPurchaseReturnDetail",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PurchaseReturnInfoModel"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/PurchaseReturns/Create": {
+      "post": {
+        "tags": [
+          "PurchaseReturns"
+        ],
+        "operationId": "CreatePurchaseReturn",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePurchaseReturnCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "guid"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/PurchaseReturns/Update": {
+      "put": {
+        "tags": [
+          "PurchaseReturns"
+        ],
+        "operationId": "UpdatePurchaseReturn",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePurchaseReturnCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/PurchaseReturns/Delete/{id}": {
+      "delete": {
+        "tags": [
+          "PurchaseReturns"
+        ],
+        "operationId": "DeletePurchaseReturn",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/PurchaseReturns/DeleteMultiple": {
+      "post": {
+        "tags": [
+          "PurchaseReturns"
+        ],
+        "operationId": "DeletePurchaseReturns",
+        "requestBody": {
+          "x-name": "ids",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "guid"
+                }
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/PurchaseReturns/Upload": {
+      "post": {
+        "tags": [
+          "PurchaseReturns"
+        ],
+        "operationId": "PurchaseReturnUpload",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/PurchaseReturns/DeletePurchaseReturnDetail": {
+      "post": {
+        "tags": [
+          "PurchaseReturns"
+        ],
+        "operationId": "DeletePurchaseReturnDetail",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
     "/api/PurchasePayments/GetAll": {
       "post": {
         "tags": [
@@ -11842,6 +12241,521 @@
             }
           }
         ]
+      },
+      "PaginatedResponseOfPurchaseReturnModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PurchaseReturnModel"
+            }
+          },
+          "pageNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "hasPreviousPage": {
+            "type": "boolean"
+          },
+          "hasNextPage": {
+            "type": "boolean"
+          },
+          "optionsDataSources": {
+            "type": "object",
+            "additionalProperties": {}
+          }
+        }
+      },
+      "PurchaseReturnModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "purchaseId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "returnDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "referenceNo": {
+            "type": "string"
+          },
+          "warehouseId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "supplierId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "returnStatusId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "attachmentUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "subTotal": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "taxRate": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "taxAmount": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "discountType": {
+            "$ref": "#/components/schemas/DiscountType"
+          },
+          "discountRate": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "discountAmount": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "shippingCost": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "grandTotal": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "note": {
+            "type": "string",
+            "nullable": true
+          },
+          "supplierName": {
+            "type": "string"
+          },
+          "returnStatus": {
+            "type": "string"
+          },
+          "purchaseReturnDetails": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PurchaseReturnDetailModel"
+            }
+          },
+          "optionsDataSources": {
+            "type": "object",
+            "additionalProperties": {}
+          }
+        }
+      },
+      "PurchaseReturnDetailModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "purchaseReturnId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "productId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "productCode": {
+            "type": "string"
+          },
+          "productName": {
+            "type": "string"
+          },
+          "productUnitCost": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "productUnitPrice": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "productUnitId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "productUnit": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "productUnitDiscount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "purchasedQuantity": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "returnedQuantity": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "stockQuantity": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "batchNo": {
+            "type": "string"
+          },
+          "expiredDate": {
+            "type": "string",
+            "format": "date",
+            "nullable": true
+          },
+          "netUnitCost": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "discountType": {
+            "$ref": "#/components/schemas/DiscountType"
+          },
+          "discountRate": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "discountAmount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "taxMethod": {
+            "$ref": "#/components/schemas/TaxMethod"
+          },
+          "taxRate": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "taxAmount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "totalPrice": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "remarks": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "GetPurchaseReturnListQuery": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/DataGridModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "cacheKey": {
+                "type": "string"
+              }
+            }
+          }
+        ]
+      },
+      "PurchaseReturnInfoModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "purchaseReturnDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "referenceNo": {
+            "type": "string"
+          },
+          "warehouseId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "supplierId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "purchaseReturnStatusId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "attachmentUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "subTotal": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "taxRate": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "taxAmount": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "discountType": {
+            "$ref": "#/components/schemas/DiscountType"
+          },
+          "discountRate": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "discountAmount": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "shippingCost": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "grandTotal": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "paidAmount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "dueAmount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "note": {
+            "type": "string",
+            "nullable": true
+          },
+          "supplierName": {
+            "type": "string"
+          },
+          "purchaseReturnStatus": {
+            "type": "string"
+          },
+          "paymentStatusId": {
+            "type": "string"
+          },
+          "totalQuantity": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "totalDiscount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "totalTaxAmount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "totalItems": {
+            "type": "string"
+          },
+          "companyInfo": {
+            "$ref": "#/components/schemas/CompanyInfoModel"
+          },
+          "supplier": {
+            "$ref": "#/components/schemas/SupplierModel"
+          },
+          "purchaseReturnDetails": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PurchaseReturnDetailModel"
+            }
+          }
+        }
+      },
+      "CreatePurchaseReturnCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "returnDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "referenceNo": {
+            "type": "string"
+          },
+          "purchaseId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "returnStatusId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "attachmentUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "subTotal": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "taxRate": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "taxAmount": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "discountType": {
+            "$ref": "#/components/schemas/DiscountType"
+          },
+          "discountRate": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "discountAmount": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "shippingCost": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "grandTotal": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "note": {
+            "type": "string",
+            "nullable": true
+          },
+          "purchaseReturnDetails": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PurchaseReturnDetailModel"
+            }
+          },
+          "cacheKey": {
+            "type": "string"
+          }
+        }
+      },
+      "UpdatePurchaseReturnCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "purchaseReturnDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "referenceNo": {
+            "type": "string"
+          },
+          "warehouseId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "supplierId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "purchaseReturnStatusId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "attachmentUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "subTotal": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "taxRate": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "taxAmount": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "discountType": {
+            "$ref": "#/components/schemas/DiscountType"
+          },
+          "discountRate": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "discountAmount": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "shippingCost": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "grandTotal": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "note": {
+            "type": "string",
+            "nullable": true
+          },
+          "purchaseReturnDetails": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PurchaseReturnDetailModel"
+            }
+          },
+          "cacheKey": {
+            "type": "string"
+          }
+        }
       },
       "PaginatedResponseOfPurchasePaymentModel": {
         "type": "object",

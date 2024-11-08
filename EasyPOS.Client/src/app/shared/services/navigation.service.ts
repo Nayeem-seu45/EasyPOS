@@ -81,6 +81,24 @@ export class NavigationService {
     this.navigateTo(path, queryParams, relativeToCurrent, skipLocationChange);
   }
 
+
+   /**
+   * Navigate to a route with static data configured in the route definition.
+   * Use this method when the data is already set in the route configuration using the `data` property.
+   *
+   * @param path - The base path of the route (e.g., '/return/create').
+   * @param params - An object representing any route parameters (e.g., { purchaseId: 123 }).
+   */
+   navigateWithRouteData(
+    path: string,
+    params: { [key: string]: any } = {}
+  ): void {
+    const navigationPath = [path, params];
+    this.router.navigate(navigationPath).catch(error => {
+      console.error(`Navigation to ${path} with route data failed: `, error);
+    });
+  }
+
   /**
    * Navigate back to the previous route or to a fallback if no history exists.
    * 
