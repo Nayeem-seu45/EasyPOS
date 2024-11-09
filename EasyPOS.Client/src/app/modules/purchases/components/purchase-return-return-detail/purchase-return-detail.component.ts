@@ -176,6 +176,7 @@ export class PurchaseReturnDetailComponent implements OnInit {
       purchaseId: [CommonConstants.EmptyGuid],
       returnDate: [null],
       referenceNo: [null],
+      purchaseReferenceNo: [null],
       warehouseId: [null],
       supplierId: [null],
       returnStatusId: [null],
@@ -205,7 +206,8 @@ export class PurchaseReturnDetailComponent implements OnInit {
       productUnitId: [null],
       productUnit: [0],
       productUnitDiscount: [0],
-      quantity: [1],
+      purchasedQuantity: [0],
+      returnedQuantity: [1],
       expiredDate: [null],
       batchNo: [null],
       netUnitCost: [0],
@@ -408,7 +410,7 @@ export class PurchaseReturnDetailComponent implements OnInit {
   // #region PurchaseReturnOrder Footer
 
   calculateFooterSection() {
-    this.totalQuantity = this.purchaseReturnDetails.controls.reduce((acc, curr) => acc + (curr.get('quantity').value || 0), 0);
+    this.totalQuantity = this.purchaseReturnDetails.controls.reduce((acc, curr) => acc + (curr.get('returnedQuantity').value || 0), 0);
     this.totalDiscount = parseFloat(this.purchaseReturnDetails.controls.reduce((acc, curr) => acc + (curr.get('discountAmount').value || 0), 0).toFixed(2));
     this.totalTaxAmount = parseFloat(this.purchaseReturnDetails.controls.reduce((acc, curr) => acc + (curr.get('taxAmount').value || 0), 0).toFixed(2));
     this.subTotal = parseFloat(this.purchaseReturnDetails.controls.reduce((acc, curr) => acc + (curr.get('totalPrice').value || 0), 0).toFixed(2));

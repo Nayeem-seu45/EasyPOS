@@ -8,6 +8,7 @@ public record PurchaseReturnModel
     public Guid PurchaseId { get; set; }
     public DateOnly ReturnDate { get; set; }
     public string ReferenceNo { get; set; }
+    public string PurchaseReferenceNo { get; set; }
     public Guid WarehouseId { get; set; }
     public Guid SupplierId { get; set; }
     public Guid ReturnStatusId { get; set; }

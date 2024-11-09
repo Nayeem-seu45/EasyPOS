@@ -1,4 +1,5 @@
-﻿using EasyPOS.Application.Features.PurchaseReturns.Models;
+﻿using EasyPOS.Application.Common.Enums;
+using EasyPOS.Application.Features.PurchaseReturns.Models;
 
 namespace EasyPOS.Application.Features.PurchaseReturns.Queries;
 
@@ -11,7 +12,9 @@ public record GetPurchaseReturnByPurchaseIdQuery(Guid PurchaseId) : ICacheableQu
     public bool? AllowCache => false;
 }
 
-internal sealed class GetPurchaseReturnByPurchaseIdQueryHandler(ISqlConnectionFactory sqlConnectionFactory)
+internal sealed class GetPurchaseReturnByPurchaseIdQueryHandler(
+    ISqlConnectionFactory sqlConnectionFactory, 
+    ICommonQueryService commonQueryService)
     : IQueryHandler<GetPurchaseReturnByPurchaseIdQuery, PurchaseReturnModel>
 {
     public async Task<Result<PurchaseReturnModel>> Handle(GetPurchaseReturnByPurchaseIdQuery request, CancellationToken cancellationToken)
@@ -23,11 +26,9 @@ internal sealed class GetPurchaseReturnByPurchaseIdQueryHandler(ISqlConnectionFa
         var sql = $"""
             SELECT 
                 t.Id AS {nameof(PurchaseReturnModel.PurchaseId)},
-                --t.ReturnDate AS {nameof(PurchaseReturnModel.ReturnDate)},
-                t.ReferenceNo AS {nameof(PurchaseReturnModel.ReferenceNo)},
+                t.ReferenceNo AS {nameof(PurchaseReturnModel.PurchaseReferenceNo)},
                 t.WarehouseId AS {nameof(PurchaseReturnModel.WarehouseId)},
                 t.SupplierId AS {nameof(PurchaseReturnModel.SupplierId)},
-                --t.ReturnStatusId AS {nameof(PurchaseReturnModel.ReturnStatusId)},
                 t.AttachmentUrl AS {nameof(PurchaseReturnModel.AttachmentUrl)},
                 t.SubTotal AS {nameof(PurchaseReturnModel.SubTotal)},
                 t.TaxRate AS {nameof(PurchaseReturnModel.TaxRate)},
@@ -89,6 +90,13 @@ internal sealed class GetPurchaseReturnByPurchaseIdQueryHandler(ISqlConnectionFa
         );
 
         var purchase = purchaseDictionary.Values.FirstOrDefault();
+        purchase.ReturnDate = DateOnly.FromDateTime(DateTime.Now);
+        var returnStatusId = await commonQueryService.GetLookupDetailIdAsync((int)PurchaseReturnStatus.Completed, cancellationToken);
+        if (!returnStatusId.IsNullOrEmpty())
+        {
+            purchase.ReturnStatusId = returnStatusId.Value;
+        }
+
         return purchase != null ? Result.Success(purchase) : Result.Failure<PurchaseReturnModel>(Error.Failure(nameof(PurchaseReturnModel), ErrorMessages.NotFound));
     }
 }

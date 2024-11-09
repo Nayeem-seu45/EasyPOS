@@ -17,4 +17,5 @@ public enum LookupDevCode
     QuotationStatus = 113,
     ProductTransferStatus = 114,
     PurchaseReturnStatus = 115,
+    SaleReturnStatus = 116,
 }

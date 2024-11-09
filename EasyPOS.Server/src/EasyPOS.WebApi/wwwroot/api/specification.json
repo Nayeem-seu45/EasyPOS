@@ -12295,6 +12295,9 @@
           "referenceNo": {
             "type": "string"
           },
+          "purchaseReferenceNo": {
+            "type": "string"
+          },
           "warehouseId": {
             "type": "string",
             "format": "guid"

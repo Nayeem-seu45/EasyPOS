@@ -8,10 +8,14 @@
           <app-input-date label="Date" formControlName="returnDate" [required]="true" />
         </div>
 
-        <!-- <div class="field col-12 md:col-4">
-          <app-input-text label="Reference No" formControlName="referenceNo" [required]="true" [readonly]="false" />
-          <app-validator-msg [control]="f['referenceNo']" />
-        </div> -->
+        <div class="field col-12 md:col-4">
+          <app-input-text label="Purchase Reference" formControlName="purchaseReferenceNo" [required]="false" [readonly]="true" [disabled]="true" />
+        </div>
+
+        <div class="field col-12 md:col-4">
+          <app-input-select label="Return Status" formControlName="returnStatusId"
+            [options]="optionsDataSources?.['returnStatusSelectList']" [required]="true" [showClear]="false" />
+        </div>
 
         <!-- <div class="field col-12 md:col-4">
           <app-input-select label="Warehouse" formControlName="warehouseId"
@@ -22,11 +26,6 @@
           <app-input-select label="Supplier" formControlName="supplierId"
             [options]="optionsDataSources?.['suppliersSelectList']" [required]="true" />
         </div> -->
-
-        <div class="field col-12 md:col-4">
-          <app-input-select label="Return Status" formControlName="returnStatusId"
-            [options]="optionsDataSources?.['returnStatusSelectList']" [required]="true" />
-        </div>
 
         <div class="mt-3 field col-12 md:col-4">
           <app-input-file-adv [maxFileSize]="100000000" mode="basic" location="images"
@@ -39,8 +38,9 @@
               <tr>
                 <th style="min-width:100px">Name</th>
                 <th style="min-width:70px">Code</th>
-                <th style="min-width:70px">Quantity</th>
                 <th style="min-width:70px">Batch No</th>
+                <th style="min-width:70px">Qty Purhcased</th>
+                <th style="min-width:100px; max-width: 120px;">Qty Return</th>
                 <!-- <th style="min-width:70px">Expired Date</th> -->
                 <th style="min-width:70px">Net Unit Cost</th>
                 <th style="min-width:70px">Discount</th>
@@ -54,22 +54,23 @@
                 <td>{{ field.get('productName').value }} <i class="pi pi-pen-to-square product-edit-icon" (click)="updateOrderDetail(i)"></i></td>
                 <td>{{ field.get('productCode').value }}</td>
                 <td>
-                  <app-input-number formControlName="quantity" textAlign="center" (onChange)="onItemPropsChange(i)" [showButtons]="true" [min]="1" />
-                </td>
-                <td>
                   <app-input-text formControlName="batchNo" />
+                </td>
+                <td>{{ field.get('purchasedQuantity').value }}</td>
+                <td>
+                  <app-input-number formControlName="returnedQuantity" textAlign="center" (onChange)="onItemPropsChange(i)" [showButtons]="true" [min]="1" buttonLayout="horizontal" />
                 </td>
                 <!-- <td>
                   <app-input-decimal formControlName="expiredDate" textAlign="center" (ngModelChange)="onItemPropsChange(i)" />
                 </td> -->
                 <td>
-                  <app-input-decimal formControlName="netUnitCost" textAlign="center"  />
+                  {{ field.get('netUnitCost').value }}
                 </td>
                 <td>
-                  <app-input-decimal formControlName="discountAmount" textAlign="center"   />
+                  {{ field.get('discountAmount').value }}
                 </td>
                 <td>
-                  <app-input-decimal formControlName="taxAmount" textAlign="center"  />
+                  {{ field.get('taxAmount').value }}
                 </td>
                 <td >
                   <div class="text-right mr-2">

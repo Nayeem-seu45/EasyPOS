@@ -18887,6 +18887,7 @@ export class PurchaseReturnModel implements IPurchaseReturnModel {
     purchaseId?: string;
     returnDate?: Date;
     referenceNo?: string;
+    purchaseReferenceNo?: string;
     warehouseId?: string;
     supplierId?: string;
     returnStatusId?: string;
@@ -18920,6 +18921,7 @@ export class PurchaseReturnModel implements IPurchaseReturnModel {
             this.purchaseId = _data["purchaseId"];
             this.returnDate = _data["returnDate"] ? new Date(_data["returnDate"].toString()) : <any>undefined;
             this.referenceNo = _data["referenceNo"];
+            this.purchaseReferenceNo = _data["purchaseReferenceNo"];
             this.warehouseId = _data["warehouseId"];
             this.supplierId = _data["supplierId"];
             this.returnStatusId = _data["returnStatusId"];
@@ -18963,6 +18965,7 @@ export class PurchaseReturnModel implements IPurchaseReturnModel {
         data["purchaseId"] = this.purchaseId;
         data["returnDate"] = this.returnDate ? formatDate(this.returnDate) : <any>undefined;
         data["referenceNo"] = this.referenceNo;
+        data["purchaseReferenceNo"] = this.purchaseReferenceNo;
         data["warehouseId"] = this.warehouseId;
         data["supplierId"] = this.supplierId;
         data["returnStatusId"] = this.returnStatusId;
@@ -18999,6 +19002,7 @@ export interface IPurchaseReturnModel {
     purchaseId?: string;
     returnDate?: Date;
     referenceNo?: string;
+    purchaseReferenceNo?: string;
     warehouseId?: string;
     supplierId?: string;
     returnStatusId?: string;
