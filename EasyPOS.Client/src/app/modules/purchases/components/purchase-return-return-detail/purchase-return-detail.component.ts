@@ -62,7 +62,6 @@ export class PurchaseReturnDetailComponent implements OnInit {
   ngOnInit(): void {
 
     this.processFrom = this.activatedRoute.snapshot.data["processFrom"];
-    this.purchaseId = this.activatedRoute.snapshot.data["purchaseId"];
 
     this.activatedRoute.paramMap.subscribe(params => {
       this.id = params.get('id')

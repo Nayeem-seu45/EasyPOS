@@ -1,0 +1,9 @@
+﻿<app-data-grid 
+    #grid
+    [pageId]="pageId"
+    [detailComponent]="detailComponent" 
+    [listComponent]="this"  
+    [entityClient]="entityClient"  
+    (handleGridRowAction)="onhandleGridRowAction($event)"
+/>
+

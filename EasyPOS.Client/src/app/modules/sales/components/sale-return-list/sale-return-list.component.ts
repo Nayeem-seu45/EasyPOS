@@ -1,6 +1,6 @@
 ﻿import { Component, inject, ViewChild } from '@angular/core';
-import { SaleDetailComponent } from '../sale-detail/sale-detail.component';
-import { SaleInfoModel, SaleModel, SalesClient } from 'src/app/modules/generated-clients/api-service';
+import { SaleReturnDetailComponent } from '../sale-return-detail/sale-return-detail.component';
+import { SaleReturnInfoModel, SaleReturnModel, SaleReturnsClient } from 'src/app/modules/generated-clients/api-service';
 import { DatePipe } from '@angular/common';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
@@ -8,28 +8,28 @@ import { CommonConstants } from 'src/app/core/contants/common';
 import { DataGridComponent } from 'src/app/shared/components/data-grid/data-grid.component';
 import { CustomDialogService } from 'src/app/shared/services/custom-dialog.service';
 import { CommonUtils } from 'src/app/shared/Utilities/common-utilities';
-import { SalePaymentDetailComponent } from '../sale-payment-detail/sale-payment-detail.component';
 import { SalePaymentListComponent } from '../sale-payment-list/sale-payment-list.component';
-import { NavigationService } from 'src/app/shared/services/navigation.service';
+import { SalePaymentDetailComponent } from '../sale-payment-detail/sale-payment-detail.component';
+// import { SaleReturnPaymentDetailComponent } from '../sale-return-payment-detail/sale-return-payment-detail.component';
+// import { SaleReturnPaymentListComponent } from '../sale-return-payment-list/sale-return-payment-list.component';
 
 @Component({
-  selector: 'app-sale-list',
-  templateUrl: './sale-list.component.html',
-  styleUrl: './sale-list.component.scss',
-  providers: [SalesClient, DatePipe, NavigationService]
+  selector: 'app-sale-return-list',
+  templateUrl: './sale-return-list.component.html',
+  styleUrl: './sale-return-list.component.scss',
+  providers: [SaleReturnsClient, DatePipe]
 })
-export class SaleListComponent {
-  detailComponent = SaleDetailComponent;
-  pageId = '093807c1-a55d-4e3d-4399-08dcd292d151'
+export class SaleReturnListComponent {
+  detailComponent = SaleReturnDetailComponent;
+  pageId = 'e6ad6749-bca1-43b0-00f2-08dd00caa1fb'
 
-  item: SaleInfoModel;
+  item: SaleReturnInfoModel;
 
   @ViewChild('grid') grid: DataGridComponent;
-  entityClient: SalesClient = inject(SalesClient);
+  entityClient: SaleReturnsClient = inject(SaleReturnsClient);
 
   constructor(private customDialogService: CustomDialogService,
-    private datePipe: DatePipe,
-    private navigationService: NavigationService
+    private datePipe: DatePipe
   ) {
 
   }
@@ -41,17 +41,14 @@ export class SaleListComponent {
     } else if (event.action.actionName === 'paymentList') {
       this.openPaymentList(event);
     } else if (event.action.actionName === 'pdf') {
-      this.generateSaleDetailPdf(event);
-    } else if (event.action.actionName === 'return') {
-      console.log('return', event)
-      this.navigationService.navigateWithRouteData(`/sales/return/create/${event.data.id}`)
+      this.generateSaleReturnDetailPdf(event);
     }
   }
 
   private openPaymentList(event: any) {
     console.log(event)
     this.customDialogService.handleCloseIcon = false;
-    const paymentListDialogRef = this.customDialogService.openDialog<SaleModel>(
+    const paymentListDialogRef = this.customDialogService.openDialog<SaleReturnModel>(
       SalePaymentListComponent,
       event.data,
       'Payment List',
@@ -65,9 +62,9 @@ export class SaleListComponent {
   }
 
   private addPayment(event: any) {
-    this.customDialogService.open<{ id: string; sale: SaleModel; }>(
+    this.customDialogService.open<{ id: string; saleReturn: SaleReturnModel; }>(
       SalePaymentDetailComponent,
-      { id: CommonConstants.EmptyGuid, sale: event.data },
+      { id: CommonConstants.EmptyGuid, saleReturn: event.data },
       'Add Payment').subscribe((succeeded) => {
         if (succeeded) {
           this.grid.refreshGrid();
@@ -75,7 +72,7 @@ export class SaleListComponent {
       });
   }
 
-  private async generateSaleDetailPdf(event: any) {
+  private async generateSaleReturnDetailPdf(event: any) {
 
     await this.getDetailById(event.data.id);
 
@@ -86,15 +83,15 @@ export class SaleListComponent {
   private exportPdf() {
     const doc = new jsPDF('p', 'mm', 'a4'); // Create jsPDF instance
 
-    // Header: Sale Details
+    // Header: SaleReturn Details
     doc.setFontSize(16);
     doc.setTextColor(40);
-    doc.text('Sale Details', 10, 15);
+    doc.text('SaleReturn Details', 10, 15);
 
     // Section: Company and Supplier Info
     const companyText = `From:\n${this.item.companyInfo.name}\n${this.item.companyInfo.address}, ${this.item.companyInfo.city}, ${this.item.companyInfo.country}\nPhone: ${this.item.companyInfo.phone}\nMobile: ${this.item.companyInfo.mobile}\nEmail: ${this.item.companyInfo.email}`;
     const customerText = `Customer:\n${this.item.customer.name}\n${this.item.customer.address}, ${this.item.customer.city}, ${this.item.customer.country}\nPhone: ${this.item.customer.phoneNo}\nMobile: ${this.item.customer.mobile}\nEmail: ${this.item.customer.email}`;
-    const referenceText = `Reference: ${this.item.referenceNo}\nSale Status: ${this.item.saleStatus}\nPayment Status: ${this.item.paymentStatusId}`;
+    const referenceText = `Reference: ${this.item.referenceNo}\nSaleReturn Status: ${this.item.returnStatus}\nPayment Status: ${this.item.paymentStatusId}`;
 
     // Display company, customer, and reference info
     doc.setFontSize(10);
@@ -112,11 +109,11 @@ export class SaleListComponent {
 
     // Section: Items Table
     const itemHeaders = ['#', 'Name', 'Price', 'Quantity', 'Unit Price', 'Discount', 'Tax', 'Sub Total'];
-    const itemBody = this.item.saleDetails.map((detail, index) => [
+    const itemBody = this.item.saleReturnDetails.map((detail, index) => [
       index + 1,
       `${detail.productName} (${detail.productCode})`,
       detail.productUnitCost,
-      detail.quantity,
+      detail.returnedQuantity,
       detail.netUnitPrice.toFixed(2),
       detail.discountAmount.toFixed(2),
       detail.taxAmount.toFixed(2),
@@ -194,7 +191,7 @@ export class SaleListComponent {
           margin: { left: footerLeftMargin }, // Set left margin for the table
           didDrawPage: () => {
             // Save the PDF
-            doc.save('sale-details.pdf');
+            doc.save('saleReturn-details.pdf');
           }
         });
       },

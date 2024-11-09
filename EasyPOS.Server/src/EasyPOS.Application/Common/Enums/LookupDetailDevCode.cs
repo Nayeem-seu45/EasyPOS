@@ -39,6 +39,6 @@ public enum PurchaseReturnStatus
 
 public enum SaleReturnStatus
 {
-    Recieved = 116001,
+    Received = 116001,
     Pending = 116002
 }

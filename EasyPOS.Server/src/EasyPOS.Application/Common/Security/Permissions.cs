@@ -289,6 +289,14 @@ public static class Permissions
         public const string Delete = "Permissions.SalePayments.Delete";
     }
 
+    public static class SaleReturns
+    {
+        public const string View = "Permissions.SaleReturns.View";
+        public const string Create = "Permissions.SaleReturns.Create";
+        public const string Edit = "Permissions.SaleReturns.Edit";
+        public const string Delete = "Permissions.SaleReturns.Delete";
+    }
+
     public static class Couriers
     {
         public const string View = "Permissions.Couriers.View";

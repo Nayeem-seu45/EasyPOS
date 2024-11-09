@@ -2870,6 +2870,527 @@ export class CompanyInfosClient implements ICompanyInfosClient {
     }
 }
 
+export interface ISaleReturnsClient {
+    getAll(query: GetSaleReturnListQuery): Observable<PaginatedResponseOfSaleReturnModel>;
+    get(id: string): Observable<UpsertSaleReturnModel>;
+    getBySaleId(saleId: string): Observable<UpsertSaleReturnModel>;
+    getDetail(id: string): Observable<SaleReturnInfoModel>;
+    create(command: CreateSaleReturnCommand): Observable<string>;
+    update(command: UpdateSaleReturnCommand): Observable<void>;
+    delete(id: string): Observable<void>;
+    deleteMultiple(ids: string[]): Observable<void>;
+    deleteSaleReturnDetail(id: string): Observable<void>;
+}
+
+@Injectable()
+export class SaleReturnsClient implements ISaleReturnsClient {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ?? "";
+    }
+
+    getAll(query: GetSaleReturnListQuery): Observable<PaginatedResponseOfSaleReturnModel> {
+        let url_ = this.baseUrl + "/api/SaleReturns/GetAll";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(query);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            withCredentials: true,
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAll(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAll(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<PaginatedResponseOfSaleReturnModel>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<PaginatedResponseOfSaleReturnModel>;
+        }));
+    }
+
+    protected processGetAll(response: HttpResponseBase): Observable<PaginatedResponseOfSaleReturnModel> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = PaginatedResponseOfSaleReturnModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    get(id: string): Observable<UpsertSaleReturnModel> {
+        let url_ = this.baseUrl + "/api/SaleReturns/Get/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            withCredentials: true,
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGet(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGet(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<UpsertSaleReturnModel>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<UpsertSaleReturnModel>;
+        }));
+    }
+
+    protected processGet(response: HttpResponseBase): Observable<UpsertSaleReturnModel> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = UpsertSaleReturnModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    getBySaleId(saleId: string): Observable<UpsertSaleReturnModel> {
+        let url_ = this.baseUrl + "/api/SaleReturns/GetBySaleId/{saleId}";
+        if (saleId === undefined || saleId === null)
+            throw new Error("The parameter 'saleId' must be defined.");
+        url_ = url_.replace("{saleId}", encodeURIComponent("" + saleId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            withCredentials: true,
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetBySaleId(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetBySaleId(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<UpsertSaleReturnModel>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<UpsertSaleReturnModel>;
+        }));
+    }
+
+    protected processGetBySaleId(response: HttpResponseBase): Observable<UpsertSaleReturnModel> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = UpsertSaleReturnModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    getDetail(id: string): Observable<SaleReturnInfoModel> {
+        let url_ = this.baseUrl + "/api/SaleReturns/GetDetail/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            withCredentials: true,
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetDetail(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetDetail(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<SaleReturnInfoModel>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<SaleReturnInfoModel>;
+        }));
+    }
+
+    protected processGetDetail(response: HttpResponseBase): Observable<SaleReturnInfoModel> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = SaleReturnInfoModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    create(command: CreateSaleReturnCommand): Observable<string> {
+        let url_ = this.baseUrl + "/api/SaleReturns/Create";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            withCredentials: true,
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreate(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<string>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<string>;
+        }));
+    }
+
+    protected processCreate(response: HttpResponseBase): Observable<string> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 201) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result201: any = null;
+            let resultData201 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result201 = resultData201 !== undefined ? resultData201 : <any>null;
+    
+            return _observableOf(result201);
+            }));
+        } else if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ProblemDetails.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    update(command: UpdateSaleReturnCommand): Observable<void> {
+        let url_ = this.baseUrl + "/api/SaleReturns/Update";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            withCredentials: true,
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+            })
+        };
+
+        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdate(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processUpdate(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ProblemDetails.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            }));
+        } else if (status === 404) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("A server side error occurred.", status, _responseText, _headers);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    delete(id: string): Observable<void> {
+        let url_ = this.baseUrl + "/api/SaleReturns/Delete/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            withCredentials: true,
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDelete(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDelete(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processDelete(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ProblemDetails.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    deleteMultiple(ids: string[]): Observable<void> {
+        let url_ = this.baseUrl + "/api/SaleReturns/DeleteMultiple";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(ids);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            withCredentials: true,
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDeleteMultiple(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDeleteMultiple(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processDeleteMultiple(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ProblemDetails.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    deleteSaleReturnDetail(id: string): Observable<void> {
+        let url_ = this.baseUrl + "/api/SaleReturns/DeleteSaleReturnDetail?";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined and cannot be null.");
+        else
+            url_ += "id=" + encodeURIComponent("" + id) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            withCredentials: true,
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDeleteSaleReturnDetail(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDeleteSaleReturnDetail(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processDeleteSaleReturnDetail(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ProblemDetails.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+}
+
 export interface ICouponsClient {
     getAll(query: GetCouponListQuery): Observable<PaginatedResponseOfCouponModel>;
     get(id: string): Observable<CouponModel>;
@@ -15930,6 +16451,795 @@ export interface IUpdateCompanyInfoCommand {
     cacheKey?: string;
 }
 
+export class PaginatedResponseOfSaleReturnModel implements IPaginatedResponseOfSaleReturnModel {
+    items?: SaleReturnModel[];
+    pageNumber?: number;
+    totalPages?: number;
+    totalCount?: number;
+    hasPreviousPage?: boolean;
+    hasNextPage?: boolean;
+    optionsDataSources?: { [key: string]: any; };
+
+    constructor(data?: IPaginatedResponseOfSaleReturnModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["items"])) {
+                this.items = [] as any;
+                for (let item of _data["items"])
+                    this.items!.push(SaleReturnModel.fromJS(item));
+            }
+            this.pageNumber = _data["pageNumber"];
+            this.totalPages = _data["totalPages"];
+            this.totalCount = _data["totalCount"];
+            this.hasPreviousPage = _data["hasPreviousPage"];
+            this.hasNextPage = _data["hasNextPage"];
+            if (_data["optionsDataSources"]) {
+                this.optionsDataSources = {} as any;
+                for (let key in _data["optionsDataSources"]) {
+                    if (_data["optionsDataSources"].hasOwnProperty(key))
+                        (<any>this.optionsDataSources)![key] = _data["optionsDataSources"][key];
+                }
+            }
+        }
+    }
+
+    static fromJS(data: any): PaginatedResponseOfSaleReturnModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new PaginatedResponseOfSaleReturnModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        data["pageNumber"] = this.pageNumber;
+        data["totalPages"] = this.totalPages;
+        data["totalCount"] = this.totalCount;
+        data["hasPreviousPage"] = this.hasPreviousPage;
+        data["hasNextPage"] = this.hasNextPage;
+        if (this.optionsDataSources) {
+            data["optionsDataSources"] = {};
+            for (let key in this.optionsDataSources) {
+                if (this.optionsDataSources.hasOwnProperty(key))
+                    (<any>data["optionsDataSources"])[key] = (<any>this.optionsDataSources)[key];
+            }
+        }
+        return data;
+    }
+}
+
+export interface IPaginatedResponseOfSaleReturnModel {
+    items?: SaleReturnModel[];
+    pageNumber?: number;
+    totalPages?: number;
+    totalCount?: number;
+    hasPreviousPage?: boolean;
+    hasNextPage?: boolean;
+    optionsDataSources?: { [key: string]: any; };
+}
+
+export class SaleReturnModel implements ISaleReturnModel {
+    id?: string;
+    returnDate?: Date;
+    soldReferenceNo?: string | undefined;
+    referenceNo?: string | undefined;
+    warehouseId?: string;
+    customerId?: string;
+    billerId?: string;
+    attachmentUrl?: string | undefined;
+    returnStatusId?: string | undefined;
+    paymentStatusId?: string | undefined;
+    taxRate?: number | undefined;
+    taxAmount?: number | undefined;
+    discountAmount?: number | undefined;
+    discountRate?: number | undefined;
+    discountType?: DiscountType;
+    shippingCost?: number | undefined;
+    grandTotal?: number;
+    paidAmount?: number;
+    dueAmount?: number;
+    returnNote?: string | undefined;
+    staffNote?: string | undefined;
+    warehouseName?: string;
+    customerName?: string;
+    returnStatus?: string;
+    paymentStatus?: string;
+    saleReturnDetails?: SaleReturnDetailModel[];
+    optionsDataSources?: { [key: string]: any; };
+
+    constructor(data?: ISaleReturnModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.returnDate = _data["returnDate"] ? new Date(_data["returnDate"].toString()) : <any>undefined;
+            this.soldReferenceNo = _data["soldReferenceNo"];
+            this.referenceNo = _data["referenceNo"];
+            this.warehouseId = _data["warehouseId"];
+            this.customerId = _data["customerId"];
+            this.billerId = _data["billerId"];
+            this.attachmentUrl = _data["attachmentUrl"];
+            this.returnStatusId = _data["returnStatusId"];
+            this.paymentStatusId = _data["paymentStatusId"];
+            this.taxRate = _data["taxRate"];
+            this.taxAmount = _data["taxAmount"];
+            this.discountAmount = _data["discountAmount"];
+            this.discountRate = _data["discountRate"];
+            this.discountType = _data["discountType"];
+            this.shippingCost = _data["shippingCost"];
+            this.grandTotal = _data["grandTotal"];
+            this.paidAmount = _data["paidAmount"];
+            this.dueAmount = _data["dueAmount"];
+            this.returnNote = _data["returnNote"];
+            this.staffNote = _data["staffNote"];
+            this.warehouseName = _data["warehouseName"];
+            this.customerName = _data["customerName"];
+            this.returnStatus = _data["returnStatus"];
+            this.paymentStatus = _data["paymentStatus"];
+            if (Array.isArray(_data["saleReturnDetails"])) {
+                this.saleReturnDetails = [] as any;
+                for (let item of _data["saleReturnDetails"])
+                    this.saleReturnDetails!.push(SaleReturnDetailModel.fromJS(item));
+            }
+            if (_data["optionsDataSources"]) {
+                this.optionsDataSources = {} as any;
+                for (let key in _data["optionsDataSources"]) {
+                    if (_data["optionsDataSources"].hasOwnProperty(key))
+                        (<any>this.optionsDataSources)![key] = _data["optionsDataSources"][key];
+                }
+            }
+        }
+    }
+
+    static fromJS(data: any): SaleReturnModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new SaleReturnModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["returnDate"] = this.returnDate ? formatDate(this.returnDate) : <any>undefined;
+        data["soldReferenceNo"] = this.soldReferenceNo;
+        data["referenceNo"] = this.referenceNo;
+        data["warehouseId"] = this.warehouseId;
+        data["customerId"] = this.customerId;
+        data["billerId"] = this.billerId;
+        data["attachmentUrl"] = this.attachmentUrl;
+        data["returnStatusId"] = this.returnStatusId;
+        data["paymentStatusId"] = this.paymentStatusId;
+        data["taxRate"] = this.taxRate;
+        data["taxAmount"] = this.taxAmount;
+        data["discountAmount"] = this.discountAmount;
+        data["discountRate"] = this.discountRate;
+        data["discountType"] = this.discountType;
+        data["shippingCost"] = this.shippingCost;
+        data["grandTotal"] = this.grandTotal;
+        data["paidAmount"] = this.paidAmount;
+        data["dueAmount"] = this.dueAmount;
+        data["returnNote"] = this.returnNote;
+        data["staffNote"] = this.staffNote;
+        data["warehouseName"] = this.warehouseName;
+        data["customerName"] = this.customerName;
+        data["returnStatus"] = this.returnStatus;
+        data["paymentStatus"] = this.paymentStatus;
+        if (Array.isArray(this.saleReturnDetails)) {
+            data["saleReturnDetails"] = [];
+            for (let item of this.saleReturnDetails)
+                data["saleReturnDetails"].push(item.toJSON());
+        }
+        if (this.optionsDataSources) {
+            data["optionsDataSources"] = {};
+            for (let key in this.optionsDataSources) {
+                if (this.optionsDataSources.hasOwnProperty(key))
+                    (<any>data["optionsDataSources"])[key] = (<any>this.optionsDataSources)[key];
+            }
+        }
+        return data;
+    }
+}
+
+export interface ISaleReturnModel {
+    id?: string;
+    returnDate?: Date;
+    soldReferenceNo?: string | undefined;
+    referenceNo?: string | undefined;
+    warehouseId?: string;
+    customerId?: string;
+    billerId?: string;
+    attachmentUrl?: string | undefined;
+    returnStatusId?: string | undefined;
+    paymentStatusId?: string | undefined;
+    taxRate?: number | undefined;
+    taxAmount?: number | undefined;
+    discountAmount?: number | undefined;
+    discountRate?: number | undefined;
+    discountType?: DiscountType;
+    shippingCost?: number | undefined;
+    grandTotal?: number;
+    paidAmount?: number;
+    dueAmount?: number;
+    returnNote?: string | undefined;
+    staffNote?: string | undefined;
+    warehouseName?: string;
+    customerName?: string;
+    returnStatus?: string;
+    paymentStatus?: string;
+    saleReturnDetails?: SaleReturnDetailModel[];
+    optionsDataSources?: { [key: string]: any; };
+}
+
+export enum DiscountType {
+    Fixed = 1,
+    Percentage = 2,
+}
+
+export class SaleReturnDetailModel implements ISaleReturnDetailModel {
+    id?: string;
+    saleReturnId?: string;
+    productId?: string;
+    productCode?: string;
+    productName?: string;
+    productUnitCost?: number;
+    productUnitPrice?: number;
+    productUnitId?: string;
+    productUnit?: number;
+    productUnitDiscount?: number;
+    soldQuantity?: number;
+    returnedQuantity?: number;
+    stock?: number;
+    batchNo?: string;
+    expiredDate?: Date | undefined;
+    netUnitPrice?: number;
+    discountType?: DiscountType;
+    discountRate?: number | undefined;
+    discountAmount?: number;
+    taxMethod?: TaxMethod;
+    taxRate?: number;
+    taxAmount?: number;
+    totalPrice?: number;
+    remarks?: string | undefined;
+
+    constructor(data?: ISaleReturnDetailModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.saleReturnId = _data["saleReturnId"];
+            this.productId = _data["productId"];
+            this.productCode = _data["productCode"];
+            this.productName = _data["productName"];
+            this.productUnitCost = _data["productUnitCost"];
+            this.productUnitPrice = _data["productUnitPrice"];
+            this.productUnitId = _data["productUnitId"];
+            this.productUnit = _data["productUnit"];
+            this.productUnitDiscount = _data["productUnitDiscount"];
+            this.soldQuantity = _data["soldQuantity"];
+            this.returnedQuantity = _data["returnedQuantity"];
+            this.stock = _data["stock"];
+            this.batchNo = _data["batchNo"];
+            this.expiredDate = _data["expiredDate"] ? new Date(_data["expiredDate"].toString()) : <any>undefined;
+            this.netUnitPrice = _data["netUnitPrice"];
+            this.discountType = _data["discountType"];
+            this.discountRate = _data["discountRate"];
+            this.discountAmount = _data["discountAmount"];
+            this.taxMethod = _data["taxMethod"];
+            this.taxRate = _data["taxRate"];
+            this.taxAmount = _data["taxAmount"];
+            this.totalPrice = _data["totalPrice"];
+            this.remarks = _data["remarks"];
+        }
+    }
+
+    static fromJS(data: any): SaleReturnDetailModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new SaleReturnDetailModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["saleReturnId"] = this.saleReturnId;
+        data["productId"] = this.productId;
+        data["productCode"] = this.productCode;
+        data["productName"] = this.productName;
+        data["productUnitCost"] = this.productUnitCost;
+        data["productUnitPrice"] = this.productUnitPrice;
+        data["productUnitId"] = this.productUnitId;
+        data["productUnit"] = this.productUnit;
+        data["productUnitDiscount"] = this.productUnitDiscount;
+        data["soldQuantity"] = this.soldQuantity;
+        data["returnedQuantity"] = this.returnedQuantity;
+        data["stock"] = this.stock;
+        data["batchNo"] = this.batchNo;
+        data["expiredDate"] = this.expiredDate ? formatDate(this.expiredDate) : <any>undefined;
+        data["netUnitPrice"] = this.netUnitPrice;
+        data["discountType"] = this.discountType;
+        data["discountRate"] = this.discountRate;
+        data["discountAmount"] = this.discountAmount;
+        data["taxMethod"] = this.taxMethod;
+        data["taxRate"] = this.taxRate;
+        data["taxAmount"] = this.taxAmount;
+        data["totalPrice"] = this.totalPrice;
+        data["remarks"] = this.remarks;
+        return data;
+    }
+}
+
+export interface ISaleReturnDetailModel {
+    id?: string;
+    saleReturnId?: string;
+    productId?: string;
+    productCode?: string;
+    productName?: string;
+    productUnitCost?: number;
+    productUnitPrice?: number;
+    productUnitId?: string;
+    productUnit?: number;
+    productUnitDiscount?: number;
+    soldQuantity?: number;
+    returnedQuantity?: number;
+    stock?: number;
+    batchNo?: string;
+    expiredDate?: Date | undefined;
+    netUnitPrice?: number;
+    discountType?: DiscountType;
+    discountRate?: number | undefined;
+    discountAmount?: number;
+    taxMethod?: TaxMethod;
+    taxRate?: number;
+    taxAmount?: number;
+    totalPrice?: number;
+    remarks?: string | undefined;
+}
+
+export enum TaxMethod {
+    Exclusive = 1,
+    Inclusive = 2,
+}
+
+export class GetSaleReturnListQuery extends DataGridModel implements IGetSaleReturnListQuery {
+    cacheKey?: string;
+
+    constructor(data?: IGetSaleReturnListQuery) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+        if (_data) {
+            this.cacheKey = _data["cacheKey"];
+        }
+    }
+
+    static override fromJS(data: any): GetSaleReturnListQuery {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetSaleReturnListQuery();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["cacheKey"] = this.cacheKey;
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IGetSaleReturnListQuery extends IDataGridModel {
+    cacheKey?: string;
+}
+
+export class UpsertSaleReturnModel implements IUpsertSaleReturnModel {
+    id?: string;
+    saleId?: string;
+    returnDate?: Date;
+    soldReferenceNo?: string | undefined;
+    referenceNo?: string | undefined;
+    warehouseId?: string;
+    customerId?: string;
+    customer?: string | undefined;
+    billerId?: string;
+    attachmentUrl?: string | undefined;
+    returnStatusId?: string | undefined;
+    paymentStatusId?: string | undefined;
+    subTotal?: number;
+    taxRate?: number | undefined;
+    taxAmount?: number | undefined;
+    discountType?: DiscountType | undefined;
+    discountAmount?: number | undefined;
+    discountRate?: number | undefined;
+    shippingCost?: number | undefined;
+    grandTotal?: number;
+    returnNote?: string | undefined;
+    staffNote?: string | undefined;
+    saleReturnDetails?: SaleReturnDetailModel[];
+    optionsDataSources?: { [key: string]: any; };
+
+    constructor(data?: IUpsertSaleReturnModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.saleId = _data["saleId"];
+            this.returnDate = _data["returnDate"] ? new Date(_data["returnDate"].toString()) : <any>undefined;
+            this.soldReferenceNo = _data["soldReferenceNo"];
+            this.referenceNo = _data["referenceNo"];
+            this.warehouseId = _data["warehouseId"];
+            this.customerId = _data["customerId"];
+            this.customer = _data["customer"];
+            this.billerId = _data["billerId"];
+            this.attachmentUrl = _data["attachmentUrl"];
+            this.returnStatusId = _data["returnStatusId"];
+            this.paymentStatusId = _data["paymentStatusId"];
+            this.subTotal = _data["subTotal"];
+            this.taxRate = _data["taxRate"];
+            this.taxAmount = _data["taxAmount"];
+            this.discountType = _data["discountType"];
+            this.discountAmount = _data["discountAmount"];
+            this.discountRate = _data["discountRate"];
+            this.shippingCost = _data["shippingCost"];
+            this.grandTotal = _data["grandTotal"];
+            this.returnNote = _data["returnNote"];
+            this.staffNote = _data["staffNote"];
+            if (Array.isArray(_data["saleReturnDetails"])) {
+                this.saleReturnDetails = [] as any;
+                for (let item of _data["saleReturnDetails"])
+                    this.saleReturnDetails!.push(SaleReturnDetailModel.fromJS(item));
+            }
+            if (_data["optionsDataSources"]) {
+                this.optionsDataSources = {} as any;
+                for (let key in _data["optionsDataSources"]) {
+                    if (_data["optionsDataSources"].hasOwnProperty(key))
+                        (<any>this.optionsDataSources)![key] = _data["optionsDataSources"][key];
+                }
+            }
+        }
+    }
+
+    static fromJS(data: any): UpsertSaleReturnModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpsertSaleReturnModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["saleId"] = this.saleId;
+        data["returnDate"] = this.returnDate ? formatDate(this.returnDate) : <any>undefined;
+        data["soldReferenceNo"] = this.soldReferenceNo;
+        data["referenceNo"] = this.referenceNo;
+        data["warehouseId"] = this.warehouseId;
+        data["customerId"] = this.customerId;
+        data["customer"] = this.customer;
+        data["billerId"] = this.billerId;
+        data["attachmentUrl"] = this.attachmentUrl;
+        data["returnStatusId"] = this.returnStatusId;
+        data["paymentStatusId"] = this.paymentStatusId;
+        data["subTotal"] = this.subTotal;
+        data["taxRate"] = this.taxRate;
+        data["taxAmount"] = this.taxAmount;
+        data["discountType"] = this.discountType;
+        data["discountAmount"] = this.discountAmount;
+        data["discountRate"] = this.discountRate;
+        data["shippingCost"] = this.shippingCost;
+        data["grandTotal"] = this.grandTotal;
+        data["returnNote"] = this.returnNote;
+        data["staffNote"] = this.staffNote;
+        if (Array.isArray(this.saleReturnDetails)) {
+            data["saleReturnDetails"] = [];
+            for (let item of this.saleReturnDetails)
+                data["saleReturnDetails"].push(item.toJSON());
+        }
+        if (this.optionsDataSources) {
+            data["optionsDataSources"] = {};
+            for (let key in this.optionsDataSources) {
+                if (this.optionsDataSources.hasOwnProperty(key))
+                    (<any>data["optionsDataSources"])[key] = (<any>this.optionsDataSources)[key];
+            }
+        }
+        return data;
+    }
+}
+
+export interface IUpsertSaleReturnModel {
+    id?: string;
+    saleId?: string;
+    returnDate?: Date;
+    soldReferenceNo?: string | undefined;
+    referenceNo?: string | undefined;
+    warehouseId?: string;
+    customerId?: string;
+    customer?: string | undefined;
+    billerId?: string;
+    attachmentUrl?: string | undefined;
+    returnStatusId?: string | undefined;
+    paymentStatusId?: string | undefined;
+    subTotal?: number;
+    taxRate?: number | undefined;
+    taxAmount?: number | undefined;
+    discountType?: DiscountType | undefined;
+    discountAmount?: number | undefined;
+    discountRate?: number | undefined;
+    shippingCost?: number | undefined;
+    grandTotal?: number;
+    returnNote?: string | undefined;
+    staffNote?: string | undefined;
+    saleReturnDetails?: SaleReturnDetailModel[];
+    optionsDataSources?: { [key: string]: any; };
+}
+
+export class SaleReturnInfoModel implements ISaleReturnInfoModel {
+    id?: string;
+    returnDate?: Date;
+    soldReferenceNo?: string | undefined;
+    referenceNo?: string | undefined;
+    warehouseId?: string;
+    customerId?: string;
+    billerId?: string;
+    attachmentUrl?: string | undefined;
+    returnStatusId?: string | undefined;
+    paymentStatusId?: string | undefined;
+    taxRate?: number | undefined;
+    taxAmount?: number | undefined;
+    discountAmount?: number | undefined;
+    discountRate?: number | undefined;
+    discountType?: DiscountType;
+    shippingCost?: number | undefined;
+    subTotal?: number;
+    grandTotal?: number;
+    returnNote?: string | undefined;
+    staffNote?: string | undefined;
+    warehouseName?: string;
+    customerName?: string;
+    returnStatus?: string;
+    paymentStatus?: string;
+    totalQuantity?: number;
+    totalDiscount?: number;
+    totalTaxAmount?: number;
+    totalItems?: string;
+    companyInfo?: CompanyInfoModel;
+    customer?: CustomerModel;
+    saleReturnDetails?: SaleReturnDetailModel[];
+
+    constructor(data?: ISaleReturnInfoModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.returnDate = _data["returnDate"] ? new Date(_data["returnDate"].toString()) : <any>undefined;
+            this.soldReferenceNo = _data["soldReferenceNo"];
+            this.referenceNo = _data["referenceNo"];
+            this.warehouseId = _data["warehouseId"];
+            this.customerId = _data["customerId"];
+            this.billerId = _data["billerId"];
+            this.attachmentUrl = _data["attachmentUrl"];
+            this.returnStatusId = _data["returnStatusId"];
+            this.paymentStatusId = _data["paymentStatusId"];
+            this.taxRate = _data["taxRate"];
+            this.taxAmount = _data["taxAmount"];
+            this.discountAmount = _data["discountAmount"];
+            this.discountRate = _data["discountRate"];
+            this.discountType = _data["discountType"];
+            this.shippingCost = _data["shippingCost"];
+            this.subTotal = _data["subTotal"];
+            this.grandTotal = _data["grandTotal"];
+            this.returnNote = _data["returnNote"];
+            this.staffNote = _data["staffNote"];
+            this.warehouseName = _data["warehouseName"];
+            this.customerName = _data["customerName"];
+            this.returnStatus = _data["returnStatus"];
+            this.paymentStatus = _data["paymentStatus"];
+            this.totalQuantity = _data["totalQuantity"];
+            this.totalDiscount = _data["totalDiscount"];
+            this.totalTaxAmount = _data["totalTaxAmount"];
+            this.totalItems = _data["totalItems"];
+            this.companyInfo = _data["companyInfo"] ? CompanyInfoModel.fromJS(_data["companyInfo"]) : <any>undefined;
+            this.customer = _data["customer"] ? CustomerModel.fromJS(_data["customer"]) : <any>undefined;
+            if (Array.isArray(_data["saleReturnDetails"])) {
+                this.saleReturnDetails = [] as any;
+                for (let item of _data["saleReturnDetails"])
+                    this.saleReturnDetails!.push(SaleReturnDetailModel.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): SaleReturnInfoModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new SaleReturnInfoModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["returnDate"] = this.returnDate ? formatDate(this.returnDate) : <any>undefined;
+        data["soldReferenceNo"] = this.soldReferenceNo;
+        data["referenceNo"] = this.referenceNo;
+        data["warehouseId"] = this.warehouseId;
+        data["customerId"] = this.customerId;
+        data["billerId"] = this.billerId;
+        data["attachmentUrl"] = this.attachmentUrl;
+        data["returnStatusId"] = this.returnStatusId;
+        data["paymentStatusId"] = this.paymentStatusId;
+        data["taxRate"] = this.taxRate;
+        data["taxAmount"] = this.taxAmount;
+        data["discountAmount"] = this.discountAmount;
+        data["discountRate"] = this.discountRate;
+        data["discountType"] = this.discountType;
+        data["shippingCost"] = this.shippingCost;
+        data["subTotal"] = this.subTotal;
+        data["grandTotal"] = this.grandTotal;
+        data["returnNote"] = this.returnNote;
+        data["staffNote"] = this.staffNote;
+        data["warehouseName"] = this.warehouseName;
+        data["customerName"] = this.customerName;
+        data["returnStatus"] = this.returnStatus;
+        data["paymentStatus"] = this.paymentStatus;
+        data["totalQuantity"] = this.totalQuantity;
+        data["totalDiscount"] = this.totalDiscount;
+        data["totalTaxAmount"] = this.totalTaxAmount;
+        data["totalItems"] = this.totalItems;
+        data["companyInfo"] = this.companyInfo ? this.companyInfo.toJSON() : <any>undefined;
+        data["customer"] = this.customer ? this.customer.toJSON() : <any>undefined;
+        if (Array.isArray(this.saleReturnDetails)) {
+            data["saleReturnDetails"] = [];
+            for (let item of this.saleReturnDetails)
+                data["saleReturnDetails"].push(item.toJSON());
+        }
+        return data;
+    }
+}
+
+export interface ISaleReturnInfoModel {
+    id?: string;
+    returnDate?: Date;
+    soldReferenceNo?: string | undefined;
+    referenceNo?: string | undefined;
+    warehouseId?: string;
+    customerId?: string;
+    billerId?: string;
+    attachmentUrl?: string | undefined;
+    returnStatusId?: string | undefined;
+    paymentStatusId?: string | undefined;
+    taxRate?: number | undefined;
+    taxAmount?: number | undefined;
+    discountAmount?: number | undefined;
+    discountRate?: number | undefined;
+    discountType?: DiscountType;
+    shippingCost?: number | undefined;
+    subTotal?: number;
+    grandTotal?: number;
+    returnNote?: string | undefined;
+    staffNote?: string | undefined;
+    warehouseName?: string;
+    customerName?: string;
+    returnStatus?: string;
+    paymentStatus?: string;
+    totalQuantity?: number;
+    totalDiscount?: number;
+    totalTaxAmount?: number;
+    totalItems?: string;
+    companyInfo?: CompanyInfoModel;
+    customer?: CustomerModel;
+    saleReturnDetails?: SaleReturnDetailModel[];
+}
+
+export class CreateSaleReturnCommand extends UpsertSaleReturnModel implements ICreateSaleReturnCommand {
+    cacheKey?: string;
+
+    constructor(data?: ICreateSaleReturnCommand) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+        if (_data) {
+            this.cacheKey = _data["cacheKey"];
+        }
+    }
+
+    static override fromJS(data: any): CreateSaleReturnCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateSaleReturnCommand();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["cacheKey"] = this.cacheKey;
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface ICreateSaleReturnCommand extends IUpsertSaleReturnModel {
+    cacheKey?: string;
+}
+
+export class UpdateSaleReturnCommand extends UpsertSaleReturnModel implements IUpdateSaleReturnCommand {
+    cacheKey?: string;
+
+    constructor(data?: IUpdateSaleReturnCommand) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+        if (_data) {
+            this.cacheKey = _data["cacheKey"];
+        }
+    }
+
+    static override fromJS(data: any): UpdateSaleReturnCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdateSaleReturnCommand();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["cacheKey"] = this.cacheKey;
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IUpdateSaleReturnCommand extends IUpsertSaleReturnModel {
+    cacheKey?: string;
+}
+
 export class PaginatedResponseOfCouponModel implements IPaginatedResponseOfCouponModel {
     items?: CouponModel[];
     pageNumber?: number;
@@ -17542,11 +18852,6 @@ export interface ISaleModel {
     optionsDataSources?: { [key: string]: any; };
 }
 
-export enum DiscountType {
-    Fixed = 1,
-    Percentage = 2,
-}
-
 export class SaleDetailModel implements ISaleDetailModel {
     id?: string;
     saleId?: string;
@@ -17665,11 +18970,6 @@ export interface ISaleDetailModel {
     taxAmount?: number;
     totalPrice?: number;
     remarks?: string | undefined;
-}
-
-export enum TaxMethod {
-    Exclusive = 1,
-    Inclusive = 2,
 }
 
 export class GetSaleListQuery extends DataGridModel implements IGetSaleListQuery {

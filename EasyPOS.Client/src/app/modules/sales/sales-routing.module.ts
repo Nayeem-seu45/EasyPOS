@@ -12,6 +12,8 @@ import { SaleListComponent } from "./components/sale-list/sale-list.component";
 import { SalePaymentDetailComponent } from "./components/sale-payment-detail/sale-payment-detail.component";
 import { SalePaymentListComponent } from "./components/sale-payment-list/sale-payment-list.component";
 import { UpdateSaleDetailComponent } from "./components/update-sale-detail/update-sale-detail.component";
+import { SaleReturnDetailComponent } from "./components/sale-return-detail/sale-return-detail.component";
+import { SaleReturnListComponent } from "./components/sale-return-list/sale-return-list.component";
 
 
 const routes: Routes = [
@@ -19,6 +21,9 @@ const routes: Routes = [
   {path: 'edit/:id', component: SaleDetailComponent},
   {path: 'create', component: SaleDetailComponent},
   {path: 'detail/:id', component: SaleInfoDetailComponent},
+  {path: 'return/create/:saleId', component: SaleReturnDetailComponent, data: {processFrom: 'sale-list'}},
+  {path: 'return/list', component: SaleReturnListComponent, data: {processFrom: 'return-list'}},
+  {path: 'return/edit/:id', component: SaleReturnDetailComponent, data: {processFrom: 'return-list'}},
   {path: 'couriers', component: CourierListComponent},
   {path: 'coupons', component: CouponListComponent},
   {path: 'gift-cards', component: GiftCardListComponent},
@@ -37,7 +42,8 @@ export const salesRoutingComponents = [
   SalePaymentListComponent,
   SalePaymentDetailComponent,
   UpdateSaleDetailComponent,
-
+  SaleReturnListComponent,
+  SaleReturnDetailComponent,
   CourierListComponent,
   CourierDetailComponent,
   CouponListComponent,
