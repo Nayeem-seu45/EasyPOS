@@ -59,6 +59,6 @@ internal sealed class CustomerConfiguration : IEntityTypeConfiguration<Customer>
 
         builder.Property(t => t.CreditLimit)
             .HasColumnType("decimal(18, 2)")
-            .HasDefaultValue(0);
+            .IsRequired(false);
     }
 }

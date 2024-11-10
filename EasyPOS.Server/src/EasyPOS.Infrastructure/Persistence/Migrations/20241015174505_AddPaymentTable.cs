@@ -18,7 +18,7 @@ namespace EasyPOS.Infrastructure.Persistence.Migrations
                 nullable: true);
 
             migrationBuilder.AddColumn<decimal>(
-                name: "PaidAmount",
+                name: "TotalPaidAmount",
                 table: "Sales",
                 type: "decimal(18,2)",
                 nullable: true);
@@ -30,7 +30,7 @@ namespace EasyPOS.Infrastructure.Persistence.Migrations
                 nullable: true);
 
             migrationBuilder.AddColumn<decimal>(
-                name: "PaidAmount",
+                name: "TotalPaidAmount",
                 table: "Purchases",
                 type: "decimal(18,2)",
                 nullable: true);
@@ -122,7 +122,7 @@ namespace EasyPOS.Infrastructure.Persistence.Migrations
                 table: "Sales");
 
             migrationBuilder.DropColumn(
-                name: "PaidAmount",
+                name: "TotalPaidAmount",
                 table: "Sales");
 
             migrationBuilder.DropColumn(
@@ -130,7 +130,7 @@ namespace EasyPOS.Infrastructure.Persistence.Migrations
                 table: "Purchases");
 
             migrationBuilder.DropColumn(
-                name: "PaidAmount",
+                name: "TotalPaidAmount",
                 table: "Purchases");
 
             migrationBuilder.DropColumn(

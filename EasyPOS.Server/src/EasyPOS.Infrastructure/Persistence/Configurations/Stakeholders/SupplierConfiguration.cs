@@ -49,11 +49,7 @@ internal sealed class SupplierConfiguration : IEntityTypeConfiguration<Supplier>
             .HasColumnType("decimal(18,2)")
             .HasDefaultValue(0);
 
-        builder.Property(s => s.PaidAmount)
-            .HasColumnType("decimal(18,2)")
-            .HasDefaultValue(0);
-
-        builder.Property(s => s.TotalAdvanceAmount)
+        builder.Property(s => s.TotalPaidAmount)
             .HasColumnType("decimal(18,2)")
             .HasDefaultValue(0);
 
@@ -61,8 +57,5 @@ internal sealed class SupplierConfiguration : IEntityTypeConfiguration<Supplier>
             .HasColumnType("decimal(18,2)")
             .HasDefaultValue(0);
 
-        builder.Property(s => s.CreditLimit)
-            .HasColumnType("decimal(18,2)")
-            .HasDefaultValue(0);
     }
 }

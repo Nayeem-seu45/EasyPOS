@@ -28,7 +28,7 @@ internal sealed class GetSaleReturnQueryHandler(ISqlConnectionFactory sqlConnect
                 t.ReturnStatusId AS {nameof(SaleReturnModel.ReturnStatusId)},
                 t.PaymentStatusId AS {nameof(SaleReturnModel.PaymentStatusId)},
                 t.GrandTotal AS {nameof(SaleReturnModel.GrandTotal)},
-                t.PaidAmount AS {nameof(SaleReturnModel.PaidAmount)},
+                t.TotalPaidAmount AS {nameof(SaleReturnModel.PaidAmount)},
                 t.DueAmount AS {nameof(SaleReturnModel.DueAmount)},
                 t.ReturnNote AS {nameof(SaleReturnModel.ReturnNote)},
                 t.StaffNote AS {nameof(SaleReturnModel.StaffNote)},

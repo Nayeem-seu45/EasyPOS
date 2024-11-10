@@ -1495,7 +1495,7 @@ namespace EasyPOS.Infrastructure.Persistence.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
-                    b.Property<decimal>("PaidAmount")
+                    b.Property<decimal>("TotalPaidAmount")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("decimal(18, 2)")
                         .HasDefaultValue(0m);
@@ -1713,7 +1713,7 @@ namespace EasyPOS.Infrastructure.Persistence.Migrations
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("PaidAmount")
+                    b.Property<decimal>("TotalPaidAmount")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("decimal(18, 2)")
                         .HasDefaultValue(0m);

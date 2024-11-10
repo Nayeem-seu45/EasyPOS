@@ -869,7 +869,7 @@ namespace EasyPOS.Infrastructure.Persistence.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
-                    b.Property<decimal?>("PaidAmount")
+                    b.Property<decimal?>("TotalPaidAmount")
                         .HasColumnType("decimal(18, 2)");
 
                     b.Property<Guid?>("PaymentStatusId")
@@ -1083,7 +1083,7 @@ namespace EasyPOS.Infrastructure.Persistence.Migrations
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal?>("PaidAmount")
+                    b.Property<decimal?>("TotalPaidAmount")
                         .HasColumnType("decimal(18, 2)");
 
                     b.Property<Guid>("PaymentStatusId")

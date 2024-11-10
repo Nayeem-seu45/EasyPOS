@@ -11,7 +11,7 @@ namespace EasyPOS.Infrastructure.Persistence.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterColumn<decimal>(
-                name: "PaidAmount",
+                name: "TotalPaidAmount",
                 table: "Sales",
                 type: "decimal(18,2)",
                 nullable: false,
@@ -31,7 +31,7 @@ namespace EasyPOS.Infrastructure.Persistence.Migrations
                 oldNullable: true);
 
             migrationBuilder.AlterColumn<decimal>(
-                name: "PaidAmount",
+                name: "TotalPaidAmount",
                 table: "Purchases",
                 type: "decimal(18,2)",
                 nullable: false,
@@ -55,7 +55,7 @@ namespace EasyPOS.Infrastructure.Persistence.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterColumn<decimal>(
-                name: "PaidAmount",
+                name: "TotalPaidAmount",
                 table: "Sales",
                 type: "decimal(18,2)",
                 nullable: true,
@@ -73,7 +73,7 @@ namespace EasyPOS.Infrastructure.Persistence.Migrations
                 oldDefaultValue: 0m);
 
             migrationBuilder.AlterColumn<decimal>(
-                name: "PaidAmount",
+                name: "TotalPaidAmount",
                 table: "Purchases",
                 type: "decimal(18,2)",
                 nullable: true,

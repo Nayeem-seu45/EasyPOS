@@ -16,7 +16,7 @@ namespace EasyPOS.Infrastructure.Persistence.Migrations
                 table: "Quotations");
 
             migrationBuilder.DropColumn(
-                name: "PaidAmount",
+                name: "TotalPaidAmount",
                 table: "Quotations");
 
             migrationBuilder.DropColumn(
@@ -39,7 +39,7 @@ namespace EasyPOS.Infrastructure.Persistence.Migrations
                 defaultValue: 0m);
 
             migrationBuilder.AddColumn<decimal>(
-                name: "PaidAmount",
+                name: "TotalPaidAmount",
                 table: "Quotations",
                 type: "decimal(18,2)",
                 nullable: false,
