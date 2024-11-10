@@ -1,4 +1,5 @@
-﻿using EasyPOS.Application.Features.Sales.SalePayments.Queries;
+﻿using EasyPOS.Application.Features.Sales.Models;
+using EasyPOS.Application.Features.Sales.SalePayments.Queries;
 
 namespace EasyPOS.Application.Features.Sales.Queries;
 

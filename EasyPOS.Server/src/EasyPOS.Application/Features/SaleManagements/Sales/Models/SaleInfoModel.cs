@@ -3,7 +3,7 @@ using EasyPOS.Application.Features.Sales.SalePayments.Queries;
 using EasyPOS.Application.Features.Settings.CompanyInfos.Queries;
 using EasyPOS.Domain.Common.Enums;
 
-namespace EasyPOS.Application.Features.Sales.Queries;
+namespace EasyPOS.Application.Features.Sales.Models;
 
 public class SaleInfoModel
 {

@@ -1,4 +1,4 @@
-﻿using EasyPOS.Application.Features.Sales.Queries;
+﻿using EasyPOS.Application.Features.Sales.Models;
 using EasyPOS.Domain.Sales;
 
 namespace EasyPOS.Application.Features.Sales.Commands;

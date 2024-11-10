@@ -1,6 +1,6 @@
 ﻿using EasyPOS.Application.Common.Enums;
+using EasyPOS.Application.Features.Sales.Models;
 using EasyPOS.Domain.Common.Enums;
-using EasyPOS.Domain.Enums;
 
 namespace EasyPOS.Application.Features.Sales.Queries;
 

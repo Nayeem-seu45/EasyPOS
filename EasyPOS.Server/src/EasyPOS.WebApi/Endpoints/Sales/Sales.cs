@@ -1,6 +1,7 @@
 ﻿using EasyPOS.Application.Features.Common.Queries;
 using EasyPOS.Application.Features.ProductManagement.Queries;
 using EasyPOS.Application.Features.Sales.Commands;
+using EasyPOS.Application.Features.Sales.Models;
 using EasyPOS.Application.Features.Sales.Queries;
 using EasyPOS.Application.Features.UnitManagement.Queries;
 
