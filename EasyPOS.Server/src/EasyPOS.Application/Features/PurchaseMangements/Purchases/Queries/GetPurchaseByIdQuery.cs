@@ -1,4 +1,6 @@
-﻿namespace EasyPOS.Application.Features.Purchases.Queries;
+﻿using EasyPOS.Application.Features.Purchases.Models;
+
+namespace EasyPOS.Application.Features.PurchaseMangements.Purchases.Queries;
 
 public record GetPurchaseByIdQuery(Guid Id) : ICacheableQuery<PurchaseModel>
 {

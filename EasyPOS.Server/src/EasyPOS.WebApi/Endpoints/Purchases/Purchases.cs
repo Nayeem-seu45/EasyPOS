@@ -1,8 +1,8 @@
 ﻿using EasyPOS.Application.Features.Common.Queries;
 using EasyPOS.Application.Features.ProductManagement.Queries;
-using EasyPOS.Application.Features.ProductTransfers.Queries;
+using EasyPOS.Application.Features.PurchaseMangements.Purchases.Queries;
 using EasyPOS.Application.Features.Purchases.Commands;
-using EasyPOS.Application.Features.Purchases.Queries;
+using EasyPOS.Application.Features.Purchases.Models;
 using EasyPOS.Application.Features.UnitManagement.Queries;
 
 namespace EasyPOS.WebApi.Endpoints.Purchases;

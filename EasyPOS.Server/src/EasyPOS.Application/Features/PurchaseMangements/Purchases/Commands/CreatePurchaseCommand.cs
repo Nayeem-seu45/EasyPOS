@@ -1,5 +1,4 @@
-﻿using EasyPOS.Application.Features.ProductTransfers.Queries;
-using EasyPOS.Application.Features.Purchases.Queries;
+﻿using EasyPOS.Application.Features.Purchases.Models;
 using EasyPOS.Domain.Common.Enums;
 using EasyPOS.Domain.Purchases;
 

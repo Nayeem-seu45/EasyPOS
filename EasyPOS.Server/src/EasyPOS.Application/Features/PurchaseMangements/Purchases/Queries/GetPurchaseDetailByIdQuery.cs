@@ -1,6 +1,7 @@
-﻿using EasyPOS.Application.Features.Purchases.PurchasePayments.Queries;
+﻿using EasyPOS.Application.Features.Purchases.Models;
+using EasyPOS.Application.Features.Purchases.PurchasePayments.Queries;
 
-namespace EasyPOS.Application.Features.Purchases.Queries;
+namespace EasyPOS.Application.Features.PurchaseMangements.Purchases.Queries;
 
 public record GetPurchaseDetailByIdQuery(Guid Id) : ICacheableQuery<PurchaseInfoModel>
 {
