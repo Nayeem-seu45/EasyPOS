@@ -40,7 +40,25 @@ internal sealed class CustomerConfiguration : IEntityTypeConfiguration<Customer>
            .HasMaxLength(200)
            .IsRequired(false);
 
+        builder.Property(t => t.TotalDueAmount)
+            .HasColumnType("decimal(18, 2)")
+            .HasDefaultValue(0);
+
+        builder.Property(t => t.TotalPaidAmount)
+            .HasColumnType("decimal(18, 2)")
+            .HasDefaultValue(0);
+
+
+        builder.Property(t => t.OutstandingBalance)
+            .HasColumnType("decimal(18, 2)")
+            .HasDefaultValue(0);
+
         builder.Property(t => t.PreviousDue)
-            .HasColumnType("decimal(18, 2)");
+            .HasColumnType("decimal(18, 2)")
+            .HasDefaultValue(0);
+
+        builder.Property(t => t.CreditLimit)
+            .HasColumnType("decimal(18, 2)")
+            .HasDefaultValue(0);
     }
 }

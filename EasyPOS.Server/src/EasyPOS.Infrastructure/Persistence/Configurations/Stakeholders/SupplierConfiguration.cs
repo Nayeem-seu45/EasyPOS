@@ -40,7 +40,29 @@ internal sealed class SupplierConfiguration : IEntityTypeConfiguration<Supplier>
            .HasMaxLength(200)
            .IsRequired(false);
 
-        builder.Property(t => t.OpeningBalance)
-            .HasColumnType("decimal(18, 2)");
+        // Decimal precision for financial fields
+        builder.Property(s => s.OpeningBalance)
+            .HasColumnType("decimal(18,2)")
+            .HasDefaultValue(0);
+
+        builder.Property(s => s.TotalDueAmount)
+            .HasColumnType("decimal(18,2)")
+            .HasDefaultValue(0);
+
+        builder.Property(s => s.PaidAmount)
+            .HasColumnType("decimal(18,2)")
+            .HasDefaultValue(0);
+
+        builder.Property(s => s.TotalAdvanceAmount)
+            .HasColumnType("decimal(18,2)")
+            .HasDefaultValue(0);
+
+        builder.Property(s => s.PreviousBalance)
+            .HasColumnType("decimal(18,2)")
+            .HasDefaultValue(0);
+
+        builder.Property(s => s.CreditLimit)
+            .HasColumnType("decimal(18,2)")
+            .HasDefaultValue(0);
     }
 }
