@@ -11,6 +11,7 @@ public record CreateSupplierCommand(
     string? Country,
     string? City,
     string? Address,
+    decimal OpeningBalance,
     bool IsActive) : ICacheInvalidatorCommand<Guid>
 {
     public string CacheKey => CacheKeys.Supplier;
@@ -25,6 +26,7 @@ internal sealed class CreateSupplierCommandHandler(
         var entity = request.Adapt<Supplier>();
 
         dbContext.Suppliers.Add(entity);
+        entity.OutstandingBalance = entity.CalculateOutstandingBalance();
         await dbContext.SaveChangesAsync(cancellationToken);
 
         return Result.Success(entity.Id);

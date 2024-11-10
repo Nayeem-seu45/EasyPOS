@@ -29,7 +29,7 @@ export class SupplierDetailComponent extends BaseDetailComponent {
       country: [null],
       city: [''],
       address: [''],
-      outstandingBalance: [0],
+      openingBalance: [0],
       isActive: [true],
     });
   }

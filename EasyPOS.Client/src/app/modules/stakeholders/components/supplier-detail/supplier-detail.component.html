@@ -29,9 +29,9 @@
         <app-input-text label="Address" formControlName="address" [required]="false" [readonly]="false" />
         <app-validator-msg [control]="f['address']"></app-validator-msg>
       </div>
-      <div class="field col-12 md:col-6" *ngIf="isNew">
-        <app-input-decimal label="Outstanding Balance" formControlName="outstandingBalance" [required]="false" [readonly]="false" />
-        <app-validator-msg [control]="f['outstandingBalance']"></app-validator-msg>
+      <div class="field col-12 md:col-6" *ngIf="!isNew">
+        <app-input-decimal label="Opening Balance" formControlName="openingBalance" [required]="false" [readonly]="false" />
+        <app-validator-msg [control]="f['openingBalance']"></app-validator-msg>
       </div>
       <div class="field col-12 md:col-6 md:flex align-items-center md:mt-4">
         <app-input-switch label="Active" formControlName="isActive" />

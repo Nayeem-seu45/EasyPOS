@@ -1,7 +1,4 @@
-﻿using EasyPOS.Application.Common.Constants;
-using Mapster;
-
-namespace EasyPOS.Application.Features.Suppliers.Commands;
+﻿namespace EasyPOS.Application.Features.Suppliers.Commands;
 
 public record UpdateSupplierCommand(
     Guid Id,
