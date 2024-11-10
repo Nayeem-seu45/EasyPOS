@@ -1,4 +1,5 @@
 ﻿using EasyPOS.Application.Features.Common.Queries;
+using EasyPOS.Application.Features.Suppliers.Models;
 using EasyPOS.Application.Features.Suppliers.Commands;
 using EasyPOS.Application.Features.Suppliers.Queries;
 

@@ -1,4 +1,6 @@
-﻿namespace EasyPOS.Application.Features.Suppliers.Queries;
+﻿using EasyPOS.Application.Features.Suppliers.Models;
+
+namespace EasyPOS.Application.Features.Suppliers.Queries;
 
 [Authorize(Policy = Permissions.Suppliers.View)]
 public record GetSupplierListQuery
@@ -25,6 +27,7 @@ internal sealed class GetSupplierListQueryHandler(ISqlConnectionFactory sqlConne
                 t.Country AS {nameof(SupplierModel.Country)},
                 t.City AS {nameof(SupplierModel.City)},
                 t.Address AS {nameof(SupplierModel.Address)},
+                t.OutstandingBalance AS {nameof(SupplierModel.OutstandingBalance)},
             IIF(t.IsActive = 1, 'Active', 'Inactive') AS {nameof(SupplierModel.Active)}
             FROM dbo.Suppliers t
             """;

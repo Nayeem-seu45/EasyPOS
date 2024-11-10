@@ -1,5 +1,5 @@
 ﻿using EasyPOS.Application.Features.Settings.CompanyInfos.Queries;
-using EasyPOS.Application.Features.Suppliers.Queries;
+using EasyPOS.Application.Features.Suppliers.Models;
 using EasyPOS.Domain.Common.Enums;
 
 namespace EasyPOS.Application.Features.PurchaseReturns.Models;

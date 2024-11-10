@@ -1,4 +1,5 @@
-import { Component, Inject } from '@angular/core';import { SuppliersClient } from 'src/app/modules/generated-clients/api-service';
+import { Component, Inject } from '@angular/core';import { CommonConstants } from 'src/app/core/contants/common';
+import { SuppliersClient } from 'src/app/modules/generated-clients/api-service';
 import { BaseDetailComponent } from 'src/app/shared/components/base-detail/base-detail.component';
 import { ENTITY_CLIENT } from 'src/app/shared/injection-tokens/tokens';
 
@@ -14,6 +15,10 @@ export class SupplierDetailComponent extends BaseDetailComponent {
     super(entityClient)
   }
 
+  get isNew(): boolean{
+    return !this.id || this.id === CommonConstants.EmptyGuid
+  }
+
   protected override initializeFormGroup(): void {
     this.form = this.fb.group({
       id: [null],
@@ -24,7 +29,7 @@ export class SupplierDetailComponent extends BaseDetailComponent {
       country: [null],
       city: [''],
       address: [''],
-      previousDue: [null],
+      outstandingBalance: [0],
       isActive: [true],
     });
   }

@@ -15731,7 +15731,11 @@ export class SupplierModel implements ISupplierModel {
     country?: string;
     city?: string | undefined;
     address?: string | undefined;
-    openingBalance?: number | undefined;
+    openingBalance?: number;
+    totalDueAmount?: number;
+    totalPaidAmount?: number;
+    outstandingBalance?: number;
+    previousBalance?: number;
     isActive?: boolean;
     active?: string;
     optionsDataSources?: { [key: string]: any; };
@@ -15756,6 +15760,10 @@ export class SupplierModel implements ISupplierModel {
             this.city = _data["city"];
             this.address = _data["address"];
             this.openingBalance = _data["openingBalance"];
+            this.totalDueAmount = _data["totalDueAmount"];
+            this.totalPaidAmount = _data["totalPaidAmount"];
+            this.outstandingBalance = _data["outstandingBalance"];
+            this.previousBalance = _data["previousBalance"];
             this.isActive = _data["isActive"];
             this.active = _data["active"];
             if (_data["optionsDataSources"]) {
@@ -15786,6 +15794,10 @@ export class SupplierModel implements ISupplierModel {
         data["city"] = this.city;
         data["address"] = this.address;
         data["openingBalance"] = this.openingBalance;
+        data["totalDueAmount"] = this.totalDueAmount;
+        data["totalPaidAmount"] = this.totalPaidAmount;
+        data["outstandingBalance"] = this.outstandingBalance;
+        data["previousBalance"] = this.previousBalance;
         data["isActive"] = this.isActive;
         data["active"] = this.active;
         if (this.optionsDataSources) {
@@ -15808,7 +15820,11 @@ export interface ISupplierModel {
     country?: string;
     city?: string | undefined;
     address?: string | undefined;
-    openingBalance?: number | undefined;
+    openingBalance?: number;
+    totalDueAmount?: number;
+    totalPaidAmount?: number;
+    outstandingBalance?: number;
+    previousBalance?: number;
     isActive?: boolean;
     active?: string;
     optionsDataSources?: { [key: string]: any; };

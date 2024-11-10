@@ -1,4 +1,6 @@
-﻿namespace EasyPOS.Application.Features.Suppliers.Queries;
+﻿using EasyPOS.Application.Features.Suppliers.Models;
+
+namespace EasyPOS.Application.Features.Suppliers.Queries;
 
 public record GetSupplierByIdQuery(Guid Id) : ICacheableQuery<SupplierModel>
 {

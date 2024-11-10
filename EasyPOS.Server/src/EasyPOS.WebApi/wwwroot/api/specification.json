@@ -10406,8 +10406,23 @@
           },
           "openingBalance": {
             "type": "number",
-            "format": "decimal",
-            "nullable": true
+            "format": "decimal"
+          },
+          "totalDueAmount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "totalPaidAmount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "outstandingBalance": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "previousBalance": {
+            "type": "number",
+            "format": "decimal"
           },
           "isActive": {
             "type": "boolean"
