@@ -1,4 +1,6 @@
 ﻿using EasyPOS.Application.Features.Purchases.Shared;
+using EasyPOS.Application.Features.Stakeholders.Suppliers.Models;
+using EasyPOS.Application.Features.Stakeholders.Suppliers.Services;
 using EasyPOS.Domain.Purchases;
 
 namespace EasyPOS.Application.Features.Purchases.PurchasePayments.Commands;
@@ -18,6 +20,7 @@ public record CreatePurchasePaymentCommand(
 
 internal sealed class CreatePurchasePaymentCommandHandler(
     IApplicationDbContext dbContext,
+    ISupplierFinancialService supplierFinancialService,
     ICommonQueryService commonQueryService) : ICommandHandler<CreatePurchasePaymentCommand, Guid>
 {
     public async Task<Result<Guid>> Handle(CreatePurchasePaymentCommand request, CancellationToken cancellationToken)
@@ -35,15 +38,21 @@ internal sealed class CreatePurchasePaymentCommandHandler(
             return Result.Failure<Guid>(Error.Failure(nameof(purchase), "Purchase Entity not found"));
         }
 
-
         purchase.PaidAmount += entity.PayingAmount;
         purchase.DueAmount = purchase.GrandTotal - purchase.PaidAmount;
-
         purchase.PaymentStatusId = await PurchaseSharedService.GetPurchasePaymentId(commonQueryService, purchase);
+
+        // Adjust supplier financials for the new payment
+        await supplierFinancialService.AdjustSupplierBalance(
+            purchase.SupplierId, 
+            entity.PayingAmount, 
+            FinancialTransactionType.Payment,
+            cancellationToken);
 
         await dbContext.SaveChangesAsync(cancellationToken);
 
-        return Result.Success(entity.Id);
+        return entity.Id;
     }
+
 }
 

@@ -1,4 +1,6 @@
 ﻿using EasyPOS.Application.Features.Purchases.Models;
+using EasyPOS.Application.Features.Stakeholders.Suppliers.Models;
+using EasyPOS.Application.Features.Stakeholders.Suppliers.Services;
 using EasyPOS.Domain.Common.Enums;
 using EasyPOS.Domain.Purchases;
 
@@ -27,7 +29,8 @@ public record CreatePurchaseCommand(
 }
 
 internal sealed class CreatePurchaseCommandHandler(
-    IApplicationDbContext dbContext)
+    IApplicationDbContext dbContext,
+    ISupplierFinancialService supplierFinancialService)
     : ICommandHandler<CreatePurchaseCommand, Guid>
 {
     public async Task<Result<Guid>> Handle(CreatePurchaseCommand request, CancellationToken cancellationToken)
@@ -36,7 +39,12 @@ internal sealed class CreatePurchaseCommandHandler(
         entity.DueAmount = entity.GrandTotal;
         dbContext.Purchases.Add(entity);
 
-        await ProcessSupplierBalance(entity);
+        // Adjust supplier financials
+        await supplierFinancialService.AdjustSupplierBalance(
+            entity.SupplierId, 
+            entity.DueAmount, 
+            FinancialTransactionType.Purchase, 
+            cancellationToken);
 
         await dbContext.SaveChangesAsync(cancellationToken);
 

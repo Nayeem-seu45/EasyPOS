@@ -1,4 +1,7 @@
-﻿namespace EasyPOS.Application.Features.Purchases.PurchasePayments.Commands;
+﻿using EasyPOS.Application.Features.Stakeholders.Suppliers.Models;
+using EasyPOS.Application.Features.Stakeholders.Suppliers.Services;
+
+namespace EasyPOS.Application.Features.Purchases.PurchasePayments.Commands;
 
 public record DeletePurchasePaymentCommand(Guid Id) : ICacheInvalidatorCommand
 {
@@ -6,7 +9,8 @@ public record DeletePurchasePaymentCommand(Guid Id) : ICacheInvalidatorCommand
 }
 
 internal sealed class DeletePurchasePaymentCommandHandler(
-    IApplicationDbContext dbContext)
+    IApplicationDbContext dbContext,
+    ISupplierFinancialService supplierFinancialService)
     : ICommandHandler<DeletePurchasePaymentCommand>
 
 {
@@ -27,8 +31,14 @@ internal sealed class DeletePurchasePaymentCommandHandler(
         purchase.PaidAmount -= entity.PayingAmount;
         purchase.DueAmount = purchase.GrandTotal - purchase.PaidAmount;
 
+        // Adjust supplier balance for payment deletion
+        await supplierFinancialService.AdjustSupplierBalance(
+            purchase.SupplierId, 
+            entity.PayingAmount, 
+            FinancialTransactionType.PaymentDelete,
+            cancellationToken);
+
         await dbContext.SaveChangesAsync(cancellationToken);
         return Result.Success();
     }
-
 }

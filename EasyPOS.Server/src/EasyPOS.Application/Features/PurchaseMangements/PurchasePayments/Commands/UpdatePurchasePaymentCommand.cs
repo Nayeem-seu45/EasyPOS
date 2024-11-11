@@ -1,4 +1,7 @@
 ﻿using EasyPOS.Application.Features.Purchases.Shared;
+using EasyPOS.Application.Features.Stakeholders.Suppliers.Models;
+using EasyPOS.Application.Features.Stakeholders.Suppliers.Services;
+using Microsoft.VisualBasic;
 
 namespace EasyPOS.Application.Features.Purchases.PurchasePayments.Commands;
 
@@ -17,6 +20,7 @@ public record UpdatePurchasePaymentCommand(
 
 internal sealed class UpdatePurchasePaymentCommandHandler(
     IApplicationDbContext dbContext,
+    ISupplierFinancialService supplierFinancialService,
     ICommonQueryService commonQueryService)
     : ICommandHandler<UpdatePurchasePaymentCommand>
 {
@@ -35,10 +39,18 @@ internal sealed class UpdatePurchasePaymentCommandHandler(
 
         request.Adapt(entity);
 
-        purchase.PaidAmount += entity.PayingAmount - previousPaymentAmount;
+        var paymentDifference = entity.PayingAmount - previousPaymentAmount;
+
+        purchase.PaidAmount += paymentDifference;
         purchase.DueAmount = purchase.GrandTotal - purchase.PaidAmount;
         purchase.PaymentStatusId = await PurchaseSharedService.GetPurchasePaymentId(commonQueryService, purchase);
 
+        // Adjust supplier financials based on the payment difference
+        await supplierFinancialService.AdjustSupplierBalance(
+            purchase.SupplierId, 
+            paymentDifference, 
+            FinancialTransactionType.PaymentUpdate, 
+            cancellationToken);
 
         await dbContext.SaveChangesAsync(cancellationToken);
 

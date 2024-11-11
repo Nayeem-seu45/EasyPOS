@@ -1,4 +1,5 @@
-﻿using EasyPOS.Application.Common.Constants;
+﻿using EasyPOS.Application.Features.Stakeholders.Suppliers.Models;
+using EasyPOS.Application.Features.Stakeholders.Suppliers.Services;
 
 namespace EasyPOS.Application.Features.Purchases.Commands;
 
@@ -8,7 +9,8 @@ public record DeletePurchaseCommand(Guid Id) : ICacheInvalidatorCommand
 }
 
 internal sealed class DeletePurchaseCommandHandler(
-    IApplicationDbContext dbContext)
+    IApplicationDbContext dbContext,
+    ISupplierFinancialService supplierFinancialService)
     : ICommandHandler<DeletePurchaseCommand>
 {
     public async Task<Result> Handle(DeletePurchaseCommand request, CancellationToken cancellationToken)
@@ -18,6 +20,13 @@ internal sealed class DeletePurchaseCommandHandler(
         if (entity is null) return Result.Failure(Error.NotFound(nameof(entity), ErrorMessages.EntityNotFound));
 
         dbContext.Purchases.Remove(entity);
+
+        // Adjust supplier financials by reversing due amount
+        await supplierFinancialService.AdjustSupplierBalance(
+            entity.SupplierId,
+            entity.DueAmount, 
+            FinancialTransactionType.PurchaseDelete, 
+            cancellationToken);
 
         await dbContext.SaveChangesAsync(cancellationToken);
 

@@ -1,5 +1,7 @@
 ﻿using EasyPOS.Application.Features.Purchases.Models;
 using EasyPOS.Application.Features.Purchases.Shared;
+using EasyPOS.Application.Features.Stakeholders.Suppliers.Models;
+using EasyPOS.Application.Features.Stakeholders.Suppliers.Services;
 using EasyPOS.Domain.Common.Enums;
 using EasyPOS.Domain.Purchases;
 
@@ -29,7 +31,8 @@ public record UpdatePurchaseCommand(
 
 internal sealed class UpdatePurchaseCommandHandler(
     IApplicationDbContext dbContext,
-    ICommonQueryService commonQueryService)
+    ICommonQueryService commonQueryService,
+    ISupplierFinancialService supplierFinancialService)
     : ICommandHandler<UpdatePurchaseCommand>
 {
     public async Task<Result> Handle(UpdatePurchaseCommand request, CancellationToken cancellationToken)
@@ -39,8 +42,8 @@ internal sealed class UpdatePurchaseCommandHandler(
         if (entity is null) return Result.Failure(Error.NotFound(nameof(entity), ErrorMessages.EntityNotFound));
 
         // Store old values for comparison
-        var oldGrandTotal = entity.GrandTotal;
-        var oldPaidAmount = entity.PaidAmount;
+        //var oldGrandTotal = entity.GrandTotal;
+        //var oldPaidAmount = entity.PaidAmount;
         var oldDueAmount = entity.DueAmount;
 
         // Update the entity with new values
@@ -50,8 +53,13 @@ internal sealed class UpdatePurchaseCommandHandler(
         entity.DueAmount = entity.GrandTotal - entity.PaidAmount;
         entity.PaymentStatusId = await PurchaseSharedService.GetPurchasePaymentId(commonQueryService, entity);
 
-        // Update Supplier's financial records based on the changes in amounts
-        await UpdateSupplierFinancials(entity, oldGrandTotal, oldPaidAmount, oldDueAmount);
+        // Adjust supplier financials
+        var dueAmountDifference = entity.DueAmount - oldDueAmount;
+        await supplierFinancialService.AdjustSupplierBalance(
+           entity.SupplierId,
+           dueAmountDifference,
+           FinancialTransactionType.PurchaseUpdate,
+           cancellationToken);
 
         await dbContext.SaveChangesAsync(cancellationToken);
 
@@ -59,8 +67,8 @@ internal sealed class UpdatePurchaseCommandHandler(
     }
 
     private async Task UpdateSupplierFinancials(
-        Purchase purchase, 
-        decimal oldGrandTotal, 
+        Purchase purchase,
+        decimal oldGrandTotal,
         decimal oldPaidAmount,
         decimal oldDueAmount)
     {

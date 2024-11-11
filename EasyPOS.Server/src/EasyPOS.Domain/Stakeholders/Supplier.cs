@@ -18,7 +18,7 @@ public class Supplier : BaseAuditableEntity
 
     public decimal CalculateOutstandingBalance()
     {
-        return OpeningBalance + TotalDueAmount - TotalPaidAmount;
+        return OpeningBalance + TotalDueAmount;
     }
 
 }

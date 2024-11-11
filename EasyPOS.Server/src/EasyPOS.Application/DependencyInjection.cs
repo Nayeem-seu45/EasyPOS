@@ -2,6 +2,7 @@
 using EasyPOS.Application.Features.Common.Queries;
 using EasyPOS.Application.Common.Behaviours;
 using Microsoft.Extensions.DependencyInjection;
+using EasyPOS.Application.Features.Stakeholders.Suppliers.Services;
 
 namespace EasyPOS.Application;
 
@@ -25,6 +26,10 @@ public static class DependencyInjection
             cfg.AddOpenBehavior(typeof(CacheInvalidationBehaviour<,>));
             cfg.AddOpenBehavior(typeof(PerformanceBehaviour<,>));
         });
+
+
+        services.AddScoped<ISupplierFinancialService, SupplierFinancialService>();
+
 
         return services;
     }
