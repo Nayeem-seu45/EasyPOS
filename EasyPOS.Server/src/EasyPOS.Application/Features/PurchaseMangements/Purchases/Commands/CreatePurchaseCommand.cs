@@ -50,15 +50,4 @@ internal sealed class CreatePurchaseCommandHandler(
 
         return Result.Success(entity.Id);
     }
-
-    private async Task ProcessSupplierBalance(Purchase purchase)
-    {
-        // Update Supplier's financial records
-        var supplier = await dbContext.Suppliers.FindAsync(purchase.SupplierId);
-        if (supplier != null)
-        {
-            supplier.TotalDueAmount += purchase.DueAmount;
-            supplier.OutstandingBalance = supplier.CalculateOutstandingBalance();
-        }
-    }
 }
