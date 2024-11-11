@@ -53,9 +53,9 @@ internal sealed class SupplierConfiguration : IEntityTypeConfiguration<Supplier>
             .HasColumnType("decimal(18,2)")
             .HasDefaultValue(0);
 
-        builder.Property(s => s.PreviousBalance)
-            .HasColumnType("decimal(18,2)")
-            .HasDefaultValue(0);
+        //builder.Property(s => s.PreviousBalance)
+        //    .HasColumnType("decimal(18,2)")
+        //    .HasDefaultValue(0);
 
     }
 }

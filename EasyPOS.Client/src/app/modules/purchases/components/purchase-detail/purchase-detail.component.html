@@ -1,6 +1,7 @@
 <app-toast />
 <div class="card">
-  <h3>Add Purchase</h3>
+  <h3 *ngIf="!isEdit">Add Purchase</h3>
+  <h3 *ngIf="isEdit">Update Purchase</h3>
   <div class="col-12">
     <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
       <div class="p-fluid p-formgrid grid">
@@ -51,10 +52,10 @@
               <tr>
                 <th style="min-width:100px">Name</th>
                 <th style="min-width:70px">Code</th>
+                <th style="min-width:70px">Net Unit Cost</th>
                 <th style="min-width:70px">Quantity</th>
                 <th style="min-width:70px">Batch No</th>
                 <!-- <th style="min-width:70px">Expired Date</th> -->
-                <th style="min-width:70px">Net Unit Cost</th>
                 <th style="min-width:70px">Discount</th>
                 <th style="min-width:70px">Tax</th>
                 <th style="min-width:70px">Sub Total</th>
@@ -66,6 +67,9 @@
                 <td>{{ field.get('productName').value }} <i class="pi pi-pen-to-square product-edit-icon" (click)="updatePurchaseDetail(i)"></i></td>
                 <td>{{ field.get('productCode').value }}</td>
                 <td>
+                  {{ field.get('netUnitCost').value }}
+                </td>
+                <td>
                   <app-input-number formControlName="quantity" textAlign="center" (onChange)="onItemPropsChange(i)" [showButtons]="true" [min]="1" />
                 </td>
                 <td>
@@ -75,13 +79,10 @@
                   <app-input-decimal formControlName="expiredDate" textAlign="center" (ngModelChange)="onItemPropsChange(i)" />
                 </td> -->
                 <td>
-                  <app-input-decimal formControlName="netUnitCost" textAlign="center"  />
+                  {{ field.get('discountAmount').value }}
                 </td>
                 <td>
-                  <app-input-decimal formControlName="discountAmount" textAlign="center"   />
-                </td>
-                <td>
-                  <app-input-decimal formControlName="taxAmount" textAlign="center"  />
+                  {{ field.get('taxAmount').value }}
                 </td>
                 <td >
                   <div class="text-right mr-2">

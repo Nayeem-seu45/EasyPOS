@@ -15944,7 +15944,6 @@ export class UpdateSupplierCommand implements IUpdateSupplierCommand {
     country?: string | undefined;
     city?: string | undefined;
     address?: string | undefined;
-    openingBalance?: number;
     isActive?: boolean;
     cacheKey?: string;
 
@@ -15967,7 +15966,6 @@ export class UpdateSupplierCommand implements IUpdateSupplierCommand {
             this.country = _data["country"];
             this.city = _data["city"];
             this.address = _data["address"];
-            this.openingBalance = _data["openingBalance"];
             this.isActive = _data["isActive"];
             this.cacheKey = _data["cacheKey"];
         }
@@ -15990,7 +15988,6 @@ export class UpdateSupplierCommand implements IUpdateSupplierCommand {
         data["country"] = this.country;
         data["city"] = this.city;
         data["address"] = this.address;
-        data["openingBalance"] = this.openingBalance;
         data["isActive"] = this.isActive;
         data["cacheKey"] = this.cacheKey;
         return data;
@@ -16006,7 +16003,6 @@ export interface IUpdateSupplierCommand {
     country?: string | undefined;
     city?: string | undefined;
     address?: string | undefined;
-    openingBalance?: number;
     isActive?: boolean;
     cacheKey?: string;
 }

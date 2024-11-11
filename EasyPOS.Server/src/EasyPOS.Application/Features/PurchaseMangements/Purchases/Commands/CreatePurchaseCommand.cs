@@ -35,8 +35,22 @@ internal sealed class CreatePurchaseCommandHandler(
         var entity = request.Adapt<Purchase>();
         entity.DueAmount = entity.GrandTotal;
         dbContext.Purchases.Add(entity);
+
+        await ProcessSupplierBalance(entity);
+
         await dbContext.SaveChangesAsync(cancellationToken);
 
         return Result.Success(entity.Id);
+    }
+
+    private async Task ProcessSupplierBalance(Purchase purchase)
+    {
+        // Update Supplier's financial records
+        var supplier = await dbContext.Suppliers.FindAsync(purchase.SupplierId);
+        if (supplier != null)
+        {
+            supplier.TotalDueAmount += purchase.DueAmount;
+            supplier.OutstandingBalance = supplier.CalculateOutstandingBalance();
+        }
     }
 }

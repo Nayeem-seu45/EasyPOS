@@ -50,6 +50,10 @@ export class PurchaseDetailComponent implements OnInit {
     return this.form.controls;
   }
 
+  get isEdit(): boolean{
+    return this.id && this.id !== CommonConstants.EmptyGuid;
+  }
+
   protected toast: ToastService = inject(ToastService);
   protected fb: FormBuilder = inject(FormBuilder);
   protected datePipe: DatePipe = inject(DatePipe);

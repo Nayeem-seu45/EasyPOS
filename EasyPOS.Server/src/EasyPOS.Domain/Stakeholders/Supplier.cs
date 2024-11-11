@@ -13,7 +13,7 @@ public class Supplier : BaseAuditableEntity
     public decimal TotalDueAmount { get; set; }
     public decimal TotalPaidAmount { get; set; }
     public decimal OutstandingBalance { get; set; }
-    public decimal PreviousBalance { get; set; }
+    //public decimal PreviousBalance { get; set; }
     public bool IsActive { get; set; }
 
     public decimal CalculateOutstandingBalance()

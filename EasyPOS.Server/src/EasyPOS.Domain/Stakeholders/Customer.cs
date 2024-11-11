@@ -13,11 +13,13 @@ public class Customer : BaseAuditableEntity
     public decimal TotalDueAmount { get; set; }
     public decimal TotalPaidAmount { get; set; }
     public decimal OutstandingBalance { get; set; }
+    public decimal DepositedBalance { get; set; }
     public decimal PreviousDue { get; set; }
     public decimal? CreditLimit { get; set; }
+    public int? RewardPoints { get; set; }
     public bool IsActive { get; set; }
 
-    public decimal CalculateOutstandingBalance()
+    private decimal CalculateOutstandingBalance()
     {
         return TotalDueAmount - TotalPaidAmount;
     }

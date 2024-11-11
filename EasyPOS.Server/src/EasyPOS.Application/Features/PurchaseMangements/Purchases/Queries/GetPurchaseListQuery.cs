@@ -23,7 +23,7 @@ internal sealed class GetPurchaseListQueryHandler(ISqlConnectionFactory sqlConne
                 t.PurchaseDate AS {nameof(PurchaseModel.PurchaseDate)},
                 t.ReferenceNo AS {nameof(PurchaseModel.ReferenceNo)},
                 t.GrandTotal AS {nameof(PurchaseModel.GrandTotal)},
-                ISNULL(t.TotalPaidAmount, 0) AS {nameof(PurchaseModel.PaidAmount)},
+                ISNULL(t.PaidAmount, 0) AS {nameof(PurchaseModel.PaidAmount)},
                 ISNULL(t.DueAmount, 0) AS {nameof(PurchaseModel.DueAmount)},
                 s.Name AS {nameof(PurchaseModel.SupplierName)},
                 ps.Name AS {nameof(PurchaseModel.PurchaseStatus)},
