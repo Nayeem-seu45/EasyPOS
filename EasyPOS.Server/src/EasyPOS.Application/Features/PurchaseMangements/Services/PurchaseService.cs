@@ -38,7 +38,7 @@ public class PurchaseService(
         CancellationToken cancellationToken = default)
     {
         var paymentStatuses = await commonQueryService
-            .GetLookupDetailsAsync((int)LookupDevCode.PaymentStatus, cancellationToken);
+            .GetLookupDetailsAsync((int)LookupDevCode.PurchasePaymentStatus, cancellationToken);
 
         if (purchase.GrandTotal == purchase.PaidAmount)
         {

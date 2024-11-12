@@ -12504,6 +12504,9 @@
             "type": "string",
             "nullable": true
           },
+          "salePayment": {
+            "$ref": "#/components/schemas/AddSalePaymentModel"
+          },
           "saleDetails": {
             "type": "array",
             "items": {
@@ -12513,6 +12516,44 @@
           "optionsDataSources": {
             "type": "object",
             "additionalProperties": {}
+          }
+        }
+      },
+      "AddSalePaymentModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "saleId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "receivedAmount": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "payingAmount": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "changeAmount": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "paymentType": {
+            "type": "string",
+            "format": "guid",
+            "nullable": true
+          },
+          "note": {
+            "type": "string",
+            "nullable": true
           }
         }
       },

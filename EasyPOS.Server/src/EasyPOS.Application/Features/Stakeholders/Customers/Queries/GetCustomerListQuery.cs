@@ -1,4 +1,6 @@
-﻿namespace EasyPOS.Application.Features.Customers.Queries;
+﻿using EasyPOS.Application.Features.Customers.Models;
+
+namespace EasyPOS.Application.Features.Customers.Queries;
 
 [Authorize(Policy = Permissions.Customers.View)]
 public record GetCustomerListQuery

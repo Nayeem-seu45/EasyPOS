@@ -28,7 +28,8 @@ internal sealed class GetSaleByIdQueryHandler(ISqlConnectionFactory sqlConnectio
                 SaleStatusId = await commonQueryService.GetLookupDetailIdAsync((int)SaleSatus.Completed),
                 PaymentStatusId = await commonQueryService.GetLookupDetailIdAsync((int)PaymentStatus.Pending),
                 TaxRate = 0,
-                SaleDate = DateOnly.FromDateTime(DateTime.Now)
+                SaleDate = DateOnly.FromDateTime(DateTime.Now),
+                SalePayment = new AddSalePaymentModel()
             };
         }
 

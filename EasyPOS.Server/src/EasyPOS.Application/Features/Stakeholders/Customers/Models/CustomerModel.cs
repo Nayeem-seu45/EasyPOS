@@ -1,4 +1,4 @@
-﻿namespace EasyPOS.Application.Features.Customers.Queries;
+﻿namespace EasyPOS.Application.Features.Customers.Models;
 
 public record CustomerModel
 {

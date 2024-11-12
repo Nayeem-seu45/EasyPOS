@@ -7,7 +7,7 @@ internal static class SaleSharedService
 {
     public static async Task<Guid?> GetSalePaymentId(ICommonQueryService commonQueryService, Sale sale)
     {
-        var paymentStatuses = await commonQueryService.GetLookupDetailsAsync((int)LookupDevCode.PaymentStatus);
+        var paymentStatuses = await commonQueryService.GetLookupDetailsAsync((int)LookupDevCode.PurchasePaymentStatus);
 
         if (sale.GrandTotal == sale.PaidAmount)
         {

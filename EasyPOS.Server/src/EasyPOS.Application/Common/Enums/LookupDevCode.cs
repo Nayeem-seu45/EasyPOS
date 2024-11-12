@@ -9,7 +9,7 @@ public enum LookupDevCode
     ProductUnit = 105,
     PurchaseStatus = 106,
     SaleStatus = 107,
-    PaymentStatus = 108,
+    PurchasePaymentStatus = 108,
     PaymentType = 109,
     Country = 110,
     District = 111,
@@ -18,4 +18,6 @@ public enum LookupDevCode
     ProductTransferStatus = 114,
     PurchaseReturnStatus = 115,
     SaleReturnStatus = 116,
+    SalePaymentStatus = 117,
+
 }

@@ -58,21 +58,23 @@
             </ng-template>
             <ng-template pTemplate="body" let-detail let-i="rowIndex">
               <tr>
-                <td>{{ detail.productName }} <i class="pi pi-pen-to-square product-edit-icon" (click)="updateSaleDetail(i, detail)"></i></td>
+                <td>{{ detail.productName }} <i class="pi pi-pen-to-square product-edit-icon"
+                    (click)="updateSaleDetail(i, detail)"></i></td>
                 <td>{{ detail.productCode }}</td>
                 <td>
-                  <app-input-number [(ngModel)]="detail.quantity" name="quantity-{{i}}" [showButtons]="true" [min]="1" textAlign="center"
-                    (onChange)="onItemPropsChange(detail)" />
+                  <app-input-number [(ngModel)]="detail.quantity" name="quantity-{{i}}" [showButtons]="true" [min]="1"
+                    textAlign="center" (onChange)="onItemPropsChange(detail)" />
                 </td>
                 <td>
                   <app-input-decimal [(ngModel)]="detail.netUnitPrice" name="unitPrice-{{i}}" textAlign="center" />
                 </td>
                 <td>
-                  <app-input-decimal [(ngModel)]="detail.discountAmount" name="discountAmount-{{i}}" textAlign="center" />
+                  <app-input-decimal [(ngModel)]="detail.discountAmount" name="discountAmount-{{i}}"
+                    textAlign="center" />
                   <!-- {{ detail.discountAmount }} -->
                 </td>
                 <td>
-                  <app-input-decimal [(ngModel)]="detail.taxAmount" name="taxAmount-{{i}}" textAlign="center"  />
+                  <app-input-decimal [(ngModel)]="detail.taxAmount" name="taxAmount-{{i}}" textAlign="center" />
                 </td>
                 <td>
                   <div class="text-right mr-2">
@@ -80,7 +82,8 @@
                   </div>
                 </td>
                 <td>
-                  <app-button type="button" severity="danger" icon="pi pi-trash" (click)="onRemoveSaleDetail(i, detail.id)" />
+                  <app-button type="button" severity="danger" icon="pi pi-trash"
+                    (click)="onRemoveSaleDetail(i, detail.id)" />
                 </td>
               </tr>
             </ng-template>
@@ -88,7 +91,7 @@
               <tr class="text-center">
                 <td colspan="2" class="text-left">Total</td>
                 <td class="text-center">{{ totalQuantity | number:'1.2-2' }}</td>
-                <td ></td>
+                <td></td>
                 <td class="text-center">{{ totalDiscount | number:'1.2-2' }}</td>
                 <td class="text-center">{{ totalTaxAmount | number:'1.2-2' }}</td>
                 <td class="text-right">{{ item.subTotal | number:'1.2-2' }}</td>
@@ -112,17 +115,20 @@
 
         <!-- Discount Rate -->
         <div class="field col-12 md:col-4" *ngIf="item.discountType === DiscountType.Percentage">
-          <app-input-decimal label="Discount Rate" textAlign="right" [(ngModel)]="item.discountRate" name="discountRate" (ngModelChange)="onDiscountRateChange()" />
+          <app-input-decimal label="Discount Rate" textAlign="right" [(ngModel)]="item.discountRate" name="discountRate"
+            (ngModelChange)="onDiscountRateChange()" />
         </div>
 
         <!-- Discount Amount -->
         <div class="field col-12 md:col-4" *ngIf="item.discountType === DiscountType.Fixed">
-          <app-input-decimal label="Discount Amount" textAlign="right" [(ngModel)]="item.discountAmount" name="discountAmount" (ngModelChange)="onDiscountAmountChange()" />
+          <app-input-decimal label="Discount Amount" textAlign="right" [(ngModel)]="item.discountAmount"
+            name="discountAmount" (ngModelChange)="onDiscountAmountChange()" />
         </div>
 
         <!-- Shipping Cost -->
         <div class="field col-12 md:col-4">
-          <app-input-decimal label="Shipping Cost" textAlign="right" [(ngModel)]="item.shippingCost" name="shippingCost" (ngModelChange)="onShippingCostChange()" />
+          <app-input-decimal label="Shipping Cost" textAlign="right" [(ngModel)]="item.shippingCost" name="shippingCost"
+            (ngModelChange)="onShippingCostChange()" />
         </div>
 
         <!-- Sale Status -->
@@ -132,29 +138,60 @@
         </div>
 
         <!-- Payment Status -->
-        <div class="field col-12 md:col-4">
+        <!-- <div class="field col-12 md:col-4">
           <app-input-select label="Payment Status" [(ngModel)]="item.paymentStatusId" name="paymentStatusId" [showClear]="false"
             [options]="optionsDataSources?.paymentStatusSelectList" />
-        </div>
+        </div> -->
 
         <!-- Attachment -->
-        <div class="mt-3 field col-12 md:col-12">
+        <div class="field col-12">
           <app-input-file-adv [maxFileSize]="100000000" mode="basic" location="images"
             (fileUrlsChange)="onFileUpload($event)" />
         </div>
 
-        <!-- Sale Note -->
-        <div class="field col-12 md:col-6">
-          <app-input-textarea label="Sale Note" [(ngModel)]="item.saleNote" name="saleNote" />
+        <!-- Show Payment Start -->
+        <div class="mt-3 field col-12 md:col-4">
+          <app-input-switch label="Add Payment" [(ngModel)]="showPayment" name="showPayment" (onChange)="setEmptySalePaymentOnSwitchOff()" />
         </div>
-
-        <!-- Staff Note -->
-        <div class="field col-12 md:col-6">
-          <app-input-textarea label="Staff Note" [(ngModel)]="item.staffNote" name="staffNote" />
+        <div class="card col-12" *ngIf="showPayment">
+          <div class="p-fluid p-formgrid grid">
+            <div class="field col-12 md:col-3">
+              <app-input-decimal label="Received Amount" [(ngModel)]="item.salePayment.receivedAmount"
+                name="receivedAmount" (onChange)="updateChangeAmount()" textAlign="right" [required]="true" />
+            </div>
+            <div class="field col-12 md:col-3">
+              <app-input-decimal label="Paying Amount" [(ngModel)]="item.salePayment.payingAmount" name="payingAmount"
+                (onChange)="updateChangeAmount()" textAlign="right" [required]="true" />
+            </div>
+            <div class="field col-12 md:col-3">
+              <app-input-decimal label="Change" [(ngModel)]="item.salePayment.changeAmount" name="changeAmount"
+                textAlign="right" [required]="false" [disabled]="true" />
+            </div>
+            <div class="field col-12 md:col-3">
+              <app-input-select label="Payment Type" [(ngModel)]="item.salePayment.paymentType" name="paymentType"
+                [options]="optionsDataSources?.['paymentTypeSelectList']" [required]="true" [showClear]="false" />
+            </div>
+            <div class="field col-12">
+              <app-input-textarea label="Payment Note" [(ngModel)]="item.salePayment.note" name="note" [required]="false"
+                [max]="500" [autoResize]="true" [showCharLength]="true" />
+            </div>
+          </div>
         </div>
+        <!-- Show Payment End -->
 
+        <div class="grid col-12">
+          <!-- Sale Note -->
+          <div class="field col-12 md:col-6">
+            <app-input-textarea label="Sale Note" [(ngModel)]="item.saleNote" name="saleNote" />
+          </div>
 
+          <!-- Staff Note -->
+          <div class="field col-12 md:col-6">
+            <app-input-textarea label="Staff Note" [(ngModel)]="item.staffNote" name="staffNote" />
+          </div>
+        </div>
       </div>
+
       <div class="col-12">
         <table width="100%" style="text-align: right;">
           <tbody>

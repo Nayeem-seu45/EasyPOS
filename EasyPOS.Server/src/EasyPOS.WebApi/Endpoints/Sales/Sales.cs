@@ -86,8 +86,8 @@ public class Sales : EndpointGroupBase
 
         var paymentStatusSelectList = await sender.Send(new GetSelectListQuery(
             Sql: SelectListSqls.GetLookupDetailSelectListByDevCodeSql,
-            Parameters: new { DevCode = LookupDevCode.PaymentStatus },
-            Key: $"{CacheKeys.LookupDetail}_{LookupDevCode.PaymentStatus}",
+            Parameters: new { DevCode = LookupDevCode.SalePaymentStatus },
+            Key: $"{CacheKeys.LookupDetail}_{LookupDevCode.SalePaymentStatus}",
             AllowCacheList: false)
         );
 
@@ -98,6 +98,14 @@ public class Sales : EndpointGroupBase
            Key: CacheKeys.Tax_All_SelectList,
            AllowCacheList: true)
         );
+
+        var paymentTypeSelectList = await sender.Send(new GetSelectListQuery(
+            Sql: SelectListSqls.GetLookupDetailSelectListByDevCodeSql,
+            Parameters: new { DevCode = (int)LookupDevCode.PaymentType },
+            Key: $"{CacheKeys.LookupDetail}_{(int)LookupDevCode.PaymentType}",
+            AllowCacheList: false)
+        );
+
 
         var productsSelectList = await sender.Send(new GetProductSelectListQuery(
             AllowCacheList: false)
@@ -114,6 +122,7 @@ public class Sales : EndpointGroupBase
         result.Value.OptionsDataSources.Add("productsSelectList", productsSelectList.Value);
         result.Value.OptionsDataSources.Add("taxesSelectList", taxesSelectList.Value);
         result.Value.OptionsDataSources.Add("productUnitSelectList", productUnitSelectList.Value);
+        result.Value.OptionsDataSources.Add("paymentTypeSelectList", paymentTypeSelectList.Value);
 
         return TypedResults.Ok(result.Value);
     }

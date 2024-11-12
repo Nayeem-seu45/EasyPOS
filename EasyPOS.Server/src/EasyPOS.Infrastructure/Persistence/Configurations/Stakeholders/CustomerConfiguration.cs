@@ -12,6 +12,10 @@ internal sealed class CustomerConfiguration : IEntityTypeConfiguration<Customer>
                 .HasDefaultValueSql("NEWSEQUENTIALID()")
                 .ValueGeneratedOnAdd();
 
+        builder.Property(p => p.IdentityNo)
+            .HasMaxLength(20)
+            .IsRequired(false);
+
         builder.Property(p => p.Name)
             .HasMaxLength(250)
             .IsRequired();
@@ -32,6 +36,11 @@ internal sealed class CustomerConfiguration : IEntityTypeConfiguration<Customer>
            .HasMaxLength(20)
            .IsRequired(false);
 
+        builder.Property(p => p.TaxNumber)
+            .HasMaxLength(250)
+            .IsRequired(false);
+
+
         builder.Property(p => p.Country)
            .HasMaxLength(100)
            .IsRequired(false);
@@ -49,13 +58,9 @@ internal sealed class CustomerConfiguration : IEntityTypeConfiguration<Customer>
             .HasDefaultValue(0);
 
 
-        builder.Property(t => t.OutstandingBalance)
-            .HasColumnType("decimal(18, 2)")
-            .HasDefaultValue(0);
-
-        builder.Property(t => t.PreviousDue)
-            .HasColumnType("decimal(18, 2)")
-            .HasDefaultValue(0);
+        //builder.Property(t => t.OutstandingBalance)
+        //    .HasColumnType("decimal(18, 2)")
+        //    .HasDefaultValue(0);
 
         builder.Property(t => t.CreditLimit)
             .HasColumnType("decimal(18, 2)")

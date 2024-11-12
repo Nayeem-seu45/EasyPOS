@@ -23,6 +23,7 @@ public record UpsertSaleModel
     public decimal GrandTotal { get; set; }
     public string? SaleNote { get; set; }
     public string? StaffNote { get; set; }
+    public AddSalePaymentModel SalePayment { get; set; }
 
     public List<SaleDetailModel> SaleDetails { get; set; } = [];
     public Dictionary<string, object> OptionsDataSources { get; set; } = [];

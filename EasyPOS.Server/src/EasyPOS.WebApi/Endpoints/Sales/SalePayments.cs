@@ -60,14 +60,14 @@ public class SalePayments : EndpointGroupBase
     {
         var result = await sender.Send(new GetSalePaymentByIdQuery(id));
 
-        var purchaseStatusSelectList = await sender.Send(new GetSelectListQuery(
+        var paymentTypeSelectList = await sender.Send(new GetSelectListQuery(
             Sql: SelectListSqls.GetLookupDetailSelectListByDevCodeSql,
             Parameters: new { DevCode = (int)LookupDevCode.PaymentType },
             Key: $"{CacheKeys.LookupDetail}_{(int)LookupDevCode.PaymentType}",
             AllowCacheList: false)
         );
 
-        result.Value.OptionsDataSources.Add("paymentTypeSelectList", purchaseStatusSelectList.Value);
+        result.Value.OptionsDataSources.Add("paymentTypeSelectList", paymentTypeSelectList.Value);
         return TypedResults.Ok(result.Value);
     }
 

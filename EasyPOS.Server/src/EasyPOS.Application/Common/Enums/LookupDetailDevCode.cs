@@ -42,3 +42,10 @@ public enum SaleReturnStatus
     Received = 116001,
     Pending = 116002
 }
+
+public enum SalePaymentStatus
+{
+    Pending = 117001,
+    Partial = 117002,
+    Paid = 117003
+}

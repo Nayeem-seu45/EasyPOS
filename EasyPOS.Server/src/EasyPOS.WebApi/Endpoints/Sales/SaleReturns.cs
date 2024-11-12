@@ -91,8 +91,8 @@ public class SaleReturns : EndpointGroupBase
 
         var paymentStatusSelectList = await sender.Send(new GetSelectListQuery(
             Sql: SelectListSqls.GetLookupDetailSelectListByDevCodeSql,
-            Parameters: new { DevCode = LookupDevCode.PaymentStatus },
-            Key: $"{CacheKeys.LookupDetail}_{LookupDevCode.PaymentStatus}",
+            Parameters: new { DevCode = LookupDevCode.PurchasePaymentStatus },
+            Key: $"{CacheKeys.LookupDetail}_{LookupDevCode.PurchasePaymentStatus}",
             AllowCacheList: false)
         );
 
@@ -151,8 +151,8 @@ public class SaleReturns : EndpointGroupBase
 
         var paymentStatusSelectList = await sender.Send(new GetSelectListQuery(
             Sql: SelectListSqls.GetLookupDetailSelectListByDevCodeSql,
-            Parameters: new { DevCode = LookupDevCode.PaymentStatus },
-            Key: $"{CacheKeys.LookupDetail}_{LookupDevCode.PaymentStatus}",
+            Parameters: new { DevCode = LookupDevCode.PurchasePaymentStatus },
+            Key: $"{CacheKeys.LookupDetail}_{LookupDevCode.PurchasePaymentStatus}",
             AllowCacheList: false)
         );
 

@@ -36,6 +36,9 @@ export class SaleDetailComponent implements OnInit {
   // Grand total Section
   totalItems: string = '0';
 
+  // Payment
+  showPayment: boolean = false;
+
   private closeDialogsubscription: Subscription;
 
 
@@ -114,7 +117,7 @@ export class SaleDetailComponent implements OnInit {
         this.toast.created();
       },
       error: (error) => {
-        this.toast.showError(this.getErrorMessage(error));
+        this.toast.showError(CommonUtils.getErrorMessage(error));
       }
     });
   }
@@ -125,7 +128,7 @@ export class SaleDetailComponent implements OnInit {
         this.toast.updated();
       },
       error: (error) => {
-        this.toast.showError(this.getErrorMessage(error));
+        this.toast.showError(CommonUtils.getErrorMessage(error));
       }
     });
   }
@@ -361,14 +364,27 @@ export class SaleDetailComponent implements OnInit {
 
   // #endregion
 
+  //#region Payment
+
+  updateChangeAmount(){
+    this.item.salePayment.changeAmount = this.item.salePayment.receivedAmount - this.item.salePayment.payingAmount;
+  }
+
+  setEmptySalePaymentOnSwitchOff(){
+    this.item.salePayment.changeAmount = 0;
+    this.item.salePayment.receivedAmount = 0;
+    this.item.salePayment.payingAmount = 0;
+    this.item.salePayment.paymentType = null;
+    this.item.salePayment.note = null;
+  }
+
+  //#endregion
+
   // #region Other
   onFileUpload(fileUrl) {
 
   }
 
-  private getErrorMessage(error: any): string {
-    return error?.errors?.[0]?.description || 'An unexpected error occurred';
-  }
   // #endregion
 
 }

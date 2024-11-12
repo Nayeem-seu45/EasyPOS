@@ -1,5 +1,5 @@
 ﻿using ClosedXML.Excel;
-using EasyPOS.Application.Features.Customers.Queries;
+using EasyPOS.Application.Features.Customers.Models;
 using EasyPOS.Domain.Stakeholders;
 using Microsoft.AspNetCore.Http;
 

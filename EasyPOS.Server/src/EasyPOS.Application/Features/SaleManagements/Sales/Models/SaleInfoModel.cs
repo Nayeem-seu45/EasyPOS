@@ -1,4 +1,4 @@
-﻿using EasyPOS.Application.Features.Customers.Queries;
+﻿using EasyPOS.Application.Features.Customers.Models;
 using EasyPOS.Application.Features.Sales.SalePayments.Queries;
 using EasyPOS.Application.Features.Settings.CompanyInfos.Queries;
 using EasyPOS.Domain.Common.Enums;

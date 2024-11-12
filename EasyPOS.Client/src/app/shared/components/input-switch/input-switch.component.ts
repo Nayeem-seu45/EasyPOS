@@ -1,4 +1,4 @@
-import { Component, Input, forwardRef } from '@angular/core';
+import { Component, EventEmitter, Input, Output, forwardRef } from '@angular/core';
 import { NG_VALUE_ACCESSOR, NG_VALIDATORS, ControlValueAccessor, Validator, AbstractControl, ValidationErrors } from '@angular/forms';
 
 @Component({
@@ -31,6 +31,8 @@ export class InputSwitchComponent implements ControlValueAccessor, Validator {
   onTouched: any = () => { };
   onChangeFn: any = (_: any) => { };
 
+  @Output() onChange = new EventEmitter<any>();
+
   get isLeftPosition(): boolean {
     return this.labelPosition === 'left';
   }
@@ -58,6 +60,7 @@ export class InputSwitchComponent implements ControlValueAccessor, Validator {
   onInputChange(event: any): void {
     this.value = event.checked;
     this.onChangeFn(this.value);
+    this.onChange.emit(this.value);
   }
 
   onBlurEvent(): void {

@@ -19045,6 +19045,7 @@ export class UpsertSaleModel implements IUpsertSaleModel {
     grandTotal?: number;
     saleNote?: string | undefined;
     staffNote?: string | undefined;
+    salePayment?: AddSalePaymentModel;
     saleDetails?: SaleDetailModel[];
     optionsDataSources?: { [key: string]: any; };
 
@@ -19078,6 +19079,7 @@ export class UpsertSaleModel implements IUpsertSaleModel {
             this.grandTotal = _data["grandTotal"];
             this.saleNote = _data["saleNote"];
             this.staffNote = _data["staffNote"];
+            this.salePayment = _data["salePayment"] ? AddSalePaymentModel.fromJS(_data["salePayment"]) : <any>undefined;
             if (Array.isArray(_data["saleDetails"])) {
                 this.saleDetails = [] as any;
                 for (let item of _data["saleDetails"])
@@ -19121,6 +19123,7 @@ export class UpsertSaleModel implements IUpsertSaleModel {
         data["grandTotal"] = this.grandTotal;
         data["saleNote"] = this.saleNote;
         data["staffNote"] = this.staffNote;
+        data["salePayment"] = this.salePayment ? this.salePayment.toJSON() : <any>undefined;
         if (Array.isArray(this.saleDetails)) {
             data["saleDetails"] = [];
             for (let item of this.saleDetails)
@@ -19157,8 +19160,69 @@ export interface IUpsertSaleModel {
     grandTotal?: number;
     saleNote?: string | undefined;
     staffNote?: string | undefined;
+    salePayment?: AddSalePaymentModel;
     saleDetails?: SaleDetailModel[];
     optionsDataSources?: { [key: string]: any; };
+}
+
+export class AddSalePaymentModel implements IAddSalePaymentModel {
+    id?: string;
+    saleId?: string;
+    receivedAmount?: number | undefined;
+    payingAmount?: number | undefined;
+    changeAmount?: number | undefined;
+    paymentType?: string | undefined;
+    note?: string | undefined;
+
+    constructor(data?: IAddSalePaymentModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.saleId = _data["saleId"];
+            this.receivedAmount = _data["receivedAmount"];
+            this.payingAmount = _data["payingAmount"];
+            this.changeAmount = _data["changeAmount"];
+            this.paymentType = _data["paymentType"];
+            this.note = _data["note"];
+        }
+    }
+
+    static fromJS(data: any): AddSalePaymentModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new AddSalePaymentModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["saleId"] = this.saleId;
+        data["receivedAmount"] = this.receivedAmount;
+        data["payingAmount"] = this.payingAmount;
+        data["changeAmount"] = this.changeAmount;
+        data["paymentType"] = this.paymentType;
+        data["note"] = this.note;
+        return data;
+    }
+}
+
+export interface IAddSalePaymentModel {
+    id?: string;
+    saleId?: string;
+    receivedAmount?: number | undefined;
+    payingAmount?: number | undefined;
+    changeAmount?: number | undefined;
+    paymentType?: string | undefined;
+    note?: string | undefined;
 }
 
 export class SaleInfoModel implements ISaleInfoModel {

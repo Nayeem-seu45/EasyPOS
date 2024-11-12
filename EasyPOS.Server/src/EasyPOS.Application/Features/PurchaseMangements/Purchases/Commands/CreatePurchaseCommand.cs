@@ -39,7 +39,7 @@ internal sealed class CreatePurchaseCommandHandler(
     {
         var entity = request.Adapt<Purchase>();
         entity.DueAmount = entity.GrandTotal;
-        entity.PurchaseStatusId = await purchaseService.GetPurchasePaymentId(entity);
+        entity.PurchaseStatusId = await purchaseService.GetPurchasePaymentId(entity) ?? Guid.Empty;
         dbContext.Purchases.Add(entity);
 
         // Adjust supplier financials
