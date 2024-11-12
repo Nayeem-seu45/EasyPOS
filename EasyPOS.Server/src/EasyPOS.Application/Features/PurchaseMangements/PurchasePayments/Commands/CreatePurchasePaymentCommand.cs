@@ -39,7 +39,7 @@ internal sealed class CreatePurchasePaymentCommandHandler(
         }
 
         // Update purchase payment fields
-        await purchaseService.UpdatePurchasePaymentFieldsAsync(
+        await purchaseService.AdjustPurchaseAndPaymentStatusAsync(
             purchase,
             entity.PayingAmount,
             PurchaseTransactionType.Payment,

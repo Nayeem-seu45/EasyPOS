@@ -5,7 +5,7 @@ namespace EasyPOS.Application.Features.PurchaseMangements.Services;
 
 internal interface IPurchaseService
 {
-    Task UpdatePurchasePaymentFieldsAsync(
+    Task AdjustPurchaseAndPaymentStatusAsync(
         Purchase purchase, 
         decimal payingAmount, 
         PurchaseTransactionType transactionType,

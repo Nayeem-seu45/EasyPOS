@@ -33,7 +33,7 @@ internal sealed class DeletePurchasePaymentCommandHandler(
         purchase.PaidAmount -= entity.PayingAmount;
         purchase.DueAmount = purchase.GrandTotal - purchase.PaidAmount;
 
-        await purchaseService.UpdatePurchasePaymentFieldsAsync(
+        await purchaseService.AdjustPurchaseAndPaymentStatusAsync(
             purchase, 
             entity.PayingAmount, 
             PurchaseTransactionType.PaymentDelete, 

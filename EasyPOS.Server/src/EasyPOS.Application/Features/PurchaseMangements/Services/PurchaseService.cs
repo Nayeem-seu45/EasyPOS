@@ -7,7 +7,7 @@ namespace EasyPOS.Application.Features.PurchaseMangements.Services;
 public class PurchaseService(
     ICommonQueryService commonQueryService) : IPurchaseService
 {
-    public async Task UpdatePurchasePaymentFieldsAsync(
+    public async Task AdjustPurchaseAndPaymentStatusAsync(
         Purchase purchase, 
         decimal payingAmount,
         PurchaseTransactionType transactionType, 
@@ -30,14 +30,15 @@ public class PurchaseService(
         }
 
         purchase.DueAmount = purchase.GrandTotal - purchase.PaidAmount;
-        purchase.PaymentStatusId = await GetPurchasePaymentId(purchase);
+        purchase.PaymentStatusId = await GetPurchasePaymentId(purchase, cancellationToken);
     }
 
     public async Task<Guid?> GetPurchasePaymentId(
         Purchase purchase, 
         CancellationToken cancellationToken = default)
     {
-        var paymentStatuses = await commonQueryService.GetLookupDetailsAsync((int)LookupDevCode.PaymentStatus);
+        var paymentStatuses = await commonQueryService
+            .GetLookupDetailsAsync((int)LookupDevCode.PaymentStatus, cancellationToken);
 
         if (purchase.GrandTotal == purchase.PaidAmount)
         {

@@ -45,7 +45,7 @@ internal sealed class UpdatePurchasePaymentCommandHandler(
         //purchase.PaymentStatusId = await PurchaseSharedService.GetPurchasePaymentId(commonQueryService, purchase);
 
         // Update purchase payment fields
-        await purchaseService.UpdatePurchasePaymentFieldsAsync(
+        await purchaseService.AdjustPurchaseAndPaymentStatusAsync(
             purchase,
             paymentDifference,
             PurchaseTransactionType.PaymentUpdate,
