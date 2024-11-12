@@ -25,7 +25,7 @@ internal sealed class DeletePurchaseCommandHandler(
         await supplierFinancialService.AdjustSupplierBalance(
             entity.SupplierId,
             entity.DueAmount, 
-            FinancialTransactionType.PurchaseDelete, 
+            PurchaseTransactionType.PurchaseDelete, 
             cancellationToken);
 
         await dbContext.SaveChangesAsync(cancellationToken);

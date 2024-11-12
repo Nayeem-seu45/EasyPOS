@@ -8,6 +8,6 @@ internal interface ISupplierFinancialService
     //Task DecreaseSupplierFinancials(Guid supplierId, decimal amount);
     //Task AddDueAmountSupplierBalance(Guid supplierId, decimal amount);
     //Task UpdateSupplierFinancialsOnPurchaseUpdate(Guid supplierId, decimal dueAmountDifference, decimal paidAmountDifference);
-    Task AdjustSupplierBalance(Guid supplierId, decimal amount, FinancialTransactionType transactionType, CancellationToken cancellationToken = default!);
+    Task AdjustSupplierBalance(Guid supplierId, decimal amount, PurchaseTransactionType transactionType, CancellationToken cancellationToken = default!);
 
 }

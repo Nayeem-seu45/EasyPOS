@@ -1,4 +1,4 @@
-﻿using EasyPOS.Application.Features.Purchases.Shared;
+﻿using EasyPOS.Application.Features.PurchaseMangements.Services;
 using EasyPOS.Application.Features.Stakeholders.Suppliers.Models;
 using EasyPOS.Application.Features.Stakeholders.Suppliers.Services;
 
@@ -20,7 +20,7 @@ public record UpdatePurchasePaymentCommand(
 internal sealed class UpdatePurchasePaymentCommandHandler(
     IApplicationDbContext dbContext,
     ISupplierFinancialService supplierFinancialService,
-    ICommonQueryService commonQueryService)
+    IPurchaseService purchaseService)
     : ICommandHandler<UpdatePurchasePaymentCommand>
 {
     public async Task<Result> Handle(UpdatePurchasePaymentCommand request, CancellationToken cancellationToken)
@@ -40,15 +40,23 @@ internal sealed class UpdatePurchasePaymentCommandHandler(
 
         var paymentDifference = entity.PayingAmount - previousPaymentAmount;
 
-        purchase.PaidAmount += paymentDifference;
-        purchase.DueAmount = purchase.GrandTotal - purchase.PaidAmount;
-        purchase.PaymentStatusId = await PurchaseSharedService.GetPurchasePaymentId(commonQueryService, purchase);
+        //purchase.PaidAmount += paymentDifference;
+        //purchase.DueAmount = purchase.GrandTotal - purchase.PaidAmount;
+        //purchase.PaymentStatusId = await PurchaseSharedService.GetPurchasePaymentId(commonQueryService, purchase);
+
+        // Update purchase payment fields
+        await purchaseService.UpdatePurchasePaymentFieldsAsync(
+            purchase,
+            paymentDifference,
+            PurchaseTransactionType.PaymentUpdate,
+            cancellationToken);
+
 
         // Adjust supplier financials based on the payment difference
         await supplierFinancialService.AdjustSupplierBalance(
             purchase.SupplierId, 
             paymentDifference, 
-            FinancialTransactionType.PaymentUpdate, 
+            PurchaseTransactionType.PaymentUpdate, 
             cancellationToken);
 
         await dbContext.SaveChangesAsync(cancellationToken);

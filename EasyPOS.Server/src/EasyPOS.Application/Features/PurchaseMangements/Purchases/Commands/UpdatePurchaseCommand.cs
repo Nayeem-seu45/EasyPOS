@@ -1,9 +1,8 @@
-﻿using EasyPOS.Application.Features.Purchases.Models;
-using EasyPOS.Application.Features.Purchases.Shared;
+﻿using EasyPOS.Application.Features.PurchaseMangements.Services;
+using EasyPOS.Application.Features.Purchases.Models;
 using EasyPOS.Application.Features.Stakeholders.Suppliers.Models;
 using EasyPOS.Application.Features.Stakeholders.Suppliers.Services;
 using EasyPOS.Domain.Common.Enums;
-using EasyPOS.Domain.Purchases;
 
 namespace EasyPOS.Application.Features.Purchases.Commands;
 
@@ -31,8 +30,8 @@ public record UpdatePurchaseCommand(
 
 internal sealed class UpdatePurchaseCommandHandler(
     IApplicationDbContext dbContext,
-    ICommonQueryService commonQueryService,
-    ISupplierFinancialService supplierFinancialService)
+    ISupplierFinancialService supplierFinancialService,
+    IPurchaseService purchaseService)
     : ICommandHandler<UpdatePurchaseCommand>
 {
     public async Task<Result> Handle(UpdatePurchaseCommand request, CancellationToken cancellationToken)
@@ -48,14 +47,14 @@ internal sealed class UpdatePurchaseCommandHandler(
 
         // Recalculate DueAmount and PaymentStatusId
         entity.DueAmount = entity.GrandTotal - entity.PaidAmount;
-        entity.PaymentStatusId = await PurchaseSharedService.GetPurchasePaymentId(commonQueryService, entity);
+        entity.PaymentStatusId = await purchaseService.GetPurchasePaymentId(entity, cancellationToken);
 
         // Adjust supplier financials
         var dueAmountDifference = entity.DueAmount - oldDueAmount;
         await supplierFinancialService.AdjustSupplierBalance(
            entity.SupplierId,
            dueAmountDifference,
-           FinancialTransactionType.PurchaseUpdate,
+           PurchaseTransactionType.PurchaseUpdate,
            cancellationToken);
 
         await dbContext.SaveChangesAsync(cancellationToken);

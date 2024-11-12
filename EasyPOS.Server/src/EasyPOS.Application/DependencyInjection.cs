@@ -1,8 +1,8 @@
 ﻿using System.Reflection;
-using EasyPOS.Application.Features.Common.Queries;
 using EasyPOS.Application.Common.Behaviours;
-using Microsoft.Extensions.DependencyInjection;
+using EasyPOS.Application.Features.PurchaseMangements.Services;
 using EasyPOS.Application.Features.Stakeholders.Suppliers.Services;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace EasyPOS.Application;
 
@@ -29,6 +29,7 @@ public static class DependencyInjection
 
 
         services.AddScoped<ISupplierFinancialService, SupplierFinancialService>();
+        services.AddScoped<IPurchaseService, PurchaseService>();
 
 
         return services;

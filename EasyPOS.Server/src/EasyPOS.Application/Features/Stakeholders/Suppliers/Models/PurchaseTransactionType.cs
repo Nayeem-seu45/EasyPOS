@@ -1,6 +1,6 @@
 ﻿namespace EasyPOS.Application.Features.Stakeholders.Suppliers.Models;
 
-public enum FinancialTransactionType 
+public enum PurchaseTransactionType 
 { 
     Purchase, 
     PurchaseUpdate, 

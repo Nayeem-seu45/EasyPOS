@@ -1,5 +1,4 @@
 ﻿using EasyPOS.Application.Features.Stakeholders.Suppliers.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace EasyPOS.Application.Features.Stakeholders.Suppliers.Services;
 
@@ -9,7 +8,7 @@ internal class SupplierFinancialService(IApplicationDbContext dbContext)
     public async Task AdjustSupplierBalance(
         Guid supplierId, 
         decimal amount, 
-        FinancialTransactionType transactionType, 
+        PurchaseTransactionType transactionType, 
         CancellationToken cancellation = default)
     {
         var supplier = await dbContext.Suppliers.FindAsync(supplierId);
@@ -17,24 +16,24 @@ internal class SupplierFinancialService(IApplicationDbContext dbContext)
 
         switch (transactionType)
         {
-            case FinancialTransactionType.Purchase:
+            case PurchaseTransactionType.Purchase:
                 supplier.TotalDueAmount += amount;
                 break;
-            case FinancialTransactionType.PurchaseUpdate:
+            case PurchaseTransactionType.PurchaseUpdate:
                 supplier.TotalDueAmount += amount;
                 break;
-            case FinancialTransactionType.PurchaseDelete:
+            case PurchaseTransactionType.PurchaseDelete:
                 supplier.TotalDueAmount -= amount;
                 break;
-            case FinancialTransactionType.Payment:
+            case PurchaseTransactionType.Payment:
                 supplier.TotalPaidAmount += amount; 
                 supplier.TotalDueAmount -= amount;
                 break;
-            case FinancialTransactionType.PaymentUpdate:
+            case PurchaseTransactionType.PaymentUpdate:
                 supplier.TotalPaidAmount += amount; 
                 supplier.TotalDueAmount -= amount;
                 break;
-            case FinancialTransactionType.PaymentDelete:
+            case PurchaseTransactionType.PaymentDelete:
                 supplier.TotalPaidAmount -= amount;
                 supplier.TotalDueAmount += amount;
                 break;
