@@ -46,6 +46,17 @@ internal sealed class CreateSalePaymentCommandHandler(
             sale.PaymentStatusId = paymentStatusId.Value;
         }
 
+        // Update customer due and paid amounts
+        var customer = await dbContext.Customers.FirstOrDefaultAsync(c => c.Id == sale.CustomerId, cancellationToken);
+        if (customer is null)
+        {
+            return Result.Failure<Guid>(Error.Failure(nameof(customer), "Customer not found."));
+        }
+
+        // Adjust customer's financial records
+        customer.TotalDueAmount += entity.PayingAmount - sale.DueAmount;
+        customer.TotalPaidAmount += entity.PayingAmount;
+
         await dbContext.SaveChangesAsync(cancellationToken);
 
         return Result.Success(entity.Id);
