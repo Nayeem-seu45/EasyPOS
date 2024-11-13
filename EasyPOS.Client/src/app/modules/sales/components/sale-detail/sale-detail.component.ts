@@ -39,6 +39,10 @@ export class SaleDetailComponent implements OnInit {
   // Payment
   showPayment: boolean = false;
 
+  get isEdit(){
+    return this.id && this.id !== CommonConstants.EmptyGuid;
+  }
+
   private closeDialogsubscription: Subscription;
 
 

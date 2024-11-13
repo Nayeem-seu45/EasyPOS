@@ -13,6 +13,7 @@ public class GlobalExceptionHandlerMiddleware(
         HttpContext httpContext,
         Exception exception,
         CancellationToken cancellationToken)
+   
     {
         logger.LogError(exception, "Exception occured: {Message}", exception.Message);
 
