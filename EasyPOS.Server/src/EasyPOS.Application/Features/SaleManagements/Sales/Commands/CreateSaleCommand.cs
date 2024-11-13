@@ -58,6 +58,8 @@ internal sealed class CreateSaleCommandHandler(
         {
             entity.PaymentStatusId = GetSalePaymentStatusId(salePaymentStatusList, SalePaymentStatus.Pending);
         }
+        entity.DueAmount = entity.GrandTotal - request.SalePayment.PayingAmount;
+        entity.PaidAmount = request.SalePayment.PayingAmount;
 
 
         // Customer

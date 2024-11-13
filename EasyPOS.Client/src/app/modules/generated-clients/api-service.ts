@@ -15380,13 +15380,17 @@ export interface IPaginatedResponseOfCustomerModel {
 export class CustomerModel implements ICustomerModel {
     id?: string;
     name?: string;
+    identityNo?: string;
     email?: string | undefined;
     phoneNo?: string;
     mobile?: string | undefined;
     country?: string | undefined;
     city?: string | undefined;
     address?: string | undefined;
-    previousDue?: number | undefined;
+    totalDueAmount?: number;
+    totalSaleReturnAmount?: number;
+    totalPaidAmount?: number;
+    rewardPoints?: number | undefined;
     isActive?: boolean;
     active?: string;
     optionsDataSources?: { [key: string]: any; };
@@ -15404,13 +15408,17 @@ export class CustomerModel implements ICustomerModel {
         if (_data) {
             this.id = _data["id"];
             this.name = _data["name"];
+            this.identityNo = _data["identityNo"];
             this.email = _data["email"];
             this.phoneNo = _data["phoneNo"];
             this.mobile = _data["mobile"];
             this.country = _data["country"];
             this.city = _data["city"];
             this.address = _data["address"];
-            this.previousDue = _data["previousDue"];
+            this.totalDueAmount = _data["totalDueAmount"];
+            this.totalSaleReturnAmount = _data["totalSaleReturnAmount"];
+            this.totalPaidAmount = _data["totalPaidAmount"];
+            this.rewardPoints = _data["rewardPoints"];
             this.isActive = _data["isActive"];
             this.active = _data["active"];
             if (_data["optionsDataSources"]) {
@@ -15434,13 +15442,17 @@ export class CustomerModel implements ICustomerModel {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
         data["name"] = this.name;
+        data["identityNo"] = this.identityNo;
         data["email"] = this.email;
         data["phoneNo"] = this.phoneNo;
         data["mobile"] = this.mobile;
         data["country"] = this.country;
         data["city"] = this.city;
         data["address"] = this.address;
-        data["previousDue"] = this.previousDue;
+        data["totalDueAmount"] = this.totalDueAmount;
+        data["totalSaleReturnAmount"] = this.totalSaleReturnAmount;
+        data["totalPaidAmount"] = this.totalPaidAmount;
+        data["rewardPoints"] = this.rewardPoints;
         data["isActive"] = this.isActive;
         data["active"] = this.active;
         if (this.optionsDataSources) {
@@ -15457,13 +15469,17 @@ export class CustomerModel implements ICustomerModel {
 export interface ICustomerModel {
     id?: string;
     name?: string;
+    identityNo?: string;
     email?: string | undefined;
     phoneNo?: string;
     mobile?: string | undefined;
     country?: string | undefined;
     city?: string | undefined;
     address?: string | undefined;
-    previousDue?: number | undefined;
+    totalDueAmount?: number;
+    totalSaleReturnAmount?: number;
+    totalPaidAmount?: number;
+    rewardPoints?: number | undefined;
     isActive?: boolean;
     active?: string;
     optionsDataSources?: { [key: string]: any; };
@@ -19168,9 +19184,9 @@ export interface IUpsertSaleModel {
 export class AddSalePaymentModel implements IAddSalePaymentModel {
     id?: string;
     saleId?: string;
-    receivedAmount?: number | undefined;
-    payingAmount?: number | undefined;
-    changeAmount?: number | undefined;
+    receivedAmount?: number;
+    payingAmount?: number;
+    changeAmount?: number;
     paymentType?: string | undefined;
     note?: string | undefined;
 
@@ -19218,9 +19234,9 @@ export class AddSalePaymentModel implements IAddSalePaymentModel {
 export interface IAddSalePaymentModel {
     id?: string;
     saleId?: string;
-    receivedAmount?: number | undefined;
-    payingAmount?: number | undefined;
-    changeAmount?: number | undefined;
+    receivedAmount?: number;
+    payingAmount?: number;
+    changeAmount?: number;
     paymentType?: string | undefined;
     note?: string | undefined;
 }

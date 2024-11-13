@@ -20,13 +20,13 @@ internal sealed class GetCustomerListQueryHandler(ISqlConnectionFactory sqlConne
         var sql = $"""
             SELECT
                 t.Id AS {nameof(CustomerModel.Id)},
+                t.IdentityNo AS {nameof(CustomerModel.IdentityNo)},
                 t.Name AS {nameof(CustomerModel.Name)},
                 t.Email AS {nameof(CustomerModel.Email)},
                 t.PhoneNo AS {nameof(CustomerModel.PhoneNo)},
                 t.Mobile AS {nameof(CustomerModel.Mobile)},
-                t.Country AS {nameof(CustomerModel.Country)},
-                t.City AS {nameof(CustomerModel.City)},
-                t.Address AS {nameof(CustomerModel.Address)},
+                t.TotalDueAmount AS {nameof(CustomerModel.TotalDueAmount)},
+                t.TotalSaleReturnAmount AS {nameof(CustomerModel.TotalSaleReturnAmount)},
                 IIF(t.IsActive = 1, 'Active', 'Inactive') AS {nameof(CustomerModel.Active)}
             FROM dbo.Customers t
             """;

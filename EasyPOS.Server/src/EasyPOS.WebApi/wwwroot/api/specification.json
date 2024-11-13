@@ -10185,6 +10185,9 @@
           "name": {
             "type": "string"
           },
+          "identityNo": {
+            "type": "string"
+          },
           "email": {
             "type": "string",
             "nullable": true
@@ -10208,9 +10211,21 @@
             "type": "string",
             "nullable": true
           },
-          "previousDue": {
+          "totalDueAmount": {
             "type": "number",
-            "format": "decimal",
+            "format": "decimal"
+          },
+          "totalSaleReturnAmount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "totalPaidAmount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "rewardPoints": {
+            "type": "integer",
+            "format": "int32",
             "nullable": true
           },
           "isActive": {
@@ -12533,18 +12548,15 @@
           },
           "receivedAmount": {
             "type": "number",
-            "format": "decimal",
-            "nullable": true
+            "format": "decimal"
           },
           "payingAmount": {
             "type": "number",
-            "format": "decimal",
-            "nullable": true
+            "format": "decimal"
           },
           "changeAmount": {
             "type": "number",
-            "format": "decimal",
-            "nullable": true
+            "format": "decimal"
           },
           "paymentType": {
             "type": "string",
