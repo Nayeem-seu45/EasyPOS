@@ -32,6 +32,7 @@ public static class DependencyInjection
 
         services.AddScoped<ISupplierService, SupplierService>();
         services.AddScoped<IPurchaseService, PurchaseService>();
+        services.AddScoped<IPurchaseReturnService, PurchaseReturnService>();
 
         services.AddScoped<ICustomerService, CustomerService>();
         services.AddScoped<ISaleService, SaleService>();

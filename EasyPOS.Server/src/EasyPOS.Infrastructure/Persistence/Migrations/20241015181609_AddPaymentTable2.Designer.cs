@@ -827,7 +827,7 @@ namespace EasyPOS.Infrastructure.Persistence.Migrations
                     b.ToTable("Suppliers");
                 });
 
-            modelBuilder.Entity("EasyPOS.Domain.Trades.Purchase", b =>
+            modelBuilder.Entity("EasyPOS.Domain.Trades.PurchaseCreate", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -1343,24 +1343,24 @@ namespace EasyPOS.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("EasyPOS.Domain.Trades.PurchaseDetail", b =>
                 {
-                    b.HasOne("EasyPOS.Domain.Trades.Purchase", "Purchase")
+                    b.HasOne("EasyPOS.Domain.Trades.PurchaseCreate", "PurchaseCreate")
                         .WithMany("PurchaseDetails")
                         .HasForeignKey("PurchaseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Purchase");
+                    b.Navigation("PurchaseCreate");
                 });
 
             modelBuilder.Entity("EasyPOS.Domain.Trades.PurchasePayment", b =>
                 {
-                    b.HasOne("EasyPOS.Domain.Trades.Purchase", "Purchase")
+                    b.HasOne("EasyPOS.Domain.Trades.PurchaseCreate", "PurchaseCreate")
                         .WithMany("PurchasePayments")
                         .HasForeignKey("PurchaseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Purchase");
+                    b.Navigation("PurchaseCreate");
                 });
 
             modelBuilder.Entity("EasyPOS.Domain.Trades.SaleDetail", b =>
@@ -1385,7 +1385,7 @@ namespace EasyPOS.Infrastructure.Persistence.Migrations
                     b.Navigation("Sale");
                 });
 
-            modelBuilder.Entity("EasyPOS.Domain.Trades.Purchase", b =>
+            modelBuilder.Entity("EasyPOS.Domain.Trades.PurchaseCreate", b =>
                 {
                     b.Navigation("PurchaseDetails");
 

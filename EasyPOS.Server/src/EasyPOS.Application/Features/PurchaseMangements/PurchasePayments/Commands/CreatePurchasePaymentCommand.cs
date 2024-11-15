@@ -20,18 +20,18 @@ public record CreatePurchasePaymentCommand(
 
 internal sealed class CreatePurchasePaymentCommandHandler(
     IApplicationDbContext dbContext,
-    ISupplierService supplierFinancialService,
+    ISupplierService supplierService,
     IPurchaseService purchaseService) : ICommandHandler<CreatePurchasePaymentCommand, Guid>
 {
     public async Task<Result<Guid>> Handle(CreatePurchasePaymentCommand request, CancellationToken cancellationToken)
     {
-        var entity = request.Adapt<PurchasePayment>();
-        entity.PaymentDate = DateTime.Now;
+        var purchasePayment = request.Adapt<PurchasePayment>();
+        purchasePayment.PaymentDate = DateTime.Now;
 
-        dbContext.PurchasePayments.Add(entity);
+        dbContext.PurchasePayments.Add(purchasePayment);
 
         var purchase = await dbContext.Purchases
-            .FirstOrDefaultAsync(x => x.Id == entity.PurchaseId, cancellationToken: cancellationToken);
+            .FirstOrDefaultAsync(x => x.Id == purchasePayment.PurchaseId, cancellationToken: cancellationToken);
 
         if (purchase is null)
         {
@@ -39,22 +39,22 @@ internal sealed class CreatePurchasePaymentCommandHandler(
         }
 
         // Update purchase payment fields
-        await purchaseService.AdjustPurchaseAndPaymentStatusAsync(
+        await purchaseService.AdjustPurchaseAsync(
             purchase,
-            entity.PayingAmount,
-            PurchaseTransactionType.Payment,
+            purchasePayment.PayingAmount,
+            PurchaseTransactionType.PaymentCreate,
             cancellationToken);
 
         // Adjust supplier financials for the new payment
-        await supplierFinancialService.AdjustSupplierBalance(
+        await supplierService.AdjustSupplierBalance(
             purchase.SupplierId, 
-            entity.PayingAmount, 
-            PurchaseTransactionType.Payment,
+            purchasePayment.PayingAmount, 
+            PurchaseTransactionType.PaymentCreate,
             cancellationToken);
 
         await dbContext.SaveChangesAsync(cancellationToken);
 
-        return entity.Id;
+        return purchasePayment.Id;
     }
 
 }

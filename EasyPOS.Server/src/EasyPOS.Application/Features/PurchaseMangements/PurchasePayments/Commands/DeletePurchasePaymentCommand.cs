@@ -11,38 +11,38 @@ public record DeletePurchasePaymentCommand(Guid Id) : ICacheInvalidatorCommand
 
 internal sealed class DeletePurchasePaymentCommandHandler(
     IApplicationDbContext dbContext,
-    ISupplierService supplierFinancialService,
+    ISupplierService supplierService,
     IPurchaseService purchaseService)
     : ICommandHandler<DeletePurchasePaymentCommand>
 
 {
     public async Task<Result> Handle(DeletePurchasePaymentCommand request, CancellationToken cancellationToken)
     {
-        var entity = await dbContext.PurchasePayments
+        var purchasePayment = await dbContext.PurchasePayments
             .FindAsync([request.Id], cancellationToken);
 
-        if (entity is null) return Result.Failure(Error.NotFound(nameof(entity), ErrorMessages.EntityNotFound));
+        if (purchasePayment is null) return Result.Failure(Error.NotFound(nameof(purchasePayment), ErrorMessages.EntityNotFound));
 
         var purchase = await dbContext.Purchases
-            .FirstOrDefaultAsync(x => x.Id == entity.PurchaseId, cancellationToken: cancellationToken);
+            .FirstOrDefaultAsync(x => x.Id == purchasePayment.PurchaseId, cancellationToken: cancellationToken);
 
-        if (purchase is null) return Result.Failure(Error.NotFound(nameof(purchase), "Purchase Not Found."));
+        if (purchase is null) return Result.Failure(Error.NotFound(nameof(purchase), "PurchaseCreate Not Found."));
 
-        dbContext.PurchasePayments.Remove(entity);
+        dbContext.PurchasePayments.Remove(purchasePayment);
 
-        purchase.PaidAmount -= entity.PayingAmount;
+        purchase.PaidAmount -= purchasePayment.PayingAmount;
         purchase.DueAmount = purchase.GrandTotal - purchase.PaidAmount;
 
-        await purchaseService.AdjustPurchaseAndPaymentStatusAsync(
+        await purchaseService.AdjustPurchaseAsync(
             purchase, 
-            entity.PayingAmount, 
+            purchasePayment.PayingAmount, 
             PurchaseTransactionType.PaymentDelete, 
             cancellationToken);
 
         // Adjust supplier balance for payment deletion
-        await supplierFinancialService.AdjustSupplierBalance(
+        await supplierService.AdjustSupplierBalance(
             purchase.SupplierId, 
-            entity.PayingAmount, 
+            purchasePayment.PayingAmount, 
             PurchaseTransactionType.PaymentDelete,
             cancellationToken);
 

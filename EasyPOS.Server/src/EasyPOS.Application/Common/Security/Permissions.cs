@@ -269,6 +269,15 @@ public static class Permissions
         public const string Edit = "Permissions.PurchaseReturns.Edit";
         public const string Delete = "Permissions.PurchaseReturns.Delete";
     }
+
+    public static class PurchaseReturnPayments
+    {
+        public const string View = "Permissions.PurchaseReturnPayments.View";
+        public const string Create = "Permissions.PurchaseReturnPayments.Create";
+        public const string Edit = "Permissions.PurchaseReturnPayments.Edit";
+        public const string Delete = "Permissions.PurchaseReturnPayments.Delete";
+    }
+
     #endregion
 
     #region Sales

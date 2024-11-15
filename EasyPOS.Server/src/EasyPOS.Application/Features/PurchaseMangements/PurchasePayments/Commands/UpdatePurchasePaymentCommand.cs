@@ -19,33 +19,33 @@ public record UpdatePurchasePaymentCommand(
 
 internal sealed class UpdatePurchasePaymentCommandHandler(
     IApplicationDbContext dbContext,
-    ISupplierService supplierFinancialService,
+    ISupplierService supplierService,
     IPurchaseService purchaseService)
     : ICommandHandler<UpdatePurchasePaymentCommand>
 {
     public async Task<Result> Handle(UpdatePurchasePaymentCommand request, CancellationToken cancellationToken)
     {
-        var entity = await dbContext.PurchasePayments.FindAsync([request.Id], cancellationToken);
+        var purchasePayment = await dbContext.PurchasePayments.FindAsync([request.Id], cancellationToken);
 
-        if (entity is null) return Result.Failure(Error.NotFound(nameof(entity), ErrorMessages.EntityNotFound));
+        if (purchasePayment is null) return Result.Failure(Error.NotFound(nameof(purchasePayment), ErrorMessages.EntityNotFound));
 
         var purchase = await dbContext.Purchases
-            .FirstOrDefaultAsync(x => x.Id == entity.PurchaseId, cancellationToken: cancellationToken);
+            .FirstOrDefaultAsync(x => x.Id == purchasePayment.PurchaseId, cancellationToken: cancellationToken);
 
-        if (purchase is null) return Result.Failure(Error.NotFound(nameof(purchase), "Purchase Not Found."));
+        if (purchase is null) return Result.Failure(Error.NotFound(nameof(purchase), "PurchaseCreate Not Found."));
 
-        var previousPaymentAmount = entity.PayingAmount;
+        var previousPaymentAmount = purchasePayment.PayingAmount;
 
-        request.Adapt(entity);
+        request.Adapt(purchasePayment);
 
-        var paymentDifference = entity.PayingAmount - previousPaymentAmount;
+        var paymentDifference = purchasePayment.PayingAmount - previousPaymentAmount;
 
         //purchase.PaidAmount += paymentDifference;
         //purchase.DueAmount = purchase.GrandTotal - purchase.PaidAmount;
         //purchase.PaymentStatusId = await PurchaseSharedService.GetPurchasePaymentId(commonQueryService, purchase);
 
         // Update purchase payment fields
-        await purchaseService.AdjustPurchaseAndPaymentStatusAsync(
+        await purchaseService.AdjustPurchaseAsync(
             purchase,
             paymentDifference,
             PurchaseTransactionType.PaymentUpdate,
@@ -53,7 +53,7 @@ internal sealed class UpdatePurchasePaymentCommandHandler(
 
 
         // Adjust supplier financials based on the payment difference
-        await supplierFinancialService.AdjustSupplierBalance(
+        await supplierService.AdjustSupplierBalance(
             purchase.SupplierId, 
             paymentDifference, 
             PurchaseTransactionType.PaymentUpdate, 

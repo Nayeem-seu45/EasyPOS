@@ -65,6 +65,7 @@ public interface IApplicationDbContext
     DbSet<PurchasePayment> PurchasePayments { get; }
     DbSet<PurchaseReturn> PurchaseReturns { get; }
     DbSet<PurchaseReturnDetail> PurchaseReturnDetails { get; }
+    DbSet<PurchaseReturnPayment> PurchaseReturnPayments { get; }
 
     #endregion
 

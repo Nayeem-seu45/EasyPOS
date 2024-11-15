@@ -9,7 +9,6 @@ namespace EasyPOS.Application.Features.Purchases.Commands;
 
 public record CreatePurchaseCommand(
     DateOnly PurchaseDate,
-    string ReferenceNo,
     Guid WarehouseId,
     Guid SupplierId,
     Guid PurchaseStatusId,
@@ -37,20 +36,23 @@ internal sealed class CreatePurchaseCommandHandler(
 {
     public async Task<Result<Guid>> Handle(CreatePurchaseCommand request, CancellationToken cancellationToken)
     {
-        var entity = request.Adapt<Purchase>();
-        entity.DueAmount = entity.GrandTotal;
-        entity.PurchaseStatusId = await purchaseService.GetPurchasePaymentId(entity) ?? Guid.Empty;
-        dbContext.Purchases.Add(entity);
+        var purchase = request.Adapt<Purchase>();
+        //entity.DueAmount = entity.GrandTotal;
+        //entity.PurchaseStatusId = await purchaseService.GetPurchasePaymentId(entity) ?? Guid.Empty;
+        dbContext.Purchases.Add(purchase);
+        purchase.ReferenceNo = "PUR-" + DateTime.Now.ToString("yyyyMMddhhmmffff");
+
+        await purchaseService.AdjustPurchaseAsync(purchase, 0, PurchaseTransactionType.PurchaseCreate, cancellationToken);
 
         // Adjust supplier financials
         await supplierFinancialService.AdjustSupplierBalance(
-            entity.SupplierId, 
-            entity.DueAmount, 
-            PurchaseTransactionType.Purchase, 
+            purchase.SupplierId, 
+            purchase.DueAmount, 
+            PurchaseTransactionType.PurchaseCreate, 
             cancellationToken);
 
         await dbContext.SaveChangesAsync(cancellationToken);
 
-        return Result.Success(entity.Id);
+        return Result.Success(purchase.Id);
     }
 }

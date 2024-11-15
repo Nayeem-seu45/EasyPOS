@@ -9,9 +9,8 @@
           <app-input-date label="Date" formControlName="purchaseDate" [required]="true" />
         </div>
 
-        <div class="field col-12 md:col-4">
-          <app-input-text label="Reference No" formControlName="referenceNo" [required]="true" [readonly]="false" />
-          <app-validator-msg [control]="f['referenceNo']" />
+        <div class="field col-12 md:col-4" *ngIf="isEdit">
+          <app-input-text label="Reference No" formControlName="referenceNo" [required]="true" [disabled]="true" />
         </div>
 
         <div class="field col-12 md:col-4">

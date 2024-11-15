@@ -6,8 +6,8 @@ import { PurchaseListComponent } from "./components/purchase-list/purchase-list.
 import { UpdatePurchaseOrderDetailComponent } from "./components/update-purchase-order-detail/update-purchase-order-detail.component";
 import { PurchasePaymentDetailComponent } from "./components/purchase-payment-detail/purchase-payment-detail.component";
 import { PurchasePaymentListComponent } from "./components/purchase-payment-list/purchase-payment-list.component";
-import { PurchaseReturnListComponent } from "./components/purchase-return-return-list/purchase-return-list.component";
-import { PurchaseReturnDetailComponent } from "./components/purchase-return-return-detail/purchase-return-detail.component";
+import { PurchaseReturnListComponent } from "./components/purchase-return-list/purchase-return-list.component";
+import { PurchaseReturnDetailComponent } from "./components/purchase-return-detail/purchase-return-detail.component";
 
 const routes: Routes = [
   {path: 'list', component: PurchaseListComponent},

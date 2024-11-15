@@ -67,6 +67,7 @@ public sealed class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<PurchasePayment> PurchasePayments => Set<PurchasePayment>();
     public DbSet<PurchaseReturn> PurchaseReturns => Set<PurchaseReturn>();
     public DbSet<PurchaseReturnDetail> PurchaseReturnDetails => Set<PurchaseReturnDetail>();
+    public DbSet<PurchaseReturnPayment> PurchaseReturnPayments => Set<PurchaseReturnPayment>();
 
     #endregion
 

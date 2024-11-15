@@ -7,7 +7,7 @@ namespace EasyPOS.Application.Features.PurchaseMangements.Services;
 public class PurchaseService(
     ICommonQueryService commonQueryService) : IPurchaseService
 {
-    public async Task AdjustPurchaseAndPaymentStatusAsync(
+    public async Task AdjustPurchaseAsync(
         Purchase purchase, 
         decimal payingAmount,
         PurchaseTransactionType transactionType, 
@@ -16,9 +16,11 @@ public class PurchaseService(
 
         switch (transactionType)
         {
-            case PurchaseTransactionType.Payment:
+            case PurchaseTransactionType.PurchaseCreate:
+            case PurchaseTransactionType.PaymentCreate:
                 purchase.PaidAmount += payingAmount;
                 break;
+            //case PurchaseTransactionType.PurchaseUpdate:
             case PurchaseTransactionType.PaymentUpdate:
                 purchase.PaidAmount += payingAmount;
                 break;
@@ -30,7 +32,7 @@ public class PurchaseService(
         }
 
         purchase.DueAmount = purchase.GrandTotal - purchase.PaidAmount;
-        purchase.PaymentStatusId = await GetPurchasePaymentId(purchase, cancellationToken);
+        await UpdatePurchasePaymentStatusId(purchase, cancellationToken);
     }
 
     public async Task<Guid?> GetPurchasePaymentId(
@@ -51,6 +53,27 @@ public class PurchaseService(
         else
         {
             return paymentStatuses.FirstOrDefault(x => x.DevCode == (int)PaymentStatus.Due)?.Id;
+        }
+    }
+
+    public async Task UpdatePurchasePaymentStatusId(
+        Purchase purchase,
+        CancellationToken cancellationToken = default)
+    {
+        var paymentStatuses = await commonQueryService
+            .GetLookupDetailsAsync((int)LookupDevCode.PurchasePaymentStatus, cancellationToken);
+
+        if (purchase.GrandTotal == purchase.PaidAmount)
+        {
+            purchase.PaymentStatusId = paymentStatuses.FirstOrDefault(x => x.DevCode == (int)PaymentStatus.Paid)?.Id;
+        }
+        else if (purchase.GrandTotal > purchase.PaidAmount && purchase.PaidAmount > 0)
+        {
+            purchase.PaymentStatusId = paymentStatuses.FirstOrDefault(x => x.DevCode == (int)PaymentStatus.Partial)?.Id;
+        }
+        else
+        {
+            purchase.PaymentStatusId = paymentStatuses.FirstOrDefault(x => x.DevCode == (int)PaymentStatus.Due)?.Id;
         }
     }
 }

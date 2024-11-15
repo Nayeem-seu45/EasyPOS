@@ -2,10 +2,16 @@
 
 public enum PurchaseTransactionType
 {
-    Purchase,
+    PurchaseCreate,
     PurchaseUpdate,
     PurchaseDelete,
-    Payment,
+    PaymentCreate,
     PaymentUpdate,
-    PaymentDelete
+    PaymentDelete,
+    PurchaseReturnCreate,
+    PurchaseReturnUpdate,
+    PurchaseReturnDelete,
+    PaymentReturnCreate,
+    PaymentReturnUpdate,
+    PaymentReturnDelete
 }

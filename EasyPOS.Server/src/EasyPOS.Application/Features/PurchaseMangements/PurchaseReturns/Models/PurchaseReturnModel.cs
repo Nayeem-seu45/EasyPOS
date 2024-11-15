@@ -21,10 +21,15 @@ public record PurchaseReturnModel
     public decimal? DiscountAmount { get; set; }
     public decimal? ShippingCost { get; set; }
     public decimal GrandTotal { get; set; }
+    public decimal DueAmount { get; set; }
+    public decimal PaidAmount { get; set; }
     public string? Note { get; set; }
 
     public string SupplierName { get; set; }
     public string ReturnStatus { get; set; }
+    public string PaymentStatus { get; set; }
+    public string PaymentStatusTag { get; set; }
+
 
     public List<PurchaseReturnDetailModel> PurchaseReturnDetails { get; set; } = [];
 

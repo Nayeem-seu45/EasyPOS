@@ -50,6 +50,10 @@ export class PurchaseReturnDetailComponent implements OnInit {
     return this.form.controls;
   }
 
+  get isEdit(): boolean{
+    return this.id && this.id !== CommonConstants.EmptyGuid;
+  }
+
   protected toast: ToastService = inject(ToastService);
   protected fb: FormBuilder = inject(FormBuilder);
   protected datePipe: DatePipe = inject(DatePipe);
@@ -112,8 +116,9 @@ export class PurchaseReturnDetailComponent implements OnInit {
         this.calculateFooterSection();
         this.calculateGrandTotal();
 
-        console.log(this.form.value)
-        console.log(res)
+        this.f?.['warehouseId'].disable();
+        this.f?.['supplierId'].disable();
+        // this.f?.['warehouseId'].disable();
       },
       error: (error) => {
         this.toast.showError(CommonUtils.getErrorMessage(error));

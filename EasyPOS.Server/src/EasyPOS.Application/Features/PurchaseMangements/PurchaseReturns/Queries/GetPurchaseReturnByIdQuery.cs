@@ -29,6 +29,7 @@ internal sealed class GetPurchaseReturnByIdQueryHandler(ISqlConnectionFactory sq
                 t.Id AS {nameof(PurchaseReturnModel.Id)},
                 t.ReturnDate AS {nameof(PurchaseReturnModel.ReturnDate)},
                 t.ReferenceNo AS {nameof(PurchaseReturnModel.ReferenceNo)},
+                t.PurchaseReferenceNo AS {nameof(PurchaseReturnModel.PurchaseReferenceNo)},
                 t.WarehouseId AS {nameof(PurchaseReturnModel.WarehouseId)},
                 t.SupplierId AS {nameof(PurchaseReturnModel.SupplierId)},
                 t.ReturnStatusId AS {nameof(PurchaseReturnModel.ReturnStatusId)},

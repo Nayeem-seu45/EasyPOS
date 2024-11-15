@@ -3945,6 +3945,295 @@
         ]
       }
     },
+    "/api/PurchaseReturnPayments/GetAll": {
+      "post": {
+        "tags": [
+          "PurchaseReturnPayments"
+        ],
+        "operationId": "GetPurchaseReturnPayments",
+        "requestBody": {
+          "x-name": "query",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetPurchaseReturnPaymentListQuery"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedResponseOfPurchaseReturnPaymentModel"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/PurchaseReturnPayments/GetAllByPurchaseReturnId": {
+      "post": {
+        "tags": [
+          "PurchaseReturnPayments"
+        ],
+        "operationId": "GetAllByPurchaseReturnId",
+        "requestBody": {
+          "x-name": "query",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetPaymentListByPurchaseReturnIdQuery"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PurchaseReturnPaymentModel"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/PurchaseReturnPayments/Get/{id}": {
+      "get": {
+        "tags": [
+          "PurchaseReturnPayments"
+        ],
+        "operationId": "GetPurchaseReturnPayment",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PurchaseReturnPaymentModel"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/PurchaseReturnPayments/Create": {
+      "post": {
+        "tags": [
+          "PurchaseReturnPayments"
+        ],
+        "operationId": "CreatePurchaseReturnPayment",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePurchaseReturnPaymentCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "guid"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/PurchaseReturnPayments/Update": {
+      "put": {
+        "tags": [
+          "PurchaseReturnPayments"
+        ],
+        "operationId": "UpdatePurchaseReturnPayment",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePurchaseReturnPaymentCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/PurchaseReturnPayments/Delete/{id}": {
+      "delete": {
+        "tags": [
+          "PurchaseReturnPayments"
+        ],
+        "operationId": "DeletePurchaseReturnPayment",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/PurchaseReturnPayments/DeleteMultiple": {
+      "post": {
+        "tags": [
+          "PurchaseReturnPayments"
+        ],
+        "operationId": "DeletePurchaseReturnPayments",
+        "requestBody": {
+          "x-name": "ids",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "guid"
+                }
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
     "/api/PurchaseReturns/GetAll": {
       "post": {
         "tags": [
@@ -13225,6 +13514,200 @@
           }
         ]
       },
+      "PaginatedResponseOfPurchaseReturnPaymentModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PurchaseReturnPaymentModel"
+            }
+          },
+          "pageNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "hasPreviousPage": {
+            "type": "boolean"
+          },
+          "hasNextPage": {
+            "type": "boolean"
+          },
+          "optionsDataSources": {
+            "type": "object",
+            "additionalProperties": {}
+          }
+        }
+      },
+      "PurchaseReturnPaymentModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "purchaseReturnId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "paymentDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "receivedAmount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "payingAmount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "changeAmount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "paymentType": {
+            "type": "string",
+            "format": "guid",
+            "nullable": true
+          },
+          "paymentTypeName": {
+            "type": "string"
+          },
+          "createdBy": {
+            "type": "string"
+          },
+          "note": {
+            "type": "string",
+            "nullable": true
+          },
+          "paymentDateString": {
+            "type": "string",
+            "nullable": true
+          },
+          "optionsDataSources": {
+            "type": "object",
+            "additionalProperties": {}
+          }
+        }
+      },
+      "GetPurchaseReturnPaymentListQuery": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/DataGridModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "cacheKey": {
+                "type": "string"
+              },
+              "purchaseReturnId": {
+                "type": "string",
+                "format": "guid"
+              }
+            }
+          }
+        ]
+      },
+      "GetPaymentListByPurchaseReturnIdQuery": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "cacheKey": {
+            "type": "string"
+          },
+          "purchaseReturnId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "allowCache": {
+            "type": "boolean",
+            "nullable": true
+          }
+        }
+      },
+      "CreatePurchaseReturnPaymentCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "purchaseReturnId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "receivedAmount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "payingAmount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "changeAmount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "paymentType": {
+            "type": "string",
+            "format": "guid"
+          },
+          "note": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "UpdatePurchaseReturnPaymentCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "purchaseReturnId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "receivedAmount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "payingAmount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "changeAmount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "paymentType": {
+            "type": "string",
+            "format": "guid"
+          },
+          "note": {
+            "type": "string",
+            "nullable": true
+          },
+          "cacheKey": {
+            "type": "string"
+          }
+        }
+      },
       "PaginatedResponseOfPurchaseReturnModel": {
         "type": "object",
         "additionalProperties": false,
@@ -13333,6 +13816,14 @@
             "type": "number",
             "format": "decimal"
           },
+          "dueAmount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "paidAmount": {
+            "type": "number",
+            "format": "decimal"
+          },
           "note": {
             "type": "string",
             "nullable": true
@@ -13341,6 +13832,12 @@
             "type": "string"
           },
           "returnStatus": {
+            "type": "string"
+          },
+          "paymentStatus": {
+            "type": "string"
+          },
+          "paymentStatusTag": {
             "type": "string"
           },
           "purchaseReturnDetails": {
@@ -13595,9 +14092,6 @@
             "type": "string",
             "format": "date"
           },
-          "referenceNo": {
-            "type": "string"
-          },
           "purchaseId": {
             "type": "string",
             "format": "guid"
@@ -13669,22 +14163,11 @@
             "type": "string",
             "format": "guid"
           },
-          "purchaseReturnDate": {
+          "returnDate": {
             "type": "string",
             "format": "date"
           },
-          "referenceNo": {
-            "type": "string"
-          },
-          "warehouseId": {
-            "type": "string",
-            "format": "guid"
-          },
-          "supplierId": {
-            "type": "string",
-            "format": "guid"
-          },
-          "purchaseReturnStatusId": {
+          "returnStatusId": {
             "type": "string",
             "format": "guid"
           },
@@ -14317,9 +14800,6 @@
           "purchaseDate": {
             "type": "string",
             "format": "date"
-          },
-          "referenceNo": {
-            "type": "string"
           },
           "warehouseId": {
             "type": "string",

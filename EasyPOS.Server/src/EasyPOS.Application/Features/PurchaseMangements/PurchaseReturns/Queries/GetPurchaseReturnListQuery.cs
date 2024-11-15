@@ -1,4 +1,5 @@
 ﻿using EasyPOS.Application.Features.PurchaseReturns.Models;
+using EasyPOS.Application.Features.Purchases.Models;
 
 namespace EasyPOS.Application.Features.PurchaseReturns.Queries;
 
@@ -22,11 +23,17 @@ internal sealed class GetPurchaseReturnListQueryHandler(ISqlConnectionFactory sq
                 t.Id AS {nameof(PurchaseReturnModel.Id)},
                 t.ReturnDate AS {nameof(PurchaseReturnModel.ReturnDate)},
                 t.ReferenceNo AS {nameof(PurchaseReturnModel.ReferenceNo)},
+                t.PurchaseReferenceNo AS {nameof(PurchaseReturnModel.PurchaseReferenceNo)},
                 t.GrandTotal AS {nameof(PurchaseReturnModel.GrandTotal)},
-                s.Name AS {nameof(PurchaseReturnModel.SupplierName)}
+                t.DueAmount AS {nameof(PurchaseReturnModel.DueAmount)},
+                t.PaidAmount AS {nameof(PurchaseReturnModel.PaidAmount)},
+                s.Name AS {nameof(PurchaseReturnModel.SupplierName)},
+                pmns.Name AS {nameof(PurchaseModel.PaymentStatus)},
+                [dbo].[fn_PaymentStatusTag](pmns.Name) AS {nameof(PurchaseModel.PaymentStatusTag)}         
             FROM dbo.PurchaseReturns t
             LEFT JOIN dbo.Suppliers s ON s.Id = t.SupplierId
             --LEFT JOIN dbo.LookupDetails ps ON ps.Id = t.PurchaseReturnStatusId
+            LEFT JOIN dbo.LookupDetails pmns ON pmns.Id = t.PaymentStatusId           
             """;
 
         var sqlWithOrders = $"""

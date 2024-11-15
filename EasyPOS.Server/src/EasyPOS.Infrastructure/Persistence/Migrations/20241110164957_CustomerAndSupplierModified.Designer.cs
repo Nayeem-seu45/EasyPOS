@@ -1064,7 +1064,7 @@ namespace EasyPOS.Infrastructure.Persistence.Migrations
                     b.ToTable("Warehouses");
                 });
 
-            modelBuilder.Entity("EasyPOS.Domain.Purchases.Purchase", b =>
+            modelBuilder.Entity("EasyPOS.Domain.Purchases.PurchaseCreate", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -2571,34 +2571,34 @@ namespace EasyPOS.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("EasyPOS.Domain.Purchases.PurchaseDetail", b =>
                 {
-                    b.HasOne("EasyPOS.Domain.Purchases.Purchase", "Purchase")
+                    b.HasOne("EasyPOS.Domain.Purchases.PurchaseCreate", "PurchaseCreate")
                         .WithMany("PurchaseDetails")
                         .HasForeignKey("PurchaseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Purchase");
+                    b.Navigation("PurchaseCreate");
                 });
 
             modelBuilder.Entity("EasyPOS.Domain.Purchases.PurchasePayment", b =>
                 {
-                    b.HasOne("EasyPOS.Domain.Purchases.Purchase", "Purchase")
+                    b.HasOne("EasyPOS.Domain.Purchases.PurchaseCreate", "PurchaseCreate")
                         .WithMany("PurchasePayments")
                         .HasForeignKey("PurchaseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Purchase");
+                    b.Navigation("PurchaseCreate");
                 });
 
             modelBuilder.Entity("EasyPOS.Domain.Purchases.PurchaseReturn", b =>
                 {
-                    b.HasOne("EasyPOS.Domain.Purchases.Purchase", "Purchase")
+                    b.HasOne("EasyPOS.Domain.Purchases.PurchaseCreate", "PurchaseCreate")
                         .WithMany("PurchaseReturns")
                         .HasForeignKey("PurchaseId")
                         .IsRequired();
 
-                    b.Navigation("Purchase");
+                    b.Navigation("PurchaseCreate");
                 });
 
             modelBuilder.Entity("EasyPOS.Domain.Purchases.PurchaseReturnDetail", b =>
@@ -2681,7 +2681,7 @@ namespace EasyPOS.Infrastructure.Persistence.Migrations
                     b.Navigation("ProductAdjustmentDetails");
                 });
 
-            modelBuilder.Entity("EasyPOS.Domain.Purchases.Purchase", b =>
+            modelBuilder.Entity("EasyPOS.Domain.Purchases.PurchaseCreate", b =>
                 {
                     b.Navigation("PurchaseDetails");
 

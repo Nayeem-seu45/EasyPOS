@@ -7,7 +7,7 @@ import { CommonUtils } from 'src/app/shared/Utilities/common-utilities';
 import { DatePipe } from '@angular/common';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
-import { PurchaseReturnDetailComponent } from '../purchase-return-return-detail/purchase-return-detail.component';
+import { PurchaseReturnDetailComponent } from '../purchase-return-detail/purchase-return-detail.component';
 
 @Component({
   selector: 'app-purchase-return-list',

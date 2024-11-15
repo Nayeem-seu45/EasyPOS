@@ -36,26 +36,40 @@ internal sealed class PurchaseReturnConfiguration : IEntityTypeConfiguration<Pur
                .IsRequired();
 
         builder.Property(x => x.TaxRate)
-               .HasColumnType("decimal(4, 2)");
+               .HasColumnType("decimal(4, 2)")
+               .HasDefaultValue(0);
 
         builder.Property(x => x.TaxAmount)
-               .HasColumnType("decimal(18, 2)");
+               .HasColumnType("decimal(18, 2)")
+               .HasDefaultValue(0);
 
         builder.Property(x => x.DiscountRate)
-                .HasColumnType("decimal(3, 2)");
+                .HasColumnType("decimal(3, 2)")
+                .HasDefaultValue(1);
 
         builder.Property(x => x.DiscountAmount)
-               .HasColumnType("decimal(18, 2)");
+               .HasColumnType("decimal(18, 2)")
+               .HasDefaultValue(0);
 
         builder.Property(x => x.ShippingCost)
-               .HasColumnType("decimal(18, 2)");
+               .HasColumnType("decimal(18, 2)")
+               .HasDefaultValue(0);
 
         builder.Property(x => x.GrandTotal)
               .HasColumnType("decimal(18, 2)")
-              .IsRequired();
+              .HasDefaultValue(0);
+
+        builder.Property(x => x.DueAmount)
+              .HasColumnType("decimal(18, 2)")
+              .HasDefaultValue(0);
+
+        builder.Property(x => x.GrandTotal)
+              .HasColumnType("decimal(18, 2)")
+              .HasDefaultValue(0);
 
         builder.Property(x => x.Note)
-               .HasMaxLength(500);
+               .HasMaxLength(500)
+               .IsRequired(false);
 
         builder.HasOne(x => x.Purchase)
            .WithMany(x => x.PurchaseReturns)

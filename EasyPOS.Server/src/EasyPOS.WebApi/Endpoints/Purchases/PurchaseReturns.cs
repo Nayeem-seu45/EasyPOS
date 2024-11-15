@@ -103,6 +103,14 @@ public class PurchaseReturns : EndpointGroupBase
            AllowCacheList: true)
         );
 
+        var returnStatusSelectList = await sender.Send(new GetSelectListQuery(
+            Sql: SelectListSqls.GetLookupDetailSelectListByDevCodeSql,
+            Parameters: new { DevCode = LookupDevCode.PurchaseReturnStatus },
+            Key: $"{CacheKeys.LookupDetail}_{LookupDevCode.PurchaseReturnStatus}",
+            AllowCacheList: false)
+        );
+
+
         var productsSelectList = await sender.Send(new GetProductSelectListQuery(
             AllowCacheList: false)
         );
@@ -111,6 +119,7 @@ public class PurchaseReturns : EndpointGroupBase
            AllowCacheList: false)
         );
 
+        result.Value.OptionsDataSources.Add("returnStatusSelectList", returnStatusSelectList.Value);
         result.Value.OptionsDataSources.Add("suppliersSelectList", suppliersSelectList.Value);
         result.Value.OptionsDataSources.Add("warehousesSelectList", warehousesSelectList.Value);
         result.Value.OptionsDataSources.Add("purchaseStatusSelectList", purchaseStatusSelectList.Value);

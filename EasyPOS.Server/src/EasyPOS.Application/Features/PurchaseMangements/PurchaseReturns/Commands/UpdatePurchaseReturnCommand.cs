@@ -1,15 +1,14 @@
-﻿using EasyPOS.Application.Features.PurchaseReturns.Models;
+﻿using EasyPOS.Application.Features.PurchaseMangements.Services;
+using EasyPOS.Application.Features.PurchaseMangements.Shared;
+using EasyPOS.Application.Features.PurchaseReturns.Models;
 using EasyPOS.Domain.Common.Enums;
 
 namespace EasyPOS.Application.Features.PurchaseReturns.Commands;
 
 public record UpdatePurchaseReturnCommand(
     Guid Id,
-    DateOnly PurchaseReturnDate,
-    string ReferenceNo,
-    Guid WarehouseId,
-    Guid SupplierId,
-    Guid PurchaseReturnStatusId,
+    DateOnly ReturnDate,
+    Guid ReturnStatusId,
     string? AttachmentUrl,
     decimal SubTotal,
     decimal? TaxRate,
@@ -27,16 +26,23 @@ public record UpdatePurchaseReturnCommand(
 
 internal sealed class UpdatePurchaseReturnCommandHandler(
     IApplicationDbContext dbContext,
-    ICommonQueryService commonQueryService)
+    IPurchaseReturnService purchaseReturnService)
     : ICommandHandler<UpdatePurchaseReturnCommand>
 {
     public async Task<Result> Handle(UpdatePurchaseReturnCommand request, CancellationToken cancellationToken)
     {
-        var entity = await dbContext.PurchaseReturns.FindAsync(request.Id, cancellationToken);
+        var purchaseReturn = await dbContext.PurchaseReturns.FindAsync(request.Id, cancellationToken);
 
-        if (entity is null) return Result.Failure(Error.NotFound(nameof(entity), ErrorMessages.EntityNotFound));
+        if (purchaseReturn is null) return Result.Failure(Error.NotFound(nameof(purchaseReturn), ErrorMessages.EntityNotFound));
 
-        request.Adapt(entity);
+        request.Adapt(purchaseReturn);
+
+        await purchaseReturnService.AdjustPurchaseReturnAsync(
+            purchaseReturn,
+            purchaseReturn.PaidAmount,
+            PurchaseReturnTransactionType.PurchaseReturnUpdate,
+            cancellationToken);
+
 
         await dbContext.SaveChangesAsync(cancellationToken);
 

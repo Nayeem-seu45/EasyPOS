@@ -1,5 +1,6 @@
 ﻿using EasyPOS.Application.Common.Enums;
 using EasyPOS.Application.Features.PurchaseReturns.Models;
+using EasyPOS.Domain.Common.Enums;
 
 namespace EasyPOS.Application.Features.PurchaseReturns.Queries;
 
@@ -29,16 +30,16 @@ internal sealed class GetPurchaseReturnByPurchaseIdQueryHandler(
                 t.ReferenceNo AS {nameof(PurchaseReturnModel.PurchaseReferenceNo)},
                 t.WarehouseId AS {nameof(PurchaseReturnModel.WarehouseId)},
                 t.SupplierId AS {nameof(PurchaseReturnModel.SupplierId)},
-                t.AttachmentUrl AS {nameof(PurchaseReturnModel.AttachmentUrl)},
-                t.SubTotal AS {nameof(PurchaseReturnModel.SubTotal)},
-                t.TaxRate AS {nameof(PurchaseReturnModel.TaxRate)},
-                t.TaxAmount AS {nameof(PurchaseReturnModel.TaxAmount)},
-                t.DiscountType AS {nameof(PurchaseReturnModel.DiscountType)},
-                t.DiscountRate AS {nameof(PurchaseReturnModel.DiscountRate)},
-                t.DiscountAmount AS {nameof(PurchaseReturnModel.DiscountAmount)},
-                t.ShippingCost AS {nameof(PurchaseReturnModel.ShippingCost)},
-                t.GrandTotal AS {nameof(PurchaseReturnModel.GrandTotal)},
-                t.Note AS {nameof(PurchaseReturnModel.Note)},
+                --t.AttachmentUrl AS {nameof(PurchaseReturnModel.AttachmentUrl)},
+                --t.SubTotal AS {nameof(PurchaseReturnModel.SubTotal)},
+                --t.TaxRate AS {nameof(PurchaseReturnModel.TaxRate)},
+                --t.TaxAmount AS {nameof(PurchaseReturnModel.TaxAmount)},
+                --t.DiscountType AS {nameof(PurchaseReturnModel.DiscountType)},
+                --t.DiscountRate AS {nameof(PurchaseReturnModel.DiscountRate)},
+                --t.DiscountAmount AS {nameof(PurchaseReturnModel.DiscountAmount)},
+                --t.ShippingCost AS {nameof(PurchaseReturnModel.ShippingCost)},
+                --t.GrandTotal AS {nameof(PurchaseReturnModel.GrandTotal)},
+                --t.Note AS {nameof(PurchaseReturnModel.Note)},
 
                 -- PurchaseReturnDetails
                 pd.Id AS {nameof(PurchaseReturnDetailModel.Id)},
@@ -59,7 +60,8 @@ internal sealed class GetPurchaseReturnByPurchaseIdQueryHandler(
                 pd.TaxRate AS {nameof(PurchaseReturnDetailModel.TaxRate)},
                 pd.TaxAmount AS {nameof(PurchaseReturnDetailModel.TaxAmount)},
                 pd.TaxMethod AS {nameof(PurchaseReturnDetailModel.TaxMethod)},
-                pd.TotalPrice AS {nameof(PurchaseReturnDetailModel.TotalPrice)}
+                --pd.TotalPrice AS {nameof(PurchaseReturnDetailModel.TotalPrice)}
+                0 AS {nameof(PurchaseReturnDetailModel.TotalPrice)}
             FROM dbo.Purchases t
             LEFT JOIN dbo.PurchaseDetails pd ON pd.PurchaseId = t.Id
             WHERE t.Id = @Id
@@ -89,15 +91,17 @@ internal sealed class GetPurchaseReturnByPurchaseIdQueryHandler(
             splitOn: "Id"
         );
 
-        var purchase = purchaseDictionary.Values.FirstOrDefault();
-        purchase.ReturnDate = DateOnly.FromDateTime(DateTime.Now);
+        var purchaseReturn = purchaseDictionary.Values.FirstOrDefault();
+        purchaseReturn.ReturnDate = DateOnly.FromDateTime(DateTime.Now);
+        purchaseReturn.TaxRate = 0; // No Tax Rate
+        purchaseReturn.DiscountType = DiscountType.Fixed;
         var returnStatusId = await commonQueryService.GetLookupDetailIdAsync((int)PurchaseReturnStatus.Completed, cancellationToken);
         if (!returnStatusId.IsNullOrEmpty())
         {
-            purchase.ReturnStatusId = returnStatusId.Value;
+            purchaseReturn.ReturnStatusId = returnStatusId.Value;
         }
 
-        return purchase != null ? Result.Success(purchase) : Result.Failure<PurchaseReturnModel>(Error.Failure(nameof(PurchaseReturnModel), ErrorMessages.NotFound));
+        return purchaseReturn != null ? Result.Success(purchaseReturn) : Result.Failure<PurchaseReturnModel>(Error.Failure(nameof(PurchaseReturnModel), ErrorMessages.NotFound));
     }
 }
 

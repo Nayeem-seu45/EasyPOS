@@ -16,7 +16,7 @@ internal class SupplierService(IApplicationDbContext dbContext)
 
         switch (transactionType)
         {
-            case PurchaseTransactionType.Purchase:
+            case PurchaseTransactionType.PurchaseCreate:
                 supplier.TotalDueAmount += amount;
                 break;
             case PurchaseTransactionType.PurchaseUpdate:
@@ -25,7 +25,7 @@ internal class SupplierService(IApplicationDbContext dbContext)
             case PurchaseTransactionType.PurchaseDelete:
                 supplier.TotalDueAmount -= amount;
                 break;
-            case PurchaseTransactionType.Payment:
+            case PurchaseTransactionType.PaymentCreate:
                 supplier.TotalPaidAmount += amount; 
                 supplier.TotalDueAmount -= amount;
                 break;
