@@ -1,5 +1,5 @@
 ﻿using EasyPOS.Application.Features.PurchaseMangements.Services;
-using EasyPOS.Application.Features.Stakeholders.Suppliers.Models;
+using EasyPOS.Application.Features.PurchaseMangements.Shared;
 using EasyPOS.Application.Features.Stakeholders.Suppliers.Services;
 
 namespace EasyPOS.Application.Features.Purchases.PurchasePayments.Commands;
@@ -11,7 +11,7 @@ public record DeletePurchasePaymentCommand(Guid Id) : ICacheInvalidatorCommand
 
 internal sealed class DeletePurchasePaymentCommandHandler(
     IApplicationDbContext dbContext,
-    ISupplierFinancialService supplierFinancialService,
+    ISupplierService supplierFinancialService,
     IPurchaseService purchaseService)
     : ICommandHandler<DeletePurchasePaymentCommand>
 

@@ -1,6 +1,6 @@
 ﻿using EasyPOS.Application.Features.PurchaseMangements.Services;
+using EasyPOS.Application.Features.PurchaseMangements.Shared;
 using EasyPOS.Application.Features.Purchases.Models;
-using EasyPOS.Application.Features.Stakeholders.Suppliers.Models;
 using EasyPOS.Application.Features.Stakeholders.Suppliers.Services;
 using EasyPOS.Domain.Common.Enums;
 
@@ -30,7 +30,7 @@ public record UpdatePurchaseCommand(
 
 internal sealed class UpdatePurchaseCommandHandler(
     IApplicationDbContext dbContext,
-    ISupplierFinancialService supplierFinancialService,
+    ISupplierService supplierFinancialService,
     IPurchaseService purchaseService)
     : ICommandHandler<UpdatePurchaseCommand>
 {

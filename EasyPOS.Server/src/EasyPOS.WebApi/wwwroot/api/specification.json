@@ -12522,6 +12522,9 @@
           "salePayment": {
             "$ref": "#/components/schemas/AddSalePaymentModel"
           },
+          "hasPayment": {
+            "type": "boolean"
+          },
           "saleDetails": {
             "type": "array",
             "items": {

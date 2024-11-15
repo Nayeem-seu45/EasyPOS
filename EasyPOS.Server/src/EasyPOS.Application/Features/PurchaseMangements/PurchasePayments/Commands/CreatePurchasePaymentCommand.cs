@@ -1,5 +1,5 @@
 ﻿using EasyPOS.Application.Features.PurchaseMangements.Services;
-using EasyPOS.Application.Features.Stakeholders.Suppliers.Models;
+using EasyPOS.Application.Features.PurchaseMangements.Shared;
 using EasyPOS.Application.Features.Stakeholders.Suppliers.Services;
 using EasyPOS.Domain.Purchases;
 
@@ -20,7 +20,7 @@ public record CreatePurchasePaymentCommand(
 
 internal sealed class CreatePurchasePaymentCommandHandler(
     IApplicationDbContext dbContext,
-    ISupplierFinancialService supplierFinancialService,
+    ISupplierService supplierFinancialService,
     IPurchaseService purchaseService) : ICommandHandler<CreatePurchasePaymentCommand, Guid>
 {
     public async Task<Result<Guid>> Handle(CreatePurchasePaymentCommand request, CancellationToken cancellationToken)

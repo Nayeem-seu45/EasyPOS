@@ -27,9 +27,4 @@
     <ProjectReference Include="..\EasyPOS.Domain\EasyPOS.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Features\SaleManagements\Services\" />
-    <Folder Include="Features\Stakeholders\Customers\Services\" />
-  </ItemGroup>
-
 </Project>

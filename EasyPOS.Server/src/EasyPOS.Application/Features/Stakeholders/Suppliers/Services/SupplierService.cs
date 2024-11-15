@@ -1,9 +1,9 @@
-﻿using EasyPOS.Application.Features.Stakeholders.Suppliers.Models;
+﻿using EasyPOS.Application.Features.PurchaseMangements.Shared;
 
 namespace EasyPOS.Application.Features.Stakeholders.Suppliers.Services;
 
-internal class SupplierFinancialService(IApplicationDbContext dbContext)
-    : ISupplierFinancialService
+internal class SupplierService(IApplicationDbContext dbContext)
+    : ISupplierService
 {
     public async Task AdjustSupplierBalance(
         Guid supplierId, 

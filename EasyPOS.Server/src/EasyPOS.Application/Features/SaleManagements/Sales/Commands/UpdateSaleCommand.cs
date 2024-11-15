@@ -1,6 +1,7 @@
-﻿using EasyPOS.Application.Common.Enums;
+﻿using EasyPOS.Application.Features.SaleManagements.Services;
+using EasyPOS.Application.Features.SaleManagements.Shared;
 using EasyPOS.Application.Features.Sales.Models;
-using EasyPOS.Domain.Common;
+using EasyPOS.Application.Features.Stakeholders.Customers.Services;
 
 namespace EasyPOS.Application.Features.Sales.Commands;
 
@@ -11,6 +12,8 @@ public record UpdateSaleCommand : UpsertSaleModel, ICacheInvalidatorCommand
 
 internal sealed class UpdateSaleCommandHandler(
     IApplicationDbContext dbContext,
+    ISaleService saleService,
+    ICustomerService customerService,
     ICommonQueryService commonQueryService)
     : ICommandHandler<UpdateSaleCommand>
 {
@@ -18,7 +21,7 @@ internal sealed class UpdateSaleCommandHandler(
     {
         // Retrieve the existing sale entity
         var entity = await dbContext.Sales
-            .Include(s => s.SalePayments) // Load SalePayments but do not modify them
+            .Include(s => s.SalePayments) // Load SalePayments to verify payments cannot be modified
             .FirstOrDefaultAsync(s => s.Id == request.Id, cancellationToken);
 
         if (entity is null)
@@ -33,28 +36,10 @@ internal sealed class UpdateSaleCommandHandler(
         // Adapt the non-payment properties from the request
         request.Adapt(entity);
 
-        // Update DueAmount and adjust based on the current GrandTotal
-        entity.DueAmount = entity.GrandTotal - entity.PaidAmount;
+        // Use SaleService to adjust sale due and payment status
+        await saleService.AdjustSaleAsync(SaleTransactionType.SaleUpdate, entity, 0, cancellationToken);
 
-        // Fetch SalePaymentStatus lookup list
-        var salePaymentStatusList = await commonQueryService
-            .GetLookupDetailsAsync((int)LookupDevCode.SalePaymentStatus, cancellationToken);
-
-        // Update the PaymentStatusId based on current DueAmount and PaidAmount
-        if (entity.DueAmount == 0)
-        {
-            entity.PaymentStatusId = GetSalePaymentStatusId(salePaymentStatusList, SalePaymentStatus.Paid);
-        }
-        else if (entity.PaidAmount > 0)
-        {
-            entity.PaymentStatusId = GetSalePaymentStatusId(salePaymentStatusList, SalePaymentStatus.Partial);
-        }
-        else
-        {
-            entity.PaymentStatusId = GetSalePaymentStatusId(salePaymentStatusList, SalePaymentStatus.Pending);
-        }
-
-        // Update the customer's due and paid amounts
+        // Update the customer's due and paid amounts via CustomerService
         var customer = await dbContext.Customers.FirstOrDefaultAsync(c => c.Id == entity.CustomerId, cancellationToken);
         if (customer is null)
         {
@@ -62,17 +47,15 @@ internal sealed class UpdateSaleCommandHandler(
         }
 
         // Adjust customer totals by removing the old amounts and adding the new amounts
-        customer.TotalDueAmount = customer.TotalDueAmount - previousDueAmount + entity.DueAmount;
-        customer.TotalPaidAmount = customer.TotalPaidAmount - previousPaidAmount + entity.PaidAmount;
+        customerService.AdjustCustomerOnSale(
+            SaleTransactionType.SaleUpdate,
+            customer,
+            entity.DueAmount - previousDueAmount
+        );
 
         // Save all changes
         await dbContext.SaveChangesAsync(cancellationToken);
 
         return Result.Success();
-    }
-
-    private Guid GetSalePaymentStatusId(List<LookupDetail> lookupDetails, SalePaymentStatus paymentStatus)
-    {
-        return lookupDetails.FirstOrDefault(x => x.DevCode == (int)paymentStatus)?.Id ?? Guid.Empty;
     }
 }

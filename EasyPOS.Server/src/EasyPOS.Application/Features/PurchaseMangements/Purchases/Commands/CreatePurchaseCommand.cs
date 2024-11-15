@@ -1,6 +1,6 @@
 ﻿using EasyPOS.Application.Features.PurchaseMangements.Services;
+using EasyPOS.Application.Features.PurchaseMangements.Shared;
 using EasyPOS.Application.Features.Purchases.Models;
-using EasyPOS.Application.Features.Stakeholders.Suppliers.Models;
 using EasyPOS.Application.Features.Stakeholders.Suppliers.Services;
 using EasyPOS.Domain.Common.Enums;
 using EasyPOS.Domain.Purchases;
@@ -31,7 +31,7 @@ public record CreatePurchaseCommand(
 
 internal sealed class CreatePurchaseCommandHandler(
     IApplicationDbContext dbContext,
-    ISupplierFinancialService supplierFinancialService,
+    ISupplierService supplierFinancialService,
     IPurchaseService purchaseService)
     : ICommandHandler<CreatePurchaseCommand, Guid>
 {

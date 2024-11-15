@@ -1,4 +1,8 @@
-﻿namespace EasyPOS.Application.Features.Sales.SalePayments.Commands;
+﻿using EasyPOS.Application.Features.SaleManagements.Services;
+using EasyPOS.Application.Features.SaleManagements.Shared;
+using EasyPOS.Application.Features.Stakeholders.Customers.Services;
+
+namespace EasyPOS.Application.Features.Sales.SalePayments.Commands;
 
 public record UpdateSalePaymentCommand(
     Guid Id,
@@ -14,37 +18,58 @@ public record UpdateSalePaymentCommand(
 }
 
 internal sealed class UpdateSalePaymentCommandHandler(
-    IApplicationDbContext dbContext) : ICommandHandler<UpdateSalePaymentCommand>
+    IApplicationDbContext dbContext,
+    ISaleService saleService,
+    ICustomerService customerService)
+    : ICommandHandler<UpdateSalePaymentCommand>
 {
     public async Task<Result> Handle(UpdateSalePaymentCommand request, CancellationToken cancellationToken)
     {
         // Retrieve the existing sale payment
-        var entity = await dbContext.SalePayments.FindAsync(new object[] { request.Id }, cancellationToken);
-        if (entity is null) return Result.Failure(Error.NotFound(nameof(entity), ErrorMessages.EntityNotFound));
+        var salePayment = await dbContext.SalePayments
+            .FindAsync([request.Id], cancellationToken);
+
+        if (salePayment is null)
+            return Result.Failure(Error.NotFound(nameof(salePayment), ErrorMessages.EntityNotFound));
 
         // Retrieve the associated sale
         var sale = await dbContext.Sales
-            .FirstOrDefaultAsync(x => x.Id == entity.SaleId, cancellationToken);
-        if (sale is null) return Result.Failure(Error.NotFound(nameof(sale), "Sale Not Found."));
+            .FirstOrDefaultAsync(x => x.Id == salePayment.SaleId, cancellationToken);
 
-        var previousPaymentAmount = entity.PayingAmount;
+        if (sale is null)
+            return Result.Failure(Error.NotFound(nameof(sale), "Sale not found."));
 
-        // Adapt the updated values to the entity
-        request.Adapt(entity);
+        // Calculate the previous payment amount
+        var previousPaymentAmount = salePayment.PayingAmount;
 
-        // Update sale amounts based on the new payment amount
-        sale.PaidAmount += entity.PayingAmount - previousPaymentAmount;
-        sale.DueAmount = sale.GrandTotal - sale.PaidAmount;
+        // Update payment entity with new values
+        request.Adapt(salePayment);
 
-        // Update the customer’s financial records
-        var customer = await dbContext.Customers.FirstOrDefaultAsync(c => c.Id == sale.CustomerId, cancellationToken);
-        if (customer is null) return Result.Failure(Error.Failure(nameof(customer), "Customer not found."));
+        // Adjust sale based on payment update
+        var paymentDifference = salePayment.PayingAmount - previousPaymentAmount;
 
-        // Adjust the customer’s total amounts
-        customer.TotalDueAmount += previousPaymentAmount - entity.PayingAmount;
-        customer.TotalPaidAmount += entity.PayingAmount - previousPaymentAmount;
+        await saleService.AdjustSaleAsync(
+            SaleTransactionType.PaymentUpdate,
+            sale,
+            paymentDifference,
+            cancellationToken);
 
+        // Retrieve the associated customer
+        var customer = await dbContext.Customers
+            .FirstOrDefaultAsync(c => c.Id == sale.CustomerId, cancellationToken);
+
+        if (customer is null)
+            return Result.Failure(Error.Failure(nameof(customer), "Customer not found."));
+
+        // Adjust customer's financial records based on the payment update
+        customerService.AdjustCustomerOnPayment(
+            SaleTransactionType.PaymentUpdate,
+            customer,
+            paymentDifference);
+
+        // Save changes to the database
         await dbContext.SaveChangesAsync(cancellationToken);
+
         return Result.Success();
     }
 }

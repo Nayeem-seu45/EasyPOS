@@ -1,6 +1,8 @@
 ﻿using System.Reflection;
 using EasyPOS.Application.Common.Behaviours;
 using EasyPOS.Application.Features.PurchaseMangements.Services;
+using EasyPOS.Application.Features.SaleManagements.Services;
+using EasyPOS.Application.Features.Stakeholders.Customers.Services;
 using EasyPOS.Application.Features.Stakeholders.Suppliers.Services;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -28,8 +30,11 @@ public static class DependencyInjection
         });
 
 
-        services.AddScoped<ISupplierFinancialService, SupplierFinancialService>();
+        services.AddScoped<ISupplierService, SupplierService>();
         services.AddScoped<IPurchaseService, PurchaseService>();
+
+        services.AddScoped<ICustomerService, CustomerService>();
+        services.AddScoped<ISaleService, SaleService>();
 
 
         return services;

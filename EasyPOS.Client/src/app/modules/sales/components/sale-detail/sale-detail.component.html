@@ -149,9 +149,9 @@
 
         <!-- Show Payment Start -->
         <div class="mt-3 field col-12 md:col-4" *ngIf="!isEdit">
-          <app-input-switch label="Add Payment" [(ngModel)]="showPayment" name="showPayment" (onChange)="setEmptySalePaymentOnSwitchOff()" />
+          <app-input-switch label="Add Payment" [(ngModel)]="item.hasPayment" name="hasPayment" (onChange)="setEmptySalePaymentOnSwitchOff()" />
         </div>
-        <div class="card col-12" *ngIf="showPayment && !isEdit">
+        <div class="card col-12" *ngIf="item.hasPayment && !isEdit">
           <div class="p-fluid p-formgrid grid">
             <div class="field col-12 md:col-3">
               <app-input-decimal label="Received Amount" [(ngModel)]="item.salePayment.receivedAmount"

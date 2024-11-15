@@ -25,6 +25,7 @@ internal sealed class GetCustomerListQueryHandler(ISqlConnectionFactory sqlConne
                 t.Email AS {nameof(CustomerModel.Email)},
                 t.PhoneNo AS {nameof(CustomerModel.PhoneNo)},
                 t.Mobile AS {nameof(CustomerModel.Mobile)},
+                t.TotalPaidAmount AS {nameof(CustomerModel.TotalPaidAmount)},
                 t.TotalDueAmount AS {nameof(CustomerModel.TotalDueAmount)},
                 t.TotalSaleReturnAmount AS {nameof(CustomerModel.TotalSaleReturnAmount)},
                 IIF(t.IsActive = 1, 'Active', 'Inactive') AS {nameof(CustomerModel.Active)}

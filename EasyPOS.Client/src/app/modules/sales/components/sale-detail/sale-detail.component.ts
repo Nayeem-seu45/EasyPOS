@@ -375,11 +375,13 @@ export class SaleDetailComponent implements OnInit {
   }
 
   setEmptySalePaymentOnSwitchOff(){
-    this.item.salePayment.changeAmount = 0;
-    this.item.salePayment.receivedAmount = 0;
-    this.item.salePayment.payingAmount = 0;
-    this.item.salePayment.paymentType = null;
-    this.item.salePayment.note = null;
+    if(!this.item.hasPayment){
+      this.item.salePayment.changeAmount = 0;
+      this.item.salePayment.receivedAmount = 0;
+      this.item.salePayment.payingAmount = 0;
+      this.item.salePayment.paymentType = null;
+      this.item.salePayment.note = null;  
+    }
   }
 
   //#endregion

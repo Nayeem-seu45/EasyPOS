@@ -1,8 +1,8 @@
-﻿using EasyPOS.Application.Features.Stakeholders.Suppliers.Models;
+﻿using EasyPOS.Application.Features.PurchaseMangements.Shared;
 
 namespace EasyPOS.Application.Features.Stakeholders.Suppliers.Services;
 
-internal interface ISupplierFinancialService
+internal interface ISupplierService
 {
     //Task IncreaseSupplierFinancials(Guid supplierId, decimal amount);
     //Task DecreaseSupplierFinancials(Guid supplierId, decimal amount);

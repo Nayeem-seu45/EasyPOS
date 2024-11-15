@@ -24,6 +24,7 @@ public record UpsertSaleModel
     public string? SaleNote { get; set; }
     public string? StaffNote { get; set; }
     public AddSalePaymentModel SalePayment { get; set; }
+    public bool HasPayment { get; set; } = false;
 
     public List<SaleDetailModel> SaleDetails { get; set; } = [];
     public Dictionary<string, object> OptionsDataSources { get; set; } = [];

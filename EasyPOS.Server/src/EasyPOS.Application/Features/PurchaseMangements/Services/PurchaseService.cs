@@ -1,5 +1,5 @@
 ﻿using EasyPOS.Application.Common.Enums;
-using EasyPOS.Application.Features.Stakeholders.Suppliers.Models;
+using EasyPOS.Application.Features.PurchaseMangements.Shared;
 using EasyPOS.Domain.Purchases;
 
 namespace EasyPOS.Application.Features.PurchaseMangements.Services;

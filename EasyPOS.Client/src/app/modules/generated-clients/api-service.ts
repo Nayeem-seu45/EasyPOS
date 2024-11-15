@@ -19062,6 +19062,7 @@ export class UpsertSaleModel implements IUpsertSaleModel {
     saleNote?: string | undefined;
     staffNote?: string | undefined;
     salePayment?: AddSalePaymentModel;
+    hasPayment?: boolean;
     saleDetails?: SaleDetailModel[];
     optionsDataSources?: { [key: string]: any; };
 
@@ -19096,6 +19097,7 @@ export class UpsertSaleModel implements IUpsertSaleModel {
             this.saleNote = _data["saleNote"];
             this.staffNote = _data["staffNote"];
             this.salePayment = _data["salePayment"] ? AddSalePaymentModel.fromJS(_data["salePayment"]) : <any>undefined;
+            this.hasPayment = _data["hasPayment"];
             if (Array.isArray(_data["saleDetails"])) {
                 this.saleDetails = [] as any;
                 for (let item of _data["saleDetails"])
@@ -19140,6 +19142,7 @@ export class UpsertSaleModel implements IUpsertSaleModel {
         data["saleNote"] = this.saleNote;
         data["staffNote"] = this.staffNote;
         data["salePayment"] = this.salePayment ? this.salePayment.toJSON() : <any>undefined;
+        data["hasPayment"] = this.hasPayment;
         if (Array.isArray(this.saleDetails)) {
             data["saleDetails"] = [];
             for (let item of this.saleDetails)
@@ -19177,6 +19180,7 @@ export interface IUpsertSaleModel {
     saleNote?: string | undefined;
     staffNote?: string | undefined;
     salePayment?: AddSalePaymentModel;
+    hasPayment?: boolean;
     saleDetails?: SaleDetailModel[];
     optionsDataSources?: { [key: string]: any; };
 }

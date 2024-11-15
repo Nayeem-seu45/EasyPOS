@@ -1,6 +1,7 @@
-﻿using EasyPOS.Application.Common.Enums;
+﻿using EasyPOS.Application.Features.SaleManagements.Services;
+using EasyPOS.Application.Features.SaleManagements.Shared;
 using EasyPOS.Application.Features.Sales.Models;
-using EasyPOS.Domain.Common;
+using EasyPOS.Application.Features.Stakeholders.Customers.Services;
 using EasyPOS.Domain.Sales;
 
 namespace EasyPOS.Application.Features.Sales.Commands;
@@ -34,69 +35,49 @@ public record CreateSaleCommand : UpsertSaleModel, ICacheInvalidatorCommand<Guid
 
 internal sealed class CreateSaleCommandHandler(
     IApplicationDbContext dbContext,
-    ICommonQueryService commonQueryService)
+    ISaleService saleService,
+    ICustomerService customerService)
     : ICommandHandler<CreateSaleCommand, Guid>
 {
     public async Task<Result<Guid>> Handle(CreateSaleCommand request, CancellationToken cancellationToken)
     {
-        var entity = request.Adapt<Sale>();
+        var sale = request.Adapt<Sale>();
 
-        dbContext.Sales.Add(entity);
+        dbContext.Sales.Add(sale);
 
-        var salePaymentStatusList = await commonQueryService
-            .GetLookupDetailsAsync((int)LookupDevCode.SalePaymentStatus, cancellationToken);
+        await saleService
+            .AdjustSaleAsync(SaleTransactionType.SaleCreate, sale, request.SalePayment?.PayingAmount ?? 0, cancellationToken);
 
-        if (entity.GrandTotal == request?.SalePayment?.PayingAmount)
+        // Payment
+        if (request.HasPayment
+            && request.SalePayment is not null
+            && request.SalePayment?.PayingAmount > 0
+            && !request.SalePayment.PaymentType.IsNullOrEmpty())
         {
-            entity.PaymentStatusId = GetSalePaymentStatusId(salePaymentStatusList, SalePaymentStatus.Paid);
+             saleService.AddPaymentToSale(
+                 sale, 
+                 request.SalePayment.ReceivedAmount, 
+                 request.SalePayment.PayingAmount, 
+                 request.SalePayment.ChangeAmount, 
+                 request.SalePayment.PaymentType.Value, 
+                 request.SalePayment.Note);
         }
-        else if (entity.GrandTotal > request?.SalePayment?.PayingAmount && request?.SalePayment?.PayingAmount > 0)
-        {
-            entity.PaymentStatusId = GetSalePaymentStatusId(salePaymentStatusList, SalePaymentStatus.Partial);
-        }
-        else if (request?.SalePayment?.PayingAmount == 0)
-        {
-            entity.PaymentStatusId = GetSalePaymentStatusId(salePaymentStatusList, SalePaymentStatus.Pending);
-        }
-        entity.DueAmount = entity.GrandTotal - request.SalePayment.PayingAmount;
-        entity.PaidAmount = request.SalePayment.PayingAmount;
 
-
+        #region Customer
         // Customer
-        var customer = await dbContext.Customers.FirstOrDefaultAsync(x => x.Id == entity.CustomerId);
+        var customer = await dbContext.Customers.FirstOrDefaultAsync(x => x.Id == sale.CustomerId);
 
-        if(customer is null)
+        if (customer is null)
         {
             return Result.Failure<Guid>(Error.Failure(nameof(customer), "Customer not found."));
         }
 
-        customer.TotalDueAmount += entity.GrandTotal - request.SalePayment.PayingAmount;
-        customer.TotalPaidAmount += request.SalePayment.PayingAmount;
+        customerService.AdjustCustomerOnSale(SaleTransactionType.SaleCreate, customer, sale.DueAmount, sale.PaidAmount);
 
-
-        // Payment
-        if(request.SalePayment is not null
-            && request.SalePayment?.PayingAmount > 0
-            && !request.SalePayment.PaymentType.IsNullOrEmpty())
-        {
-            entity.SalePayments.Add(new SalePayment
-            {
-                ReceivedAmount = request.SalePayment.ReceivedAmount,
-                PayingAmount = request.SalePayment.PayingAmount,
-                ChangeAmount = request.SalePayment.ChangeAmount,
-                PaymentType = request.SalePayment.PaymentType.Value,
-                Note = request.SalePayment.Note,
-                PaymentDate = DateTime.Now
-            });
-        }
+        #endregion
 
         await dbContext.SaveChangesAsync(cancellationToken);
 
-        return entity.Id;
-    }
-
-    private Guid GetSalePaymentStatusId(List<LookupDetail> lookupDetails, SalePaymentStatus paymentStatus)
-    {
-        return lookupDetails.FirstOrDefault(x => x.DevCode == (int)paymentStatus).Id;
+        return sale.Id;
     }
 }
