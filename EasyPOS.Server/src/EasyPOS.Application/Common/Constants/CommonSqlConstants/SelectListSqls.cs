@@ -188,5 +188,13 @@ public static class SelectListSqls
         ORDER BY Name
         """;
 
+    public const string EmployeesSelectListSql = """
+        SELECT Id, EmployeeName
+        FROM dbo.Employees t
+        WHERE 1 = 1
+        ORDER BY Name
+        """;
+
+
     #endregion
 }

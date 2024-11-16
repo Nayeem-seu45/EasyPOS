@@ -14,6 +14,8 @@ import { AttendanceDetailComponent } from './components/attendance-detail/attend
 import { AttendanceListComponent } from './components/attendance-list/attendance-list.component';
 import { LeaveRequestListComponent } from './components/leave-request-list/leave-request-list.component';
 import { LeaveRequestDetailComponent } from './components/leave-request-detail/leave-request-detail.component';
+import { LeaveTypeListComponent } from './components/leave-type-list/leave-type-list.component';
+import { LeaveTypeDetailComponent } from './components/leave-type-detail/leave-type-detail.component';
 
 const routes: Routes = [
   {path: 'departments', component: DepartmentListComponent},
@@ -23,6 +25,7 @@ const routes: Routes = [
   {path: 'holidays', component: HolidayListComponent},
   {path: 'attendances', component: AttendanceListComponent},
   {path: 'leaves', component: LeaveRequestListComponent},
+  {path: 'leave-types', component: LeaveTypeListComponent},
 ]
 
 @NgModule({
@@ -48,4 +51,6 @@ export const HRMRoutingComponents = [
   AttendanceDetailComponent,
   LeaveRequestListComponent,
   LeaveRequestDetailComponent,
+  LeaveTypeListComponent,
+  LeaveTypeDetailComponent
 ]

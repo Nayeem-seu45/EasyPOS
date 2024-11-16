@@ -106,6 +106,8 @@ public sealed class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<Holiday> Holidays => Set<Holiday>();
     public DbSet<Attendance> Attendances => Set<Attendance>();
     public DbSet<LeaveRequest> LeaveRequests => Set<LeaveRequest>();
+    public DbSet<LeaveType> LeaveTypes => Set<LeaveType>();
+
 
     #endregion
 

@@ -426,6 +426,14 @@ public static class Permissions
         public const string Delete = "Permissions.LeaveRequests.Delete";
     }
 
+    public static class LeaveTypes
+    {
+        public const string View = "Permissions.LeaveTypes.View";
+        public const string Create = "Permissions.LeaveTypes.Create";
+        public const string Edit = "Permissions.LeaveTypes.Edit";
+        public const string Delete = "Permissions.LeaveTypes.Delete";
+    }
+
 
     #endregion
 

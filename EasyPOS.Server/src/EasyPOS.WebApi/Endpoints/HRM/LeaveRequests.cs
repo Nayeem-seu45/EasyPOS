@@ -1,4 +1,5 @@
-﻿using EasyPOS.Application.Features.HRM.LeaveRequests.Commands;
+﻿using EasyPOS.Application.Features.Common.Queries;
+using EasyPOS.Application.Features.HRM.LeaveRequests.Commands;
 using EasyPOS.Application.Features.HRM.LeaveRequests.Queries;
 
 namespace EasyPOS.WebApi.Endpoints;
@@ -48,6 +49,17 @@ public class LeaveRequests : EndpointGroupBase
     private async Task<IResult> Get(ISender sender, Guid id)
     {
         var result = await sender.Send(new GetLeaveRequestByIdQuery(id));
+
+        var employeesSelectList = await sender.Send(new GetSelectListQuery(
+            Sql: SelectListSqls.EmployeesSelectListSql,
+            Parameters: new { },
+            Key: $"{CacheKeys.Employee}",
+            AllowCacheList: true)
+        );
+
+
+        result.Value.OptionsDataSources.Add("employeesSelectList", employeesSelectList.Value);
+
         return TypedResults.Ok(result.Value);
     }
 

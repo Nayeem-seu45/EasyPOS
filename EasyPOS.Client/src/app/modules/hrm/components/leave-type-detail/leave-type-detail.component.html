@@ -1,0 +1,28 @@
+﻿<div class="col-12">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+    <div class="p-fluid p-formgrid grid">
+         <div class="field col-12 md:col-6">
+        <app-input-text label="Name" formControlName="name" [required]="true" [readonly]="false" />
+        <app-validator-msg [control]="f['name']" />
+    </div>
+    <div class="field col-12 md:col-6">
+        <app-input-text label="Code" formControlName="code" [required]="false" [readonly]="false" />
+    </div>
+    <div class="field col-12 md:col-6">
+      <app-input-number label="Total Leave Days" formControlName="totalLeaveDays" textAlign="right" [showButtons]="false" [required]="true" />
+    </div>
+    <div class="field col-12 md:col-6">
+      <app-input-number label="Max Consecutive Allowed" formControlName="maxConsecutiveAllowed" textAlign="right" [showButtons]="false" [required]="false" />
+    </div>
+    <div class="field col-12 md:col-6 md:flex align-items-center md:mt-4">
+      <app-input-switch label="Sandwich Allowed" formControlName="isSandwichAllowed" />
+    </div>
+    </div>
+
+    <div class="mt-3 p-dialog-footer">
+      <app-button label="Cancel" type="button" icon="pi pi-times" [text]="true" severity="warning"
+        (onClick)="cancel()" />
+      <app-button label="Save" type="submit" icon="pi pi-check" [text]="true" [disabled]="form.invalid" />
+    </div>
+  </form>
+</div>
