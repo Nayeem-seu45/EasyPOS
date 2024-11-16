@@ -8,6 +8,8 @@ import { PurchasePaymentDetailComponent } from "./components/purchase-payment-de
 import { PurchasePaymentListComponent } from "./components/purchase-payment-list/purchase-payment-list.component";
 import { PurchaseReturnListComponent } from "./components/purchase-return-list/purchase-return-list.component";
 import { PurchaseReturnDetailComponent } from "./components/purchase-return-detail/purchase-return-detail.component";
+import { PurchaseReturnPaymentDetailComponent } from "./components/purchase-return-payment-detail/purchase-return-payment-detail.component";
+import { PurchaseReturnPaymentListComponent } from "./components/purchase-return-payment-list/purchase-return-payment-list.component";
 
 const routes: Routes = [
   {path: 'list', component: PurchaseListComponent},
@@ -34,5 +36,7 @@ export const purchaseRoutingComponents = [
   PurchasePaymentDetailComponent,
   PurchasePaymentListComponent,
   PurchaseReturnListComponent,
-  PurchaseReturnDetailComponent
+  PurchaseReturnDetailComponent,
+  PurchaseReturnPaymentListComponent,
+  PurchaseReturnPaymentDetailComponent
 ]
