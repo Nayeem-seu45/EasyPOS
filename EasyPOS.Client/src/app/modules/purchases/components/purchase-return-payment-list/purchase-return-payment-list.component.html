@@ -4,7 +4,7 @@
           <th *ngFor="let col of columns">
               {{ col.header }}
           </th>
-          <!-- <th>Action</th> -->
+          <th>Action</th>
       </tr>
   </ng-template>
   <ng-template pTemplate="body" let-rowData let-columns="columns">
@@ -12,9 +12,9 @@
           <td *ngFor="let col of columns">
               {{ rowData[col.field] }}
           </td>
-          <!-- <td>
+          <td>
             <app-custom-menu  [items]="actionDropdownOptions" [data]="rowData" label="Action" (onMenuClick)="onhandleMenuClick($event)"  />  
-          </td> -->
+          </td>
       </tr>
   </ng-template>
 </p-table>

@@ -67,13 +67,13 @@ export class PurchaseReturnPaymentListComponent {
     this.getList(this.purchaseReturnModel.id)
   }
 
-  // onhandleMenuClick(event) {
-  //   if (event?.menuItem?.id === 'edit' && event?.data?.id && event?.data?.id !== CommonConstants.EmptyGuid) {
-  //     this.update(event.data)
-  //   } else if (event?.menuItem?.id === 'delete') {
-  //     this.delete(event.data)
-  //   }
-  // }
+  onhandleMenuClick(event) {
+    if (event?.menuItem?.id === 'edit' && event?.data?.id && event?.data?.id !== CommonConstants.EmptyGuid) {
+      this.update(event.data)
+    } else if (event?.menuItem?.id === 'delete') {
+      this.delete(event.data)
+    }
+  }
 
   getList(purchaseReturnId: string) {
     const query = new GetPaymentListByPurchaseReturnIdQuery();

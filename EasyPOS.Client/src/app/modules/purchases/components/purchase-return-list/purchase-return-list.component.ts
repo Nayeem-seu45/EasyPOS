@@ -42,11 +42,18 @@ export class PurchaseReturnListComponent {
   }
 
   private openPaymentList(event: any) {
+    this.customDialogService.handleCloseIcon = false;
     const paymentListDialogRef = this.customDialogService.openDialog<PurchaseReturnModel>(
       PurchaseReturnPaymentListComponent,
       event.data,
       'Payment List',
+      {width: '60vw'},
+      true,
     );
+
+    paymentListDialogRef.onClose.subscribe((succeeded) => {
+      this.grid.refreshGrid();
+    });
   }
 
   private addPayment(event: any) {
