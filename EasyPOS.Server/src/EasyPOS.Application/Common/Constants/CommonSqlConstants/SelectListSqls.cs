@@ -165,4 +165,28 @@ public static class SelectListSqls
         ORDER BY Name
         """;
     #endregion
+
+    #region HRM
+    public const string DepartmentsSelectListSql = """
+        SELECT Id, Name 
+        FROM dbo.Departments t
+        WHERE 1 = 1
+        ORDER BY Name
+        """;
+
+    public const string DesignationsSelectListSql = """
+        SELECT Id, Name 
+        FROM dbo.Designations t
+        WHERE 1 = 1
+        ORDER BY Name
+        """;
+
+    public const string WorkingShiftsSelectListSql = """
+        SELECT Id, ShiftName Name
+        FROM dbo.WorkingShifts t
+        WHERE 1 = 1
+        ORDER BY Name
+        """;
+
+    #endregion
 }

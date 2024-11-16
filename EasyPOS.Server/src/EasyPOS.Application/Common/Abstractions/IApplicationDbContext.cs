@@ -1,6 +1,7 @@
 ﻿using EasyPOS.Domain.Accounting;
 using EasyPOS.Domain.Admin;
 using EasyPOS.Domain.Common;
+using EasyPOS.Domain.HRM;
 using EasyPOS.Domain.Products;
 using EasyPOS.Domain.ProductTransfers;
 using EasyPOS.Domain.Purchases;
@@ -94,6 +95,18 @@ public interface IApplicationDbContext
     DbSet<Account> Accounts { get; }
     DbSet<MoneyTransfer> MoneyTransfers { get; }
     DbSet<Expense> Expenses { get; }
+
+    #endregion
+
+    #region HRM
+    DbSet<Department> Departments { get; }
+    DbSet<Designation> Designations { get; }
+    DbSet<Employee> Employees { get; }
+    DbSet<WorkingShift> WorkingShifts { get; }
+    DbSet<WorkingShiftDetail> WorkingShiftDetails { get; }
+    DbSet<Holiday> Holidays { get; }
+    DbSet<Attendance> Attendances { get; }
+    DbSet<LeaveRequest> LeaveRequests { get; }
 
     #endregion
 

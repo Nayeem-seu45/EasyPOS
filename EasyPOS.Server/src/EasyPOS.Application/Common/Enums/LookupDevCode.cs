@@ -19,4 +19,5 @@ public enum LookupDevCode
     PurchaseReturnStatus = 115,
     SaleReturnStatus = 116,
     SalePaymentStatus = 117,
+    Gender = 118,
 }

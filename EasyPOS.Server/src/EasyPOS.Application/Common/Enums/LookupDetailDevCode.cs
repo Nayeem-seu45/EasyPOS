@@ -49,3 +49,10 @@ public enum SalePaymentStatus
     Partial = 117002,
     Paid = 117003
 }
+
+public enum Gender
+{
+    Male = 118001,
+    Female = 118002,
+    Other = 118003
+}

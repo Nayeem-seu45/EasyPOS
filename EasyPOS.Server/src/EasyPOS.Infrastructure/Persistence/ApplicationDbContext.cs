@@ -3,6 +3,7 @@ using EasyPOS.Application.Common.Abstractions;
 using EasyPOS.Domain.Accounting;
 using EasyPOS.Domain.Admin;
 using EasyPOS.Domain.Common;
+using EasyPOS.Domain.HRM;
 using EasyPOS.Domain.Products;
 using EasyPOS.Domain.ProductTransfers;
 using EasyPOS.Domain.Purchases;
@@ -93,6 +94,18 @@ public sealed class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<Account> Accounts => Set<Account>();
     public DbSet<MoneyTransfer> MoneyTransfers => Set<MoneyTransfer>();
     public DbSet<Expense> Expenses => Set<Expense>();
+
+    #endregion
+
+    #region HRM
+    public DbSet<Department> Departments => Set<Department>();
+    public DbSet<Designation> Designations => Set<Designation>();   
+    public DbSet<Employee> Employees => Set<Employee>();
+    public DbSet<WorkingShift> WorkingShifts => Set<WorkingShift>();
+    public DbSet<WorkingShiftDetail> WorkingShiftDetails => Set<WorkingShiftDetail>();
+    public DbSet<Holiday> Holidays => Set<Holiday>();
+    public DbSet<Attendance> Attendances => Set<Attendance>();
+    public DbSet<LeaveRequest> LeaveRequests => Set<LeaveRequest>();
 
     #endregion
 

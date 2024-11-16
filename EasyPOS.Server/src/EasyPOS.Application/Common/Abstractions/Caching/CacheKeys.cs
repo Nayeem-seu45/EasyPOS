@@ -96,6 +96,20 @@ public static class CacheKeys
     public const string Quotation = nameof(Quotation);
     #endregion
 
+    #region HRM
+    public const string Department = nameof(Department);
+    public const string Department_All_SelectList = nameof(Department_All_SelectList);
+    public const string Designation = nameof(Designation);
+    public const string Designation_All_SelectList = nameof(Designation_All_SelectList);
+    public const string Employee = nameof(Employee);
+    public const string Holiday = nameof(Holiday);
+    public const string WorkingShift = nameof(WorkingShift);
+    public const string WorkingShift_All_SelectList = nameof(WorkingShift_All_SelectList);
+    public const string Attendance = nameof(Attendance);
+    public const string LeaveRequest = nameof(LeaveRequest);
+
+    #endregion
+
     #region Settings
     public const string CompanyInfo = nameof(CompanyInfo);
     #endregion

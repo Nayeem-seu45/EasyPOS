@@ -364,6 +364,71 @@ public static class Permissions
 
     #endregion
 
+    #region HRM
+    public static class Departments
+    {
+        public const string View = "Permissions.Departments.View";
+        public const string Create = "Permissions.Departments.Create";
+        public const string Edit = "Permissions.Departments.Edit";
+        public const string Delete = "Permissions.Departments.Delete";
+    }
+
+    public static class Designations
+    {
+        public const string View = "Permissions.Designations.View";
+        public const string Create = "Permissions.Designations.Create";
+        public const string Edit = "Permissions.Designations.Edit";
+        public const string Delete = "Permissions.Designations.Delete";
+    }
+
+
+    public static class Employees
+    {
+        public const string View = "Permissions.Employees.View";
+        public const string Create = "Permissions.Employees.Create";
+        public const string Edit = "Permissions.Employees.Edit";
+        public const string Delete = "Permissions.Employees.Delete";
+    }
+
+
+    public static class WorkingShifts
+    {
+        public const string View = "Permissions.WorkingShifts.View";
+        public const string Create = "Permissions.WorkingShifts.Create";
+        public const string Edit = "Permissions.WorkingShifts.Edit";
+        public const string Delete = "Permissions.WorkingShifts.Delete";
+    }
+
+
+    public static class Holidays
+    {
+        public const string View = "Permissions.Holidays.View";
+        public const string Create = "Permissions.Holidays.Create";
+        public const string Edit = "Permissions.Holidays.Edit";
+        public const string Delete = "Permissions.Holidays.Delete";
+    }
+
+
+    public static class Attendances
+    {
+        public const string View = "Permissions.Attendances.View";
+        public const string Create = "Permissions.Attendances.Create";
+        public const string Edit = "Permissions.Attendances.Edit";
+        public const string Delete = "Permissions.Attendances.Delete";
+    }
+
+
+    public static class LeaveRequests
+    {
+        public const string View = "Permissions.LeaveRequests.View";
+        public const string Create = "Permissions.LeaveRequests.Create";
+        public const string Edit = "Permissions.LeaveRequests.Edit";
+        public const string Delete = "Permissions.LeaveRequests.Delete";
+    }
+
+
+    #endregion
+
     #region Settings
     public static class CompanyInfos
     {

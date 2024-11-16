@@ -18,7 +18,8 @@ const routes: Routes = [
             { path: 'setting', loadChildren: () => import('./modules/settings/settings.module').then(m => m.SettingsModule), canActivateChild: [AuthGuard] },
             { path: 'acc', loadChildren: () => import('./modules/accounting/accounting.module').then(m => m.AccountingModule), canActivateChild: [AuthGuard] },
             { path: 'quotation', loadChildren: () => import('./modules/quotations/quotations.module').then(m => m.QuotationsModule), canActivateChild: [AuthGuard] },
-            { path: 'transfers', loadChildren: () => import('./modules/product-transfers/product-transfers.module').then(m => m.ProductTransfersModule), canActivateChild: [AuthGuard] }
+            { path: 'transfers', loadChildren: () => import('./modules/product-transfers/product-transfers.module').then(m => m.ProductTransfersModule), canActivateChild: [AuthGuard] },
+            { path: 'hrm', loadChildren: () => import('./modules/hrm/hrm.module').then(m => m.HRMModule), canActivateChild: [AuthGuard] }
         ]
     },
     { path: 'auth', loadChildren: () => import('./modules/auth/auth.module').then(m => m.AuthModule) },
