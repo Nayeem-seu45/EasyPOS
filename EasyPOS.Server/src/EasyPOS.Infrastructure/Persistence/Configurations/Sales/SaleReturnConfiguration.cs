@@ -1,4 +1,5 @@
-﻿using EasyPOS.Domain.Sales;
+﻿using EasyPOS.Domain.Common.Enums;
+using EasyPOS.Domain.Sales;
 
 namespace EasyPOS.Infrastructure.Persistence.Configurations.Sales;
 
@@ -40,33 +41,41 @@ internal sealed class SaleReturnConfiguration : IEntityTypeConfiguration<SaleRet
                .IsRequired();
 
         builder.Property(x => x.TaxRate)
-               .HasColumnType("decimal(18, 2)");
+               .HasColumnType("decimal(18, 2)")
+               .HasDefaultValue(0);
 
         builder.Property(x => x.TaxAmount)
-               .HasColumnType("decimal(18, 2)");
+               .HasColumnType("decimal(18, 2)")
+               .HasDefaultValue(0);
+
+        //builder.Property(x => x.DiscountType)
+        //        .HasConversion<int>()
+        //        .HasDefaultValue((int)DiscountType.Fixed);
 
         builder.Property(x => x.DiscountRate)
-              .HasColumnType("decimal(18, 2)");
+              .HasColumnType("decimal(18, 2)")
+              .HasDefaultValue(0);
 
         builder.Property(x => x.DiscountAmount)
-           .HasColumnType("decimal(18, 2)");
+               .HasColumnType("decimal(18, 2)")
+               .HasDefaultValue(0);
 
         builder.Property(x => x.ShippingCost)
-               .HasColumnType("decimal(18, 2)");
+               .HasColumnType("decimal(18, 2)")
+               .HasDefaultValue(0);
 
         builder.Property(x => x.GrandTotal)
               .HasColumnType("decimal(18, 2)")
+              .HasDefaultValue(0)
               .IsRequired();
 
         builder.Property(x => x.PaidAmount)
               .HasColumnType("decimal(18, 2)")
-              .HasDefaultValue(0)
-              .IsRequired();
+              .HasDefaultValue(0);
 
         builder.Property(x => x.DueAmount)
               .HasColumnType("decimal(18, 2)")
-              .HasDefaultValue(0)
-              .IsRequired();
+              .HasDefaultValue(0);
 
         builder.Property(x => x.ReturnNote)
                .HasMaxLength(500);

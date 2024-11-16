@@ -76,6 +76,7 @@ public interface IApplicationDbContext
     DbSet<SaleReturn> SaleReturns { get; }
     DbSet<SaleReturnDetail> SaleReturnDetails { get; }
     DbSet<SalePayment> SalePayments { get; }
+    DbSet<SaleReturnPayment> SaleReturnPayments { get; }
     DbSet<Courier> Couriers { get; }
     DbSet<Coupon> Coupons { get; }
     DbSet<GiftCard> GiftCards { get; }

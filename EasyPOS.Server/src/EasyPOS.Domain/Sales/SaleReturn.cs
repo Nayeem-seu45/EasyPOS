@@ -15,12 +15,12 @@ public class SaleReturn : BaseAuditableEntity
     public Guid ReturnStatusId { get; set; }
     public Guid PaymentStatusId { get; set; }
     public decimal SubTotal { get; set; }
-    public decimal? TaxRate { get; set; }
-    public decimal? TaxAmount { get; set; }
+    public decimal TaxRate { get; set; }
+    public decimal TaxAmount { get; set; }
     public DiscountType DiscountType { get; set; }
-    public decimal? DiscountRate { get; set; }
+    public decimal DiscountRate { get; set; }
     public decimal DiscountAmount { get; set; }
-    public decimal? ShippingCost { get; set; }
+    public decimal ShippingCost { get; set; }
     public decimal GrandTotal { get; set; }
     public string? ReturnNote { get; set; }
     public string? StaffNote { get; set; }
@@ -29,5 +29,5 @@ public class SaleReturn : BaseAuditableEntity
 
     public virtual Sale Sale { get; set; } = default!;
     public virtual List<SaleReturnDetail> SaleReturnDetails { get; set; } = [];
-    //public virtual List<SalePayment> SalePayments { get; set; } = [];
+    public virtual List<SaleReturnPayment> SaleReturnPayments { get; set; } = [];
 }

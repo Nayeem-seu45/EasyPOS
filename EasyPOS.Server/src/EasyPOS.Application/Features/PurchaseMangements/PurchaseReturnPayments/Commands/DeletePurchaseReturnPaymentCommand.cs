@@ -28,8 +28,8 @@ internal sealed class DeletePurchaseReturnPaymentCommandHandler(
 
         dbContext.PurchaseReturnPayments.Remove(purchaseReturnPayment);
 
-        purchaseReturn.PaidAmount -= purchaseReturnPayment.PayingAmount;
-        purchaseReturn.DueAmount = purchaseReturn.GrandTotal - purchaseReturn.PaidAmount;
+        //purchaseReturn.PaidAmount -= purchaseReturnPayment.PayingAmount;
+        //purchaseReturn.DueAmount = purchaseReturn.GrandTotal - purchaseReturn.PaidAmount;
 
         await purchaseService.AdjustPurchaseReturnAsync(
             purchaseReturn, 

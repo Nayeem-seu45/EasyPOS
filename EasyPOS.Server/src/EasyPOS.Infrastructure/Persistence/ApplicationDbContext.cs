@@ -76,6 +76,7 @@ public sealed class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<SaleDetail> SaleDetails => Set<SaleDetail>();
     public DbSet<SalePayment> SalePayments => Set<SalePayment>();
     public DbSet<SaleReturn> SaleReturns => Set<SaleReturn>();
+    public DbSet<SaleReturnPayment> SaleReturnPayments => Set<SaleReturnPayment>();
     public DbSet<SaleReturnDetail> SaleReturnDetails => Set<SaleReturnDetail>();
 
     public DbSet<Courier> Couriers => Set<Courier>();

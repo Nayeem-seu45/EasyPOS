@@ -30,6 +30,7 @@ public record SaleReturnModel
     public string CustomerName { get; set; }
     public string ReturnStatus { get; set; }
     public string PaymentStatus { get; set; }
+    public string PaymentStatusTag { get; set; }
 
     public List<SaleReturnDetailModel> SaleReturnDetails { get; set; } = [];
 

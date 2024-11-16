@@ -41,6 +41,9 @@ export class SaleReturnDetailComponent implements OnInit {
 
   private closeDialogsubscription: Subscription;
 
+  get isEdit(): boolean{
+    return this.id && this.id !== CommonConstants.EmptyGuid;
+  }
 
   constructor(private entityClient: SaleReturnsClient,
     private activatedRoute: ActivatedRoute,

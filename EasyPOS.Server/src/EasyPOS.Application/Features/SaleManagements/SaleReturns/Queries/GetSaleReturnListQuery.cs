@@ -20,27 +20,20 @@ internal sealed class GetSaleReturnQueryHandler(ISqlConnectionFactory sqlConnect
         var sql = $"""
             SELECT
                 t.Id AS {nameof(SaleReturnModel.Id)},
-                t.ReturnDate As {nameof(SaleReturnModel.ReturnDate)},
+                t.ReturnDate AS {nameof(SaleReturnModel.ReturnDate)},
                 t.ReferenceNo AS {nameof(SaleReturnModel.ReferenceNo)},
                 t.SoldReferenceNo AS {nameof(SaleReturnModel.SoldReferenceNo)},
-                t.WarehouseId AS {nameof(SaleReturnModel.WarehouseId)},
-                t.CustomerId AS {nameof(SaleReturnModel.CustomerId)},
-                t.ReturnStatusId AS {nameof(SaleReturnModel.ReturnStatusId)},
-                t.PaymentStatusId AS {nameof(SaleReturnModel.PaymentStatusId)},
                 t.GrandTotal AS {nameof(SaleReturnModel.GrandTotal)},
-                t.TotalPaidAmount AS {nameof(SaleReturnModel.PaidAmount)},
                 t.DueAmount AS {nameof(SaleReturnModel.DueAmount)},
-                t.ReturnNote AS {nameof(SaleReturnModel.ReturnNote)},
-                t.StaffNote AS {nameof(SaleReturnModel.StaffNote)},
-                w.Name AS {nameof(SaleReturnModel.WarehouseName)},
+                t.PaidAmount AS {nameof(SaleReturnModel.PaidAmount)},
                 c.Name AS {nameof(SaleReturnModel.CustomerName)},
-                ss.Name AS {nameof(SaleReturnModel.ReturnStatus)},
-                ps.Name AS {nameof(SaleReturnModel.PaymentStatus)}
+                pmns.Name AS {nameof(SaleReturnModel.PaymentStatus)},
+                [dbo].[fn_PaymentStatusTag](pmns.Name) AS {nameof(SaleReturnModel.PaymentStatusTag)}         
             FROM dbo.SaleReturns AS t
             LEFT JOIN dbo.Warehouses w ON w.Id = t.WarehouseId
             LEFT JOIN dbo.Customers c ON c.Id = t.CustomerId
-            LEFT JOIN dbo.LookupDetails ss ON ss.Id = t.ReturnStatusId
-            LEFT JOIN dbo.LookupDetails ps ON ps.Id = t.PaymentStatusId
+            --LEFT JOIN dbo.LookupDetails ss ON ss.Id = t.ReturnStatusId
+            LEFT JOIN dbo.LookupDetails pmns ON pmns.Id = t.PaymentStatusId           
             WHERE 1 = 1
             """;
 

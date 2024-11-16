@@ -1,4 +1,5 @@
 ﻿using EasyPOS.Application.Features.SaleReturns.Models;
+using EasyPOS.Domain.Common.Enums;
 
 namespace EasyPOS.Application.Features.SaleReturns.Queries;
 
@@ -21,15 +22,11 @@ internal sealed class GetSaleReturnBySaleIdQueryHandler(ISqlConnectionFactory sq
         var sql = $"""
             SELECT
                 -- UpsertSaleReturnModel fields (master)
-                s.Id AS {nameof(UpsertSaleReturnModel.Id)},
-                s.ReturnDate AS {nameof(UpsertSaleReturnModel.ReturnDate)},
+                s.Id AS {nameof(UpsertSaleReturnModel.SaleId)},
                 s.ReferenceNo AS {nameof(UpsertSaleReturnModel.SoldReferenceNo)},
                 s.WarehouseId AS {nameof(UpsertSaleReturnModel.WarehouseId)},
                 s.CustomerId AS {nameof(UpsertSaleReturnModel.CustomerId)},
                 s.BillerId AS {nameof(UpsertSaleReturnModel.BillerId)},
-                s.ReturnNote AS {nameof(UpsertSaleReturnModel.ReturnNote)},
-                s.StaffNote AS {nameof(UpsertSaleReturnModel.StaffNote)},
-                c.Name AS {nameof(UpsertSaleReturnModel.Customer)},
 
                 -- SaleReturnDetailModel fields (detail)
                 d.Id AS {nameof(SaleReturnDetailModel.Id)},
@@ -51,7 +48,7 @@ internal sealed class GetSaleReturnBySaleIdQueryHandler(ISqlConnectionFactory sq
                 d.TaxRate AS {nameof(SaleReturnDetailModel.TaxRate)},
                 d.TaxAmount AS {nameof(SaleReturnDetailModel.TaxAmount)},
                 d.TaxMethod AS {nameof(SaleReturnDetailModel.TaxMethod)},
-                d.TotalPrice AS {nameof(SaleReturnDetailModel.TotalPrice)}
+                0 AS {nameof(SaleReturnDetailModel.TotalPrice)}
             FROM dbo.Sales s
             LEFT JOIN dbo.SaleDetails d ON s.Id = d.SaleId
             LEFT JOIN dbo.Customers c ON c.Id = s.CustomerId
@@ -84,6 +81,11 @@ internal sealed class GetSaleReturnBySaleIdQueryHandler(ISqlConnectionFactory sq
 
         var result = saleModel.FirstOrDefault();
         result.ReturnDate = DateOnly.FromDateTime(DateTime.Now);
+        result.DiscountType = DiscountType.Fixed;
+        result.TaxRate = 0;
+        result.ShippingCost = 0;
+        result.DiscountAmount = 0;
+
         return result == null
             ? Result.Failure<UpsertSaleReturnModel>(Error.Failure(nameof(UpsertSaleReturnModel), ErrorMessages.NotFound))
             : Result.Success(result);

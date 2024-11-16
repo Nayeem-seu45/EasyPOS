@@ -1,4 +1,5 @@
-﻿using EasyPOS.Domain.Purchases;
+﻿using EasyPOS.Domain.Common.Enums;
+using EasyPOS.Domain.Purchases;
 
 namespace EasyPOS.Infrastructure.Persistence.Configurations.Purchases;
 
@@ -43,9 +44,13 @@ internal sealed class PurchaseReturnConfiguration : IEntityTypeConfiguration<Pur
                .HasColumnType("decimal(18, 2)")
                .HasDefaultValue(0);
 
+        //builder.Property(x => x.DiscountType)
+        //    .HasConversion<int>()
+        //    .HasDefaultValue((int)DiscountType.Fixed);
+
         builder.Property(x => x.DiscountRate)
                 .HasColumnType("decimal(3, 2)")
-                .HasDefaultValue(1);
+                .HasDefaultValue(0);
 
         builder.Property(x => x.DiscountAmount)
                .HasColumnType("decimal(18, 2)")

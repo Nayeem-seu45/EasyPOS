@@ -8,10 +8,8 @@ import { CommonConstants } from 'src/app/core/contants/common';
 import { DataGridComponent } from 'src/app/shared/components/data-grid/data-grid.component';
 import { CustomDialogService } from 'src/app/shared/services/custom-dialog.service';
 import { CommonUtils } from 'src/app/shared/Utilities/common-utilities';
-import { SalePaymentListComponent } from '../sale-payment-list/sale-payment-list.component';
-import { SalePaymentDetailComponent } from '../sale-payment-detail/sale-payment-detail.component';
-// import { SaleReturnPaymentDetailComponent } from '../sale-return-payment-detail/sale-return-payment-detail.component';
-// import { SaleReturnPaymentListComponent } from '../sale-return-payment-list/sale-return-payment-list.component';
+import { SaleReturnPaymentListComponent } from '../sale-return-payment-list/sale-return-payment-list.component';
+import { SaleReturnPaymentDetailComponent } from '../sale-return-payment-detail/sale-return-payment-detail.component';
 
 @Component({
   selector: 'app-sale-return-list',
@@ -49,7 +47,7 @@ export class SaleReturnListComponent {
     console.log(event)
     this.customDialogService.handleCloseIcon = false;
     const paymentListDialogRef = this.customDialogService.openDialog<SaleReturnModel>(
-      SalePaymentListComponent,
+      SaleReturnPaymentListComponent,
       event.data,
       'Payment List',
       { width: '60vw' },
@@ -63,7 +61,7 @@ export class SaleReturnListComponent {
 
   private addPayment(event: any) {
     this.customDialogService.open<{ id: string; saleReturn: SaleReturnModel; }>(
-      SalePaymentDetailComponent,
+      SaleReturnPaymentDetailComponent,
       { id: CommonConstants.EmptyGuid, saleReturn: event.data },
       'Add Payment').subscribe((succeeded) => {
         if (succeeded) {

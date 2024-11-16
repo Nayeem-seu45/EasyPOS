@@ -1,25 +1,45 @@
 ﻿<app-toast />
 <div class="card">
-  <h3 *ngIf="!id">Return Sale</h3>
-  <h3 *ngIf="id">Update Return Sale</h3>
+  <h3 *ngIf="!isEdit">Return Sale</h3>
+  <h3 *ngIf="isEdit">Update Return Sale</h3>
   <div class="col-12" *ngIf="item">
     <form #saleForm="ngForm" (ngSubmit)="onSubmit()">
       <div class="p-fluid p-formgrid grid">
-
-        <!-- Reference No -->
-        <div class="field col-12 md:col-4">
-          <app-input-text label="Sale Ref No" [(ngModel)]="item.soldReferenceNo" name="soldReferenceNo" [disabled]="true" />
-        </div>
-
-        <!-- Customer Name -->
-        <div class="field col-12 md:col-4">
-          <app-input-text label="Customer" [(ngModel)]="item.customer" name="customer" [disabled]="true" />
-        </div>
 
         <!-- Sale Date -->
         <div class="field col-12 md:col-4">
           <app-input-date label="Date" [(ngModel)]="item.returnDate" name="returnDate" />
         </div>
+
+        <!-- Reference No -->
+        <div class="field col-12 md:col-4" *ngIf="isEdit">
+          <app-input-text label="Reference No" [(ngModel)]="item.referenceNo" name="referenceNo" [disabled]="true" />
+        </div>
+
+        <!-- Reference No -->
+        <div class="field col-12 md:col-4">
+          <app-input-text label="Sale Ref No" [(ngModel)]="item.soldReferenceNo" name="soldReferenceNo"
+            [disabled]="true" />
+        </div>
+
+        <!-- Warehouse -->
+        <div class="field col-12 md:col-4">
+          <app-input-select label="Warehouse" [(ngModel)]="item.warehouseId" name="warehouseId"
+            [options]="optionsDataSources?.warehousesSelectList" [disabled]="true" />
+        </div>
+
+        <!-- Customer -->
+        <div class="field col-12 md:col-4">
+          <app-input-select label="Customer" [(ngModel)]="item.customerId" name="customerId"
+            [options]="optionsDataSources?.customersSelectList" [disabled]="true" />
+        </div>
+
+        <!-- Biller -->
+        <div class="field col-12 md:col-4">
+          <app-input-select label="Biller" [(ngModel)]="item.billerId" name="billerId"
+            [options]="optionsDataSources?.customersSelectList" [disabled]="true" />
+        </div>
+
 
         <!-- product select  -->
         <!-- <div class="col-12">
@@ -40,16 +60,17 @@
                 <th style="min-width:70px">Discount</th>
                 <th style="min-width:70px">Tax</th>
                 <th style="min-width:70px">Sub Total</th>
-                <th style="min-width:50px">Del</th>
+                <!-- <th style="min-width:50px">Del</th> -->
               </tr>
             </ng-template>
             <ng-template pTemplate="body" let-detail let-i="rowIndex">
               <tr>
-                <td>{{ detail.productName }} <i class="pi pi-pen-to-square product-edit-icon" (click)="updateDetail(i, detail)"></i></td>
+                <td>{{ detail.productName }} <i class="pi pi-pen-to-square product-edit-icon"
+                    (click)="updateDetail(i, detail)"></i></td>
                 <td>{{ detail.productCode }}</td>
                 <td>{{ detail.soldQuantity }}</td>
                 <td style="min-width:120px; max-width: 150px !important;">
-                  <app-input-number [(ngModel)]="detail.returnedQuantity" name="returnedQuantity-{{i}}" [showButtons]="true" [min]="1" textAlign="center" buttonLayout="horizontal"
+                  <app-input-number [(ngModel)]="detail.returnedQuantity" name="returnedQuantity-{{i}}" [showButtons]="true" [min]="0" textAlign="center" buttonLayout="horizontal"
                     (onChange)="onItemPropsChange(detail)" />
                 </td>
                 <td>{{ detail.netUnitPrice }}</td>
@@ -60,9 +81,9 @@
                     {{ detail.totalPrice | number:'1.2-2' }}
                   </div>
                 </td>
-                <td>
+                <!-- <td>
                   <app-button type="button" severity="danger" icon="pi pi-trash" (click)="onRemoveDetail(i, detail.id)" />
-                </td>
+                </td> -->
               </tr>
             </ng-template>
             <ng-template pTemplate="footer">
@@ -93,29 +114,32 @@
 
         <!-- Discount Rate -->
         <div class="field col-12 md:col-4" *ngIf="item.discountType === DiscountType.Percentage">
-          <app-input-decimal label="Discount Rate" textAlign="right" [(ngModel)]="item.discountRate" name="discountRate" (ngModelChange)="onDiscountRateChange()" />
+          <app-input-decimal label="Discount Rate" textAlign="right" [(ngModel)]="item.discountRate" name="discountRate"
+            (ngModelChange)="onDiscountRateChange()" />
         </div>
 
         <!-- Discount Amount -->
         <div class="field col-12 md:col-4" *ngIf="item.discountType === DiscountType.Fixed">
-          <app-input-decimal label="Discount Amount" textAlign="right" [(ngModel)]="item.discountAmount" name="discountAmount" (ngModelChange)="onDiscountAmountChange()" />
+          <app-input-decimal label="Discount Amount" textAlign="right" [(ngModel)]="item.discountAmount"
+            name="discountAmount" (ngModelChange)="onDiscountAmountChange()" />
         </div>
 
         <!-- Shipping Cost -->
         <div class="field col-12 md:col-4">
-          <app-input-decimal label="Shipping Cost" textAlign="right" [(ngModel)]="item.shippingCost" name="shippingCost" (ngModelChange)="onShippingCostChange()" />
+          <app-input-decimal label="Shipping Cost" textAlign="right" [(ngModel)]="item.shippingCost" name="shippingCost"
+            (ngModelChange)="onShippingCostChange()" />
         </div>
 
         <!-- Sale Status -->
         <div class="field col-12 md:col-4">
-          <app-input-select label="Sale Status" [(ngModel)]="item.returnStatusId" name="returnStatusId" [showClear]="false"
-            [options]="optionsDataSources?.saleStatusSelectList" />
+          <app-input-select label="Sale Status" [(ngModel)]="item.returnStatusId" name="returnStatusId"
+            [showClear]="false" [options]="optionsDataSources?.saleStatusSelectList" />
         </div>
 
         <!-- Payment Status -->
         <div class="field col-12 md:col-4">
-          <app-input-select label="Payment Status" [(ngModel)]="item.paymentStatusId" name="paymentStatusId" [showClear]="false"
-            [options]="optionsDataSources?.paymentStatusSelectList" />
+          <app-input-select label="Payment Status" [(ngModel)]="item.paymentStatusId" name="paymentStatusId"
+            [showClear]="false" [options]="optionsDataSources?.paymentStatusSelectList" />
         </div>
 
         <!-- Attachment -->

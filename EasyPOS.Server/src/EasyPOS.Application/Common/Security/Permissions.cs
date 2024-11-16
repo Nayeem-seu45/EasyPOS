@@ -306,6 +306,14 @@ public static class Permissions
         public const string Delete = "Permissions.SaleReturns.Delete";
     }
 
+    public static class SaleReturnPayments
+    {
+        public const string View = "Permissions.SaleReturnPayments.View";
+        public const string Create = "Permissions.SaleReturnPayments.Create";
+        public const string Edit = "Permissions.SaleReturnPayments.Edit";
+        public const string Delete = "Permissions.SaleReturnPayments.Delete";
+    }
+
     public static class Couriers
     {
         public const string View = "Permissions.Couriers.View";

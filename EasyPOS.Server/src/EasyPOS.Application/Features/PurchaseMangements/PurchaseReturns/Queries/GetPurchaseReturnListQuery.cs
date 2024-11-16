@@ -32,7 +32,7 @@ internal sealed class GetPurchaseReturnListQueryHandler(ISqlConnectionFactory sq
                 [dbo].[fn_PaymentStatusTag](pmns.Name) AS {nameof(PurchaseModel.PaymentStatusTag)}         
             FROM dbo.PurchaseReturns t
             LEFT JOIN dbo.Suppliers s ON s.Id = t.SupplierId
-            --LEFT JOIN dbo.LookupDetails ps ON ps.Id = t.PurchaseReturnStatusId
+            --LEFT JOIN dbo.LookupDetails ps ON ps.Id = t.ReturnStatusId
             LEFT JOIN dbo.LookupDetails pmns ON pmns.Id = t.PaymentStatusId           
             """;
 

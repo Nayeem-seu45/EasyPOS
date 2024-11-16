@@ -3,6 +3,7 @@ using EasyPOS.Application.Features.SaleManagements.Shared;
 using EasyPOS.Application.Features.Sales.Models;
 using EasyPOS.Application.Features.Stakeholders.Customers.Services;
 using EasyPOS.Domain.Sales;
+using static EasyPOS.Application.Common.Security.Permissions;
 
 namespace EasyPOS.Application.Features.Sales.Commands;
 
@@ -42,8 +43,9 @@ internal sealed class CreateSaleCommandHandler(
     public async Task<Result<Guid>> Handle(CreateSaleCommand request, CancellationToken cancellationToken)
     {
         var sale = request.Adapt<Sale>();
-
         dbContext.Sales.Add(sale);
+
+        sale.ReferenceNo = "S-" + DateTime.Now.ToString("yyyyMMddhhmmffff");
 
         await saleService
             .AdjustSaleAsync(SaleTransactionType.SaleCreate, sale, request.SalePayment?.PayingAmount ?? 0, cancellationToken);

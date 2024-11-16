@@ -1,4 +1,6 @@
-﻿using EasyPOS.Application.Features.SaleReturns.Models;
+﻿using EasyPOS.Application.Features.SaleManagements.Services;
+using EasyPOS.Application.Features.SaleManagements.Shared;
+using EasyPOS.Application.Features.SaleReturns.Models;
 using EasyPOS.Domain.Sales;
 
 namespace EasyPOS.Application.Features.SaleReturns.Commands;
@@ -31,18 +33,38 @@ public record CreateSaleReturnCommand : UpsertSaleReturnModel, ICacheInvalidator
 }
 
 internal sealed class CreateSaleReturnCommandHandler(
-    IApplicationDbContext dbContext)
+    IApplicationDbContext dbContext,
+    ISaleReturnService saleReturnService)
     : ICommandHandler<CreateSaleReturnCommand, Guid>
 {
     public async Task<Result<Guid>> Handle(CreateSaleReturnCommand request, CancellationToken cancellationToken)
-    {
-        var entity = request.Adapt<SaleReturn>();
+    {      
+        var saleReturn = request.Adapt<SaleReturn>();
 
-        dbContext.SaleReturns.Add(entity);
-        entity.ReferenceNo = DateTime.Now.ToString("ddMMyyyyhhmmssffff");
+        dbContext.SaleReturns.Add(saleReturn);
+        saleReturn.ReferenceNo = "SR-" + DateTime.Now.ToString("yyyyMMddhhmmffff");
+
+        var sale = await dbContext.Sales
+            .AsNoTracking()
+            .FirstOrDefaultAsync(x => x.Id == saleReturn.SaleId);
+
+        if (sale is null)
+        {
+            return Result.Failure<Guid>(Error.Failure(nameof(sale), "Sale not found"));
+        }
+
+        saleReturn.SoldReferenceNo = sale.ReferenceNo;
+        saleReturn.WarehouseId = sale.WarehouseId;
+        saleReturn.CustomerId = sale.CustomerId;
+
+        await saleReturnService.AdjustSaleReturnAsync(
+            SaleReturnTransactionType.SaleReturnCreate, 
+            saleReturn, 
+            0, 
+            cancellationToken);
 
         await dbContext.SaveChangesAsync(cancellationToken);
 
-        return entity.Id;
+        return saleReturn.Id;
     }
 }

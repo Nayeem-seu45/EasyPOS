@@ -14,6 +14,8 @@ import { SalePaymentListComponent } from "./components/sale-payment-list/sale-pa
 import { UpdateSaleDetailComponent } from "./components/update-sale-detail/update-sale-detail.component";
 import { SaleReturnDetailComponent } from "./components/sale-return-detail/sale-return-detail.component";
 import { SaleReturnListComponent } from "./components/sale-return-list/sale-return-list.component";
+import { SaleReturnPaymentListComponent } from "./components/sale-return-payment-list/sale-return-payment-list.component";
+import { SaleReturnPaymentDetailComponent } from "./components/sale-return-payment-detail/sale-return-payment-detail.component";
 
 
 const routes: Routes = [
@@ -50,4 +52,6 @@ export const salesRoutingComponents = [
   CouponDetailComponent,
   GiftCardListComponent,
   GiftCardDetailComponent,
+  SaleReturnPaymentListComponent,
+  SaleReturnPaymentDetailComponent
 ];
