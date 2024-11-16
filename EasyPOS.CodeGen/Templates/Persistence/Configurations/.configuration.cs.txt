@@ -8,7 +8,7 @@ public class {itemname}Configuration : IEntityTypeConfiguration<{itemname}>
     {
         builder.HasKey(x => x.Id);
 
-        builder.Property(e => e.Id)
+        builder.Property(x => x.Id)
                .HasDefaultValueSql("NEWSEQUENTIALID()")
                .ValueGeneratedOnAdd();
 

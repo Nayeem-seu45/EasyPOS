@@ -128,6 +128,9 @@
     <Content Include="Templates\GeneratedClient\List\.scss.txt">
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
+    <Content Include="Templates\Models\.model.cs.txt">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
     <Content Include="Templates\Persistence\Configurations\.configuration.cs.txt">
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>

@@ -78,7 +78,7 @@ public sealed class CodeGenPackage : AsyncPackage
         var includes = new string[] { "IEntity", "BaseEntity", "BaseAuditableEntity", "BaseAuditableSoftDeleteEntity", "AuditTrail", "OwnerPropertyEntity" };
         var objectlist = ProjectHelpers.GetEntities(domain.Project)
             .Where(x => includes.Contains(x.BaseName) && !includes.Contains(x.Name));
-        var entities = objectlist.Select(x => x.Name).Distinct().ToArray();
+        var entities = objectlist.Select(x => x.Name).Distinct().OrderBy(x => x).ToArray();
         if (target == null && target.Project.Name == APPLICATIONPROJECT)
         {
             MessageBox.Show(

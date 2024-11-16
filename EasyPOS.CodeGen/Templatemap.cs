@@ -275,6 +275,24 @@ internal static class TemplateMap
                     case "System.DateTime":
                         output.Append($"    public DateTime {property.Name} {{get;set;}} \r\n");
                         break;
+                    case "System.DateOnly?":
+                        output.Append($"    public DateOnly? {property.Name} {{get;set;}} \r\n");
+                        break;
+                    case "System.DateOnly":
+                        output.Append($"    public DateOnly {property.Name} {{get;set;}} \r\n");
+                        break;
+                    case "System.TimeOnly?":
+                        output.Append($"    public TimeOnly? {property.Name} {{get;set;}} \r\n");
+                        break;
+                    case "System.TimeOnly":
+                        output.Append($"    public TimeOnly {property.Name} {{get;set;}} \r\n");
+                        break;
+                    case "System.TimeSpan?":
+                        output.Append($"    public TimeSpan? {property.Name} {{get;set;}} \r\n");
+                        break;
+                    case "System.TimeSpan":
+                        output.Append($"    public TimeSpan {property.Name} {{get;set;}} \r\n");
+                        break;
                     case "System.Guid?":
                         output.Append($"    public Guid? {property.Name} {{get;set;}} \r\n");
                         break;
@@ -606,7 +624,7 @@ internal static class TemplateMap
                 case "string":
                     output.AppendLine();
                     output.AppendLine($"""
-                                builder.Property(t => t.{property.Name})
+                                builder.Property(x => x.{property.Name})
                                     .HasMaxLength(250)
                                     .IsRequired();
                         """);
@@ -615,7 +633,7 @@ internal static class TemplateMap
                 case "decimal":
                     output.AppendLine();
                     output.AppendLine($""""
-                                builder.Property(t => t.{property.Name})
+                                builder.Property(x => x.{property.Name})
                                     .HasColumnType("decimal(18, 2)")
                                     .IsRequired();
                         """");
