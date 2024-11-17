@@ -2,13 +2,15 @@
 
 public record UpdateLeaveRequestCommand(
     Guid Id,
-    int TotalDays, 
-    Guid EmployeeId, 
-    Guid LeaveTypeId, 
-    Guid? StatusId, 
-    string? AttachmentUrl, 
+    Guid EmployeeId,
+    Guid LeaveTypeId,
+    DateOnly StartDate,
+    DateOnly EndDate,
+    int TotalDays,
+    Guid? StatusId,
+    string? AttachmentUrl,
     string? Reason
-    ): ICacheInvalidatorCommand
+    ) : ICacheInvalidatorCommand
 {
     public string CacheKey => CacheKeys.LeaveRequest;
 }

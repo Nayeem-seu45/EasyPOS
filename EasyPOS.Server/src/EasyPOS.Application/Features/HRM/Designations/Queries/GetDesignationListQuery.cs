@@ -24,8 +24,10 @@ internal sealed class GetDesignationQueryHandler(ISqlConnectionFactory sqlConnec
                 t.Description AS {nameof(DesignationModel.Description)},
                 t.Status AS {nameof(DesignationModel.Status)},
                 t.DepartmentId AS {nameof(DesignationModel.DepartmentId)},
-                t.ParentId AS {nameof(DesignationModel.ParentId)}
+                t.ParentId AS {nameof(DesignationModel.ParentId)},
+                d.Name AS {nameof(DesignationModel.Department)}
             FROM dbo.Designations AS t
+            LEFT JOIN dbo.Departments AS d ON d.Id = t.DepartmentId
             WHERE 1 = 1
             """;
 

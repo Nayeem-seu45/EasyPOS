@@ -3,29 +3,31 @@
 namespace EasyPOS.Application.Features.HRM.LeaveRequests.Commands;
 
 public record CreateLeaveRequestCommand(
-    int TotalDays, 
-    Guid EmployeeId, 
-    Guid LeaveTypeId, 
-    Guid? StatusId, 
-    string? AttachmentUrl, 
+    Guid EmployeeId,
+    Guid LeaveTypeId,
+    DateOnly StartDate,
+    DateOnly EndDate,
+    int TotalDays,
+    Guid? StatusId,
+    string? AttachmentUrl,
     string? Reason
-    ): ICacheInvalidatorCommand<Guid>
+    ) : ICacheInvalidatorCommand<Guid>
 {
     public string CacheKey => CacheKeys.LeaveRequest;
 }
-    
+
 internal sealed class CreateLeaveRequestCommandHandler(
-    IApplicationDbContext dbContext) 
+    IApplicationDbContext dbContext)
     : ICommandHandler<CreateLeaveRequestCommand, Guid>
 {
     public async Task<Result<Guid>> Handle(CreateLeaveRequestCommand request, CancellationToken cancellationToken)
     {
-       var entity = request.Adapt<LeaveRequest>();
+        var entity = request.Adapt<LeaveRequest>();
 
-       dbContext.LeaveRequests.Add(entity);
+        dbContext.LeaveRequests.Add(entity);
 
-       await dbContext.SaveChangesAsync(cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
 
-       return  entity.Id;
+        return entity.Id;
     }
 }

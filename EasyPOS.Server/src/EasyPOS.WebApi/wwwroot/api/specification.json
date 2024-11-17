@@ -12911,6 +12911,10 @@
             "type": "string",
             "format": "guid"
           },
+          "department": {
+            "type": "string",
+            "nullable": true
+          },
           "parentId": {
             "type": "string",
             "format": "guid",
@@ -13503,6 +13507,18 @@
             "type": "string",
             "nullable": true
           },
+          "employeeName": {
+            "type": "string",
+            "nullable": true
+          },
+          "department": {
+            "type": "string",
+            "nullable": true
+          },
+          "designation": {
+            "type": "string",
+            "nullable": true
+          },
           "optionsDataSources": {
             "type": "object",
             "additionalProperties": {}
@@ -13529,10 +13545,6 @@
         "type": "object",
         "additionalProperties": false,
         "properties": {
-          "totalDays": {
-            "type": "integer",
-            "format": "int32"
-          },
           "employeeId": {
             "type": "string",
             "format": "guid"
@@ -13540,6 +13552,18 @@
           "leaveTypeId": {
             "type": "string",
             "format": "guid"
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "totalDays": {
+            "type": "integer",
+            "format": "int32"
           },
           "statusId": {
             "type": "string",
@@ -13570,10 +13594,6 @@
             "type": "string",
             "format": "guid"
           },
-          "totalDays": {
-            "type": "integer",
-            "format": "int32"
-          },
           "employeeId": {
             "type": "string",
             "format": "guid"
@@ -13581,6 +13601,18 @@
           "leaveTypeId": {
             "type": "string",
             "format": "guid"
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "totalDays": {
+            "type": "integer",
+            "format": "int32"
           },
           "statusId": {
             "type": "string",

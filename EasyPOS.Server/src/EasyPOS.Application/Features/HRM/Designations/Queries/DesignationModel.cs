@@ -8,6 +8,7 @@ public record DesignationModel
     public string? Description {get;set;} 
     public bool Status {get;set;} 
     public Guid DepartmentId {get;set;} 
+    public string? Department {get;set;} 
     public Guid? ParentId {get;set;} 
 
 

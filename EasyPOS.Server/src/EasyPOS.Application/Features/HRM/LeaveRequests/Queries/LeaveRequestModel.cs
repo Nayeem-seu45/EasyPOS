@@ -11,7 +11,11 @@ public record LeaveRequestModel
     public int TotalDays {get;set;} 
     public Guid? StatusId {get;set;} 
     public string? AttachmentUrl {get;set;} 
-    public string? Reason {get;set;} 
+    public string? Reason {get;set;}
+
+    public string? EmployeeName { get; set; }
+    public string? Department { get; set; }
+    public string? Designation { get; set; }
 
 
     public Dictionary<string, object> OptionsDataSources { get; set; } = [];
