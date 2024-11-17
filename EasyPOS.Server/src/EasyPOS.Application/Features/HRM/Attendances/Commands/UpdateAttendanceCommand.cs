@@ -2,9 +2,11 @@
 
 public record UpdateAttendanceCommand(
     Guid Id,
-    Guid EmployeeId, 
-    Guid AttendanceStatusId
-    ): ICacheInvalidatorCommand
+    DateOnly AttendanceDate,
+    Guid EmployeeId,
+    TimeOnly CheckIn,
+    TimeOnly? CheckOut,
+    Guid StatusId): ICacheInvalidatorCommand
 {
     public string CacheKey => CacheKeys.Attendance;
 }

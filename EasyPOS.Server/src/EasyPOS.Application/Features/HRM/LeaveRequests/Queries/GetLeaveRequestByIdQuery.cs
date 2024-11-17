@@ -24,9 +24,11 @@ internal sealed class GetLeaveRequestByIdQueryHandler(ISqlConnectionFactory sqlC
         var sql = $"""
             SELECT
                 t.Id AS {nameof(LeaveRequestModel.Id)},
-                t.TotalDays AS {nameof(LeaveRequestModel.TotalDays)},
                 t.EmployeeId AS {nameof(LeaveRequestModel.EmployeeId)},
                 t.LeaveTypeId AS {nameof(LeaveRequestModel.LeaveTypeId)},
+                t.StartDate AS {nameof(LeaveRequestModel.StartDate)},
+                t.EndDate AS {nameof(LeaveRequestModel.EndDate)},
+                t.TotalDays AS {nameof(LeaveRequestModel.TotalDays)},
                 t.StatusId AS {nameof(LeaveRequestModel.StatusId)},
                 t.AttachmentUrl AS {nameof(LeaveRequestModel.AttachmentUrl)},
                 t.Reason AS {nameof(LeaveRequestModel.Reason)}

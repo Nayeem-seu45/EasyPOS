@@ -18768,8 +18768,12 @@ export interface IPaginatedResponseOfAttendanceModel {
 
 export class AttendanceModel implements IAttendanceModel {
     id?: string;
+    attendanceDate?: Date;
     employeeId?: string;
-    attendanceStatusId?: string;
+    checkIn?: string | undefined;
+    checkOut?: string | undefined;
+    statusId?: string;
+    employeeName?: string | undefined;
     optionsDataSources?: { [key: string]: any; };
 
     constructor(data?: IAttendanceModel) {
@@ -18784,8 +18788,12 @@ export class AttendanceModel implements IAttendanceModel {
     init(_data?: any) {
         if (_data) {
             this.id = _data["id"];
+            this.attendanceDate = _data["attendanceDate"] ? new Date(_data["attendanceDate"].toString()) : <any>undefined;
             this.employeeId = _data["employeeId"];
-            this.attendanceStatusId = _data["attendanceStatusId"];
+            this.checkIn = _data["checkIn"];
+            this.checkOut = _data["checkOut"];
+            this.statusId = _data["statusId"];
+            this.employeeName = _data["employeeName"];
             if (_data["optionsDataSources"]) {
                 this.optionsDataSources = {} as any;
                 for (let key in _data["optionsDataSources"]) {
@@ -18806,8 +18814,12 @@ export class AttendanceModel implements IAttendanceModel {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
+        data["attendanceDate"] = this.attendanceDate ? formatDate(this.attendanceDate) : <any>undefined;
         data["employeeId"] = this.employeeId;
-        data["attendanceStatusId"] = this.attendanceStatusId;
+        data["checkIn"] = this.checkIn;
+        data["checkOut"] = this.checkOut;
+        data["statusId"] = this.statusId;
+        data["employeeName"] = this.employeeName;
         if (this.optionsDataSources) {
             data["optionsDataSources"] = {};
             for (let key in this.optionsDataSources) {
@@ -18821,8 +18833,12 @@ export class AttendanceModel implements IAttendanceModel {
 
 export interface IAttendanceModel {
     id?: string;
+    attendanceDate?: Date;
     employeeId?: string;
-    attendanceStatusId?: string;
+    checkIn?: string | undefined;
+    checkOut?: string | undefined;
+    statusId?: string;
+    employeeName?: string | undefined;
     optionsDataSources?: { [key: string]: any; };
 }
 
@@ -18860,8 +18876,11 @@ export interface IGetAttendanceListQuery extends IDataGridModel {
 }
 
 export class CreateAttendanceCommand implements ICreateAttendanceCommand {
+    attendanceDate?: Date;
     employeeId?: string;
-    attendanceStatusId?: string;
+    checkIn?: string;
+    checkOut?: string | undefined;
+    statusId?: string;
     cacheKey?: string;
 
     constructor(data?: ICreateAttendanceCommand) {
@@ -18875,8 +18894,11 @@ export class CreateAttendanceCommand implements ICreateAttendanceCommand {
 
     init(_data?: any) {
         if (_data) {
+            this.attendanceDate = _data["attendanceDate"] ? new Date(_data["attendanceDate"].toString()) : <any>undefined;
             this.employeeId = _data["employeeId"];
-            this.attendanceStatusId = _data["attendanceStatusId"];
+            this.checkIn = _data["checkIn"];
+            this.checkOut = _data["checkOut"];
+            this.statusId = _data["statusId"];
             this.cacheKey = _data["cacheKey"];
         }
     }
@@ -18890,23 +18912,32 @@ export class CreateAttendanceCommand implements ICreateAttendanceCommand {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["attendanceDate"] = this.attendanceDate ? formatDate(this.attendanceDate) : <any>undefined;
         data["employeeId"] = this.employeeId;
-        data["attendanceStatusId"] = this.attendanceStatusId;
+        data["checkIn"] = this.checkIn;
+        data["checkOut"] = this.checkOut;
+        data["statusId"] = this.statusId;
         data["cacheKey"] = this.cacheKey;
         return data;
     }
 }
 
 export interface ICreateAttendanceCommand {
+    attendanceDate?: Date;
     employeeId?: string;
-    attendanceStatusId?: string;
+    checkIn?: string;
+    checkOut?: string | undefined;
+    statusId?: string;
     cacheKey?: string;
 }
 
 export class UpdateAttendanceCommand implements IUpdateAttendanceCommand {
     id!: string;
+    attendanceDate?: Date;
     employeeId?: string;
-    attendanceStatusId?: string;
+    checkIn?: string;
+    checkOut?: string | undefined;
+    statusId?: string;
     cacheKey?: string;
 
     constructor(data?: IUpdateAttendanceCommand) {
@@ -18921,8 +18952,11 @@ export class UpdateAttendanceCommand implements IUpdateAttendanceCommand {
     init(_data?: any) {
         if (_data) {
             this.id = _data["id"];
+            this.attendanceDate = _data["attendanceDate"] ? new Date(_data["attendanceDate"].toString()) : <any>undefined;
             this.employeeId = _data["employeeId"];
-            this.attendanceStatusId = _data["attendanceStatusId"];
+            this.checkIn = _data["checkIn"];
+            this.checkOut = _data["checkOut"];
+            this.statusId = _data["statusId"];
             this.cacheKey = _data["cacheKey"];
         }
     }
@@ -18937,8 +18971,11 @@ export class UpdateAttendanceCommand implements IUpdateAttendanceCommand {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
+        data["attendanceDate"] = this.attendanceDate ? formatDate(this.attendanceDate) : <any>undefined;
         data["employeeId"] = this.employeeId;
-        data["attendanceStatusId"] = this.attendanceStatusId;
+        data["checkIn"] = this.checkIn;
+        data["checkOut"] = this.checkOut;
+        data["statusId"] = this.statusId;
         data["cacheKey"] = this.cacheKey;
         return data;
     }
@@ -18946,8 +18983,11 @@ export class UpdateAttendanceCommand implements IUpdateAttendanceCommand {
 
 export interface IUpdateAttendanceCommand {
     id: string;
+    attendanceDate?: Date;
     employeeId?: string;
-    attendanceStatusId?: string;
+    checkIn?: string;
+    checkOut?: string | undefined;
+    statusId?: string;
     cacheKey?: string;
 }
 

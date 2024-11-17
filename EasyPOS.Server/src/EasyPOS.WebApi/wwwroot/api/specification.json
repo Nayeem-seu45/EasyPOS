@@ -12619,13 +12619,31 @@
             "type": "string",
             "format": "guid"
           },
+          "attendanceDate": {
+            "type": "string",
+            "format": "date"
+          },
           "employeeId": {
             "type": "string",
             "format": "guid"
           },
-          "attendanceStatusId": {
+          "checkIn": {
+            "type": "string",
+            "format": "time",
+            "nullable": true
+          },
+          "checkOut": {
+            "type": "string",
+            "format": "time",
+            "nullable": true
+          },
+          "statusId": {
             "type": "string",
             "format": "guid"
+          },
+          "employeeName": {
+            "type": "string",
+            "nullable": true
           },
           "optionsDataSources": {
             "type": "object",
@@ -12653,11 +12671,24 @@
         "type": "object",
         "additionalProperties": false,
         "properties": {
+          "attendanceDate": {
+            "type": "string",
+            "format": "date"
+          },
           "employeeId": {
             "type": "string",
             "format": "guid"
           },
-          "attendanceStatusId": {
+          "checkIn": {
+            "type": "string",
+            "format": "time"
+          },
+          "checkOut": {
+            "type": "string",
+            "format": "time",
+            "nullable": true
+          },
+          "statusId": {
             "type": "string",
             "format": "guid"
           },
@@ -12677,11 +12708,24 @@
             "type": "string",
             "format": "guid"
           },
+          "attendanceDate": {
+            "type": "string",
+            "format": "date"
+          },
           "employeeId": {
             "type": "string",
             "format": "guid"
           },
-          "attendanceStatusId": {
+          "checkIn": {
+            "type": "string",
+            "format": "time"
+          },
+          "checkOut": {
+            "type": "string",
+            "format": "time",
+            "nullable": true
+          },
+          "statusId": {
             "type": "string",
             "format": "guid"
           },

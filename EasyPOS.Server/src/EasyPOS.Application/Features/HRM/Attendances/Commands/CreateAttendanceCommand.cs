@@ -3,9 +3,11 @@
 namespace EasyPOS.Application.Features.HRM.Attendances.Commands;
 
 public record CreateAttendanceCommand(
-    Guid EmployeeId, 
-    Guid AttendanceStatusId
-    ): ICacheInvalidatorCommand<Guid>
+    DateOnly AttendanceDate,
+    Guid EmployeeId,
+    TimeOnly CheckIn,
+    TimeOnly? CheckOut,
+    Guid StatusId) : ICacheInvalidatorCommand<Guid>
 {
     public string CacheKey => CacheKeys.Attendance;
 }

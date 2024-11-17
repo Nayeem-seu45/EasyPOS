@@ -1,4 +1,5 @@
-﻿using EasyPOS.Application.Features.HRM.Attendances.Commands;
+﻿using EasyPOS.Application.Features.Common.Queries;
+using EasyPOS.Application.Features.HRM.Attendances.Commands;
 using EasyPOS.Application.Features.HRM.Attendances.Queries;
 
 namespace EasyPOS.WebApi.Endpoints;
@@ -48,6 +49,24 @@ public class Attendances : EndpointGroupBase
     private async Task<IResult> Get(ISender sender, Guid id)
     {
         var result = await sender.Send(new GetAttendanceByIdQuery(id));
+
+        var employeesSelectList = await sender.Send(new GetSelectListQuery(
+            Sql: SelectListSqls.EmployeesSelectListSql,
+            Parameters: new { },
+            Key: $"{CacheKeys.Employee}",
+            AllowCacheList: true)
+        );
+
+        var attendanceStatusSelectList = await sender.Send(new GetSelectListQuery(
+            Sql: SelectListSqls.GetLookupDetailSelectListByDevCodeSql,
+            Parameters: new { DevCode = (int)LookupDevCode.AttendanceStatus },
+            Key: $"{CacheKeys.LookupDetail}_{(int)LookupDevCode.AttendanceStatus}",
+            AllowCacheList: false)
+        );
+
+        result.Value.OptionsDataSources.Add("employeesSelectList", employeesSelectList.Value);
+        result.Value.OptionsDataSources.Add("attendanceStatusSelectList", attendanceStatusSelectList.Value);
+
         return TypedResults.Ok(result.Value);
     }
 

@@ -27,8 +27,8 @@
         <app-input-text label="Attachment Url" formControlName="attachmentUrl" [required]="false" [readonly]="false" />
         <app-validator-msg [control]="f['attachmenturl']" />
       </div>
-      <div class="field col-12 md:col-6">
-        <app-input-text label="Reason" formControlName="reason" [required]="false" [readonly]="false" />
+      <div class="field col-12 md:col-12">
+        <app-input-textarea label="Reason" formControlName="reason" [required]="false" [readonly]="false" />
         <app-validator-msg [control]="f['reason']" />
       </div>
 

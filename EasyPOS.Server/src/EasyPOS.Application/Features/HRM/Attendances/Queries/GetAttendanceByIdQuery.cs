@@ -25,7 +25,10 @@ internal sealed class GetAttendanceByIdQueryHandler(ISqlConnectionFactory sqlCon
             SELECT
                 t.Id AS {nameof(AttendanceModel.Id)},
                 t.EmployeeId AS {nameof(AttendanceModel.EmployeeId)},
-                t.AttendanceStatusId AS {nameof(AttendanceModel.AttendanceStatusId)}
+                t.AttendanceDate AS {nameof(AttendanceModel.AttendanceDate)},
+                t.CheckIn AS {nameof(AttendanceModel.CheckIn)},
+                t.CheckOut AS {nameof(AttendanceModel.CheckOut)},           
+                t.StatusId AS {nameof(AttendanceModel.StatusId)}
             FROM dbo.Attendances AS t
             WHERE t.Id = @Id
             """;

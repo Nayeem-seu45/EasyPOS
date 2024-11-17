@@ -20,11 +20,15 @@ internal sealed class GetAttendanceQueryHandler(ISqlConnectionFactory sqlConnect
             SELECT
                 t.Id AS {nameof(AttendanceModel.Id)},
                 t.EmployeeId AS {nameof(AttendanceModel.EmployeeId)},
-                t.AttendanceStatusId AS {nameof(AttendanceModel.AttendanceStatusId)}
+                t.AttendanceDate AS {nameof(AttendanceModel.AttendanceDate)},
+                t.CheckIn AS {nameof(AttendanceModel.CheckIn)},
+                t.CheckOut AS {nameof(AttendanceModel.CheckOut)},
+                t.StatusId AS {nameof(AttendanceModel.StatusId)},
+                e.EmployeeName AS {nameof(AttendanceModel.EmployeeName)}
             FROM dbo.Attendances AS t
+            LEFT JOIN dbo.Employees AS e ON e.Id = t.EmployeeId
             WHERE 1 = 1
             """;
-
 
         return await PaginatedResponse<AttendanceModel>
             .CreateAsync(connection, sql, request);

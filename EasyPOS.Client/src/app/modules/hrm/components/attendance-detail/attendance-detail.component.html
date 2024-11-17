@@ -1,14 +1,23 @@
 ﻿<div class="col-12">
   <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
     <div class="p-fluid p-formgrid grid">
-         <div class="field col-12 md:col-6">
-      <app-input-select label="Employee Id" formControlName="employeeId" [options]="optionsDataSources?.['SelectList']"
-        [required]="false" />
-    </div>
-    <div class="field col-12 md:col-6">
-      <app-input-select label="Attendance Status Id" formControlName="attendanceStatusId" [options]="optionsDataSources?.['SelectList']"
-        [required]="false" />
-    </div>
+      <div class="field col-12 md:col-6">
+        <app-input-select label="Employee" formControlName="employeeId"
+          [options]="optionsDataSources?.['employeesSelectList']" [required]="false" appendTo="body" />
+      </div>
+      <div class="field col-12 md:col-6">
+        <app-input-date label="Attendance Date" formControlName="attendanceDate" />
+      </div>
+      <div class="field col-12 md:col-6">
+        <app-input-time label="Check In" formControlName="checkIn" />
+      </div>
+      <div class="field col-12 md:col-6">
+        <app-input-time label="Check Out" formControlName="checkOut" />
+      </div>
+      <div class="field col-12 md:col-6">
+        <app-input-select label="Attendance Status" formControlName="statusId" appendTo="body"
+          [options]="optionsDataSources?.['attendanceStatusSelectList']" [required]="false" />
+      </div>
 
     </div>
 

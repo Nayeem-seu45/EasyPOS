@@ -3,9 +3,13 @@
 public record AttendanceModel
 {
     public Guid Id { get; set; }
-    public Guid EmployeeId {get;set;} 
-    public Guid AttendanceStatusId {get;set;} 
+    public DateOnly AttendanceDate { get; set; }
+    public Guid EmployeeId { get; set; }
+    public TimeOnly? CheckIn { get; set; }
+    public TimeOnly? CheckOut { get; set; }
+    public Guid StatusId { get; set; }
 
+    public string? EmployeeName { get; set; }
 
     public Dictionary<string, object> OptionsDataSources { get; set; } = [];
 }
