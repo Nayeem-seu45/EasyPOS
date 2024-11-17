@@ -18,13 +18,14 @@ export class LeaveRequestDetailComponent extends BaseDetailComponent {
   override initializeFormGroup() {
     this.form = this.fb.group({
       id: [null],
-      totalDays: [null],
       employeeId: [null],
       leaveTypeId: [null],
+      startDate: [null],
+      endDate: [null],
+      totalDays: [null],
       statusId: [null],
       attachmentUrl: [null],
       reason: [null]
-
     });
   }
 

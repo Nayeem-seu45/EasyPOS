@@ -5,7 +5,7 @@ public record UpdateLeaveRequestCommand(
     int TotalDays, 
     Guid EmployeeId, 
     Guid LeaveTypeId, 
-    Guid StatusId, 
+    Guid? StatusId, 
     string? AttachmentUrl, 
     string? Reason
     ): ICacheInvalidatorCommand

@@ -1,6 +1,7 @@
 ﻿using EasyPOS.Application.Features.Common.Queries;
 using EasyPOS.Application.Features.HRM.LeaveRequests.Commands;
 using EasyPOS.Application.Features.HRM.LeaveRequests.Queries;
+using EasyPOS.Application.Features.HRM.LeaveTypes.Queries;
 
 namespace EasyPOS.WebApi.Endpoints;
 
@@ -57,8 +58,10 @@ public class LeaveRequests : EndpointGroupBase
             AllowCacheList: true)
         );
 
+        var leaveTypeSelectList = await sender.Send(new GetLeaveTypeSelectListQuery(CacheAllowed: false));
 
         result.Value.OptionsDataSources.Add("employeesSelectList", employeesSelectList.Value);
+        result.Value.OptionsDataSources.Add("leaveTypeSelectList", leaveTypeSelectList.Value);
 
         return TypedResults.Ok(result.Value);
     }

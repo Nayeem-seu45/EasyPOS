@@ -6,7 +6,7 @@ public record GetLeaveRequestByIdQuery(Guid Id) : ICacheableQuery<LeaveRequestMo
     public string CacheKey => $"{CacheKeys.LeaveRequest}_{Id}";
     [JsonIgnore]
     public TimeSpan? Expiration => null;
-    public bool? AllowCache => true;
+    public bool? AllowCache => false;
 }
 
 internal sealed class GetLeaveRequestByIdQueryHandler(ISqlConnectionFactory sqlConnection)

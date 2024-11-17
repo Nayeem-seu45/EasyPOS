@@ -20345,10 +20345,12 @@ export interface IPaginatedResponseOfLeaveRequestModel {
 
 export class LeaveRequestModel implements ILeaveRequestModel {
     id?: string;
-    totalDays?: number;
     employeeId?: string;
     leaveTypeId?: string;
-    statusId?: string;
+    startDate?: Date;
+    endDate?: Date;
+    totalDays?: number;
+    statusId?: string | undefined;
     attachmentUrl?: string | undefined;
     reason?: string | undefined;
     optionsDataSources?: { [key: string]: any; };
@@ -20365,9 +20367,11 @@ export class LeaveRequestModel implements ILeaveRequestModel {
     init(_data?: any) {
         if (_data) {
             this.id = _data["id"];
-            this.totalDays = _data["totalDays"];
             this.employeeId = _data["employeeId"];
             this.leaveTypeId = _data["leaveTypeId"];
+            this.startDate = _data["startDate"] ? new Date(_data["startDate"].toString()) : <any>undefined;
+            this.endDate = _data["endDate"] ? new Date(_data["endDate"].toString()) : <any>undefined;
+            this.totalDays = _data["totalDays"];
             this.statusId = _data["statusId"];
             this.attachmentUrl = _data["attachmentUrl"];
             this.reason = _data["reason"];
@@ -20391,9 +20395,11 @@ export class LeaveRequestModel implements ILeaveRequestModel {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
-        data["totalDays"] = this.totalDays;
         data["employeeId"] = this.employeeId;
         data["leaveTypeId"] = this.leaveTypeId;
+        data["startDate"] = this.startDate ? formatDate(this.startDate) : <any>undefined;
+        data["endDate"] = this.endDate ? formatDate(this.endDate) : <any>undefined;
+        data["totalDays"] = this.totalDays;
         data["statusId"] = this.statusId;
         data["attachmentUrl"] = this.attachmentUrl;
         data["reason"] = this.reason;
@@ -20410,10 +20416,12 @@ export class LeaveRequestModel implements ILeaveRequestModel {
 
 export interface ILeaveRequestModel {
     id?: string;
-    totalDays?: number;
     employeeId?: string;
     leaveTypeId?: string;
-    statusId?: string;
+    startDate?: Date;
+    endDate?: Date;
+    totalDays?: number;
+    statusId?: string | undefined;
     attachmentUrl?: string | undefined;
     reason?: string | undefined;
     optionsDataSources?: { [key: string]: any; };
@@ -20456,7 +20464,7 @@ export class CreateLeaveRequestCommand implements ICreateLeaveRequestCommand {
     totalDays?: number;
     employeeId?: string;
     leaveTypeId?: string;
-    statusId?: string;
+    statusId?: string | undefined;
     attachmentUrl?: string | undefined;
     reason?: string | undefined;
     cacheKey?: string;
@@ -20506,7 +20514,7 @@ export interface ICreateLeaveRequestCommand {
     totalDays?: number;
     employeeId?: string;
     leaveTypeId?: string;
-    statusId?: string;
+    statusId?: string | undefined;
     attachmentUrl?: string | undefined;
     reason?: string | undefined;
     cacheKey?: string;
@@ -20517,7 +20525,7 @@ export class UpdateLeaveRequestCommand implements IUpdateLeaveRequestCommand {
     totalDays?: number;
     employeeId?: string;
     leaveTypeId?: string;
-    statusId?: string;
+    statusId?: string | undefined;
     attachmentUrl?: string | undefined;
     reason?: string | undefined;
     cacheKey?: string;
@@ -20570,7 +20578,7 @@ export interface IUpdateLeaveRequestCommand {
     totalDays?: number;
     employeeId?: string;
     leaveTypeId?: string;
-    statusId?: string;
+    statusId?: string | undefined;
     attachmentUrl?: string | undefined;
     reason?: string | undefined;
     cacheKey?: string;
@@ -32256,6 +32264,7 @@ export class LeaveTypeModel implements ILeaveTypeModel {
     totalLeaveDays?: number;
     maxConsecutiveAllowed?: number;
     isSandwichAllowed?: boolean;
+    sandwichAllowed?: string;
     optionsDataSources?: { [key: string]: any; };
 
     constructor(data?: ILeaveTypeModel) {
@@ -32275,6 +32284,7 @@ export class LeaveTypeModel implements ILeaveTypeModel {
             this.totalLeaveDays = _data["totalLeaveDays"];
             this.maxConsecutiveAllowed = _data["maxConsecutiveAllowed"];
             this.isSandwichAllowed = _data["isSandwichAllowed"];
+            this.sandwichAllowed = _data["sandwichAllowed"];
             if (_data["optionsDataSources"]) {
                 this.optionsDataSources = {} as any;
                 for (let key in _data["optionsDataSources"]) {
@@ -32300,6 +32310,7 @@ export class LeaveTypeModel implements ILeaveTypeModel {
         data["totalLeaveDays"] = this.totalLeaveDays;
         data["maxConsecutiveAllowed"] = this.maxConsecutiveAllowed;
         data["isSandwichAllowed"] = this.isSandwichAllowed;
+        data["sandwichAllowed"] = this.sandwichAllowed;
         if (this.optionsDataSources) {
             data["optionsDataSources"] = {};
             for (let key in this.optionsDataSources) {
@@ -32318,6 +32329,7 @@ export interface ILeaveTypeModel {
     totalLeaveDays?: number;
     maxConsecutiveAllowed?: number;
     isSandwichAllowed?: boolean;
+    sandwichAllowed?: string;
     optionsDataSources?: { [key: string]: any; };
 }
 
