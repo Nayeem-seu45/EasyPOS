@@ -7,6 +7,7 @@ public class Employee: BaseAuditableEntity
     public string Gender { get; set; }
     public DateOnly? DOB { get; set; }
     public string? NID { get; set; }
+    public Guid? ReportTo { get; set; }
     public Guid? WarehouseId { get; set; }
     public Guid? DepartmentId { get; set; }
     public Guid? DesignationId { get; set; }

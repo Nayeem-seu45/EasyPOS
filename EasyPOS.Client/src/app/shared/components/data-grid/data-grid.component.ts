@@ -14,6 +14,7 @@ import { AppPageDetailComponent } from 'src/app/modules/admin/components/app-pag
 import { PermissionService } from 'src/app/core/auth/services/permission.service';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
+import { DynamicDialogConfig } from 'primeng/dynamicdialog';
 
 
 @Component({
@@ -92,7 +93,7 @@ export class DataGridComponent implements OnInit, OnDestroy {
   @Input() pageId: string;
   @Input() entityClient: any;
   @Input() detailComponent: any;
-  @Input() dialogSize: any = '900px';
+  // @Input() dialogSize: any = '900px';
   @Input() getFuncName = 'getAll';
   @Input() pageTitle: string = null;
   @Input() listComponent: any;
@@ -101,6 +102,7 @@ export class DataGridComponent implements OnInit, OnDestroy {
   @Input() columnResizeMode: 'fit' | 'expand' = 'expand';
   @Input() styleClass: string = 'p-datatable-sm'; // 'p-datatable-sm p-datatable-gridlines'
   // @Input() dataTableSize: string = 'p-datatable-sm';
+  @Input() config?: Partial<DynamicDialogConfig> = null;
 
   @Output() handleToolbarAction: EventEmitter<AppPageActionModel> = new EventEmitter<AppPageActionModel>();
   @Output() handleGridRowAction: EventEmitter<{ action: AppPageActionModel, data: any }> = new EventEmitter<{ action: AppPageActionModel, data: any }>();
@@ -531,7 +533,8 @@ export class DataGridComponent implements OnInit, OnDestroy {
     this.customDialogService.open<string>(
       this.detailComponent,
       data,
-      this.dialogTitle
+      this.dialogTitle,
+      this.config
     )
       .subscribe((isSucceed: boolean) => {
         if (isSucceed) {

@@ -25,12 +25,13 @@ internal sealed class GetHolidayByIdQueryHandler(ISqlConnectionFactory sqlConnec
             SELECT
                 t.Id AS {nameof(HolidayModel.Id)},
                 t.Title AS {nameof(HolidayModel.Title)},
+                t.StartDate AS {nameof(HolidayModel.StartDate)},
+                t.EndDate AS {nameof(HolidayModel.EndDate)},
                 t.Description AS {nameof(HolidayModel.Description)},
                 t.IsActive AS {nameof(HolidayModel.IsActive)}
             FROM dbo.Holidays AS t
             WHERE t.Id = @Id
             """;
-
 
         return await connection.QueryFirstOrDefaultAsync<HolidayModel>(sql, new { request.Id });
     }

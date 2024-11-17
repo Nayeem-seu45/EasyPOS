@@ -13324,12 +13324,24 @@
             "type": "string",
             "nullable": true
           },
+          "startDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date"
+          },
           "description": {
             "type": "string",
             "nullable": true
           },
           "isActive": {
             "type": "boolean"
+          },
+          "activeStatus": {
+            "type": "string",
+            "nullable": true
           },
           "optionsDataSources": {
             "type": "object",
@@ -13361,6 +13373,14 @@
             "type": "string",
             "nullable": true
           },
+          "startDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date"
+          },
           "description": {
             "type": "string",
             "nullable": true
@@ -13387,6 +13407,14 @@
           "title": {
             "type": "string",
             "nullable": true
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date"
           },
           "description": {
             "type": "string",

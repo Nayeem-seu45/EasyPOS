@@ -12,14 +12,13 @@ public class HolidayConfiguration : IEntityTypeConfiguration<Holiday>
                .HasDefaultValueSql("NEWSEQUENTIALID()")
                .ValueGeneratedOnAdd();
 
-
         builder.Property(x => x.Title)
             .HasMaxLength(250)
             .IsRequired();
 
         builder.Property(x => x.Description)
             .HasMaxLength(250)
-            .IsRequired();
+            .IsRequired(false);
 
         //builder.Ignore(e => e.DomainEvents);
     }

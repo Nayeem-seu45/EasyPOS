@@ -11,7 +11,7 @@ import { ENTITY_CLIENT } from "../../injection-tokens/tokens";
     FormBuilder
   ]
 })
-export abstract class BaseDetailComponent implements OnInit{
+export abstract class BaseDetailComponent implements OnInit {
   emptyGuid = '00000000-0000-0000-0000-000000000000';
   form: FormGroup;
   id: string = '';
@@ -26,8 +26,8 @@ export abstract class BaseDetailComponent implements OnInit{
   protected toast: ToastService = inject(ToastService);
   protected customDialogService: CustomDialogService = inject(CustomDialogService)
   protected fb: FormBuilder = inject(FormBuilder);
-  
-  constructor(@Inject(ENTITY_CLIENT) protected entityClient: any) {}
+
+  constructor(@Inject(ENTITY_CLIENT) protected entityClient: any) { }
 
   ngOnInit() {
     this.id = this.customDialogService.getConfigData();
@@ -56,7 +56,8 @@ export abstract class BaseDetailComponent implements OnInit{
   }
 
   protected save() {
-    const createCommand = { ...this.form.value };
+    let createCommand = { ...this.form.value };
+    createCommand = this.beforeActionProcess(createCommand);
     this.entityClient.create(createCommand).subscribe({
       next: () => {
         this.toast.created();
@@ -64,12 +65,16 @@ export abstract class BaseDetailComponent implements OnInit{
       },
       error: (error) => {
         this.toast.showError(this.getErrorMessage(error));
+      },
+      complete: () => {
+        this.postActionProcess();
       }
     });
   }
 
   protected update() {
-    const updateCommand = { ...this.form.value };
+    let updateCommand = { ...this.form.value };
+    updateCommand = this.beforeActionProcess(updateCommand);
     this.entityClient.update(updateCommand).subscribe({
       next: () => {
         this.toast.updated();
@@ -77,14 +82,29 @@ export abstract class BaseDetailComponent implements OnInit{
       },
       error: (error) => {
         this.toast.showError(this.getErrorMessage(error));
+      },
+      complete: () => {
+        this.postActionProcess();
       }
     });
+  }
+
+  /**
+    * Optional method to process the command object before API calls.
+    * Child classes can override this method as needed.
+    */
+  protected beforeActionProcess(command: any): any {
+    return command; // Default implementation does nothing
+  }
+
+  protected postActionProcess() {
+
   }
 
   protected getById(id: string) {
     this.entityClient.get(id).subscribe({
       next: (res: any) => {
-        if(!this.mapCreateResponse && id && id !== this.emptyGuid ){
+        if (!this.mapCreateResponse && id && id !== this.emptyGuid) {
           this.item = res;
         }
         this.optionsDataSources = res.optionsDataSources;

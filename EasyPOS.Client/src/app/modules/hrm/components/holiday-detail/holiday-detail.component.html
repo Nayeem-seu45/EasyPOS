@@ -1,18 +1,22 @@
 ﻿<div class="col-12">
   <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
     <div class="p-fluid p-formgrid grid">
-         <div class="field col-12 md:col-6">
+      <div class="field col-12 md:col-8">
         <app-input-text label="Title" formControlName="title" [required]="false" [readonly]="false" />
         <app-validator-msg [control]="f['title']" />
-    </div>
-    <div class="field col-12 md:col-6">
-        <app-input-text label="Description" formControlName="description" [required]="false" [readonly]="false" />
-        <app-validator-msg [control]="f['description']" />
-    </div>
-    <div class="field col-12 md:col-6 md:flex align-items-center md:mt-4">
-      <app-input-switch label="Is Active" formControlName="isActive" />
-    </div>
-
+      </div>
+      <div class="field col-12 md:col-4 md:flex align-items-center md:mt-4">
+        <app-input-switch label="Active" formControlName="isActive" />
+      </div>
+      <div class="field col-12 md:col-6">
+        <app-input-date label="Start Date" formControlName="startDate" />
+      </div>
+      <div class="field col-12 md:col-6">
+        <app-input-date label="End Date" formControlName="endDate" />
+      </div>
+      <div class="field col-12 md:col-12">
+        <app-input-textarea label="Description" formControlName="description" [required]="false" [readonly]="false" />
+      </div>
     </div>
 
     <div class="mt-3 p-dialog-footer">

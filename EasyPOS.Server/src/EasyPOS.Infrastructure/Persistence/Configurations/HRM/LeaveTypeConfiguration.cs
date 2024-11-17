@@ -18,7 +18,7 @@ public class LeaveTypeConfiguration : IEntityTypeConfiguration<LeaveType>
 
         builder.Property(x => x.Code)
             .HasMaxLength(10)
-            .IsRequired();
+            .IsRequired(false);
 
         //builder.Ignore(e => e.DomainEvents);
     }

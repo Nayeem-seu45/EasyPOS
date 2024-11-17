@@ -20069,8 +20069,11 @@ export interface IPaginatedResponseOfHolidayModel {
 export class HolidayModel implements IHolidayModel {
     id?: string;
     title?: string | undefined;
+    startDate?: Date;
+    endDate?: Date;
     description?: string | undefined;
     isActive?: boolean;
+    activeStatus?: string | undefined;
     optionsDataSources?: { [key: string]: any; };
 
     constructor(data?: IHolidayModel) {
@@ -20086,8 +20089,11 @@ export class HolidayModel implements IHolidayModel {
         if (_data) {
             this.id = _data["id"];
             this.title = _data["title"];
+            this.startDate = _data["startDate"] ? new Date(_data["startDate"].toString()) : <any>undefined;
+            this.endDate = _data["endDate"] ? new Date(_data["endDate"].toString()) : <any>undefined;
             this.description = _data["description"];
             this.isActive = _data["isActive"];
+            this.activeStatus = _data["activeStatus"];
             if (_data["optionsDataSources"]) {
                 this.optionsDataSources = {} as any;
                 for (let key in _data["optionsDataSources"]) {
@@ -20109,8 +20115,11 @@ export class HolidayModel implements IHolidayModel {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
         data["title"] = this.title;
+        data["startDate"] = this.startDate ? formatDate(this.startDate) : <any>undefined;
+        data["endDate"] = this.endDate ? formatDate(this.endDate) : <any>undefined;
         data["description"] = this.description;
         data["isActive"] = this.isActive;
+        data["activeStatus"] = this.activeStatus;
         if (this.optionsDataSources) {
             data["optionsDataSources"] = {};
             for (let key in this.optionsDataSources) {
@@ -20125,8 +20134,11 @@ export class HolidayModel implements IHolidayModel {
 export interface IHolidayModel {
     id?: string;
     title?: string | undefined;
+    startDate?: Date;
+    endDate?: Date;
     description?: string | undefined;
     isActive?: boolean;
+    activeStatus?: string | undefined;
     optionsDataSources?: { [key: string]: any; };
 }
 
@@ -20165,6 +20177,8 @@ export interface IGetHolidayListQuery extends IDataGridModel {
 
 export class CreateHolidayCommand implements ICreateHolidayCommand {
     title?: string | undefined;
+    startDate?: Date;
+    endDate?: Date;
     description?: string | undefined;
     isActive?: boolean;
     cacheKey?: string;
@@ -20181,6 +20195,8 @@ export class CreateHolidayCommand implements ICreateHolidayCommand {
     init(_data?: any) {
         if (_data) {
             this.title = _data["title"];
+            this.startDate = _data["startDate"] ? new Date(_data["startDate"].toString()) : <any>undefined;
+            this.endDate = _data["endDate"] ? new Date(_data["endDate"].toString()) : <any>undefined;
             this.description = _data["description"];
             this.isActive = _data["isActive"];
             this.cacheKey = _data["cacheKey"];
@@ -20197,6 +20213,8 @@ export class CreateHolidayCommand implements ICreateHolidayCommand {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["title"] = this.title;
+        data["startDate"] = this.startDate ? formatDate(this.startDate) : <any>undefined;
+        data["endDate"] = this.endDate ? formatDate(this.endDate) : <any>undefined;
         data["description"] = this.description;
         data["isActive"] = this.isActive;
         data["cacheKey"] = this.cacheKey;
@@ -20206,6 +20224,8 @@ export class CreateHolidayCommand implements ICreateHolidayCommand {
 
 export interface ICreateHolidayCommand {
     title?: string | undefined;
+    startDate?: Date;
+    endDate?: Date;
     description?: string | undefined;
     isActive?: boolean;
     cacheKey?: string;
@@ -20214,6 +20234,8 @@ export interface ICreateHolidayCommand {
 export class UpdateHolidayCommand implements IUpdateHolidayCommand {
     id!: string;
     title?: string | undefined;
+    startDate?: Date;
+    endDate?: Date;
     description?: string | undefined;
     isActive?: boolean;
     cacheKey?: string;
@@ -20231,6 +20253,8 @@ export class UpdateHolidayCommand implements IUpdateHolidayCommand {
         if (_data) {
             this.id = _data["id"];
             this.title = _data["title"];
+            this.startDate = _data["startDate"] ? new Date(_data["startDate"].toString()) : <any>undefined;
+            this.endDate = _data["endDate"] ? new Date(_data["endDate"].toString()) : <any>undefined;
             this.description = _data["description"];
             this.isActive = _data["isActive"];
             this.cacheKey = _data["cacheKey"];
@@ -20248,6 +20272,8 @@ export class UpdateHolidayCommand implements IUpdateHolidayCommand {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
         data["title"] = this.title;
+        data["startDate"] = this.startDate ? formatDate(this.startDate) : <any>undefined;
+        data["endDate"] = this.endDate ? formatDate(this.endDate) : <any>undefined;
         data["description"] = this.description;
         data["isActive"] = this.isActive;
         data["cacheKey"] = this.cacheKey;
@@ -20258,6 +20284,8 @@ export class UpdateHolidayCommand implements IUpdateHolidayCommand {
 export interface IUpdateHolidayCommand {
     id: string;
     title?: string | undefined;
+    startDate?: Date;
+    endDate?: Date;
     description?: string | undefined;
     isActive?: boolean;
     cacheKey?: string;

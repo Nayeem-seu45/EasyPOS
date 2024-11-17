@@ -3,7 +3,9 @@
 namespace EasyPOS.Application.Features.HRM.Holidays.Commands;
 
 public record CreateHolidayCommand(
-    string? Title, 
+    string? Title,
+    DateOnly StartDate,
+    DateOnly EndDate,
     string? Description, 
     bool IsActive
     ): ICacheInvalidatorCommand<Guid>
@@ -24,5 +26,6 @@ internal sealed class CreateHolidayCommandHandler(
        await dbContext.SaveChangesAsync(cancellationToken);
 
        return  entity.Id;
+
     }
 }

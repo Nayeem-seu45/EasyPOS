@@ -2,7 +2,9 @@
 
 public record UpdateHolidayCommand(
     Guid Id,
-    string? Title, 
+    string? Title,
+    DateOnly StartDate,
+    DateOnly EndDate,
     string? Description, 
     bool IsActive
     ): ICacheInvalidatorCommand
