@@ -1,13 +1,12 @@
-﻿namespace EasyPOS.Domain.HRM;
+﻿namespace EasyPOS.Application.Features.HRM.WorkingShifts.Models;
 
-public class WorkingShiftDetail: BaseEntity
+public record WorkingShiftDetailModel
 {
+    public Guid Id { get; set; }
     public Guid WorkingShiftId { get; set; }
     public TimeOnly? StartTime { get; set; }
     public TimeOnly? EndTime { get; set; }
     public DayOfWeek DayOfWeek { get; set; }
+    public string DayNameOfWeek { get; set; }
     public bool IsWeekend { get; set; }
-
-    public WorkingShift WorkingShift { get; set; } = default!;
-
 }

@@ -1,4 +1,5 @@
 ﻿using EasyPOS.Application.Features.HRM.WorkingShifts.Commands;
+using EasyPOS.Application.Features.HRM.WorkingShifts.Models;
 using EasyPOS.Application.Features.HRM.WorkingShifts.Queries;
 
 namespace EasyPOS.WebApi.Endpoints;

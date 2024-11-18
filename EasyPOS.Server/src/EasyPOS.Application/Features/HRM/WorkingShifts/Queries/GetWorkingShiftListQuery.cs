@@ -1,4 +1,6 @@
-﻿namespace EasyPOS.Application.Features.HRM.WorkingShifts.Queries;
+﻿using EasyPOS.Application.Features.HRM.WorkingShifts.Models;
+
+namespace EasyPOS.Application.Features.HRM.WorkingShifts.Queries;
 
 [Authorize(Policy = Permissions.WorkingShifts.View)]
 public record GetWorkingShiftListQuery 

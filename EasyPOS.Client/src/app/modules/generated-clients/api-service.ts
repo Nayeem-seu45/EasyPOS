@@ -20769,6 +20769,7 @@ export class WorkingShiftModel implements IWorkingShiftModel {
     shiftName?: string | undefined;
     description?: string | undefined;
     isActive?: boolean;
+    workingShiftDetails?: WorkingShiftDetailModel[];
     optionsDataSources?: { [key: string]: any; };
 
     constructor(data?: IWorkingShiftModel) {
@@ -20786,6 +20787,11 @@ export class WorkingShiftModel implements IWorkingShiftModel {
             this.shiftName = _data["shiftName"];
             this.description = _data["description"];
             this.isActive = _data["isActive"];
+            if (Array.isArray(_data["workingShiftDetails"])) {
+                this.workingShiftDetails = [] as any;
+                for (let item of _data["workingShiftDetails"])
+                    this.workingShiftDetails!.push(WorkingShiftDetailModel.fromJS(item));
+            }
             if (_data["optionsDataSources"]) {
                 this.optionsDataSources = {} as any;
                 for (let key in _data["optionsDataSources"]) {
@@ -20809,6 +20815,11 @@ export class WorkingShiftModel implements IWorkingShiftModel {
         data["shiftName"] = this.shiftName;
         data["description"] = this.description;
         data["isActive"] = this.isActive;
+        if (Array.isArray(this.workingShiftDetails)) {
+            data["workingShiftDetails"] = [];
+            for (let item of this.workingShiftDetails)
+                data["workingShiftDetails"].push(item.toJSON());
+        }
         if (this.optionsDataSources) {
             data["optionsDataSources"] = {};
             for (let key in this.optionsDataSources) {
@@ -20825,7 +20836,78 @@ export interface IWorkingShiftModel {
     shiftName?: string | undefined;
     description?: string | undefined;
     isActive?: boolean;
+    workingShiftDetails?: WorkingShiftDetailModel[];
     optionsDataSources?: { [key: string]: any; };
+}
+
+export class WorkingShiftDetailModel implements IWorkingShiftDetailModel {
+    id?: string;
+    workingShiftId?: string;
+    startTime?: string | undefined;
+    endTime?: string | undefined;
+    dayOfWeek?: DayOfWeek;
+    dayNameOfWeek?: string;
+    isWeekend?: boolean;
+
+    constructor(data?: IWorkingShiftDetailModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.workingShiftId = _data["workingShiftId"];
+            this.startTime = _data["startTime"];
+            this.endTime = _data["endTime"];
+            this.dayOfWeek = _data["dayOfWeek"];
+            this.dayNameOfWeek = _data["dayNameOfWeek"];
+            this.isWeekend = _data["isWeekend"];
+        }
+    }
+
+    static fromJS(data: any): WorkingShiftDetailModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new WorkingShiftDetailModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["workingShiftId"] = this.workingShiftId;
+        data["startTime"] = this.startTime;
+        data["endTime"] = this.endTime;
+        data["dayOfWeek"] = this.dayOfWeek;
+        data["dayNameOfWeek"] = this.dayNameOfWeek;
+        data["isWeekend"] = this.isWeekend;
+        return data;
+    }
+}
+
+export interface IWorkingShiftDetailModel {
+    id?: string;
+    workingShiftId?: string;
+    startTime?: string | undefined;
+    endTime?: string | undefined;
+    dayOfWeek?: DayOfWeek;
+    dayNameOfWeek?: string;
+    isWeekend?: boolean;
+}
+
+export enum DayOfWeek {
+    Sunday = 0,
+    Monday = 1,
+    Tuesday = 2,
+    Wednesday = 3,
+    Thursday = 4,
+    Friday = 5,
+    Saturday = 6,
 }
 
 export class GetWorkingShiftListQuery extends DataGridModel implements IGetWorkingShiftListQuery {
@@ -20865,6 +20947,7 @@ export class CreateWorkingShiftCommand implements ICreateWorkingShiftCommand {
     shiftName?: string | undefined;
     description?: string | undefined;
     isActive?: boolean;
+    workingShiftDetails?: WorkingShiftDetailModel[];
     cacheKey?: string;
 
     constructor(data?: ICreateWorkingShiftCommand) {
@@ -20881,6 +20964,11 @@ export class CreateWorkingShiftCommand implements ICreateWorkingShiftCommand {
             this.shiftName = _data["shiftName"];
             this.description = _data["description"];
             this.isActive = _data["isActive"];
+            if (Array.isArray(_data["workingShiftDetails"])) {
+                this.workingShiftDetails = [] as any;
+                for (let item of _data["workingShiftDetails"])
+                    this.workingShiftDetails!.push(WorkingShiftDetailModel.fromJS(item));
+            }
             this.cacheKey = _data["cacheKey"];
         }
     }
@@ -20897,6 +20985,11 @@ export class CreateWorkingShiftCommand implements ICreateWorkingShiftCommand {
         data["shiftName"] = this.shiftName;
         data["description"] = this.description;
         data["isActive"] = this.isActive;
+        if (Array.isArray(this.workingShiftDetails)) {
+            data["workingShiftDetails"] = [];
+            for (let item of this.workingShiftDetails)
+                data["workingShiftDetails"].push(item.toJSON());
+        }
         data["cacheKey"] = this.cacheKey;
         return data;
     }
@@ -20906,6 +20999,7 @@ export interface ICreateWorkingShiftCommand {
     shiftName?: string | undefined;
     description?: string | undefined;
     isActive?: boolean;
+    workingShiftDetails?: WorkingShiftDetailModel[];
     cacheKey?: string;
 }
 
@@ -20914,7 +21008,7 @@ export class UpdateWorkingShiftCommand implements IUpdateWorkingShiftCommand {
     shiftName?: string | undefined;
     description?: string | undefined;
     isActive?: boolean;
-    cacheKey?: string;
+    workingShiftDetails?: WorkingShiftDetailModel[];
 
     constructor(data?: IUpdateWorkingShiftCommand) {
         if (data) {
@@ -20931,7 +21025,11 @@ export class UpdateWorkingShiftCommand implements IUpdateWorkingShiftCommand {
             this.shiftName = _data["shiftName"];
             this.description = _data["description"];
             this.isActive = _data["isActive"];
-            this.cacheKey = _data["cacheKey"];
+            if (Array.isArray(_data["workingShiftDetails"])) {
+                this.workingShiftDetails = [] as any;
+                for (let item of _data["workingShiftDetails"])
+                    this.workingShiftDetails!.push(WorkingShiftDetailModel.fromJS(item));
+            }
         }
     }
 
@@ -20948,7 +21046,11 @@ export class UpdateWorkingShiftCommand implements IUpdateWorkingShiftCommand {
         data["shiftName"] = this.shiftName;
         data["description"] = this.description;
         data["isActive"] = this.isActive;
-        data["cacheKey"] = this.cacheKey;
+        if (Array.isArray(this.workingShiftDetails)) {
+            data["workingShiftDetails"] = [];
+            for (let item of this.workingShiftDetails)
+                data["workingShiftDetails"].push(item.toJSON());
+        }
         return data;
     }
 }
@@ -20958,7 +21060,7 @@ export interface IUpdateWorkingShiftCommand {
     shiftName?: string | undefined;
     description?: string | undefined;
     isActive?: boolean;
-    cacheKey?: string;
+    workingShiftDetails?: WorkingShiftDetailModel[];
 }
 
 export class SelectListModel implements ISelectListModel {

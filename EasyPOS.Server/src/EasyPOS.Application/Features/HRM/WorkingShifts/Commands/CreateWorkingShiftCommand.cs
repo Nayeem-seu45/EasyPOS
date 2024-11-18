@@ -1,12 +1,14 @@
-﻿using EasyPOS.Domain.HRM;
+﻿using EasyPOS.Application.Features.HRM.WorkingShifts.Models;
+using EasyPOS.Domain.HRM;
 
 namespace EasyPOS.Application.Features.HRM.WorkingShifts.Commands;
 
 public record CreateWorkingShiftCommand(
     string? ShiftName, 
     string? Description, 
-    bool IsActive
-    ): ICacheInvalidatorCommand<Guid>
+    bool IsActive,
+    List<WorkingShiftDetailModel> WorkingShiftDetails
+    ) : ICacheInvalidatorCommand<Guid>
 {
     public string CacheKey => CacheKeys.WorkingShift;
 }

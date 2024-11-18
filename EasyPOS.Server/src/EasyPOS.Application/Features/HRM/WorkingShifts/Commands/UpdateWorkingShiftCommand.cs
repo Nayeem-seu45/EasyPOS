@@ -1,12 +1,16 @@
-﻿namespace EasyPOS.Application.Features.HRM.WorkingShifts.Commands;
+﻿using EasyPOS.Application.Features.HRM.WorkingShifts.Models;
+
+namespace EasyPOS.Application.Features.HRM.WorkingShifts.Commands;
 
 public record UpdateWorkingShiftCommand(
     Guid Id,
     string? ShiftName, 
     string? Description, 
-    bool IsActive
-    ): ICacheInvalidatorCommand
+    bool IsActive,
+    List<WorkingShiftDetailModel> WorkingShiftDetails
+    ) : ICacheInvalidatorCommand
 {
+    [JsonIgnore]
     public string CacheKey => CacheKeys.WorkingShift;
 }
 

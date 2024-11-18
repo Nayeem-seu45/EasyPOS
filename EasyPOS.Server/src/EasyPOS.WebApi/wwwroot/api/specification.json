@@ -13729,11 +13729,72 @@
           "isActive": {
             "type": "boolean"
           },
+          "workingShiftDetails": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WorkingShiftDetailModel"
+            }
+          },
           "optionsDataSources": {
             "type": "object",
             "additionalProperties": {}
           }
         }
+      },
+      "WorkingShiftDetailModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "workingShiftId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "startTime": {
+            "type": "string",
+            "format": "time",
+            "nullable": true
+          },
+          "endTime": {
+            "type": "string",
+            "format": "time",
+            "nullable": true
+          },
+          "dayOfWeek": {
+            "$ref": "#/components/schemas/DayOfWeek"
+          },
+          "dayNameOfWeek": {
+            "type": "string"
+          },
+          "isWeekend": {
+            "type": "boolean"
+          }
+        }
+      },
+      "DayOfWeek": {
+        "type": "integer",
+        "description": "",
+        "x-enumNames": [
+          "Sunday",
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday"
+        ],
+        "enum": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ]
       },
       "GetWorkingShiftListQuery": {
         "allOf": [
@@ -13766,6 +13827,12 @@
           "isActive": {
             "type": "boolean"
           },
+          "workingShiftDetails": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WorkingShiftDetailModel"
+            }
+          },
           "cacheKey": {
             "type": "string"
           }
@@ -13793,8 +13860,11 @@
           "isActive": {
             "type": "boolean"
           },
-          "cacheKey": {
-            "type": "string"
+          "workingShiftDetails": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WorkingShiftDetailModel"
+            }
           }
         }
       },

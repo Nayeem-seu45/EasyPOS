@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup } from "@angular/forms";
 import { CustomDialogService } from "../../services/custom-dialog.service";
 import { ToastService } from "../../services/toast.service";
 import { ENTITY_CLIENT } from "../../injection-tokens/tokens";
+import { CommonUtils } from "../../Utilities/common-utilities";
 
 @Directive({
   selector: '[baseDetail]', // Selector is required but can be generic
@@ -64,7 +65,7 @@ export abstract class BaseDetailComponent implements OnInit {
         this.customDialogService.close(true);
       },
       error: (error) => {
-        this.toast.showError(this.getErrorMessage(error));
+        this.toast.showError(CommonUtils.getErrorMessage(error));
       },
       complete: () => {
         this.postActionProcess();
@@ -81,7 +82,7 @@ export abstract class BaseDetailComponent implements OnInit {
         this.customDialogService.close(true);
       },
       error: (error) => {
-        this.toast.showError(this.getErrorMessage(error));
+        this.toast.showError(CommonUtils.getErrorMessage(error));
       },
       complete: () => {
         this.postActionProcess();
@@ -113,12 +114,8 @@ export abstract class BaseDetailComponent implements OnInit {
         });
       },
       error: (error) => {
-        this.toast.showError(this.getErrorMessage(error));
+        this.toast.showError(CommonUtils.getErrorMessage(error));
       }
     });
-  }
-
-  protected getErrorMessage(error: any): string {
-    return error?.errors?.[0]?.description || 'An unexpected error occurred';
   }
 }
