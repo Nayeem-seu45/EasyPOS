@@ -22,6 +22,7 @@ export class WorkingShiftMapper {
 
   private static mapDetail(detail: WorkingShiftDetailModel): WorkingShiftDetailModel {
     const mappedDetail = new WorkingShiftDetailModel();
+    mappedDetail.id = detail.id;
     mappedDetail.workingShiftId = detail.workingShiftId;
     mappedDetail.startTime = detail.startTime;
     mappedDetail.endTime = detail.endTime;
