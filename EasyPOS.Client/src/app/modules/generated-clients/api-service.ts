@@ -20769,6 +20769,7 @@ export class WorkingShiftModel implements IWorkingShiftModel {
     shiftName?: string | undefined;
     description?: string | undefined;
     isActive?: boolean;
+    activeStatus?: string | undefined;
     workingShiftDetails?: WorkingShiftDetailModel[];
     optionsDataSources?: { [key: string]: any; };
 
@@ -20787,6 +20788,7 @@ export class WorkingShiftModel implements IWorkingShiftModel {
             this.shiftName = _data["shiftName"];
             this.description = _data["description"];
             this.isActive = _data["isActive"];
+            this.activeStatus = _data["activeStatus"];
             if (Array.isArray(_data["workingShiftDetails"])) {
                 this.workingShiftDetails = [] as any;
                 for (let item of _data["workingShiftDetails"])
@@ -20815,6 +20817,7 @@ export class WorkingShiftModel implements IWorkingShiftModel {
         data["shiftName"] = this.shiftName;
         data["description"] = this.description;
         data["isActive"] = this.isActive;
+        data["activeStatus"] = this.activeStatus;
         if (Array.isArray(this.workingShiftDetails)) {
             data["workingShiftDetails"] = [];
             for (let item of this.workingShiftDetails)
@@ -20836,6 +20839,7 @@ export interface IWorkingShiftModel {
     shiftName?: string | undefined;
     description?: string | undefined;
     isActive?: boolean;
+    activeStatus?: string | undefined;
     workingShiftDetails?: WorkingShiftDetailModel[];
     optionsDataSources?: { [key: string]: any; };
 }

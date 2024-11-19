@@ -23,7 +23,7 @@ internal sealed class GetWorkingShiftQueryHandler(ISqlConnectionFactory sqlConne
                 t.Id AS {nameof(WorkingShiftModel.Id)},
                 t.ShiftName AS {nameof(WorkingShiftModel.ShiftName)},
                 t.Description AS {nameof(WorkingShiftModel.Description)},
-                t.IsActive AS {nameof(WorkingShiftModel.IsActive)}
+                IIF(t.IsActive = 1, 'Active', 'Inactive') AS {nameof(WorkingShiftModel.ActiveStatus)}
             FROM dbo.WorkingShifts AS t
             WHERE 1 = 1
             """;

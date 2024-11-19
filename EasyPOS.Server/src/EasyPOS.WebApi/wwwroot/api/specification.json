@@ -13729,6 +13729,10 @@
           "isActive": {
             "type": "boolean"
           },
+          "activeStatus": {
+            "type": "string",
+            "nullable": true
+          },
           "workingShiftDetails": {
             "type": "array",
             "items": {
