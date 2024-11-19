@@ -93,6 +93,14 @@ public class Employees : EndpointGroupBase
             AllowCacheList: true)
         );
 
+        var employeesSelectList = await sender.Send(new GetSelectListQuery(
+            Sql: SelectListSqls.EmployeesSelectListSql,
+            Parameters: new { },
+            Key: $"{CacheKeys.Employee}",
+            AllowCacheList: true)
+        );
+
+        result.Value.OptionsDataSources.Add("employeesSelectList", employeesSelectList.Value);
         result.Value.OptionsDataSources.Add("warehousesSelectList", warehousesSelectList.Value);
         result.Value.OptionsDataSources.Add("departmentSelectList", departmentSelectList.Value);
         result.Value.OptionsDataSources.Add("designationSelectList", designationSelectList.Value);

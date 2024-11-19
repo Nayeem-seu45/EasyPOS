@@ -19,10 +19,12 @@ internal sealed class GetEmployeeQueryHandler(ISqlConnectionFactory sqlConnectio
         var sql = $"""
             SELECT
                 t.Id AS {nameof(EmployeeModel.Id)},
-                t.EmployeeCode AS {nameof(EmployeeModel.EmployeeCode)},
-                t.EmployeeName AS {nameof(EmployeeModel.EmployeeName)},
+                t.Code AS {nameof(EmployeeModel.Code)},
+                t.FirstName AS {nameof(EmployeeModel.FirstName)},
+                t.LastName AS {nameof(EmployeeModel.LastName)},
                 t.Gender AS {nameof(EmployeeModel.Gender)},
                 t.NID AS {nameof(EmployeeModel.NID)},
+                t.DOB AS {nameof(EmployeeModel.DOB)},
                 t.WarehouseId AS {nameof(EmployeeModel.WarehouseId)},
                 t.DepartmentId AS {nameof(EmployeeModel.DepartmentId)},
                 t.DesignationId AS {nameof(EmployeeModel.DesignationId)},
@@ -32,8 +34,17 @@ internal sealed class GetEmployeeQueryHandler(ISqlConnectionFactory sqlConnectio
                 t.MobileNo AS {nameof(EmployeeModel.MobileNo)},
                 t.Country AS {nameof(EmployeeModel.Country)},
                 t.City AS {nameof(EmployeeModel.City)},
-                t.Address AS {nameof(EmployeeModel.Address)}
+                t.Address AS {nameof(EmployeeModel.Address)},
+
+                w.Name AS {nameof(EmployeeModel.Warehouse)},
+                d.Name AS {nameof(EmployeeModel.Department)},
+                ds.Name AS {nameof(EmployeeModel.Designation)},
+                ws.ShiftName AS {nameof(EmployeeModel.WorkingShift)}
             FROM dbo.Employees AS t
+            LEFT JOIN dbo.Warehouses AS w ON w.Id = t.WarehouseId
+            LEFT JOIN dbo.Departments AS d ON d.Id = t.DepartmentId
+            LEFT JOIN dbo.Designations AS ds ON ds.Id = t.DesignationId
+            LEFT JOIN dbo.WorkingShifts AS ws ON ws.Id = t.WorkingShiftId
             WHERE 1 = 1
             """;
 

@@ -19703,10 +19703,13 @@ export interface IPaginatedResponseOfEmployeeModel {
 
 export class EmployeeModel implements IEmployeeModel {
     id?: string;
-    employeeCode?: string | undefined;
-    employeeName?: string | undefined;
-    gender?: string | undefined;
+    code?: string;
+    firstName?: string;
+    lastName?: string | undefined;
+    gender?: string;
+    dob?: Date | undefined;
     nid?: string | undefined;
+    reportTo?: string | undefined;
     warehouseId?: string | undefined;
     departmentId?: string | undefined;
     designationId?: string | undefined;
@@ -19714,9 +19717,13 @@ export class EmployeeModel implements IEmployeeModel {
     email?: string | undefined;
     phoneNo?: string | undefined;
     mobileNo?: string | undefined;
-    country?: string | undefined;
+    country?: string;
     city?: string | undefined;
     address?: string | undefined;
+    warehouse?: string | undefined;
+    department?: string | undefined;
+    designation?: string | undefined;
+    workingShift?: string | undefined;
     optionsDataSources?: { [key: string]: any; };
 
     constructor(data?: IEmployeeModel) {
@@ -19731,10 +19738,13 @@ export class EmployeeModel implements IEmployeeModel {
     init(_data?: any) {
         if (_data) {
             this.id = _data["id"];
-            this.employeeCode = _data["employeeCode"];
-            this.employeeName = _data["employeeName"];
+            this.code = _data["code"];
+            this.firstName = _data["firstName"];
+            this.lastName = _data["lastName"];
             this.gender = _data["gender"];
+            this.dob = _data["dob"] ? new Date(_data["dob"].toString()) : <any>undefined;
             this.nid = _data["nid"];
+            this.reportTo = _data["reportTo"];
             this.warehouseId = _data["warehouseId"];
             this.departmentId = _data["departmentId"];
             this.designationId = _data["designationId"];
@@ -19745,6 +19755,10 @@ export class EmployeeModel implements IEmployeeModel {
             this.country = _data["country"];
             this.city = _data["city"];
             this.address = _data["address"];
+            this.warehouse = _data["warehouse"];
+            this.department = _data["department"];
+            this.designation = _data["designation"];
+            this.workingShift = _data["workingShift"];
             if (_data["optionsDataSources"]) {
                 this.optionsDataSources = {} as any;
                 for (let key in _data["optionsDataSources"]) {
@@ -19765,10 +19779,13 @@ export class EmployeeModel implements IEmployeeModel {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
-        data["employeeCode"] = this.employeeCode;
-        data["employeeName"] = this.employeeName;
+        data["code"] = this.code;
+        data["firstName"] = this.firstName;
+        data["lastName"] = this.lastName;
         data["gender"] = this.gender;
+        data["dob"] = this.dob ? formatDate(this.dob) : <any>undefined;
         data["nid"] = this.nid;
+        data["reportTo"] = this.reportTo;
         data["warehouseId"] = this.warehouseId;
         data["departmentId"] = this.departmentId;
         data["designationId"] = this.designationId;
@@ -19779,6 +19796,10 @@ export class EmployeeModel implements IEmployeeModel {
         data["country"] = this.country;
         data["city"] = this.city;
         data["address"] = this.address;
+        data["warehouse"] = this.warehouse;
+        data["department"] = this.department;
+        data["designation"] = this.designation;
+        data["workingShift"] = this.workingShift;
         if (this.optionsDataSources) {
             data["optionsDataSources"] = {};
             for (let key in this.optionsDataSources) {
@@ -19792,10 +19813,13 @@ export class EmployeeModel implements IEmployeeModel {
 
 export interface IEmployeeModel {
     id?: string;
-    employeeCode?: string | undefined;
-    employeeName?: string | undefined;
-    gender?: string | undefined;
+    code?: string;
+    firstName?: string;
+    lastName?: string | undefined;
+    gender?: string;
+    dob?: Date | undefined;
     nid?: string | undefined;
+    reportTo?: string | undefined;
     warehouseId?: string | undefined;
     departmentId?: string | undefined;
     designationId?: string | undefined;
@@ -19803,9 +19827,13 @@ export interface IEmployeeModel {
     email?: string | undefined;
     phoneNo?: string | undefined;
     mobileNo?: string | undefined;
-    country?: string | undefined;
+    country?: string;
     city?: string | undefined;
     address?: string | undefined;
+    warehouse?: string | undefined;
+    department?: string | undefined;
+    designation?: string | undefined;
+    workingShift?: string | undefined;
     optionsDataSources?: { [key: string]: any; };
 }
 
@@ -19843,14 +19871,17 @@ export interface IGetEmployeeListQuery extends IDataGridModel {
 }
 
 export class CreateEmployeeCommand implements ICreateEmployeeCommand {
-    employeeCode?: string | undefined;
-    employeeName?: string | undefined;
+    code?: string | undefined;
+    firstName?: string;
+    lastName?: string | undefined;
     gender?: string | undefined;
     nid?: string | undefined;
+    dob?: Date | undefined;
     warehouseId?: string | undefined;
     departmentId?: string | undefined;
     designationId?: string | undefined;
     workingShiftId?: string | undefined;
+    reportTo?: string | undefined;
     email?: string | undefined;
     phoneNo?: string | undefined;
     mobileNo?: string | undefined;
@@ -19870,14 +19901,17 @@ export class CreateEmployeeCommand implements ICreateEmployeeCommand {
 
     init(_data?: any) {
         if (_data) {
-            this.employeeCode = _data["employeeCode"];
-            this.employeeName = _data["employeeName"];
+            this.code = _data["code"];
+            this.firstName = _data["firstName"];
+            this.lastName = _data["lastName"];
             this.gender = _data["gender"];
             this.nid = _data["nid"];
+            this.dob = _data["dob"] ? new Date(_data["dob"].toString()) : <any>undefined;
             this.warehouseId = _data["warehouseId"];
             this.departmentId = _data["departmentId"];
             this.designationId = _data["designationId"];
             this.workingShiftId = _data["workingShiftId"];
+            this.reportTo = _data["reportTo"];
             this.email = _data["email"];
             this.phoneNo = _data["phoneNo"];
             this.mobileNo = _data["mobileNo"];
@@ -19897,14 +19931,17 @@ export class CreateEmployeeCommand implements ICreateEmployeeCommand {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["employeeCode"] = this.employeeCode;
-        data["employeeName"] = this.employeeName;
+        data["code"] = this.code;
+        data["firstName"] = this.firstName;
+        data["lastName"] = this.lastName;
         data["gender"] = this.gender;
         data["nid"] = this.nid;
+        data["dob"] = this.dob ? formatDate(this.dob) : <any>undefined;
         data["warehouseId"] = this.warehouseId;
         data["departmentId"] = this.departmentId;
         data["designationId"] = this.designationId;
         data["workingShiftId"] = this.workingShiftId;
+        data["reportTo"] = this.reportTo;
         data["email"] = this.email;
         data["phoneNo"] = this.phoneNo;
         data["mobileNo"] = this.mobileNo;
@@ -19917,14 +19954,17 @@ export class CreateEmployeeCommand implements ICreateEmployeeCommand {
 }
 
 export interface ICreateEmployeeCommand {
-    employeeCode?: string | undefined;
-    employeeName?: string | undefined;
+    code?: string | undefined;
+    firstName?: string;
+    lastName?: string | undefined;
     gender?: string | undefined;
     nid?: string | undefined;
+    dob?: Date | undefined;
     warehouseId?: string | undefined;
     departmentId?: string | undefined;
     designationId?: string | undefined;
     workingShiftId?: string | undefined;
+    reportTo?: string | undefined;
     email?: string | undefined;
     phoneNo?: string | undefined;
     mobileNo?: string | undefined;
@@ -19936,14 +19976,17 @@ export interface ICreateEmployeeCommand {
 
 export class UpdateEmployeeCommand implements IUpdateEmployeeCommand {
     id!: string;
-    employeeCode?: string | undefined;
-    employeeName?: string | undefined;
+    code?: string | undefined;
+    firstName?: string;
+    lastName?: string | undefined;
     gender?: string | undefined;
     nid?: string | undefined;
+    dob?: Date | undefined;
     warehouseId?: string | undefined;
     departmentId?: string | undefined;
     designationId?: string | undefined;
     workingShiftId?: string | undefined;
+    reportTo?: string | undefined;
     email?: string | undefined;
     phoneNo?: string | undefined;
     mobileNo?: string | undefined;
@@ -19964,14 +20007,17 @@ export class UpdateEmployeeCommand implements IUpdateEmployeeCommand {
     init(_data?: any) {
         if (_data) {
             this.id = _data["id"];
-            this.employeeCode = _data["employeeCode"];
-            this.employeeName = _data["employeeName"];
+            this.code = _data["code"];
+            this.firstName = _data["firstName"];
+            this.lastName = _data["lastName"];
             this.gender = _data["gender"];
             this.nid = _data["nid"];
+            this.dob = _data["dob"] ? new Date(_data["dob"].toString()) : <any>undefined;
             this.warehouseId = _data["warehouseId"];
             this.departmentId = _data["departmentId"];
             this.designationId = _data["designationId"];
             this.workingShiftId = _data["workingShiftId"];
+            this.reportTo = _data["reportTo"];
             this.email = _data["email"];
             this.phoneNo = _data["phoneNo"];
             this.mobileNo = _data["mobileNo"];
@@ -19992,14 +20038,17 @@ export class UpdateEmployeeCommand implements IUpdateEmployeeCommand {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
-        data["employeeCode"] = this.employeeCode;
-        data["employeeName"] = this.employeeName;
+        data["code"] = this.code;
+        data["firstName"] = this.firstName;
+        data["lastName"] = this.lastName;
         data["gender"] = this.gender;
         data["nid"] = this.nid;
+        data["dob"] = this.dob ? formatDate(this.dob) : <any>undefined;
         data["warehouseId"] = this.warehouseId;
         data["departmentId"] = this.departmentId;
         data["designationId"] = this.designationId;
         data["workingShiftId"] = this.workingShiftId;
+        data["reportTo"] = this.reportTo;
         data["email"] = this.email;
         data["phoneNo"] = this.phoneNo;
         data["mobileNo"] = this.mobileNo;
@@ -20013,14 +20062,17 @@ export class UpdateEmployeeCommand implements IUpdateEmployeeCommand {
 
 export interface IUpdateEmployeeCommand {
     id: string;
-    employeeCode?: string | undefined;
-    employeeName?: string | undefined;
+    code?: string | undefined;
+    firstName?: string;
+    lastName?: string | undefined;
     gender?: string | undefined;
     nid?: string | undefined;
+    dob?: Date | undefined;
     warehouseId?: string | undefined;
     departmentId?: string | undefined;
     designationId?: string | undefined;
     workingShiftId?: string | undefined;
+    reportTo?: string | undefined;
     email?: string | undefined;
     phoneNo?: string | undefined;
     mobileNo?: string | undefined;

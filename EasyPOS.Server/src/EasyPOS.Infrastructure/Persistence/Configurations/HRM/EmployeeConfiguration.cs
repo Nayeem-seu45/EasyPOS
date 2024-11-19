@@ -12,13 +12,18 @@ public class EmployeeConfiguration : IEntityTypeConfiguration<Employee>
                .HasDefaultValueSql("NEWSEQUENTIALID()")
                .ValueGeneratedOnAdd();
 
-        builder.Property(x => x.EmployeeCode)
+        builder.Property(x => x.Code)
             .HasMaxLength(250)
             .IsRequired();
 
-        builder.Property(x => x.EmployeeName)
+        builder.Property(x => x.FirstName)
             .HasMaxLength(250)
             .IsRequired();
+
+        builder.Property(x => x.LastName)
+            .HasMaxLength(250)
+            .HasDefaultValue("")
+            .IsRequired(false);
 
         builder.Property(x => x.Gender)
             .HasMaxLength(250)

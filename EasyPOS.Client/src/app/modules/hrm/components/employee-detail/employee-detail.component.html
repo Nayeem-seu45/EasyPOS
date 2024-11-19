@@ -1,69 +1,112 @@
 ﻿<div class="col-12">
   <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
-    <div class="p-fluid p-formgrid grid">
-         <div class="field col-12 md:col-6">
-        <app-input-text label="Employee Code" formControlName="employeeCode" [required]="false" [readonly]="false" />
-        <app-validator-msg [control]="f['employeecode']" />
-    </div>
-    <div class="field col-12 md:col-6">
-        <app-input-text label="Employee Name" formControlName="employeeName" [required]="false" [readonly]="false" />
-        <app-validator-msg [control]="f['employeename']" />
-    </div>
-    <div class="field col-12 md:col-6">
-        <app-input-select label="Gender" formControlName="gender" [options]="optionsDataSources?.['genderSelectList']"
-        [required]="false" />
-    </div>
-    <div class="field col-12 md:col-6">
-        <app-input-text label="NID" formControlName="nid" [required]="false" [readonly]="false" />
-        <app-validator-msg [control]="f['nid']" />
-    </div>
-    <div class="field col-12 md:col-6">
-      <app-input-select label="Warehouse" formControlName="warehouseId" [options]="optionsDataSources?.['warehousesSelectList']"
-        [required]="false" />
-    </div>
-    <div class="field col-12 md:col-6">
-      <app-input-select label="Department" formControlName="departmentId" [options]="optionsDataSources?.['departmentSelectList']"
-        [required]="false" />
-    </div>
-    <div class="field col-12 md:col-6">
-      <app-input-select label="Designation" formControlName="designationId" [options]="optionsDataSources?.['designationSelectList']"
-        [required]="false" />
-    </div>
-    <div class="field col-12 md:col-6">
-      <app-input-select label="Working Shift" formControlName="workingShiftId" [options]="optionsDataSources?.['workingShiftSelectList']"
-        [required]="false" />
-    </div>
-    <div class="field col-12 md:col-6">
-        <app-input-text label="Email" formControlName="email" [required]="false" [readonly]="false" />
-        <app-validator-msg [control]="f['email']" />
-    </div>
-    <div class="field col-12 md:col-6">
-        <app-input-text label="Phone No" formControlName="phoneNo" [required]="false" [readonly]="false" />
-        <app-validator-msg [control]="f['phoneno']" />
-    </div>
-    <div class="field col-12 md:col-6">
-        <app-input-text label="Mobile No" formControlName="mobileNo" [required]="false" [readonly]="false" />
-        <app-validator-msg [control]="f['mobileNo']" />
-    </div>
-    <div class="field col-12 md:col-6">
-        <app-input-select label="Country" formControlName="country" [options]="optionsDataSources?.['countrySelectList']"
-        [required]="false" />
-    </div>
-    <div class="field col-12 md:col-6">
-        <app-input-text label="City" formControlName="city" [required]="false" [readonly]="false" />
-        <app-validator-msg [control]="f['city']" />
-    </div>
-    <div class="field col-12 md:col-6">
-        <app-input-text label="Address" formControlName="address" [required]="false" [readonly]="false" />
-        <app-validator-msg [control]="f['address']" />
-    </div>
+    <div class="employee-tab">
+      <p-tabView [(activeIndex)]="activeTabIndex" styleClass="orientation-right">
+        <!-- General Tab -->
+        <p-tabPanel header="General" leftIcon="pi pi-warehouse">
+          <ng-container *ngTemplateOutlet="generalTab"></ng-container>
+        </p-tabPanel>
 
+        <!-- Work Tab -->
+        <p-tabPanel header="Work" leftIcon="pi pi-briefcase">
+          <ng-container *ngTemplateOutlet="workTab"></ng-container>
+        </p-tabPanel>
+
+        <!-- Contact Tab -->
+        <p-tabPanel header="Contact" leftIcon="pi pi-address-book">
+          <ng-container *ngTemplateOutlet="contactTab"></ng-container>
+        </p-tabPanel>
+      </p-tabView>
     </div>
 
     <div class="mt-3 p-dialog-footer">
-      <app-button label="Cancel" type="button" icon="pi pi-times" [text]="true" severity="warning"
-        (onClick)="cancel()" />
+      <app-button label="Cancel" type="button" icon="pi pi-times" [text]="true" severity="warning" (onClick)="cancel()" />
       <app-button label="Save" type="submit" icon="pi pi-check" [text]="true" [disabled]="form.invalid" />
     </div>
   </form>
+
+  <!-- General Tab Template -->
+  <ng-template #generalTab>
+    <div [formGroup]="form">
+      <div class="p-fluid p-formgrid grid">
+        <div class="field col-12 md:col-6">
+          <app-input-text label="Employee Code" formControlName="code" [required]="false" [readonly]="false"></app-input-text>
+          <app-validator-msg [control]="f['code']"></app-validator-msg>
+        </div>
+        <div class="field col-12 md:col-6">
+          <app-input-text label="First Name" formControlName="firstName" [required]="false" [readonly]="false"></app-input-text>
+          <app-validator-msg [control]="f['firstName']"></app-validator-msg>
+        </div>
+        <div class="field col-12 md:col-6">
+          <app-input-text label="Last Name" formControlName="lastName" [required]="false" [readonly]="false"></app-input-text>
+          <app-validator-msg [control]="f['lastName']"></app-validator-msg>
+        </div>
+        <div class="field col-12 md:col-6">
+          <app-input-select label="Gender" formControlName="gender" [options]="optionsDataSources?.['genderSelectList']" [required]="false"></app-input-select>
+        </div>
+        <div class="field col-12 md:col-6">
+          <app-input-text label="NID" formControlName="nid" [required]="false" [readonly]="false"></app-input-text>
+          <app-validator-msg [control]="f['nid']"></app-validator-msg>
+        </div>
+        <div class="field col-12 md:col-6">
+          <app-input-date label="DOB" formControlName="dob" [required]="false" [readonly]="false"></app-input-date>
+          <app-validator-msg [control]="f['dob']"></app-validator-msg>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+
+  <!-- Work Tab Template -->
+  <ng-template #workTab>
+    <div [formGroup]="form">
+      <div class="p-fluid p-formgrid grid">
+        <div class="field col-12 md:col-6">
+          <app-input-select label="Warehouse" formControlName="warehouseId" [options]="optionsDataSources?.['warehousesSelectList']" [required]="false"></app-input-select>
+        </div>
+        <div class="field col-12 md:col-6">
+          <app-input-select label="Department" formControlName="departmentId" [options]="optionsDataSources?.['departmentSelectList']" [required]="false"></app-input-select>
+        </div>
+        <div class="field col-12 md:col-6">
+          <app-input-select label="Designation" formControlName="designationId" [options]="optionsDataSources?.['designationSelectList']" [required]="false"></app-input-select>
+        </div>
+        <div class="field col-12 md:col-6">
+          <app-input-select label="Working Shift" formControlName="workingShiftId" [options]="optionsDataSources?.['workingShiftSelectList']" [required]="false"></app-input-select>
+        </div>
+        <div class="field col-12 md:col-6">
+          <app-input-select label="Reporting To" formControlName="reportTo" [options]="optionsDataSources?.['employeesSelectList']" [required]="false"></app-input-select>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+
+  <!-- Contact Tab Template -->
+  <ng-template #contactTab>
+    <div [formGroup]="form">
+      <div class="p-fluid p-formgrid grid">
+        <div class="field col-12 md:col-6">
+          <app-input-text label="Email" formControlName="email" [required]="false" [readonly]="false"></app-input-text>
+          <app-validator-msg [control]="f['email']"></app-validator-msg>
+        </div>
+        <div class="field col-12 md:col-6">
+          <app-input-text label="Phone No" formControlName="phoneNo" [required]="false" [readonly]="false"></app-input-text>
+          <app-validator-msg [control]="f['phoneNo']"></app-validator-msg>
+        </div>
+        <div class="field col-12 md:col-6">
+          <app-input-text label="Mobile No" formControlName="mobileNo" [required]="false" [readonly]="false"></app-input-text>
+          <app-validator-msg [control]="f['mobileNo']"></app-validator-msg>
+        </div>
+        <div class="field col-12 md:col-6">
+          <app-input-select label="Country" formControlName="country" [options]="optionsDataSources?.['countrySelectList']" [required]="false"></app-input-select>
+        </div>
+        <div class="field col-12 md:col-6">
+          <app-input-text label="City" formControlName="city" [required]="false" [readonly]="false"></app-input-text>
+          <app-validator-msg [control]="f['city']"></app-validator-msg>
+        </div>
+        <div class="field col-12 md:col-6">
+          <app-input-text label="Address" formControlName="address" [required]="false" [readonly]="false"></app-input-text>
+          <app-validator-msg [control]="f['address']"></app-validator-msg>
+        </div>
+      </div>
+    </div>
+  </ng-template>
 </div>

@@ -2,21 +2,24 @@
 
 public record UpdateEmployeeCommand(
     Guid Id,
-    string? EmployeeCode, 
-    string? EmployeeName, 
-    string? Gender, 
-    string? NID, 
-    Guid? WarehouseId, 
-    Guid? DepartmentId, 
-    Guid? DesignationId, 
-    Guid? WorkingShiftId, 
-    string? Email, 
-    string? PhoneNo, 
-    string? MobileNo, 
-    string? Country, 
-    string? City, 
+    string? Code,
+    string FirstName,
+    string? LastName,
+    string? Gender,
+    string? NID,
+    DateOnly? DOB,
+    Guid? WarehouseId,
+    Guid? DepartmentId,
+    Guid? DesignationId,
+    Guid? WorkingShiftId,
+    Guid? ReportTo,
+    string? Email,
+    string? PhoneNo,
+    string? MobileNo,
+    string? Country,
+    string? City,
     string? Address
-    ): ICacheInvalidatorCommand
+    ) : ICacheInvalidatorCommand
 {
     public string CacheKey => CacheKeys.Employee;
 }

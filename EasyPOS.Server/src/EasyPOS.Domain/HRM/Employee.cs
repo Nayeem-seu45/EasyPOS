@@ -2,8 +2,9 @@
 
 public class Employee: BaseAuditableEntity
 {
-    public string EmployeeCode { get; set; }
-    public string EmployeeName { get; set; }
+    public string Code { get; set; }
+    public string FirstName { get; set; }
+    public string? LastName { get; set; }
     public string Gender { get; set; }
     public DateOnly? DOB { get; set; }
     public string? NID { get; set; }

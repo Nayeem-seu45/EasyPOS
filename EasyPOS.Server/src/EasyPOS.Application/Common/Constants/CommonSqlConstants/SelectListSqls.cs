@@ -189,7 +189,7 @@ public static class SelectListSqls
         """;
 
     public const string EmployeesSelectListSql = """
-        SELECT Id, EmployeeName Name
+        SELECT Id, Concat(FirstName, ' ', LastName) Name
         FROM dbo.Employees t
         WHERE 1 = 1
         ORDER BY Name

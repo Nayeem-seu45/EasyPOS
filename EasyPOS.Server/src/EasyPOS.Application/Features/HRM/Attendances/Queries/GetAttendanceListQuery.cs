@@ -24,7 +24,7 @@ internal sealed class GetAttendanceQueryHandler(ISqlConnectionFactory sqlConnect
                 t.CheckIn AS {nameof(AttendanceModel.CheckIn)},
                 t.CheckOut AS {nameof(AttendanceModel.CheckOut)},
                 t.StatusId AS {nameof(AttendanceModel.StatusId)},
-                e.EmployeeName AS {nameof(AttendanceModel.EmployeeName)}
+                e.FirstName AS {nameof(AttendanceModel.EmployeeName)}
             FROM dbo.Attendances AS t
             LEFT JOIN dbo.Employees AS e ON e.Id = t.EmployeeId
             WHERE 1 = 1

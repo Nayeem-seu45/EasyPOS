@@ -29,7 +29,7 @@ internal sealed class GetLeaveRequestQueryHandler(ISqlConnectionFactory sqlConne
                 t.StatusId AS {nameof(LeaveRequestModel.StatusId)},
                 t.AttachmentUrl AS {nameof(LeaveRequestModel.AttachmentUrl)},
                 t.Reason AS {nameof(LeaveRequestModel.Reason)},
-                e.EmployeeName AS {nameof(LeaveRequestModel.EmployeeName)},
+                e.FirstName AS {nameof(LeaveRequestModel.EmployeeName)},
                 d.Name AS {nameof(LeaveRequestModel.Department)},
                 d2.Name AS {nameof(LeaveRequestModel.Designation)}
             FROM dbo.LeaveRequests AS t

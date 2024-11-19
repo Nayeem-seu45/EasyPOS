@@ -13099,20 +13099,31 @@
             "type": "string",
             "format": "guid"
           },
-          "employeeCode": {
-            "type": "string",
-            "nullable": true
+          "code": {
+            "type": "string"
           },
-          "employeeName": {
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
             "type": "string",
             "nullable": true
           },
           "gender": {
+            "type": "string"
+          },
+          "dob": {
             "type": "string",
+            "format": "date",
             "nullable": true
           },
           "nid": {
             "type": "string",
+            "nullable": true
+          },
+          "reportTo": {
+            "type": "string",
+            "format": "guid",
             "nullable": true
           },
           "warehouseId": {
@@ -13148,14 +13159,29 @@
             "nullable": true
           },
           "country": {
-            "type": "string",
-            "nullable": true
+            "type": "string"
           },
           "city": {
             "type": "string",
             "nullable": true
           },
           "address": {
+            "type": "string",
+            "nullable": true
+          },
+          "warehouse": {
+            "type": "string",
+            "nullable": true
+          },
+          "department": {
+            "type": "string",
+            "nullable": true
+          },
+          "designation": {
+            "type": "string",
+            "nullable": true
+          },
+          "workingShift": {
             "type": "string",
             "nullable": true
           },
@@ -13185,11 +13211,14 @@
         "type": "object",
         "additionalProperties": false,
         "properties": {
-          "employeeCode": {
+          "code": {
             "type": "string",
             "nullable": true
           },
-          "employeeName": {
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
             "type": "string",
             "nullable": true
           },
@@ -13199,6 +13228,11 @@
           },
           "nid": {
             "type": "string",
+            "nullable": true
+          },
+          "dob": {
+            "type": "string",
+            "format": "date",
             "nullable": true
           },
           "warehouseId": {
@@ -13217,6 +13251,11 @@
             "nullable": true
           },
           "workingShiftId": {
+            "type": "string",
+            "format": "guid",
+            "nullable": true
+          },
+          "reportTo": {
             "type": "string",
             "format": "guid",
             "nullable": true
@@ -13261,11 +13300,14 @@
             "type": "string",
             "format": "guid"
           },
-          "employeeCode": {
+          "code": {
             "type": "string",
             "nullable": true
           },
-          "employeeName": {
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
             "type": "string",
             "nullable": true
           },
@@ -13275,6 +13317,11 @@
           },
           "nid": {
             "type": "string",
+            "nullable": true
+          },
+          "dob": {
+            "type": "string",
+            "format": "date",
             "nullable": true
           },
           "warehouseId": {
@@ -13293,6 +13340,11 @@
             "nullable": true
           },
           "workingShiftId": {
+            "type": "string",
+            "format": "guid",
+            "nullable": true
+          },
+          "reportTo": {
             "type": "string",
             "format": "guid",
             "nullable": true
