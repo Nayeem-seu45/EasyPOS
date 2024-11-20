@@ -4,6 +4,7 @@ using EasyPOS.Application.Features.PurchaseMangements.Services;
 using EasyPOS.Application.Features.SaleManagements.Services;
 using EasyPOS.Application.Features.Stakeholders.Customers.Services;
 using EasyPOS.Application.Features.Stakeholders.Suppliers.Services;
+using EasyPOS.Application.Features.StockManagement.Services;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace EasyPOS.Application;
@@ -38,6 +39,7 @@ public static class DependencyInjection
         services.AddScoped<ISaleService, SaleService>();
         services.AddScoped<ISaleReturnService, SaleReturnService>();
 
+        services.AddScoped<IStockService, StockService>();
 
         return services;
     }

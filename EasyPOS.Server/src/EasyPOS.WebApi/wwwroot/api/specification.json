@@ -20253,6 +20253,10 @@
           },
           "taxMethod": {
             "$ref": "#/components/schemas/TaxMethod"
+          },
+          "availableStock": {
+            "type": "number",
+            "format": "decimal"
           }
         }
       },

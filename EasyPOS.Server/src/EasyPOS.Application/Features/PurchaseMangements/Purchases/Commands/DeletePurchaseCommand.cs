@@ -1,5 +1,6 @@
 ﻿using EasyPOS.Application.Features.PurchaseMangements.Shared;
 using EasyPOS.Application.Features.Stakeholders.Suppliers.Services;
+using EasyPOS.Application.Features.StockManagement.Services;
 
 namespace EasyPOS.Application.Features.Purchases.Commands;
 
@@ -10,21 +11,28 @@ public record DeletePurchaseCommand(Guid Id) : ICacheInvalidatorCommand
 
 internal sealed class DeletePurchaseCommandHandler(
     IApplicationDbContext dbContext,
-    ISupplierService supplierFinancialService)
+    ISupplierService supplierService,
+    IStockService stockService)
     : ICommandHandler<DeletePurchaseCommand>
 {
     public async Task<Result> Handle(DeletePurchaseCommand request, CancellationToken cancellationToken)
     {
-        var entity = await dbContext.Purchases.FindAsync(request.Id, cancellationToken);
+        var purchase = await dbContext.Purchases.FindAsync(request.Id, cancellationToken);
 
-        if (entity is null) return Result.Failure(Error.NotFound(nameof(entity), ErrorMessages.EntityNotFound));
+        if (purchase is null) return Result.Failure(Error.NotFound(nameof(purchase), ErrorMessages.EntityNotFound));
 
-        dbContext.Purchases.Remove(entity);
+        dbContext.Purchases.Remove(purchase);
+
+        // Update Stock
+        foreach (var detail in purchase.PurchaseDetails)
+        {
+            await stockService.AdjustStockAsync(detail.ProductId, purchase.WarehouseId, detail.Quantity, detail.NetUnitCost, true);
+        }
 
         // Adjust supplier financials by reversing due amount
-        await supplierFinancialService.AdjustSupplierBalance(
-            entity.SupplierId,
-            entity.DueAmount, 
+        await supplierService.AdjustSupplierBalance(
+            purchase.SupplierId,
+            purchase.DueAmount, 
             PurchaseTransactionType.PurchaseDelete, 
             cancellationToken);
 

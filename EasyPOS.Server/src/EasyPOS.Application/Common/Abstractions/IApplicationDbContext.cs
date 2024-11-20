@@ -9,6 +9,7 @@ using EasyPOS.Domain.Quotations;
 using EasyPOS.Domain.Sales;
 using EasyPOS.Domain.Settings;
 using EasyPOS.Domain.Stakeholders;
+using EasyPOS.Domain.Stocks;
 using Unit = EasyPOS.Domain.Products.Unit;
 
 namespace EasyPOS.Application.Common.Abstractions;
@@ -111,9 +112,16 @@ public interface IApplicationDbContext
 
     #endregion
 
+    #region Stock Management
+    DbSet<Stock> Stocks { get; }
+    #endregion
+
     #region Settings
     DbSet<CompanyInfo> CompanyInfos { get; }
     #endregion
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
+    Task BeginTransactionAsync();
+    Task CommitTransactionAsync();
+    Task RollbackTransactionAsync();
 }

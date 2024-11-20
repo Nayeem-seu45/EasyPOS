@@ -17,4 +17,5 @@ public record ProductSelectListModel
     public decimal? DiscountRate { get; set; }
     public decimal TaxRate { get; set; }
     public TaxMethod TaxMethod { get; set; }
+    public decimal AvailableStock { get; set; }
 }

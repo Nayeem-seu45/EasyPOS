@@ -2,7 +2,9 @@
 using EasyPOS.Application.Features.PurchaseMangements.Shared;
 using EasyPOS.Application.Features.Purchases.Models;
 using EasyPOS.Application.Features.Stakeholders.Suppliers.Services;
+using EasyPOS.Application.Features.StockManagement.Services;
 using EasyPOS.Domain.Common.Enums;
+using EasyPOS.Domain.Purchases;
 
 namespace EasyPOS.Application.Features.Purchases.Commands;
 
@@ -31,28 +33,35 @@ public record UpdatePurchaseCommand(
 internal sealed class UpdatePurchaseCommandHandler(
     IApplicationDbContext dbContext,
     ISupplierService supplierFinancialService,
-    IPurchaseService purchaseService)
+    IPurchaseService purchaseService,
+    IStockService stockService)
     : ICommandHandler<UpdatePurchaseCommand>
 {
     public async Task<Result> Handle(UpdatePurchaseCommand request, CancellationToken cancellationToken)
     {
         // Retrieve the existing purchase
-        var entity = await dbContext.Purchases.FindAsync(request.Id, cancellationToken);
-        if (entity is null) return Result.Failure(Error.NotFound(nameof(entity), ErrorMessages.EntityNotFound));
+        var purchase = await dbContext.Purchases.FindAsync(request.Id, cancellationToken);
+        if (purchase is null) return Result.Failure(Error.NotFound(nameof(purchase), ErrorMessages.EntityNotFound));
 
-        var oldDueAmount = entity.DueAmount;
+        var oldDueAmount = purchase.DueAmount;
 
         // Update the entity with new values
-        request.Adapt(entity);
+        request.Adapt(purchase);
 
         // Recalculate DueAmount and PaymentStatusId
-        entity.DueAmount = entity.GrandTotal - entity.PaidAmount;
-        entity.PaymentStatusId = await purchaseService.GetPurchasePaymentId(entity, cancellationToken);
+        purchase.DueAmount = purchase.GrandTotal - purchase.PaidAmount;
+        purchase.PaymentStatusId = await purchaseService.GetPurchasePaymentId(purchase, cancellationToken);
+
+        // Update Stock
+        foreach (var detail in purchase.PurchaseDetails) 
+        { 
+            await stockService.AdjustStockAsync(detail.ProductId, purchase.WarehouseId, detail.Quantity, detail.NetUnitCost, true); 
+        }
 
         // Adjust supplier financials
-        var dueAmountDifference = entity.DueAmount - oldDueAmount;
+        var dueAmountDifference = purchase.DueAmount - oldDueAmount;
         await supplierFinancialService.AdjustSupplierBalance(
-           entity.SupplierId,
+           purchase.SupplierId,
            dueAmountDifference,
            PurchaseTransactionType.PurchaseUpdate,
            cancellationToken);

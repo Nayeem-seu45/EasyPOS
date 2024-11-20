@@ -20,26 +20,33 @@ internal sealed class ProductSelectListQueryHandler(
 
         string sql = $"""
             SELECT 
-                t.Id AS {nameof(ProductSelectListModel.Id)},
-                t.Name AS {nameof(ProductSelectListModel.Name)},
-                t.Code AS {nameof(ProductSelectListModel.Code)},
-                t.PurchaseUnit AS {nameof(ProductSelectListModel.PurchaseUnit)},
-                t.SaleUnit AS {nameof(ProductSelectListModel.SaleUnit)},
-                t.CostPrice AS {nameof(ProductSelectListModel.CostPrice)},
-                t.SalePrice AS {nameof(ProductSelectListModel.SalePrice)},
-                t.TaxRate AS {nameof(ProductSelectListModel.TaxRate)},
-                t.TaxMethod AS {nameof(ProductSelectListModel.TaxMethod)},
-                t.DiscountType AS {nameof(ProductSelectListModel.DiscountType)},
-                t.DiscountRate AS {nameof(ProductSelectListModel.DiscountRate)},
-                t.DiscountAmount AS {nameof(ProductSelectListModel.DiscountAmount)}
-            FROM dbo.Products t
+                p.Id AS {nameof(ProductSelectListModel.Id)},
+                p.Name AS {nameof(ProductSelectListModel.Name)},
+                p.Code AS {nameof(ProductSelectListModel.Code)},
+                p.PurchaseUnit AS {nameof(ProductSelectListModel.PurchaseUnit)},
+                p.SaleUnit AS {nameof(ProductSelectListModel.SaleUnit)},
+                p.CostPrice AS {nameof(ProductSelectListModel.CostPrice)},
+                p.SalePrice AS {nameof(ProductSelectListModel.SalePrice)},
+                p.TaxRate AS {nameof(ProductSelectListModel.TaxRate)},
+                p.TaxMethod AS {nameof(ProductSelectListModel.TaxMethod)},
+                p.DiscountType AS {nameof(ProductSelectListModel.DiscountType)},
+                p.DiscountRate AS {nameof(ProductSelectListModel.DiscountRate)},
+                p.DiscountAmount AS {nameof(ProductSelectListModel.DiscountAmount)},
+                ISNULL(s.Quantity, 0) AS {nameof(ProductSelectListModel.AvailableStock)}
+            FROM dbo.Products p
+            LEFT JOIN dbo.Stocks s ON p.Id = s.ProductId
+            --LEFT JOIN dbo.Stocks s ON p.Id = s.ProductId AND s.WarehouseId = @WarehouseId
             WHERE 1 = 1
-            ORDER BY t.Name
+            ORDER BY p.Name
             """;
 
 
         var selectList = await connection
                 .QueryAsync<ProductSelectListModel>(sql);
+
+
+        //var selectList = await connection
+        //        .QueryAsync<ProductSelectListModel>(sql, new { request.WarehouseId });
 
         return Result.Success(selectList.AsList());
     }

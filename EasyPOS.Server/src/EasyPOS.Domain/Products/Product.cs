@@ -1,5 +1,6 @@
 ﻿using EasyPOS.Domain.Common.Enums;
 using EasyPOS.Domain.Enums;
+using EasyPOS.Domain.Stocks;
 
 namespace EasyPOS.Domain.Products;
 
@@ -30,4 +31,6 @@ public class Product : BaseAuditableEntity
 
 
     public virtual Category Category { get; set; } = default!;
+
+    public virtual List<Stock> Stocks { get; set; } = [];
 }

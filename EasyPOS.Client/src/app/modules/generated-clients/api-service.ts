@@ -31461,6 +31461,7 @@ export class ProductSelectListModel implements IProductSelectListModel {
     discountRate?: number | undefined;
     taxRate?: number;
     taxMethod?: TaxMethod;
+    availableStock?: number;
 
     constructor(data?: IProductSelectListModel) {
         if (data) {
@@ -31485,6 +31486,7 @@ export class ProductSelectListModel implements IProductSelectListModel {
             this.discountRate = _data["discountRate"];
             this.taxRate = _data["taxRate"];
             this.taxMethod = _data["taxMethod"];
+            this.availableStock = _data["availableStock"];
         }
     }
 
@@ -31509,6 +31511,7 @@ export class ProductSelectListModel implements IProductSelectListModel {
         data["discountRate"] = this.discountRate;
         data["taxRate"] = this.taxRate;
         data["taxMethod"] = this.taxMethod;
+        data["availableStock"] = this.availableStock;
         return data;
     }
 }
@@ -31526,6 +31529,7 @@ export interface IProductSelectListModel {
     discountRate?: number | undefined;
     taxRate?: number;
     taxMethod?: TaxMethod;
+    availableStock?: number;
 }
 
 export class PaginatedResponseOfTaxModel implements IPaginatedResponseOfTaxModel {

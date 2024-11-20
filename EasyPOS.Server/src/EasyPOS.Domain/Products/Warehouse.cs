@@ -1,4 +1,6 @@
-﻿namespace EasyPOS.Domain.Products;
+﻿using EasyPOS.Domain.Stocks;
+
+namespace EasyPOS.Domain.Products;
 
 public class Warehouse : BaseAuditableEntity
 {
@@ -10,4 +12,7 @@ public class Warehouse : BaseAuditableEntity
     public string? City { get; set; }
     public string? Address { get; set; }
     public bool IsActive { get; set; }
+
+    public virtual List<Stock> Stocks { get; set; } = [];
+
 }

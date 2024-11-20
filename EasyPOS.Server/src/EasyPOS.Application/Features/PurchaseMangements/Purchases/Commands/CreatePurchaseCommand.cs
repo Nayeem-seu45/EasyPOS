@@ -2,6 +2,7 @@
 using EasyPOS.Application.Features.PurchaseMangements.Shared;
 using EasyPOS.Application.Features.Purchases.Models;
 using EasyPOS.Application.Features.Stakeholders.Suppliers.Services;
+using EasyPOS.Application.Features.StockManagement.Services;
 using EasyPOS.Domain.Common.Enums;
 using EasyPOS.Domain.Purchases;
 
@@ -30,25 +31,37 @@ public record CreatePurchaseCommand(
 
 internal sealed class CreatePurchaseCommandHandler(
     IApplicationDbContext dbContext,
-    ISupplierService supplierFinancialService,
-    IPurchaseService purchaseService)
+    ISupplierService supplierService,
+    IPurchaseService purchaseService,
+    IStockService stockService)
     : ICommandHandler<CreatePurchaseCommand, Guid>
 {
     public async Task<Result<Guid>> Handle(CreatePurchaseCommand request, CancellationToken cancellationToken)
     {
         var purchase = request.Adapt<Purchase>();
-        //entity.DueAmount = entity.GrandTotal;
-        //entity.PurchaseStatusId = await purchaseService.GetPurchasePaymentId(entity) ?? Guid.Empty;
         dbContext.Purchases.Add(purchase);
         purchase.ReferenceNo = "PUR-" + DateTime.Now.ToString("yyyyMMddhhmmffff");
 
         await purchaseService.AdjustPurchaseAsync(purchase, 0, PurchaseTransactionType.PurchaseCreate, cancellationToken);
 
+        // Adjust stock for each purchased item
+        foreach (var item in purchase.PurchaseDetails)
+        {
+            await stockService.AdjustStockAsync(
+                productId: item.ProductId,
+                warehouseId: purchase.WarehouseId,
+                quantity: item.Quantity,
+                unitCost: item.NetUnitCost, // Use per-unit cost for accuracy
+                isAddition: true // Adding stock
+            );
+        }
+
+
         // Adjust supplier financials
-        await supplierFinancialService.AdjustSupplierBalance(
-            purchase.SupplierId, 
-            purchase.DueAmount, 
-            PurchaseTransactionType.PurchaseCreate, 
+        await supplierService.AdjustSupplierBalance(
+            purchase.SupplierId,
+            purchase.DueAmount,
+            PurchaseTransactionType.PurchaseCreate,
             cancellationToken);
 
         await dbContext.SaveChangesAsync(cancellationToken);

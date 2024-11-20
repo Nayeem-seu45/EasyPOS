@@ -11,11 +11,14 @@ using EasyPOS.Domain.Quotations;
 using EasyPOS.Domain.Sales;
 using EasyPOS.Domain.Settings;
 using EasyPOS.Domain.Stakeholders;
+using EasyPOS.Domain.Stocks;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace EasyPOS.Infrastructure.Persistence;
 
 public sealed class ApplicationDbContext : DbContext, IApplicationDbContext
 {
+    private IDbContextTransaction? _currentTransaction;
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
     //public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
@@ -111,6 +114,12 @@ public sealed class ApplicationDbContext : DbContext, IApplicationDbContext
 
     #endregion
 
+    #region Stock Management
+    public DbSet<Stock> Stocks => Set<Stock>();
+
+    #endregion
+
+
     #region Settings
     public DbSet<CompanyInfo> CompanyInfos => Set<CompanyInfo>();
 
@@ -122,4 +131,51 @@ public sealed class ApplicationDbContext : DbContext, IApplicationDbContext
 
         base.OnModelCreating(builder);
     }
+
+    public async Task BeginTransactionAsync()
+    {
+        if (_currentTransaction != null)
+            throw new InvalidOperationException("A transaction is already in progress.");
+
+        _currentTransaction = await Database.BeginTransactionAsync();
+    }
+
+    public async Task CommitTransactionAsync()
+    {
+        if (_currentTransaction == null)
+            throw new InvalidOperationException("No transaction in progress.");
+
+        try
+        {
+            _currentTransaction?.Commit();
+        }
+        finally
+        {
+            await DisposeTransactionAsync();
+        }
+    }
+
+    private async Task DisposeTransactionAsync()
+    {
+        if (_currentTransaction != null)
+        {
+            await _currentTransaction.DisposeAsync();
+            _currentTransaction = null;
+        }
+    }
+    public async Task RollbackTransactionAsync()
+    {
+        try
+        {
+            _currentTransaction?.Rollback();
+            // Log rollback
+            Console.WriteLine("Transaction rolled back.");
+        }
+        finally
+        {
+            await DisposeTransactionAsync();
+        }
+    }
+
+
 }
