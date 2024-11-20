@@ -40,14 +40,14 @@ internal sealed class CreatePurchaseCommandHandler(
     {
         var purchase = request.Adapt<Purchase>();
         dbContext.Purchases.Add(purchase);
-        purchase.ReferenceNo = "PUR-" + DateTime.Now.ToString("yyyyMMddhhmmffff");
+        purchase.ReferenceNo = GenerateNewRefNo();
 
         await purchaseService.AdjustPurchaseAsync(purchase, 0, PurchaseTransactionType.PurchaseCreate, cancellationToken);
 
         // Adjust stock for each purchased item
         foreach (var item in purchase.PurchaseDetails)
         {
-            await stockService.AdjustStockAsync(
+            await stockService.AdjustStockOnPurchaseAsync(
                 productId: item.ProductId,
                 warehouseId: purchase.WarehouseId,
                 quantity: item.Quantity,
@@ -67,5 +67,10 @@ internal sealed class CreatePurchaseCommandHandler(
         await dbContext.SaveChangesAsync(cancellationToken);
 
         return Result.Success(purchase.Id);
+    }
+
+    private static string GenerateNewRefNo()
+    {
+        return "PUR-" + DateTime.Now.ToString("yyyyMMddhhmmffff");
     }
 }

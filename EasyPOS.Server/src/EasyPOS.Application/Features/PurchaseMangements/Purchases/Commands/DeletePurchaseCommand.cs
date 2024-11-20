@@ -17,16 +17,16 @@ internal sealed class DeletePurchaseCommandHandler(
 {
     public async Task<Result> Handle(DeletePurchaseCommand request, CancellationToken cancellationToken)
     {
-        var purchase = await dbContext.Purchases.FindAsync(request.Id, cancellationToken);
+        var purchase = await dbContext.Purchases
+            .Include(p => p.PurchaseDetails)
+            .FirstOrDefaultAsync(p => p.Id == request.Id, cancellationToken);
 
         if (purchase is null) return Result.Failure(Error.NotFound(nameof(purchase), ErrorMessages.EntityNotFound));
 
-        dbContext.Purchases.Remove(purchase);
-
-        // Update Stock
+        // Reverse stock adjustments
         foreach (var detail in purchase.PurchaseDetails)
         {
-            await stockService.AdjustStockAsync(detail.ProductId, purchase.WarehouseId, detail.Quantity, detail.NetUnitCost, true);
+            await stockService.AdjustStockOnPurchaseAsync(detail.ProductId, purchase.WarehouseId, -detail.Quantity, detail.NetUnitCost, isAddition: false);
         }
 
         // Adjust supplier financials by reversing due amount
@@ -35,6 +35,8 @@ internal sealed class DeletePurchaseCommandHandler(
             purchase.DueAmount, 
             PurchaseTransactionType.PurchaseDelete, 
             cancellationToken);
+
+        dbContext.Purchases.Remove(purchase);
 
         await dbContext.SaveChangesAsync(cancellationToken);
 

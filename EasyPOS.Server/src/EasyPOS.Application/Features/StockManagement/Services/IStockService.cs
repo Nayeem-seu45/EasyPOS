@@ -2,5 +2,6 @@
 
 internal interface IStockService
 {
-    Task AdjustStockAsync(Guid productId, Guid warehouseId, decimal quantity, decimal unitCost, bool isAddition = false);
+    Task AdjustStockOnPurchaseAsync(Guid productId, Guid warehouseId, decimal quantity, decimal unitCost, bool isAddition = false);
+    Task AdjustStockOnSaleAsync(Guid productId, Guid warehouseId, decimal quantity, bool isAddition = false);
 }

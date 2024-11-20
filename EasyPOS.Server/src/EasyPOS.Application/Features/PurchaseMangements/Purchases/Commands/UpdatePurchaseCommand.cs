@@ -40,10 +40,17 @@ internal sealed class UpdatePurchaseCommandHandler(
     public async Task<Result> Handle(UpdatePurchaseCommand request, CancellationToken cancellationToken)
     {
         // Retrieve the existing purchase
-        var purchase = await dbContext.Purchases.FindAsync(request.Id, cancellationToken);
+        var purchase = await dbContext.Purchases
+            .Include(x => x.PurchaseDetails)
+            .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
+        
         if (purchase is null) return Result.Failure(Error.NotFound(nameof(purchase), ErrorMessages.EntityNotFound));
 
+        // Calculate old due amount
         var oldDueAmount = purchase.DueAmount;
+
+        // Update purchase details
+        var oldPurchaseDetails = purchase.PurchaseDetails.ToList(); // Keep a copy of old details
 
         // Update the entity with new values
         request.Adapt(purchase);
@@ -53,9 +60,14 @@ internal sealed class UpdatePurchaseCommandHandler(
         purchase.PaymentStatusId = await purchaseService.GetPurchasePaymentId(purchase, cancellationToken);
 
         // Update Stock
-        foreach (var detail in purchase.PurchaseDetails) 
-        { 
-            await stockService.AdjustStockAsync(detail.ProductId, purchase.WarehouseId, detail.Quantity, detail.NetUnitCost, true); 
+        foreach (var detail in request.PurchaseDetails)
+        {
+            var oldDetail = oldPurchaseDetails.FirstOrDefault(d => d.ProductId == detail.ProductId);
+            var oldQuantity = oldDetail?.Quantity ?? 0; // Previous quantity or 0 if not present before
+
+            // Adjust stock with difference
+            var quantityDifference = detail.Quantity - oldQuantity;
+            await stockService.AdjustStockOnPurchaseAsync(detail.ProductId, purchase.WarehouseId, quantityDifference, detail.NetUnitCost, isAddition: quantityDifference > 0);
         }
 
         // Adjust supplier financials
