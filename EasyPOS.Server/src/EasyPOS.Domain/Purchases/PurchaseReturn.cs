@@ -7,7 +7,7 @@ public class PurchaseReturn : BaseAuditableEntity
     public DateOnly ReturnDate { get; set; }
     public string PurchaseReferenceNo { get; set; }
     public string ReferenceNo { get; set; }
-    public Guid? WarehouseId { get; set; }
+    public Guid WarehouseId { get; set; }
     public Guid SupplierId { get; set; }
     public Guid PurchaseId { get; set; }
     public string? AttachmentUrl { get; set; }

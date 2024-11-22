@@ -4,53 +4,40 @@ namespace EasyPOS.Application.Features.StockManagement.Services;
 
 public class StockService(IApplicationDbContext dbContext) : IStockService
 {
-    public async Task AdjustStockOnPurchaseAsync(Guid productId, Guid warehouseId, decimal quantity, decimal unitCost, bool isAddition = false)
+    public async Task<Result> AdjustStockOnPurchaseAsync(
+        Guid productId, 
+        Guid warehouseId, 
+        decimal quantity,
+        decimal unitCost, 
+        bool isAddition = false)
     {
         if (unitCost <= 0)
-            throw new InvalidOperationException("Invalid unit cost.");
+            return Result.Failure(Error.Failure(ErrorMessages.InvalidOperation, "Invalid unit cost."));
+
 
         var stock = await dbContext.Stocks.FirstOrDefaultAsync(s =>
             s.ProductId == productId && s.WarehouseId == warehouseId);
 
+        Result result;
+
         if (isAddition)
         {
-            if (stock is null)
-            {
-                stock = new Stock
-                {
-                    Id = Guid.NewGuid(),
-                    ProductId = productId,
-                    WarehouseId = warehouseId,
-                    Quantity = quantity,
-                    UnitCost = unitCost,
-                    AverageUnitCost = unitCost
-                };
-                dbContext.Stocks.Add(stock);
-            }
-            else
-            {
-                stock.AverageUnitCost = CalculateWeightedAverage(stock.Quantity, stock.AverageUnitCost, quantity, unitCost);
-                stock.Quantity += quantity;
-            }
+           result = AddToStock(stock, productId, warehouseId, quantity, unitCost);
         }
         else
         {
-            if (stock == null || stock.Quantity < Math.Abs(quantity))
-                throw new InvalidOperationException("Insufficient stock.");
-
-            // Store the old quantity for calculations
-            var oldStockQty = stock.Quantity;
-
-            // Adjust stock quantity
-            stock.Quantity -= Math.Abs(quantity);
-
-            // Adjust AverageUnitCost
-            AdjustAverageUnitCost(stock, oldStockQty, quantity, unitCost);
+           result = SubtractFromStock(stock, quantity, unitCost);
         }
+        return result;
     }
 
-    // Handles sale and sale return adjustments
-    public async Task AdjustStockOnSaleAsync(Guid productId, Guid warehouseId, decimal quantity, bool isAddition = false)
+
+    // Handles sale and sale adjustments
+    public async Task<Result> AdjustStockOnSaleAsync(
+        Guid productId, 
+        Guid warehouseId, 
+        decimal quantity, 
+        bool isAddition = false)
     {
         var stock = await dbContext.Stocks.FirstOrDefaultAsync(s =>
             s.ProductId == productId && s.WarehouseId == warehouseId);
@@ -58,20 +45,73 @@ public class StockService(IApplicationDbContext dbContext) : IStockService
         if (isAddition)
         {
             if (stock is null)
-                throw new InvalidOperationException("Cannot return items to a stock that doesn't exist.");
+                return Result.Failure(Error.Failure(ErrorMessages.NotFound, "Cannot return items to a stock that doesn't exist."));
 
             stock.Quantity += quantity;
         }
         else
         {
             if (stock == null || stock.Quantity < Math.Abs(quantity))
-                throw new InvalidOperationException("Insufficient stock.");
+                return Result.Failure(Error.Failure(ErrorMessages.InvalidOperation, "Insufficient stock."));
 
             stock.Quantity -= Math.Abs(quantity);
         }
+        return Result.Success();
     }
 
-    private static void AdjustAverageUnitCost(Stock stock, decimal oldStockQty, decimal quantity, decimal unitCost)
+
+    private Result AddToStock(
+        Stock stock, 
+        Guid productId, 
+        Guid warehouseId, 
+        decimal quantity, 
+        decimal unitCost)
+    {
+        if (stock is null)
+        {
+            stock = new Stock
+            {
+                ProductId = productId,
+                WarehouseId = warehouseId,
+                Quantity = quantity,
+                UnitCost = unitCost,
+                AverageUnitCost = unitCost
+            };
+            dbContext.Stocks.Add(stock);
+        }
+        else
+        {
+            stock.AverageUnitCost = CalculateWeightedAverage(
+                stock.Quantity, 
+                stock.AverageUnitCost, 
+                quantity, 
+                unitCost);
+            stock.Quantity += quantity;
+        }
+        return Result.Success();
+    }
+
+    private static Result SubtractFromStock(Stock stock, decimal quantity, decimal unitCost)
+    {
+        if (stock == null || stock.Quantity < Math.Abs(quantity))
+            return Result.Failure(Error.Failure(ErrorMessages.InvalidOperation, "Insufficient stock."));
+
+
+        var oldStockQty = stock.Quantity;
+
+        stock.Quantity -= Math.Abs(quantity);
+
+        AdjustAverageUnitCost(stock, oldStockQty, quantity, unitCost);
+
+        return Result.Success();
+    }
+
+
+    private static void AdjustAverageUnitCost(
+        Stock stock, 
+        decimal oldStockQty, 
+        decimal quantity, 
+        decimal unitCost)
     {
         // Calculate the cost of the removed items
         var netCostRemoved = Math.Abs(quantity) * unitCost;
@@ -91,7 +131,11 @@ public class StockService(IApplicationDbContext dbContext) : IStockService
         }
     }
 
-    private static decimal CalculateWeightedAverage(decimal oldQuantity, decimal oldCost, decimal newQuantity, decimal newCost)
+    private static decimal CalculateWeightedAverage(
+        decimal oldQuantity, 
+        decimal oldCost, 
+        decimal newQuantity, 
+        decimal newCost)
     {
         return ((oldQuantity * oldCost) + (newQuantity * newCost)) / (oldQuantity + newQuantity);
     }

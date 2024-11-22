@@ -27,6 +27,7 @@ public static class ErrorMessages
 
 
     public const string NotFound = "Not Found";
+    public const string InvalidOperation = "Invalid Operation";
     public const string EntityNotFound = "Entity Not Found";
 
 

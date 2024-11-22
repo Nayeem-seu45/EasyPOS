@@ -1,21 +1,35 @@
-﻿namespace EasyPOS.Application.Features.Purchases.Commands;
+﻿using EasyPOS.Application.Features.StockManagement.Services;
+
+namespace EasyPOS.Application.Features.Purchases.Commands;
 
 public record DeletePurchaseDetailCommand(Guid Id) : ICacheInvalidatorCommand
 {
+    [JsonIgnore]
     public string CacheKey => CacheKeys.Purchase;
 }
 
 internal sealed class DeletePurchaseDetailCommandHandler(
-    IApplicationDbContext dbContext)
+    IApplicationDbContext dbContext,
+    IStockService stockService)
     : ICommandHandler<DeletePurchaseDetailCommand>
 {
     public async Task<Result> Handle(DeletePurchaseDetailCommand request, CancellationToken cancellationToken)
     {
-        var entity = await dbContext.PurchaseDetails.FindAsync(request.Id, cancellationToken);
+        var purchaseDetail = await dbContext.PurchaseDetails
+            .Include(x => x.Purchase)
+            .FirstOrDefaultAsync(x  => x.Id == request.Id, cancellationToken);
 
-        if (entity is null) return Result.Failure(Error.NotFound(nameof(entity), ErrorMessages.EntityNotFound));
+        if (purchaseDetail is null) return Result.Failure(Error.NotFound(nameof(purchaseDetail), ErrorMessages.EntityNotFound));
 
-        dbContext.PurchaseDetails.Remove(entity);
+        dbContext.PurchaseDetails.Remove(purchaseDetail);
+
+        await stockService.AdjustStockOnPurchaseAsync(
+            productId: purchaseDetail.ProductId,
+            warehouseId: purchaseDetail.Purchase.WarehouseId,
+            quantity: purchaseDetail.Quantity,
+            unitCost: purchaseDetail.NetUnitCost,
+            isAddition: false 
+        );
 
         await dbContext.SaveChangesAsync(cancellationToken);
 
