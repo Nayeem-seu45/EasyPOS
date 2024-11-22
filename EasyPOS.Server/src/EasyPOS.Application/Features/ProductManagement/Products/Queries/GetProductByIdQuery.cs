@@ -1,7 +1,10 @@
-﻿namespace EasyPOS.Application.Features.ProductManagement.Queries;
+﻿using EasyPOS.Application.Features.ProductManagement.Models;
+
+namespace EasyPOS.Application.Features.ProductManagement.Queries;
 
 public record GetProductByIdQuery(Guid Id) : ICacheableQuery<ProductModel>
 {
+    [JsonInclude]
     public string CacheKey => $"{CacheKeys.Product}_{Id}";
 
     public TimeSpan? Expiration => null;

@@ -1,7 +1,7 @@
 ﻿using EasyPOS.Domain.Common.Enums;
 using EasyPOS.Domain.Enums;
 
-namespace EasyPOS.Application.Features.ProductManagement.Queries;
+namespace EasyPOS.Application.Features.ProductManagement.Products.SelectLists;
 
 public record ProductSelectListModel
 {
@@ -18,4 +18,5 @@ public record ProductSelectListModel
     public decimal TaxRate { get; set; }
     public TaxMethod TaxMethod { get; set; }
     public decimal AvailableStock { get; set; }
+    public Guid? WarehouseId { get; set; }
 }

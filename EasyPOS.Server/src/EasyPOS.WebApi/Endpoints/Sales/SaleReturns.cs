@@ -1,4 +1,5 @@
 ﻿using EasyPOS.Application.Features.Common.Queries;
+using EasyPOS.Application.Features.ProductManagement.Products.SelectLists;
 using EasyPOS.Application.Features.ProductManagement.Queries;
 using EasyPOS.Application.Features.SaleReturns.Commands;
 using EasyPOS.Application.Features.SaleReturns.Models;

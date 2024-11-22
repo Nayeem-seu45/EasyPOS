@@ -1,5 +1,7 @@
 ﻿using EasyPOS.Application.Features.Common.Queries;
 using EasyPOS.Application.Features.ProductManagement.Commands;
+using EasyPOS.Application.Features.ProductManagement.Models;
+using EasyPOS.Application.Features.ProductManagement.Products.SelectLists;
 using EasyPOS.Application.Features.ProductManagement.Queries;
 
 namespace EasyPOS.WebApi.Endpoints.ProductManagement;
@@ -47,6 +49,12 @@ public class Products : EndpointGroupBase
         group.MapPost("GetProductSelectList", GetProductSelectList)
              .WithName("GetProductSelectList")
              .Produces<List<ProductSelectListModel>>(StatusCodes.Status200OK);
+
+        group.MapPost("SearchProductInStocks", SearchProductInStocks)
+             .WithName("SearchProductInStocks")
+             .Produces<List<ProductSelectListModel>>(StatusCodes.Status200OK)
+             .Produces<ProblemDetails>(StatusCodes.Status400BadRequest);
+
     }
 
     private async Task<IResult> GetAll(ISender sender, GetProductListQuery query)
@@ -182,6 +190,13 @@ public class Products : EndpointGroupBase
         var result =await sender.Send(new GetProductSelectListQuery(
             AllowCacheList: allowCache)
         );
+
+        return TypedResults.Ok(result.Value);
+    }
+
+    private async Task<IResult> SearchProductInStocks(ISender sender, GetProductSearchInStockSelectListQuery query)
+    {
+        var result = await sender.Send(query);
 
         return TypedResults.Ok(result.Value);
     }

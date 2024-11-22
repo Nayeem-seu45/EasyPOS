@@ -1,6 +1,7 @@
 ﻿using EasyPOS.Application.Features.Common.Queries;
 using EasyPOS.Application.Features.ProductManagement.ProductAdjustments.Commands;
 using EasyPOS.Application.Features.ProductManagement.ProductAdjustments.Queries;
+using EasyPOS.Application.Features.ProductManagement.Products.SelectLists;
 using EasyPOS.Application.Features.ProductManagement.Queries;
 
 namespace EasyPOS.WebApi.Endpoints.ProductManagement;

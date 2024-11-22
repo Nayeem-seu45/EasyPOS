@@ -1,4 +1,4 @@
-﻿using EasyPOS.Application.Features.ProductManagement.Queries;
+﻿using EasyPOS.Application.Features.ProductManagement.Models;
 
 namespace EasyPOS.Application.Features.ProductManagement.Commands;
 

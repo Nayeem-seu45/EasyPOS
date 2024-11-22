@@ -68,11 +68,11 @@ import { BadgeModule } from 'primeng/badge';
 import { AvatarModule } from 'primeng/avatar';
 import { SidebarModule } from 'primeng/sidebar';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
-import { SidebarService } from './services/sidebar.service';
 import { SelectButtonComponent } from './components/select-button/select-button.component';
 import { TagComponent } from './components/tag/tag.component';
 import { ChartModule } from 'primeng/chart';
-
+import { AutoCompleteModule } from 'primeng/autocomplete';
+import { AutoCompleteComponent } from './components/auto-complete/autocomplete.component';
 
 @NgModule({
 	declarations: [
@@ -108,7 +108,8 @@ import { ChartModule } from 'primeng/chart';
 		CustomMenuComponent,
 		SidebarComponent,
 		SelectButtonComponent,
-		TagComponent
+		TagComponent,
+		AutoCompleteComponent
 	],
 	imports: [
 		CommonModule,
@@ -150,7 +151,8 @@ import { ChartModule } from 'primeng/chart';
 		BadgeModule,
 		AvatarModule,
 		SidebarModule,
-		ChartModule 
+		ChartModule,
+		AutoCompleteModule 
 
 	],
 	providers: [
@@ -194,7 +196,8 @@ import { ChartModule } from 'primeng/chart';
 		SidebarComponent,
 		SelectButtonComponent,
 		TagComponent,
-		TableModule
+		TableModule,
+		AutoCompleteComponent
 	]
 })
 export class AppSharedModule { }

@@ -1,0 +1,76 @@
+<div class="autocomplete-container" [ngClass]="styleClass" [ngStyle]="style">
+  <!-- Label -->
+  <label *ngIf="label" [for]="inputId">
+    {{ label }}
+    <span *ngIf="required" class="required-star">*</span>
+  </label>
+
+  <!-- PrimeNG AutoComplete -->
+  <p-autoComplete
+    [id]="inputId"
+    [placeholder]="placeholder"
+    [disabled]="disabled"
+    [readonly]="readonly"
+    [forceSelection]="forceSelection"
+    [dropdown]="dropdown"
+    [field]="field"
+    [suggestions]="suggestions"
+    [minLength]="minLength"
+    [delay]="delay"
+    [multiple]="multiple"
+    [showClear]="showClear"
+    [autoHighlight]="autoHighlight"
+    [dropdownIcon]="dropdownIcon"
+    [panelStyleClass]="panelStyleClass"
+    [inputStyleClass]="inputStyleClass"
+    [panelStyle]="panelStyle"
+    [inputStyle]="inputStyle"
+    [style]="style"
+    [scrollHeight]="scrollHeight"
+    [autoZIndex]="autoZIndex"
+    [baseZIndex]="baseZIndex"
+    [appendTo]="appendTo"
+    [lazy]="lazy"
+    [optionLabel]="optionLabel"
+    [optionValue]="optionValue"
+    [optionDisabled]="optionDisabled"
+    [virtualScroll]="virtualScroll"
+    [virtualScrollItemSize]="virtualScrollItemSize"
+    [itemSize]="itemSize"
+    [virtualScrollOptions]="virtualScrollOptions"
+    [autoOptionFocus]="autoOptionFocus"
+    [selectOnFocus]="selectOnFocus"
+    [searchLocale]="searchLocale"
+    [focusOnHover]="focusOnHover"
+    [dropdownMode]="dropdownMode"
+    [ariaLabel]="ariaLabel"
+    [ariaLabelledBy]="ariaLabelledBy"
+    [dropdownAriaLabel]="dropdownAriaLabel"
+    [emptyMessage]="emptyMessage"
+    [showEmptyMessage]="showEmptyMessage"
+    [variant]="variant"
+    [maxlength]="maxlength"
+    [autocomplete]="autocomplete"
+    [name]="name"
+    [size]="size"
+    [required]="required"
+    [tabindex]="tabindex"
+    [searchMessage]="searchMessage"
+    [selectionMessage]="selectionMessage"
+    [emptySelectionMessage]="emptySelectionMessage"
+    [showTransitionOptions]="showTransitionOptions"
+    [hideTransitionOptions]="hideTransitionOptions"
+    [(ngModel)]="value"
+    (completeMethod)="handleComplete($event)"
+    (onSelect)="handleSelect($event)"
+    (onUnselect)="handleUnselect($event)"
+    (onDropdownClick)="handleDropdownClick($event)"
+    (onClear)="handleClear()"
+    (onKeyUp)="handleOnKeyUp($event)"
+  ></p-autoComplete>
+
+  <!-- Error Messages (Optional, for validation or feedback) -->
+  <!-- <div *ngIf="required && !value" class="error-message">
+    This field is required.
+  </div> -->
+</div>

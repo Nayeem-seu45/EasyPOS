@@ -12,21 +12,17 @@
           <app-input-date label="Date" [(ngModel)]="item.saleDate" name="saleDate" />
         </div>
 
-        <!-- Reference No -->
-        <div class="field col-12 md:col-4">
-          <app-input-text label="Reference No" [(ngModel)]="item.referenceNo" name="referenceNo" />
-        </div>
-
         <!-- Warehouse -->
         <div class="field col-12 md:col-4">
           <app-input-select label="Warehouse" [(ngModel)]="item.warehouseId" name="warehouseId"
-            [options]="optionsDataSources?.warehousesSelectList" />
+            [options]="optionsDataSources?.warehousesSelectList" [required]="true" (onChange)="onWarehouseChange()" [showClear]="false" />
+            <small class="validation-color" *ngIf="showWarehouseValidationMsg">Please select warehouse</small>
         </div>
 
         <!-- Customer -->
         <div class="field col-12 md:col-4">
           <app-input-select label="Customer" [(ngModel)]="item.customerId" name="customerId"
-            [options]="optionsDataSources?.customersSelectList" />
+            [options]="optionsDataSources?.customersSelectList" [required]="true" [showClear]="false" />
         </div>
 
         <!-- Biller -->
@@ -36,9 +32,14 @@
         </div>
 
         <!-- product select  -->
-        <div class="col-12">
+        <!-- <div class="col-12">
           <app-input-select label="" [optionValue]="null" name="selectedProduct" [(ngModel)]="selectedProduct"
-            (ngModelChange)="onProductSelect()" [options]="optionsDataSources?.productsSelectList" />
+            (ngModelChange)="onProductSelect()" [options]="optionsDataSources?.productsSelectList"  />
+        </div> -->
+
+        <div class="col-12">
+          <app-autocomplete  [suggestions]="suggestions" (onComplete)="searchProduct($event)" [showClear]="true"
+            (onSelect)="onProductSelect($event)" [forceSelection]="true" placeholder="Search Product by code or name"  />
         </div>
 
         <!-- Sale Details List -->

@@ -1,4 +1,4 @@
-﻿namespace EasyPOS.Application.Features.ProductManagement.Queries;
+﻿namespace EasyPOS.Application.Features.ProductManagement.Products.SelectLists;
 
 public record GetProductSelectListQuery(
     bool? AllowCacheList) : ICacheableQuery<List<ProductSelectListModel>>

@@ -1,7 +1,7 @@
 ﻿using EasyPOS.Domain.Common.Enums;
 using EasyPOS.Domain.Enums;
 
-namespace EasyPOS.Application.Features.ProductManagement.Queries;
+namespace EasyPOS.Application.Features.ProductManagement.Models;
 
 public record ProductModel
 {
