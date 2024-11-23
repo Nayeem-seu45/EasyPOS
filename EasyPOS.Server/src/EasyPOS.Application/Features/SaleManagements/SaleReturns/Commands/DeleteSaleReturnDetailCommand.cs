@@ -1,4 +1,7 @@
-﻿namespace EasyPOS.Application.Features.SaleReturns.Commands;
+﻿using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
+using EasyPOS.Application.Features.StockManagement.Services;
+
+namespace EasyPOS.Application.Features.SaleReturns.Commands;
 
 public record DeleteSaleReturnDetailCommand(Guid Id) : ICacheInvalidatorCommand
 {
@@ -6,16 +9,31 @@ public record DeleteSaleReturnDetailCommand(Guid Id) : ICacheInvalidatorCommand
 }
 
 internal sealed class DeleteSaleReturnDetailCommandHandler(
-    IApplicationDbContext dbContext)
+    IApplicationDbContext dbContext,
+    IStockService stockService)
     : ICommandHandler<DeleteSaleReturnDetailCommand>
 {
     public async Task<Result> Handle(DeleteSaleReturnDetailCommand request, CancellationToken cancellationToken)
     {
-        var entity = await dbContext.SaleReturnDetails.FindAsync(request.Id, cancellationToken);
+        var saleReturnDetail = await dbContext.SaleReturnDetails.FindAsync(request.Id, cancellationToken);
 
-        if (entity is null) return Result.Failure(Error.NotFound(nameof(entity), ErrorMessages.EntityNotFound));
+        if (saleReturnDetail is null) return Result.Failure(Error.NotFound(nameof(saleReturnDetail), ErrorMessages.EntityNotFound));
 
-        dbContext.SaleReturnDetails.Remove(entity);
+        // Adjust stock for the deleted detail
+        var stockAdjustmentResult = await stockService.AdjustStockOnSaleAsync(
+            productId: saleReturnDetail.ProductId,
+            warehouseId: saleReturnDetail.SaleReturn.WarehouseId,
+            quantity: saleReturnDetail.ReturnedQuantity,
+            isAddition: false, // Revert stock changes
+            cancellationToken: cancellationToken
+        );
+
+        if (!stockAdjustmentResult.IsSuccess)
+        {
+            return Result.Failure(stockAdjustmentResult.Error);
+        }
+
+        dbContext.SaleReturnDetails.Remove(saleReturnDetail);
 
         await dbContext.SaveChangesAsync(cancellationToken);
 
