@@ -9,7 +9,8 @@ public class StockService(IApplicationDbContext dbContext) : IStockService
         Guid warehouseId, 
         decimal quantity,
         decimal unitCost, 
-        bool isAddition = false)
+        bool isAddition = false,
+        CancellationToken cancellationToken = default)
     {
         if (unitCost <= 0)
             return Result.Failure(Error.Failure(ErrorMessages.InvalidOperation, "Invalid unit cost."));
@@ -32,32 +33,43 @@ public class StockService(IApplicationDbContext dbContext) : IStockService
     }
 
 
-    // Handles sale and sale adjustments
     public async Task<Result> AdjustStockOnSaleAsync(
-        Guid productId, 
-        Guid warehouseId, 
-        decimal quantity, 
-        bool isAddition = false)
+         Guid productId,
+         Guid warehouseId,
+         decimal quantity,
+         bool isAddition = false,
+         CancellationToken cancellationToken = default)
     {
+        // Find the stock entity for the specified product and warehouse
         var stock = await dbContext.Stocks.FirstOrDefaultAsync(s =>
             s.ProductId == productId && s.WarehouseId == warehouseId);
 
-        if (isAddition)
+        // Validate the existence of stock
+        if (stock == null)
         {
-            if (stock is null)
-                return Result.Failure(Error.Failure(ErrorMessages.NotFound, "Cannot return items to a stock that doesn't exist."));
+            return Result.Failure(Error.Failure(ErrorMessages.NotFound, "Stock not found for the specified product and warehouse."));
+        }
 
+        if (isAddition) // Sale return case
+        {
+            // Add the returned quantity back to the stock
             stock.Quantity += quantity;
         }
-        else
+        else // Sale case
         {
-            if (stock == null || stock.Quantity < Math.Abs(quantity))
-                return Result.Failure(Error.Failure(ErrorMessages.InvalidOperation, "Insufficient stock."));
+            // Ensure sufficient stock is available for the sale
+            if (stock.Quantity < quantity)
+            {
+                return Result.Failure(Error.Failure(ErrorMessages.InvalidOperation, "Insufficient stock for the sale."));
+            }
 
-            stock.Quantity -= Math.Abs(quantity);
+            // Reduce the stock quantity
+            stock.Quantity -= quantity;
         }
+
         return Result.Success();
     }
+
 
 
     private Result AddToStock(

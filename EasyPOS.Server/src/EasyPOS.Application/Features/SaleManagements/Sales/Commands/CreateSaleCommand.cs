@@ -2,8 +2,8 @@
 using EasyPOS.Application.Features.SaleManagements.Shared;
 using EasyPOS.Application.Features.Sales.Models;
 using EasyPOS.Application.Features.Stakeholders.Customers.Services;
+using EasyPOS.Application.Features.StockManagement.Services;
 using EasyPOS.Domain.Sales;
-using static EasyPOS.Application.Common.Security.Permissions;
 
 namespace EasyPOS.Application.Features.Sales.Commands;
 
@@ -37,49 +37,84 @@ public record CreateSaleCommand : UpsertSaleModel, ICacheInvalidatorCommand<Guid
 internal sealed class CreateSaleCommandHandler(
     IApplicationDbContext dbContext,
     ISaleService saleService,
-    ICustomerService customerService)
+    ICustomerService customerService,
+    IStockService stockService)
     : ICommandHandler<CreateSaleCommand, Guid>
 {
     public async Task<Result<Guid>> Handle(CreateSaleCommand request, CancellationToken cancellationToken)
     {
+        // Map request to Sale entity
         var sale = request.Adapt<Sale>();
+
         dbContext.Sales.Add(sale);
 
+        // Generate a reference number
         sale.ReferenceNo = "S-" + DateTime.Now.ToString("yyyyMMddhhmmffff");
 
-        await saleService
-            .AdjustSaleAsync(SaleTransactionType.SaleCreate, sale, request.SalePayment?.PayingAmount ?? 0, cancellationToken);
-
-        // Payment
-        if (request.HasPayment
-            && request.SalePayment is not null
-            && request.SalePayment?.PayingAmount > 0
-            && !request.SalePayment.PaymentType.IsNullOrEmpty())
+        // Validate and adjust stock for each sale detail
+        foreach (var detail in request.SaleDetails)
         {
-             saleService.AddPaymentToSale(
-                 sale, 
-                 request.SalePayment.ReceivedAmount, 
-                 request.SalePayment.PayingAmount, 
-                 request.SalePayment.ChangeAmount, 
-                 request.SalePayment.PaymentType.Value, 
-                 request.SalePayment.Note);
+            var stockAdjustmentResult = await stockService.AdjustStockOnSaleAsync(
+                detail.ProductId,
+                sale.WarehouseId,
+                detail.Quantity,
+                isAddition: false // This is a sale, so reduce stock
+            );
+
+            if (!stockAdjustmentResult.IsSuccess)
+            {
+                return Result.Failure<Guid>(stockAdjustmentResult.Error); // Stop if stock adjustment fails
+            }
         }
 
-        #region Customer
-        // Customer
-        var customer = await dbContext.Customers.FirstOrDefaultAsync(x => x.Id == sale.CustomerId);
+        // Adjust sale information using SaleService
+        await saleService.AdjustSaleAsync(
+            SaleTransactionType.SaleCreate,
+            sale,
+            request.SalePayment?.PayingAmount ?? 0,
+            cancellationToken
+        );
+
+        // Handle payment if applicable
+        if (request.HasPayment
+            && request.SalePayment is not null
+            && request.SalePayment.PayingAmount > 0
+            && !request.SalePayment.PaymentType.IsNullOrEmpty())
+        {
+            saleService.AddPaymentToSale(
+                sale,
+                request.SalePayment.ReceivedAmount,
+                request.SalePayment.PayingAmount,
+                request.SalePayment.ChangeAmount,
+                request.SalePayment.PaymentType.Value,
+                request.SalePayment.Note
+            );
+        }
+
+        #region Customer Adjustment
+
+        // Retrieve customer
+        var customer = await dbContext.Customers.FirstOrDefaultAsync(x => x.Id == sale.CustomerId, cancellationToken);
 
         if (customer is null)
         {
             return Result.Failure<Guid>(Error.Failure(nameof(customer), "Customer not found."));
         }
 
-        customerService.AdjustCustomerOnSale(SaleTransactionType.SaleCreate, customer, sale.DueAmount, sale.PaidAmount);
+        // Adjust customer financials
+        customerService.AdjustCustomerOnSale(
+            SaleTransactionType.SaleCreate,
+            customer,
+            sale.DueAmount,
+            sale.PaidAmount
+        );
 
         #endregion
 
+        // Save all changes
         await dbContext.SaveChangesAsync(cancellationToken);
 
         return sale.Id;
     }
 }
+

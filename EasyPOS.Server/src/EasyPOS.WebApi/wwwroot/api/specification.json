@@ -16892,12 +16892,7 @@
           },
           {
             "type": "object",
-            "additionalProperties": false,
-            "properties": {
-              "cacheKey": {
-                "type": "string"
-              }
-            }
+            "additionalProperties": false
           }
         ]
       },

@@ -26031,7 +26031,6 @@ export interface ICreateSaleCommand extends IUpsertSaleModel {
 }
 
 export class UpdateSaleCommand extends UpsertSaleModel implements IUpdateSaleCommand {
-    cacheKey?: string;
 
     constructor(data?: IUpdateSaleCommand) {
         super(data);
@@ -26039,9 +26038,6 @@ export class UpdateSaleCommand extends UpsertSaleModel implements IUpdateSaleCom
 
     override init(_data?: any) {
         super.init(_data);
-        if (_data) {
-            this.cacheKey = _data["cacheKey"];
-        }
     }
 
     static override fromJS(data: any): UpdateSaleCommand {
@@ -26053,14 +26049,12 @@ export class UpdateSaleCommand extends UpsertSaleModel implements IUpdateSaleCom
 
     override toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["cacheKey"] = this.cacheKey;
         super.toJSON(data);
         return data;
     }
 }
 
 export interface IUpdateSaleCommand extends IUpsertSaleModel {
-    cacheKey?: string;
 }
 
 export class PaginatedResponseOfQuotationModel implements IPaginatedResponseOfQuotationModel {

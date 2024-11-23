@@ -42,14 +42,15 @@ internal sealed class GetProductSearchInStockSelectListQueryHandler(
                 ON p.Id = s.ProductId 
                 AND s.WarehouseId = @WarehouseId
             WHERE 
-                (p.Name LIKE '%' + @Query + '%' 
-                 OR p.Code LIKE '%' + @Query + '%')
-                --AND s.Quantity > 0
+                (LOWER(p.Name) LIKE '%' + LOWER(@Query) + '%' 
+                 OR LOWER(p.Code) LIKE '%' + LOWER(@Query) + '%')
             ORDER BY 
                 CASE 
-                    WHEN p.Code LIKE @Query + '%' THEN 1
-                    WHEN p.Name LIKE @Query + '%' THEN 2
-                    ELSE 3
+                    WHEN LOWER(p.Code) = LOWER(@Query) THEN 0
+                    WHEN LOWER(p.Name) = LOWER(@Query) THEN 1
+                    WHEN p.Code LIKE @Query + '%' THEN 2
+                    WHEN p.Name LIKE @Query + '%' THEN 3
+                    ELSE 4
                 END,
                 p.Name;
             """;

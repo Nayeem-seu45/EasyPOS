@@ -73,6 +73,7 @@ import { TagComponent } from './components/tag/tag.component';
 import { ChartModule } from 'primeng/chart';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { AutoCompleteComponent } from './components/auto-complete/autocomplete.component';
+import { ProductSearchComponent } from './components/product-search/product-search.component';
 
 @NgModule({
 	declarations: [
@@ -109,7 +110,8 @@ import { AutoCompleteComponent } from './components/auto-complete/autocomplete.c
 		SidebarComponent,
 		SelectButtonComponent,
 		TagComponent,
-		AutoCompleteComponent
+		AutoCompleteComponent,
+		ProductSearchComponent
 	],
 	imports: [
 		CommonModule,
@@ -197,7 +199,8 @@ import { AutoCompleteComponent } from './components/auto-complete/autocomplete.c
 		SelectButtonComponent,
 		TagComponent,
 		TableModule,
-		AutoCompleteComponent
+		AutoCompleteComponent,
+		ProductSearchComponent
 	]
 })
 export class AppSharedModule { }

@@ -38,7 +38,7 @@
         </div> -->
 
         <div class="col-12">
-          <app-autocomplete  [suggestions]="suggestions" (onComplete)="searchProduct($event)" [showClear]="true"
+          <app-product-search  [suggestions]="suggestions" (onComplete)="searchProduct($event)" [showClear]="true"
             (onSelect)="onProductSelect($event)" [forceSelection]="true" placeholder="Search Product by code or name"  />
         </div>
 
