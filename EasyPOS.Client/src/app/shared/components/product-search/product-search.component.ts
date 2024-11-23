@@ -1,5 +1,8 @@
 import { Component, EventEmitter, Input, Output, forwardRef } from '@angular/core';
 import { ControlValueAccessor, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { debounceTime, Subject } from 'rxjs';
+import { CommonConstants } from 'src/app/core/contants/common';
+import { GetProductSearchInStockSelectListQuery, ProductsClient } from 'src/app/modules/generated-clients/api-service';
 
 @Component({
   selector: 'app-product-search',
@@ -15,7 +18,8 @@ import { ControlValueAccessor, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular
       provide: NG_VALIDATORS,
       useExisting: forwardRef(() => ProductSearchComponent),
       multi: true
-    }
+    },
+    ProductsClient
   ],
 })
 export class ProductSearchComponent implements ControlValueAccessor {
@@ -29,6 +33,7 @@ export class ProductSearchComponent implements ControlValueAccessor {
   @Input() autocomplete: string = 'off'; // Default: 'off'
   @Input() inputId: string = null; // Identifier for input focus
   @Input() name: string = null; // Name attribute of the input field
+  @Input() warehouseId: string = null;
 
   // Data Handling Properties
   @Input() suggestions: any[] = []; // Array of suggestions to display
@@ -109,10 +114,21 @@ export class ProductSearchComponent implements ControlValueAccessor {
   @Output() onDropdownClick: EventEmitter<any> = new EventEmitter();
   @Output() onClear: EventEmitter<any> = new EventEmitter();
   @Output() onKeyUp: EventEmitter<any> = new EventEmitter();
+  @Output() onExactMatched: EventEmitter<any> = new EventEmitter();
+  @Output() onWarehouseNotFound: EventEmitter<any> = new EventEmitter();
+
+  private searchSubject = new Subject<string>();
 
   value: any;
   onTouched: any = () => {};
   onChangeFn: any = (_: any) => {};
+
+  constructor(private productsClient: ProductsClient){
+    // Subscribe to the searchSubject for debounced search
+    this.searchSubject.pipe(debounceTime(300)).subscribe((query) => {
+      this.fetchProductSuggestions(query);
+    });
+  }
 
   writeValue(value: any): void {
     this.value = value;
@@ -131,6 +147,19 @@ export class ProductSearchComponent implements ControlValueAccessor {
   }
 
   handleComplete(event: any): void {
+    const query = event.query?.trim();
+
+    if (!this.warehouseId || this.warehouseId === CommonConstants.EmptyGuid) {
+      this.onWarehouseNotFound.emit(true);
+      this.suggestions = [];
+      return;
+    }
+    if (query) {
+      this.searchSubject.next(query); // Trigger debounced search
+    } else {
+      this.suggestions = [];
+    }
+
     this.onComplete.emit(event);
   }
 
@@ -162,5 +191,38 @@ export class ProductSearchComponent implements ControlValueAccessor {
 
   handleOnKeyUp(event){
     this.onKeyUp.emit(event);
+  }
+
+   /**
+   * Fetch product suggestions from server
+   */
+   fetchProductSuggestions(query: string) {
+
+    const searchCommand = new GetProductSearchInStockSelectListQuery();
+    searchCommand.warehouseId = this.warehouseId;
+    searchCommand.query = query;
+    this.productsClient.searchProductInStocks(searchCommand).subscribe({
+      next: (response) => {
+        this.suggestions = response.map((product) => ({
+          label: `${product.name} (${product.code})`,
+          value: product
+        }));
+
+        // Automatically add product to the table if an exact match exists
+        const exactMatch = response.find(
+          (product) =>
+            product.name?.toLowerCase() === query.toLowerCase() ||
+            product.code?.toLowerCase() === query.toLowerCase()
+        );
+
+        if (exactMatch) {
+          this.onExactMatched.emit(exactMatch);
+          this.suggestions = [];
+        }
+
+      }, error: (error) => {
+        console.error('Error fetching products:', error);
+      }
+    });
   }
 }

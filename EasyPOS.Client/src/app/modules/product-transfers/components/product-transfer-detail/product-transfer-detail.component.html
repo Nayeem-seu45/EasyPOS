@@ -39,9 +39,21 @@
             [ngModelOptions]="{standalone: true}" />
         </div> -->
 
-        <div class="col-12">
+        <!-- <div class="col-12">
           <app-product-search #productSearch [suggestions]="suggestions" (onComplete)="searchProduct($event)" [showClear]="true"
             (onSelect)="onProductSelect($event)" [forceSelection]="true" placeholder="Search Product by code or name"  />
+        </div> -->
+
+        <!-- (onComplete)="searchProduct($event)"  -->
+        <div class="col-12">
+          <app-product-search #productSearch 
+            [forceSelection]="true"
+            [showClear]="true"
+            [warehouseId]="f['fromWarehouseId']?.value"        
+            (onSelect)="onProductSelect($event)" 
+            (onExactMatched)="onExactMatchProduct($event)" 
+            (onWarehouseNotFound)="getWarehouseValidation($event)" 
+            placeholder="Search Product by code or name"  />
         </div>
 
         <div class="col-12">

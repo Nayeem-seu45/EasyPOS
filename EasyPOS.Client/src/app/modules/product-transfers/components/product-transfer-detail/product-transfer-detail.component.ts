@@ -7,10 +7,8 @@ import { DiscountType, GetProductSearchInStockSelectListQuery, ProductsClient, P
 import { CustomDialogService } from 'src/app/shared/services/custom-dialog.service';
 import { ToastService } from 'src/app/shared/services/toast.service';
 import { CommonUtils } from 'src/app/shared/Utilities/common-utilities';
-import { debounceTime, from, Subject, Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { UpdateProductTransferOrderDetailComponent } from '../update-product-transfer-order-detail/update-product-transfer-order-detail.component';
-import { AutoCompleteCompleteEvent } from 'primeng/autocomplete';
-import { ProductSearchComponent } from 'src/app/shared/components/product-search/product-search.component';
 
 @Component({
   selector: 'app-product-transfer-detail',
@@ -62,8 +60,7 @@ export class ProductTransferDetailComponent implements OnInit {
 
   constructor(private entityClient: ProductTransfersClient,
     private activatedRoute: ActivatedRoute,
-    private customDialogService: CustomDialogService,
-    private productsClient: ProductsClient
+    private customDialogService: CustomDialogService
   ) { }
 
   ngOnInit(): void {
@@ -74,11 +71,6 @@ export class ProductTransferDetailComponent implements OnInit {
 
     this.getById(this.id || this.emptyGuid)
     this.initializeFormGroup();
-
-    // Subscribe to the searchSubject for debounced search
-    this.searchSubject.pipe(debounceTime(300)).subscribe((query) => {
-      this.fetchProductSuggestions(query);
-    });
   }
 
   ngOnDestroy() {
@@ -89,10 +81,7 @@ export class ProductTransferDetailComponent implements OnInit {
   }
 
   //#region AutoComplete Search
-  suggestions: any[] | undefined;
-  private searchSubject = new Subject<string>();
   showWarehouseValidationMsg: boolean = false;
-  @ViewChild('productSearch') productSearch: ProductSearchComponent;
 
   onWarehouseChange(event: any) {
     if (event && event !== CommonConstants.EmptyGuid) {
@@ -100,79 +89,20 @@ export class ProductTransferDetailComponent implements OnInit {
     }
   }
 
-  /**
-  * Handles product search in autocomplete
-  */
-  searchProduct(event: AutoCompleteCompleteEvent) {
-    console.log(event)
-    const query = event.query?.trim();
-    const fromWarehouseId = this.f['fromWarehouseId']?.value;
-    console.log('from searchProduct: ', fromWarehouseId)
-    if (!fromWarehouseId || fromWarehouseId === CommonConstants.EmptyGuid) {
-      this.showWarehouseValidationMsg = true;
-      this.suggestions = [];
-      return;
-    }
-
-    this.showWarehouseValidationMsg = false;
-
-    if (query) {
-      this.searchSubject.next(query); // Trigger debounced search
-    } else {
-      this.suggestions = [];
-    }
+  getWarehouseValidation(event: boolean){
+    this.showWarehouseValidationMsg = event;
   }
 
   onProductSelect(selectedEvent: any) {
     const selectedProduct = selectedEvent.value;
-
     if (selectedProduct.value) {
       this.addProductToProductTransferDetails(selectedProduct.value);
-      this.suggestions = [];
-
-      setTimeout(() => {
-        this.productSearch.handleClear();
-      }, 100);
-
     }
   }
 
-  /**
-   * Fetch product suggestions from server
-   */
-  fetchProductSuggestions(query: string) {
-    const fromWarehouseId = this.f['fromWarehouseId']?.value;
-    console.log(fromWarehouseId)
-    console.log(query)
-
-    const searchCommand = new GetProductSearchInStockSelectListQuery();
-    searchCommand.warehouseId = fromWarehouseId;
-    searchCommand.query = query;
-    this.productsClient.searchProductInStocks(searchCommand).subscribe({
-      next: (response) => {
-        this.suggestions = response.map((product) => ({
-          label: `${product.name} (${product.code})`,
-          value: product
-        }));
-
-        // Automatically add product to the table if an exact match exists
-        const exactMatch = response.find(
-          (product) =>
-            product.name?.toLowerCase() === query.toLowerCase() ||
-            product.code?.toLowerCase() === query.toLowerCase()
-        );
-
-        if (exactMatch) {
-          this.addProductToProductTransferDetails(exactMatch);
-          this.suggestions = [];
-        }
-
-      }, error: (error) => {
-        console.error('Error fetching products:', error);
-      }
-    });
+  onExactMatchProduct(product: ProductSelectListModel) {
+    this.addProductToProductTransferDetails(product);
   }
-
 
   //#endregion
 
