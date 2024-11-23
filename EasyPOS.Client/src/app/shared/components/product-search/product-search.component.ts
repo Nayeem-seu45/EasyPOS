@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output, forwardRef } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { ControlValueAccessor, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
   selector: 'app-product-search',
@@ -9,8 +9,13 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => ProductSearchComponent),
-      multi: true,
+      multi: true
     },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => ProductSearchComponent),
+      multi: true
+    }
   ],
 })
 export class ProductSearchComponent implements ControlValueAccessor {
@@ -48,6 +53,7 @@ export class ProductSearchComponent implements ControlValueAccessor {
   @Input() selectOnFocus: boolean = false; // Select focused option
   @Input() searchMessage: string = null; // Text when search is active
   @Input() emptySelectionMessage: string = null; // Text for no filtering results
+  @Input() emptyAfterSelect: boolean = true; // Text for no filtering results
 
   // Appearance and Style
   @Input() style: {} = null; // Inline style for the component
@@ -132,6 +138,11 @@ export class ProductSearchComponent implements ControlValueAccessor {
     this.value = event.value;
     this.onChangeFn(this.value);
     this.onSelect.emit(event);
+    if(this.emptyAfterSelect){
+      setTimeout(() => {
+        this.handleClear();
+      }, 50);
+    }
   }
 
   handleUnselect(event: any): void {

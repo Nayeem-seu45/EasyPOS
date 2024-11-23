@@ -1,4 +1,5 @@
 ﻿using EasyPOS.Application.Features.ProductTransfers.Queries;
+using EasyPOS.Application.Features.StockManagement.Services;
 using EasyPOS.Domain.Common.Enums;
 
 namespace EasyPOS.Application.Features.ProductTransfers.Commands;
@@ -27,7 +28,7 @@ public record UpdateProductTransferCommand(
 
 internal sealed class UpdateProductTransferCommandHandler(
     IApplicationDbContext dbContext,
-    ICommonQueryService commonQueryService)
+    IStockService stockService)
     : ICommandHandler<UpdateProductTransferCommand>
 {
     public async Task<Result> Handle(UpdateProductTransferCommand request, CancellationToken cancellationToken)

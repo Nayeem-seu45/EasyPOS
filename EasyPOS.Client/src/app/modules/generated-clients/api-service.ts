@@ -29575,7 +29575,6 @@ export interface IProductTransferInfoModel {
 
 export class CreateProductTransferCommand implements ICreateProductTransferCommand {
     transferDate?: Date;
-    referenceNo?: string;
     fromWarehouseId?: string;
     toWarehouseId?: string;
     transferStatusId?: string;
@@ -29604,7 +29603,6 @@ export class CreateProductTransferCommand implements ICreateProductTransferComma
     init(_data?: any) {
         if (_data) {
             this.transferDate = _data["transferDate"] ? new Date(_data["transferDate"].toString()) : <any>undefined;
-            this.referenceNo = _data["referenceNo"];
             this.fromWarehouseId = _data["fromWarehouseId"];
             this.toWarehouseId = _data["toWarehouseId"];
             this.transferStatusId = _data["transferStatusId"];
@@ -29637,7 +29635,6 @@ export class CreateProductTransferCommand implements ICreateProductTransferComma
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["transferDate"] = this.transferDate ? formatDate(this.transferDate) : <any>undefined;
-        data["referenceNo"] = this.referenceNo;
         data["fromWarehouseId"] = this.fromWarehouseId;
         data["toWarehouseId"] = this.toWarehouseId;
         data["transferStatusId"] = this.transferStatusId;
@@ -29663,7 +29660,6 @@ export class CreateProductTransferCommand implements ICreateProductTransferComma
 
 export interface ICreateProductTransferCommand {
     transferDate?: Date;
-    referenceNo?: string;
     fromWarehouseId?: string;
     toWarehouseId?: string;
     transferStatusId?: string;

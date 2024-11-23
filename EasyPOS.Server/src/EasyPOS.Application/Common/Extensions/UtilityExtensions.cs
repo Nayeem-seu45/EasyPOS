@@ -37,6 +37,26 @@ public static class UtilityExtensions
         return properties.Select(prop => prop.Name);
     }
 
+    public static string GetDateTimeStampRef(string? prefix = null, string? postfix = null)
+    {
+        if (!string.IsNullOrWhiteSpace(prefix) && string.IsNullOrWhiteSpace(postfix))
+        {
+            return $"{prefix}{DateTime.Now:yyyyMMddhhmmssffff}";
+        }
+        else if (string.IsNullOrWhiteSpace(prefix) && !string.IsNullOrWhiteSpace(postfix))
+        {
+            return $"{DateTime.Now:yyyyMMddhhmmssffff}{postfix}";
+        }
+        else if (!string.IsNullOrWhiteSpace(prefix) && !string.IsNullOrWhiteSpace(postfix))
+        {
+            return $"{prefix}{DateTime.Now:yyyyMMddhhmmssffff}{postfix}";
+        }
+        else
+        {
+            return DateTime.Now.ToString("yyyyMMddhhmmssffff");
+        }
+    }
+
     public static List<SelectListModel> GetActiveInactiveSelectList() =>
         [
             new() {Id = 1, Name = "Active", Severity = "success"},

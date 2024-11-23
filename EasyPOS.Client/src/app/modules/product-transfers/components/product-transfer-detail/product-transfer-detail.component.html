@@ -8,23 +8,23 @@
           <app-input-date label="Date" formControlName="transferDate" [required]="true" />
         </div>
 
-        <div class="field col-12 md:col-4">
-          <app-input-text label="Reference No" formControlName="referenceNo" [required]="true" [readonly]="false" />
-          <app-validator-msg [control]="f['referenceNo']" />
+        <div class="field col-12 md:col-4" *ngIf="isEdit">
+          <app-input-text label="Reference No" formControlName="referenceNo" [disabled]="true" />
         </div>
 
         <div class="field col-12 md:col-4">
           <app-input-select label="From Warehouse" formControlName="fromWarehouseId"
-            [options]="optionsDataSources?.['warehousesSelectList']" [required]="true" />
+            [options]="optionsDataSources?.['warehousesSelectList']" [required]="true" (onChange)="onWarehouseChange($event)" [showClear]="false" />
+            <small class="validation-color" *ngIf="showWarehouseValidationMsg">Please select warehouse</small>
         </div>
         <div class="field col-12 md:col-4">
           <app-input-select label="To Warehouse" formControlName="toWarehouseId"
-            [options]="optionsDataSources?.['warehousesSelectList']" [required]="true" />
+            [options]="optionsDataSources?.['warehousesSelectList']" [required]="true" [showClear]="false" />
         </div>
 
         <div class="field col-12 md:col-4">
           <app-input-select label="Status" formControlName="transferStatusId"
-            [options]="optionsDataSources?.['transferStatusSelectList']" [required]="true" />
+            [options]="optionsDataSources?.['transferStatusSelectList']" [required]="true" [showClear]="false" />
         </div>
 
         <div class="mt-3 field col-12 md:col-4">
@@ -33,17 +33,16 @@
         </div>
 
         <!-- product select  -->
-        <div class="col-12">
+        <!-- <div class="col-12">
           <app-input-select label="" (onChange)="onProductSelect($event)" [optionValue]="null"
             [options]="optionsDataSources?.['productsSelectList']" [(ngModel)]="selectedProduct"
             [ngModelOptions]="{standalone: true}" />
-        </div>
-
-        <!-- <div class="col-12">
-          <app-input-select label="" (ngModelChange)="onProductSelect()" [optionValue]="null"
-            [options]="optionsDataSources?.['productsSelectList']" [(ngModel)]="selectedProduct"
-            [ngModelOptions]="{standalone: true}" />
         </div> -->
+
+        <div class="col-12">
+          <app-product-search #productSearch [suggestions]="suggestions" (onComplete)="searchProduct($event)" [showClear]="true"
+            (onSelect)="onProductSelect($event)" [forceSelection]="true" placeholder="Search Product by code or name"  />
+        </div>
 
         <div class="col-12">
           <p-table [value]="productTransferDetails.controls" [scrollable]="true" scrollHeight="600px">

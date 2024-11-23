@@ -1,20 +1,22 @@
 import { DatePipe } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { CommonConstants } from 'src/app/core/contants/common';
-import { DiscountType, ProductSelectListModel, ProductTransferDetailModel, ProductTransferModel, ProductTransfersClient, TaxMethod } from 'src/app/modules/generated-clients/api-service';
+import { DiscountType, GetProductSearchInStockSelectListQuery, ProductsClient, ProductSelectListModel, ProductTransferDetailModel, ProductTransferModel, ProductTransfersClient, TaxMethod } from 'src/app/modules/generated-clients/api-service';
 import { CustomDialogService } from 'src/app/shared/services/custom-dialog.service';
 import { ToastService } from 'src/app/shared/services/toast.service';
 import { CommonUtils } from 'src/app/shared/Utilities/common-utilities';
-import { Subscription } from 'rxjs';
+import { debounceTime, from, Subject, Subscription } from 'rxjs';
 import { UpdateProductTransferOrderDetailComponent } from '../update-product-transfer-order-detail/update-product-transfer-order-detail.component';
+import { AutoCompleteCompleteEvent } from 'primeng/autocomplete';
+import { ProductSearchComponent } from 'src/app/shared/components/product-search/product-search.component';
 
 @Component({
   selector: 'app-product-transfer-detail',
   templateUrl: './product-transfer-detail.component.html',
   styleUrl: './product-transfer-detail.component.scss',
-  providers: [ProductTransfersClient, DatePipe]
+  providers: [ProductTransfersClient, DatePipe, ProductsClient]
 })
 export class ProductTransferDetailComponent implements OnInit {
   emptyGuid = CommonConstants.EmptyGuid;
@@ -30,7 +32,7 @@ export class ProductTransferDetailComponent implements OnInit {
   subTotal: number = 0;
 
   // Grand total Section
-  totalItems: string = '0'; 
+  totalItems: string = '0';
   orderTaxAmount: number = 0;
   orderDiscountAmount: number = 0;
   shippingCostAmount: number = 0;
@@ -41,7 +43,11 @@ export class ProductTransferDetailComponent implements OnInit {
   DiscountType = DiscountType;
 
   private closeDialogsubscription: Subscription;
-  
+
+  get isEdit() {
+    return this.id && this.id !== CommonConstants.EmptyGuid;
+  }
+
   get productTransferDetails(): FormArray {
     return this.form.get('productTransferDetails') as FormArray;
   }
@@ -56,7 +62,8 @@ export class ProductTransferDetailComponent implements OnInit {
 
   constructor(private entityClient: ProductTransfersClient,
     private activatedRoute: ActivatedRoute,
-    private customDialogService: CustomDialogService
+    private customDialogService: CustomDialogService,
+    private productsClient: ProductsClient
   ) { }
 
   ngOnInit(): void {
@@ -67,6 +74,11 @@ export class ProductTransferDetailComponent implements OnInit {
 
     this.getById(this.id || this.emptyGuid)
     this.initializeFormGroup();
+
+    // Subscribe to the searchSubject for debounced search
+    this.searchSubject.pipe(debounceTime(300)).subscribe((query) => {
+      this.fetchProductSuggestions(query);
+    });
   }
 
   ngOnDestroy() {
@@ -75,6 +87,94 @@ export class ProductTransferDetailComponent implements OnInit {
       this.closeDialogsubscription.unsubscribe();
     }
   }
+
+  //#region AutoComplete Search
+  suggestions: any[] | undefined;
+  private searchSubject = new Subject<string>();
+  showWarehouseValidationMsg: boolean = false;
+  @ViewChild('productSearch') productSearch: ProductSearchComponent;
+
+  onWarehouseChange(event: any) {
+    if (event && event !== CommonConstants.EmptyGuid) {
+      this.showWarehouseValidationMsg = false; // Hide the validation message when a warehouse is selected
+    }
+  }
+
+  /**
+  * Handles product search in autocomplete
+  */
+  searchProduct(event: AutoCompleteCompleteEvent) {
+    console.log(event)
+    const query = event.query?.trim();
+    const fromWarehouseId = this.f['fromWarehouseId']?.value;
+    console.log('from searchProduct: ', fromWarehouseId)
+    if (!fromWarehouseId || fromWarehouseId === CommonConstants.EmptyGuid) {
+      this.showWarehouseValidationMsg = true;
+      this.suggestions = [];
+      return;
+    }
+
+    this.showWarehouseValidationMsg = false;
+
+    if (query) {
+      this.searchSubject.next(query); // Trigger debounced search
+    } else {
+      this.suggestions = [];
+    }
+  }
+
+  onProductSelect(selectedEvent: any) {
+    const selectedProduct = selectedEvent.value;
+
+    if (selectedProduct.value) {
+      this.addProductToProductTransferDetails(selectedProduct.value);
+      this.suggestions = [];
+
+      setTimeout(() => {
+        this.productSearch.handleClear();
+      }, 100);
+
+    }
+  }
+
+  /**
+   * Fetch product suggestions from server
+   */
+  fetchProductSuggestions(query: string) {
+    const fromWarehouseId = this.f['fromWarehouseId']?.value;
+    console.log(fromWarehouseId)
+    console.log(query)
+
+    const searchCommand = new GetProductSearchInStockSelectListQuery();
+    searchCommand.warehouseId = fromWarehouseId;
+    searchCommand.query = query;
+    this.productsClient.searchProductInStocks(searchCommand).subscribe({
+      next: (response) => {
+        this.suggestions = response.map((product) => ({
+          label: `${product.name} (${product.code})`,
+          value: product
+        }));
+
+        // Automatically add product to the table if an exact match exists
+        const exactMatch = response.find(
+          (product) =>
+            product.name?.toLowerCase() === query.toLowerCase() ||
+            product.code?.toLowerCase() === query.toLowerCase()
+        );
+
+        if (exactMatch) {
+          this.addProductToProductTransferDetails(exactMatch);
+          this.suggestions = [];
+        }
+
+      }, error: (error) => {
+        console.error('Error fetching products:', error);
+      }
+    });
+  }
+
+
+  //#endregion
 
   // #region CRUDS
 
@@ -163,7 +263,7 @@ export class ProductTransferDetailComponent implements OnInit {
       productTransferDetails: this.fb.array([])
     });
   }
-  
+
   private addProductTransferDetailFormGroup(): FormGroup {
     return this.fb.group({
       id: [CommonConstants.EmptyGuid],
@@ -196,11 +296,11 @@ export class ProductTransferDetailComponent implements OnInit {
   // #region Add or Update ProductTransferDetail
 
 
-  onProductSelect(selectedProduct: ProductSelectListModel) {
-    if (selectedProduct) {
-      this.addProductToProductTransferDetails(selectedProduct);
-    }
-  }
+  // onProductSelect(selectedProduct: ProductSelectListModel) {
+  //   if (selectedProduct) {
+  //     this.addProductToProductTransferDetails(selectedProduct);
+  //   }
+  // }
 
   removeProductTransferDetail(index: number) {
 
@@ -215,7 +315,7 @@ export class ProductTransferDetailComponent implements OnInit {
 
   private addProductToProductTransferDetails(product: ProductSelectListModel) {
     const productFormGroup = this.addProductTransferDetailFormGroup();
-    const quantity = 1; 
+    const quantity = 1;
     // const totalDiscountAmount = (product.discountAmount || 0) * quantity;
 
     // Set the values in the form group
@@ -226,10 +326,10 @@ export class ProductTransferDetailComponent implements OnInit {
       productUnitCost: product.costPrice,
       productUnitPrice: product.salePrice,
       productUnitId: product.saleUnit,
-      productUnitDiscount: product.discountAmount  || 0,
+      productUnitDiscount: product.discountAmount || 0,
       quantity: quantity,
       discountType: product.discountType || DiscountType.Fixed,
-      discountRate: product.discountRate || 0, 
+      discountRate: product.discountRate || 0,
       // discountAmount: totalDiscountAmount,
       taxMethod: product.taxMethod,
       taxRate: product.taxRate || 0,
@@ -268,29 +368,29 @@ export class ProductTransferDetailComponent implements OnInit {
     let productUnitDiscount: number = 0;
     let totalDiscountAmount: number = 0;
 
-    if(productTransferDetail.discountType === DiscountType.Fixed){
+    if (productTransferDetail.discountType === DiscountType.Fixed) {
       productUnitDiscount = productTransferDetail.productUnitDiscount;
-    } else if(productTransferDetail.discountType === DiscountType.Percentage){
+    } else if (productTransferDetail.discountType === DiscountType.Percentage) {
       productUnitDiscount = (productTransferDetail.productUnitPrice * productTransferDetail.discountRate) / 100;
     }
 
     totalDiscountAmount = parseFloat((productUnitDiscount * productTransferDetail.quantity).toFixed(2));
     const taxRateDecimal = productTransferDetail.taxRate / 100;
-  
+
     if (productTransferDetail.taxMethod === TaxMethod.Exclusive) {
       netUnitCost = productTransferDetail.productUnitCost - (productUnitDiscount || 0);
       const taxableTotalPrice = netUnitCost * productTransferDetail.quantity;
       taxAmount = taxableTotalPrice * taxRateDecimal;
       totalPrice = taxableTotalPrice + taxAmount;
-    } 
-    else if(productTransferDetail.taxMethod === TaxMethod.Inclusive){
+    }
+    else if (productTransferDetail.taxMethod === TaxMethod.Inclusive) {
       const priceAfterDiscount = productTransferDetail.productUnitCost - (productUnitDiscount || 0);
       const taxRateFactor = 1 + taxRateDecimal;
       netUnitCost = priceAfterDiscount / taxRateFactor;
       taxAmount = (netUnitCost * productTransferDetail.quantity) * (productTransferDetail.taxRate / 100);
       totalPrice = (netUnitCost * productTransferDetail.quantity) + taxAmount;
     }
-  
+
     this.productTransferDetails.at(index).patchValue({
       productUnitDiscount: parseFloat(productUnitDiscount.toFixed(2)),
       netUnitCost: parseFloat(netUnitCost.toFixed(2)),
@@ -298,15 +398,15 @@ export class ProductTransferDetailComponent implements OnInit {
       taxAmount: parseFloat(taxAmount.toFixed(2)),
       totalPrice: parseFloat(totalPrice.toFixed(2))
     }, { emitEvent: false });
-  
+
     this.calculateFooterSection();
     this.calculateGrandTotal();
   }
 
-  updateProductTransferDetail(index: number){
+  updateProductTransferDetail(index: number) {
     console.log(index)
 
-    const productTransferDetailFormGroup = this.productTransferDetails.at(index) as FormGroup; 
+    const productTransferDetailFormGroup = this.productTransferDetails.at(index) as FormGroup;
     const productTransferDetail = productTransferDetailFormGroup.value;
     this.customDialogService.open<{ productTransferDetail: ProductTransferDetailModel; optionsDataSources: any }>(
       UpdateProductTransferOrderDetailComponent,
@@ -321,7 +421,7 @@ export class ProductTransferDetailComponent implements OnInit {
           }
 
           this.closeDialogsubscription = this.customDialogService.closeDataSubject.subscribe((updatedProductTransferDetail: ProductTransferDetailModel) => {
-           
+
             productTransferDetailFormGroup.patchValue({
               productUnitCost: updatedProductTransferDetail.productUnitCost,
               productUnitId: updatedProductTransferDetail.productUnitId,
@@ -330,12 +430,12 @@ export class ProductTransferDetailComponent implements OnInit {
               discountType: updatedProductTransferDetail.discountType,
               discountRate: updatedProductTransferDetail.discountRate,
               productUnitDiscount: updatedProductTransferDetail.productUnitDiscount,
-            }, {emitEvent: false});
+            }, { emitEvent: false });
             const updateProductTransferDetailValue = productTransferDetailFormGroup.value;
             this.calculateTaxAndTotalPrice(index, updateProductTransferDetailValue);
-    
+
           });
-        } 
+        }
       });
 
   }
@@ -349,9 +449,9 @@ export class ProductTransferDetailComponent implements OnInit {
       .subscribe((succeeded) => {
         if (succeeded) {
           this.closeDialogsubscription = this.customDialogService.closeDataSubject.subscribe((updatedProductTransferDetail: ProductTransferDetailModel) => {
-            const productTransferDetailFormGroup = this.productTransferDetails.at(index) as FormGroup; 
+            const productTransferDetailFormGroup = this.productTransferDetails.at(index) as FormGroup;
 
-           
+
             productTransferDetailFormGroup.patchValue({
               productUnitCost: updatedProductTransferDetail.productUnitCost,
               productUnitId: updatedProductTransferDetail.productUnitId,
@@ -360,21 +460,21 @@ export class ProductTransferDetailComponent implements OnInit {
               discountType: updatedProductTransferDetail.discountType,
               discountRate: updatedProductTransferDetail.discountRate,
               productUnitDiscount: updatedProductTransferDetail.productUnitDiscount,
-            }, {emitEvent: false});
+            }, { emitEvent: false });
             const updateProductTransferDetailValue = productTransferDetailFormGroup.value;
             this.calculateTaxAndTotalPrice(index, updateProductTransferDetailValue);
-    
+
           });
-        } 
+        }
       });
   }
-  
+
 
   // #endregion
 
   // #region ProductTransferOrder Footer
 
-  calculateFooterSection(){
+  calculateFooterSection() {
     this.totalQuantity = this.productTransferDetails.controls.reduce((acc, curr) => acc + (curr.get('quantity').value || 0), 0);
     this.totalDiscount = parseFloat(this.productTransferDetails.controls.reduce((acc, curr) => acc + (curr.get('discountAmount').value || 0), 0).toFixed(2));
     this.totalTaxAmount = parseFloat(this.productTransferDetails.controls.reduce((acc, curr) => acc + (curr.get('taxAmount').value || 0), 0).toFixed(2));
@@ -407,7 +507,7 @@ export class ProductTransferDetailComponent implements OnInit {
 
   private calculateGrandTotal() {
     const taxRate = parseFloat(this.f['taxRate'].value || 0);
-    
+
     this.orderDiscountAmount = parseFloat(this.f['discountAmount'].value || 0);
     this.shippingCostAmount = parseFloat(this.f['shippingCost'].value || 0);
 

@@ -15,4 +15,11 @@ internal interface IStockService
         decimal quantity,
         bool isAddition = false,
         CancellationToken cancellationToken = default);
+
+    Task<Result> AdjustStockOnProductTransferAsync(
+        Guid productId,
+        Guid fromWarehouseId,
+        Guid toWarehouseId,
+        decimal quantity,
+        CancellationToken cancellationToken = default);
 }
