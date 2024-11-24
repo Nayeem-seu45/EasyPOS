@@ -21,7 +21,7 @@ export class LeaveTypeDetailComponent extends BaseDetailComponent {
       name: [null],
       code: [null],
       totalLeaveDays: [null],
-      maxConsecutiveAllowed: [null],
+      maxConsecutiveDays: [null],
       isSandwichAllowed: [null]
 
     });

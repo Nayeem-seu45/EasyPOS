@@ -787,7 +787,7 @@ namespace EasyPOS.Infrastructure.Persistence.Migrations
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("MaxConsecutiveAllowed")
+                    b.Property<int>("MaxConsecutiveDays")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")

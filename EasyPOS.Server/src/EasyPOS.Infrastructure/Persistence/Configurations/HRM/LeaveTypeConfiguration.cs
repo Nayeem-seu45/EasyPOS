@@ -20,6 +20,9 @@ public class LeaveTypeConfiguration : IEntityTypeConfiguration<LeaveType>
             .HasMaxLength(10)
             .IsRequired(false);
 
+        builder.Property(x => x.MaxConsecutiveDays)
+            .IsRequired(false);
+
         //builder.Ignore(e => e.DomainEvents);
     }
 }

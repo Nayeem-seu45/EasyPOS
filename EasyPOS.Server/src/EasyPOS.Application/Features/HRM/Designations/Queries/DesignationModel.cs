@@ -9,8 +9,8 @@ public record DesignationModel
     public bool Status {get;set;} 
     public Guid DepartmentId {get;set;} 
     public string? Department {get;set;} 
-    public Guid? ParentId {get;set;} 
-
+    public Guid? ParentId {get;set;}
+    public string? ActiveStatus { get; set; }
 
     public Dictionary<string, object> OptionsDataSources { get; set; } = [];
 }

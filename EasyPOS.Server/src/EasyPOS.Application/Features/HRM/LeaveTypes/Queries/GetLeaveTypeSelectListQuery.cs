@@ -25,7 +25,7 @@ internal sealed class GetLeaveTypeSelectListQueryHandler(ISqlConnectionFactory s
                 t.Name AS {nameof(LeaveTypeSelectListModel.Name)},
                 t.Code AS {nameof(LeaveTypeSelectListModel.Code)},
                 t.TotalLeaveDays AS {nameof(LeaveTypeSelectListModel.TotalLeaveDays)},
-                t.MaxConsecutiveAllowed AS {nameof(LeaveTypeSelectListModel.MaxConsecutiveAllowed)},
+                t.MaxConsecutiveDays AS {nameof(LeaveTypeSelectListModel.MaxConsecutiveDays)},
                 t.IsSandwichAllowed AS {nameof(LeaveTypeSelectListModel.IsSandwichAllowed)}
             FROM dbo.LeaveTypes AS t
             WHERE 1 = 1

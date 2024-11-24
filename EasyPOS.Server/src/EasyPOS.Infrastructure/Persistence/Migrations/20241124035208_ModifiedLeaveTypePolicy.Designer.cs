@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EasyPOS.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241119193542_StockAdded")]
-    partial class StockAdded
+    [Migration("20241124035208_ModifiedLeaveTypePolicy")]
+    partial class ModifiedLeaveTypePolicy
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -787,7 +787,7 @@ namespace EasyPOS.Infrastructure.Persistence.Migrations
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("MaxConsecutiveDays")
+                    b.Property<int?>("MaxConsecutiveDays")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -1797,8 +1797,7 @@ namespace EasyPOS.Infrastructure.Persistence.Migrations
                         .HasColumnType("decimal(4, 2)")
                         .HasDefaultValue(0m);
 
-                    b.Property<Guid?>("WarehouseId")
-                        .IsRequired()
+                    b.Property<Guid>("WarehouseId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");

@@ -5,7 +5,7 @@ public record UpdateLeaveTypeCommand(
     string Name, 
     string? Code, 
     int TotalLeaveDays, 
-    int MaxConsecutiveAllowed, 
+    int? MaxConsecutiveDays, 
     bool IsSandwichAllowed
     ): ICacheInvalidatorCommand
 {

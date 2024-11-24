@@ -1,4 +1,5 @@
 ﻿using EasyPOS.Application.Features.HRM.LeaveTypes.Commands;
+using EasyPOS.Application.Features.HRM.LeaveTypes.Models;
 using EasyPOS.Application.Features.HRM.LeaveTypes.Queries;
 
 namespace EasyPOS.WebApi.Endpoints.HRM;

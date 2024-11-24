@@ -19469,6 +19469,7 @@ export class DesignationModel implements IDesignationModel {
     departmentId?: string;
     department?: string | undefined;
     parentId?: string | undefined;
+    activeStatus?: string | undefined;
     optionsDataSources?: { [key: string]: any; };
 
     constructor(data?: IDesignationModel) {
@@ -19490,6 +19491,7 @@ export class DesignationModel implements IDesignationModel {
             this.departmentId = _data["departmentId"];
             this.department = _data["department"];
             this.parentId = _data["parentId"];
+            this.activeStatus = _data["activeStatus"];
             if (_data["optionsDataSources"]) {
                 this.optionsDataSources = {} as any;
                 for (let key in _data["optionsDataSources"]) {
@@ -19517,6 +19519,7 @@ export class DesignationModel implements IDesignationModel {
         data["departmentId"] = this.departmentId;
         data["department"] = this.department;
         data["parentId"] = this.parentId;
+        data["activeStatus"] = this.activeStatus;
         if (this.optionsDataSources) {
             data["optionsDataSources"] = {};
             for (let key in this.optionsDataSources) {
@@ -19537,6 +19540,7 @@ export interface IDesignationModel {
     departmentId?: string;
     department?: string | undefined;
     parentId?: string | undefined;
+    activeStatus?: string | undefined;
     optionsDataSources?: { [key: string]: any; };
 }
 
@@ -32646,7 +32650,7 @@ export class LeaveTypeModel implements ILeaveTypeModel {
     name?: string;
     code?: string | undefined;
     totalLeaveDays?: number;
-    maxConsecutiveAllowed?: number;
+    maxConsecutiveDays?: number | undefined;
     isSandwichAllowed?: boolean;
     sandwichAllowed?: string;
     optionsDataSources?: { [key: string]: any; };
@@ -32666,7 +32670,7 @@ export class LeaveTypeModel implements ILeaveTypeModel {
             this.name = _data["name"];
             this.code = _data["code"];
             this.totalLeaveDays = _data["totalLeaveDays"];
-            this.maxConsecutiveAllowed = _data["maxConsecutiveAllowed"];
+            this.maxConsecutiveDays = _data["maxConsecutiveDays"];
             this.isSandwichAllowed = _data["isSandwichAllowed"];
             this.sandwichAllowed = _data["sandwichAllowed"];
             if (_data["optionsDataSources"]) {
@@ -32692,7 +32696,7 @@ export class LeaveTypeModel implements ILeaveTypeModel {
         data["name"] = this.name;
         data["code"] = this.code;
         data["totalLeaveDays"] = this.totalLeaveDays;
-        data["maxConsecutiveAllowed"] = this.maxConsecutiveAllowed;
+        data["maxConsecutiveDays"] = this.maxConsecutiveDays;
         data["isSandwichAllowed"] = this.isSandwichAllowed;
         data["sandwichAllowed"] = this.sandwichAllowed;
         if (this.optionsDataSources) {
@@ -32711,7 +32715,7 @@ export interface ILeaveTypeModel {
     name?: string;
     code?: string | undefined;
     totalLeaveDays?: number;
-    maxConsecutiveAllowed?: number;
+    maxConsecutiveDays?: number | undefined;
     isSandwichAllowed?: boolean;
     sandwichAllowed?: string;
     optionsDataSources?: { [key: string]: any; };
@@ -32754,7 +32758,7 @@ export class CreateLeaveTypeCommand implements ICreateLeaveTypeCommand {
     name?: string;
     code?: string | undefined;
     totalLeaveDays?: number;
-    maxConsecutiveAllowed?: number;
+    maxConsecutiveDays?: number | undefined;
     isSandwichAllowed?: boolean;
     cacheKey?: string;
 
@@ -32772,7 +32776,7 @@ export class CreateLeaveTypeCommand implements ICreateLeaveTypeCommand {
             this.name = _data["name"];
             this.code = _data["code"];
             this.totalLeaveDays = _data["totalLeaveDays"];
-            this.maxConsecutiveAllowed = _data["maxConsecutiveAllowed"];
+            this.maxConsecutiveDays = _data["maxConsecutiveDays"];
             this.isSandwichAllowed = _data["isSandwichAllowed"];
             this.cacheKey = _data["cacheKey"];
         }
@@ -32790,7 +32794,7 @@ export class CreateLeaveTypeCommand implements ICreateLeaveTypeCommand {
         data["name"] = this.name;
         data["code"] = this.code;
         data["totalLeaveDays"] = this.totalLeaveDays;
-        data["maxConsecutiveAllowed"] = this.maxConsecutiveAllowed;
+        data["maxConsecutiveDays"] = this.maxConsecutiveDays;
         data["isSandwichAllowed"] = this.isSandwichAllowed;
         data["cacheKey"] = this.cacheKey;
         return data;
@@ -32801,7 +32805,7 @@ export interface ICreateLeaveTypeCommand {
     name?: string;
     code?: string | undefined;
     totalLeaveDays?: number;
-    maxConsecutiveAllowed?: number;
+    maxConsecutiveDays?: number | undefined;
     isSandwichAllowed?: boolean;
     cacheKey?: string;
 }
@@ -32811,7 +32815,7 @@ export class UpdateLeaveTypeCommand implements IUpdateLeaveTypeCommand {
     name?: string;
     code?: string | undefined;
     totalLeaveDays?: number;
-    maxConsecutiveAllowed?: number;
+    maxConsecutiveDays?: number | undefined;
     isSandwichAllowed?: boolean;
     cacheKey?: string;
 
@@ -32830,7 +32834,7 @@ export class UpdateLeaveTypeCommand implements IUpdateLeaveTypeCommand {
             this.name = _data["name"];
             this.code = _data["code"];
             this.totalLeaveDays = _data["totalLeaveDays"];
-            this.maxConsecutiveAllowed = _data["maxConsecutiveAllowed"];
+            this.maxConsecutiveDays = _data["maxConsecutiveDays"];
             this.isSandwichAllowed = _data["isSandwichAllowed"];
             this.cacheKey = _data["cacheKey"];
         }
@@ -32849,7 +32853,7 @@ export class UpdateLeaveTypeCommand implements IUpdateLeaveTypeCommand {
         data["name"] = this.name;
         data["code"] = this.code;
         data["totalLeaveDays"] = this.totalLeaveDays;
-        data["maxConsecutiveAllowed"] = this.maxConsecutiveAllowed;
+        data["maxConsecutiveDays"] = this.maxConsecutiveDays;
         data["isSandwichAllowed"] = this.isSandwichAllowed;
         data["cacheKey"] = this.cacheKey;
         return data;
@@ -32861,7 +32865,7 @@ export interface IUpdateLeaveTypeCommand {
     name?: string;
     code?: string | undefined;
     totalLeaveDays?: number;
-    maxConsecutiveAllowed?: number;
+    maxConsecutiveDays?: number | undefined;
     isSandwichAllowed?: boolean;
     cacheKey?: string;
 }

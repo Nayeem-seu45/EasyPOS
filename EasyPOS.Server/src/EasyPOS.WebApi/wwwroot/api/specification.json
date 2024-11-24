@@ -13022,6 +13022,10 @@
             "format": "guid",
             "nullable": true
           },
+          "activeStatus": {
+            "type": "string",
+            "nullable": true
+          },
           "optionsDataSources": {
             "type": "object",
             "additionalProperties": {}
@@ -20853,9 +20857,10 @@
             "type": "integer",
             "format": "int32"
           },
-          "maxConsecutiveAllowed": {
+          "maxConsecutiveDays": {
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "nullable": true
           },
           "isSandwichAllowed": {
             "type": "boolean"
@@ -20900,9 +20905,10 @@
             "type": "integer",
             "format": "int32"
           },
-          "maxConsecutiveAllowed": {
+          "maxConsecutiveDays": {
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "nullable": true
           },
           "isSandwichAllowed": {
             "type": "boolean"
@@ -20934,9 +20940,10 @@
             "type": "integer",
             "format": "int32"
           },
-          "maxConsecutiveAllowed": {
+          "maxConsecutiveDays": {
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "nullable": true
           },
           "isSandwichAllowed": {
             "type": "boolean"

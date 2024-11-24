@@ -1,4 +1,6 @@
-﻿namespace EasyPOS.Application.Features.HRM.LeaveTypes.Queries;
+﻿using EasyPOS.Application.Features.HRM.LeaveTypes.Models;
+
+namespace EasyPOS.Application.Features.HRM.LeaveTypes.Queries;
 
 public record GetLeaveTypeByIdQuery(Guid Id) : ICacheableQuery<LeaveTypeModel>
 {
@@ -27,7 +29,7 @@ internal sealed class GetLeaveTypeByIdQueryHandler(ISqlConnectionFactory sqlConn
                 t.Name AS {nameof(LeaveTypeModel.Name)},
                 t.Code AS {nameof(LeaveTypeModel.Code)},
                 t.TotalLeaveDays AS {nameof(LeaveTypeModel.TotalLeaveDays)},
-                t.MaxConsecutiveAllowed AS {nameof(LeaveTypeModel.MaxConsecutiveAllowed)},
+                t.MaxConsecutiveDays AS {nameof(LeaveTypeModel.MaxConsecutiveDays)},
                 t.IsSandwichAllowed AS {nameof(LeaveTypeModel.IsSandwichAllowed)}
             FROM dbo.LeaveTypes AS t
             WHERE t.Id = @Id

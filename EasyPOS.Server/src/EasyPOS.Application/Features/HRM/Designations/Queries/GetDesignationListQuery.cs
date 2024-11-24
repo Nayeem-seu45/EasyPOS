@@ -1,4 +1,6 @@
-﻿namespace EasyPOS.Application.Features.HRM.Designations.Queries;
+﻿using EasyPOS.Application.Features.HRM.Departments.Queries;
+
+namespace EasyPOS.Application.Features.HRM.Designations.Queries;
 
 [Authorize(Policy = Permissions.Designations.View)]
 public record GetDesignationListQuery 
@@ -25,7 +27,8 @@ internal sealed class GetDesignationQueryHandler(ISqlConnectionFactory sqlConnec
                 t.Status AS {nameof(DesignationModel.Status)},
                 t.DepartmentId AS {nameof(DesignationModel.DepartmentId)},
                 t.ParentId AS {nameof(DesignationModel.ParentId)},
-                d.Name AS {nameof(DesignationModel.Department)}
+                d.Name AS {nameof(DesignationModel.Department)},
+                IIF(t.Status = 1, 'Active', 'Inactive') AS {nameof(DesignationModel.ActiveStatus)}         
             FROM dbo.Designations AS t
             LEFT JOIN dbo.Departments AS d ON d.Id = t.DepartmentId
             WHERE 1 = 1
