@@ -56,3 +56,12 @@ public enum Gender
     Female = 118002,
     Other = 118003
 }
+
+public enum LeaveStatus
+{
+    Drafted = 12001,
+    Submitted = 12002,
+    Forwarded = 12003,
+    Approved = 12004,
+    Rejected = 12005
+}

@@ -45,7 +45,8 @@ export class EmployeeDetailComponent extends BaseDetailComponent {
       mobileNo: [null],
       country: [null],
       city: [null],
-      address: [null]
+      address: [null],
+      leaveTypes: [null]
 
     });
   }

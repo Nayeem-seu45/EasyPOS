@@ -16,6 +16,11 @@
         <p-tabPanel header="Contact" leftIcon="pi pi-address-book">
           <ng-container *ngTemplateOutlet="contactTab"></ng-container>
         </p-tabPanel>
+
+         <!-- Leave Tab -->
+         <p-tabPanel header="Leave" leftIcon="pi pi-sign-out">
+          <ng-container *ngTemplateOutlet="leave"></ng-container>
+        </p-tabPanel>
       </p-tabView>
     </div>
 
@@ -109,4 +114,15 @@
       </div>
     </div>
   </ng-template>
+
+  <ng-template #leave>
+    <div [formGroup]="form">
+      <div class="p-fluid p-formgrid grid">
+        <div class="field col-12 md:col-6">
+          <app-input-multiselect label="Leave Type" formControlName="leaveTypes" [options]="optionsDataSources?.['leaveTypeSelectList']" [required]="false" />
+        </div>
+      </div>
+    </div>
+  </ng-template>
+  
 </div>

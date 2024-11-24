@@ -26,6 +26,8 @@ public record EmployeeModel
     public string? Designation { get; set; }
     public string? WorkingShift { get; set; }
 
+    public List<Guid> LeaveTypes { get; set; } = [];
+
     public Dictionary<string, object> OptionsDataSources { get; set; } = [];
 }
 

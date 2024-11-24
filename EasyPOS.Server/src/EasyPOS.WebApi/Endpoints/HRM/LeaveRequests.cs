@@ -58,10 +58,18 @@ public class LeaveRequests : EndpointGroupBase
             AllowCacheList: true)
         );
 
+        var leaveStatusSelectList = await sender.Send(new GetSelectListQuery(
+            Sql: SelectListSqls.GetLookupDetailSelectListByDevCodeSql,
+            Parameters: new {DevCode = (int)LookupDevCode.LeaveStatus },
+            Key: $"{CacheKeys.LookupDetail}_{LookupDevCode.LeaveStatus}",
+            AllowCacheList: true)
+        );
+
         var leaveTypeSelectList = await sender.Send(new GetLeaveTypeSelectListQuery(CacheAllowed: false));
 
         result.Value.OptionsDataSources.Add("employeesSelectList", employeesSelectList.Value);
         result.Value.OptionsDataSources.Add("leaveTypeSelectList", leaveTypeSelectList.Value);
+        result.Value.OptionsDataSources.Add("leaveStatusSelectList", leaveStatusSelectList.Value);
 
         return TypedResults.Ok(result.Value);
     }

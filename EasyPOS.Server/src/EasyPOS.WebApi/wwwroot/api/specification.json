@@ -13247,6 +13247,13 @@
             "type": "string",
             "nullable": true
           },
+          "leaveTypes": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "guid"
+            }
+          },
           "optionsDataSources": {
             "type": "object",
             "additionalProperties": {}
@@ -13346,6 +13353,13 @@
             "type": "string",
             "nullable": true
           },
+          "leaveTypes": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "guid"
+            }
+          },
           "cacheKey": {
             "type": "string"
           }
@@ -13434,6 +13448,13 @@
           "address": {
             "type": "string",
             "nullable": true
+          },
+          "leaveTypes": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "guid"
+            }
           },
           "cacheKey": {
             "type": "string"

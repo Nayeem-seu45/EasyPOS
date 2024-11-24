@@ -6,7 +6,7 @@ public record GetEmployeeByIdQuery(Guid Id) : ICacheableQuery<EmployeeModel>
     public string CacheKey => $"{CacheKeys.Employee}_{Id}";
     [JsonIgnore]
     public TimeSpan? Expiration => null;
-    public bool? AllowCache => true;
+    public bool? AllowCache => false;
 }
 
 internal sealed class GetEmployeeByIdQueryHandler(ISqlConnectionFactory sqlConnection)
@@ -40,13 +40,40 @@ internal sealed class GetEmployeeByIdQueryHandler(ISqlConnectionFactory sqlConne
                 t.MobileNo AS {nameof(EmployeeModel.MobileNo)},
                 t.Country AS {nameof(EmployeeModel.Country)},
                 t.City AS {nameof(EmployeeModel.City)},
-                t.Address AS {nameof(EmployeeModel.Address)}
+                t.Address AS {nameof(EmployeeModel.Address)},
+                elt.LeaveTypeId
             FROM dbo.Employees AS t
+            LEFT JOIN dbo.EmployeeLeaveTypes AS elt ON elt.EmployeeId = t.Id
             WHERE t.Id = @Id
             """;
 
+        var employeeDictionary = new Dictionary<Guid, EmployeeModel>();
 
-        return await connection.QueryFirstOrDefaultAsync<EmployeeModel>(sql, new { request.Id });
+        var result = await connection.QueryAsync<EmployeeModel, Guid, EmployeeModel>(
+            sql,
+            (employee, leaveTypeId) =>
+            {
+                if (!employeeDictionary.TryGetValue(employee.Id, out var employeeEntry))
+                {
+                    employeeEntry = employee;
+                    employeeEntry.LeaveTypes = [];
+                    employeeDictionary[employee.Id] = employeeEntry;
+                }
+
+                if (leaveTypeId != Guid.Empty)
+                {
+                    employeeEntry.LeaveTypes.Add(leaveTypeId);
+                }
+
+                return employeeEntry;
+            },
+            new { request.Id },
+            splitOn: "LeaveTypeId"
+        );
+
+        var employee = employeeDictionary.Values.FirstOrDefault();
+
+        return employee;
     }
 }
 

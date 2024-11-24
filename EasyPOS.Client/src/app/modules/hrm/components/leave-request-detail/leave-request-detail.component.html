@@ -17,15 +17,17 @@
       </div>
       <div class="field col-12 md:col-4">
         <app-input-number label="Total Days" formControlName="totalDays" textAlign="right" [showButtons]="false"
+          [required]="false" [readonly]="true" />
+      </div>
+      <div class="field col-12 md:col-6">
+        <app-input-select label="Status" formControlName="statusId" [options]="optionsDataSources?.['leaveStatusSelectList']"
           [required]="false" />
       </div>
       <div class="field col-12 md:col-6">
-        <app-input-select label="Status Id" formControlName="statusId" [options]="optionsDataSources?.['leaveTypeSelectList']"
-          [required]="false" />
-      </div>
-      <div class="field col-12 md:col-6">
-        <app-input-text label="Attachment Url" formControlName="attachmentUrl" [required]="false" [readonly]="false" />
-        <app-validator-msg [control]="f['attachmenturl']" />
+        <div class="field col-12">
+          <app-input-file-adv [maxFileSize]="100000000" mode="basic" location="images"  />
+        </div>
+
       </div>
       <div class="field col-12 md:col-12">
         <app-input-textarea label="Reason" formControlName="reason" [required]="false" [readonly]="false" />

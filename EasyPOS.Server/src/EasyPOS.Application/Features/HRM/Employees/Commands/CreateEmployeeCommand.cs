@@ -1,4 +1,5 @@
 ﻿using EasyPOS.Domain.HRM;
+using static EasyPOS.Application.Common.Security.Permissions;
 
 namespace EasyPOS.Application.Features.HRM.Employees.Commands;
 
@@ -19,8 +20,9 @@ public record CreateEmployeeCommand(
     string? MobileNo, 
     string? Country, 
     string? City, 
-    string? Address
-    ): ICacheInvalidatorCommand<Guid>
+    string? Address,
+    List<Guid> LeaveTypes
+    ) : ICacheInvalidatorCommand<Guid>
 {
     public string CacheKey => CacheKeys.Employee;
 }
@@ -31,12 +33,34 @@ internal sealed class CreateEmployeeCommandHandler(
 {
     public async Task<Result<Guid>> Handle(CreateEmployeeCommand request, CancellationToken cancellationToken)
     {
-       var entity = request.Adapt<Employee>();
+        // Generate a new ID for the employee if not already set.
+        var employeeId = Guid.NewGuid();
 
-       dbContext.Employees.Add(entity);
+        // Adapt the request to an Employee entity and set the generated Id.
+        var entity = request.Adapt<Employee>();
+        entity.Id = employeeId;
 
-       await dbContext.SaveChangesAsync(cancellationToken);
+        // Add the Employee entity to the database.
+        dbContext.Employees.Add(entity);
 
-       return  entity.Id;
+        // Add leave types to the Employee if provided.
+        if (request.LeaveTypes.Any())
+        {
+            var leaveTypes = MapLeaveTypesToEmployee(request.LeaveTypes, employeeId);
+            dbContext.EmployeeLeaveTypes.AddRange(leaveTypes);
+        }
+
+        await dbContext.SaveChangesAsync(cancellationToken);
+
+        return entity.Id;
+    }
+
+    private static IEnumerable<EmployeeLeaveType> MapLeaveTypesToEmployee(List<Guid> leaveTypes, Guid employeeId)
+    {
+        return leaveTypes.Select(leaveTypeId => new EmployeeLeaveType
+        {
+            EmployeeId = employeeId,
+            LeaveTypeId = leaveTypeId
+        });
     }
 }

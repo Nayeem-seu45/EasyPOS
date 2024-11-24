@@ -109,6 +109,7 @@ public interface IApplicationDbContext
     DbSet<Attendance> Attendances { get; }
     DbSet<LeaveRequest> LeaveRequests { get; }
     DbSet<LeaveType> LeaveTypes { get; }
+    DbSet<EmployeeLeaveType> EmployeeLeaveTypes { get; }
 
     #endregion
 

@@ -1,4 +1,6 @@
-﻿namespace EasyPOS.Application.Features.HRM.Employees.Commands;
+﻿using EasyPOS.Domain.HRM;
+
+namespace EasyPOS.Application.Features.HRM.Employees.Commands;
 
 public record UpdateEmployeeCommand(
     Guid Id,
@@ -18,7 +20,8 @@ public record UpdateEmployeeCommand(
     string? MobileNo,
     string? Country,
     string? City,
-    string? Address
+    string? Address,
+    List<Guid> LeaveTypes
     ) : ICacheInvalidatorCommand
 {
     public string CacheKey => CacheKeys.Employee;
@@ -36,8 +39,34 @@ internal sealed class UpdateEmployeeCommandHandler(
 
         request.Adapt(entity);
 
+        UpdateEmployeeLeaveTypes(dbContext, request);
+
         await dbContext.SaveChangesAsync(cancellationToken);
 
         return Result.Success();
+    }
+
+    private static void UpdateEmployeeLeaveTypes(IApplicationDbContext dbContext, UpdateEmployeeCommand request)
+    {
+        if (request.LeaveTypes != null)
+        {
+            // Remove existing leave types associated with the employee
+            var existingLeaveTypes = dbContext.EmployeeLeaveTypes
+                .Where(e => e.EmployeeId == request.Id);
+
+            dbContext.EmployeeLeaveTypes.RemoveRange(existingLeaveTypes);
+
+            // Add the updated leave types
+            if (request.LeaveTypes.Any())
+            {
+                var newLeaveTypes = request.LeaveTypes.Select(leaveTypeId => new EmployeeLeaveType
+                {
+                    EmployeeId = request.Id,
+                    LeaveTypeId = leaveTypeId
+                });
+
+                dbContext.EmployeeLeaveTypes.AddRange(newLeaveTypes);
+            }
+        }
     }
 }
