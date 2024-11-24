@@ -1,4 +1,5 @@
-﻿using EasyPOS.Application.Features.HRM.Departments.Commands;
+﻿using EasyPOS.Application.Features.Common.Queries;
+using EasyPOS.Application.Features.HRM.Departments.Commands;
 using EasyPOS.Application.Features.HRM.Departments.Queries;
 
 namespace EasyPOS.WebApi.Endpoints;
@@ -48,6 +49,16 @@ public class Departments : EndpointGroupBase
     private async Task<IResult> Get(ISender sender, Guid id)
     {
         var result = await sender.Send(new GetDepartmentByIdQuery(id));
+
+        var employeesSelectList = await sender.Send(new GetSelectListQuery(
+            Sql: SelectListSqls.EmployeesSelectListSql,
+            Parameters: new { },
+            Key: $"{CacheKeys.Employee}",
+            AllowCacheList: false)
+        );
+
+        result.Value.OptionsDataSources.Add("employeesSelectList", employeesSelectList.Value);
+
         return TypedResults.Ok(result.Value);
     }
 

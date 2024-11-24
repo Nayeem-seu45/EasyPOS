@@ -19147,6 +19147,8 @@ export class DepartmentModel implements IDepartmentModel {
     status?: boolean;
     parentId?: string | undefined;
     departmentHeadId?: string | undefined;
+    departmentHead?: string | undefined;
+    activeStatus?: string | undefined;
     optionsDataSources?: { [key: string]: any; };
 
     constructor(data?: IDepartmentModel) {
@@ -19167,6 +19169,8 @@ export class DepartmentModel implements IDepartmentModel {
             this.status = _data["status"];
             this.parentId = _data["parentId"];
             this.departmentHeadId = _data["departmentHeadId"];
+            this.departmentHead = _data["departmentHead"];
+            this.activeStatus = _data["activeStatus"];
             if (_data["optionsDataSources"]) {
                 this.optionsDataSources = {} as any;
                 for (let key in _data["optionsDataSources"]) {
@@ -19193,6 +19197,8 @@ export class DepartmentModel implements IDepartmentModel {
         data["status"] = this.status;
         data["parentId"] = this.parentId;
         data["departmentHeadId"] = this.departmentHeadId;
+        data["departmentHead"] = this.departmentHead;
+        data["activeStatus"] = this.activeStatus;
         if (this.optionsDataSources) {
             data["optionsDataSources"] = {};
             for (let key in this.optionsDataSources) {
@@ -19212,6 +19218,8 @@ export interface IDepartmentModel {
     status?: boolean;
     parentId?: string | undefined;
     departmentHeadId?: string | undefined;
+    departmentHead?: string | undefined;
+    activeStatus?: string | undefined;
     optionsDataSources?: { [key: string]: any; };
 }
 

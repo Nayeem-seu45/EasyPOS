@@ -24,8 +24,11 @@ internal sealed class GetDepartmentQueryHandler(ISqlConnectionFactory sqlConnect
                 t.Description AS {nameof(DepartmentModel.Description)},
                 t.Status AS {nameof(DepartmentModel.Status)},
                 t.ParentId AS {nameof(DepartmentModel.ParentId)},
-                t.DepartmentHeadId AS {nameof(DepartmentModel.DepartmentHeadId)}
+                t.DepartmentHeadId AS {nameof(DepartmentModel.DepartmentHeadId)},
+                Concat(dh.FirstName, ' ', dh.LastName) AS {nameof(DepartmentModel.DepartmentHead)},
+                IIF(t.Status = 1, 'Active', 'Inactive') AS {nameof(DepartmentModel.ActiveStatus)}
             FROM dbo.Departments AS t
+            LEFT JOIN dbo.Employees AS dh ON dh.Id = t.DepartmentHeadId
             WHERE 1 = 1
             """;
 

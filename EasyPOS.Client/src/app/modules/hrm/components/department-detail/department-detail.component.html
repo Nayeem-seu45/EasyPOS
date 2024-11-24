@@ -2,7 +2,7 @@
   <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
     <div class="p-fluid p-formgrid grid">
          <div class="field col-12 md:col-6">
-        <app-input-text label="Name" formControlName="name" [required]="false" [readonly]="false" />
+        <app-input-text label="Name" formControlName="name" [required]="true" />
         <app-validator-msg [control]="f['name']" />
     </div>
     <div class="field col-12 md:col-6">
@@ -10,21 +10,20 @@
         <app-validator-msg [control]="f['code']" />
     </div>
     <div class="field col-12 md:col-6">
-        <app-input-text label="Description" formControlName="description" [required]="false" [readonly]="false" />
-        <app-validator-msg [control]="f['description']" />
+      <app-input-select label="Department Head" formControlName="departmentHeadId"
+        [options]="optionsDataSources?.['employeesSelectList']" [required]="false" />
     </div>
     <div class="field col-12 md:col-6 md:flex align-items-center md:mt-4">
       <app-input-switch label="Status" formControlName="status" />
     </div>
+    <div class="field col-12 md:col-6">
+      <app-input-text label="Description" formControlName="description" [required]="false" [readonly]="false" />
+      <app-validator-msg [control]="f['description']" />
+  </div>
     <!-- <div class="field col-12 md:col-6">
       <app-input-select label="Parent Id" formControlName="parentId" [options]="optionsDataSources?.['SelectList']"
         [required]="false" />
     </div> -->
-    <!-- <div class="field col-12 md:col-6">
-      <app-input-select label="Department Head Id" formControlName="departmentHeadId" [options]="optionsDataSources?.['SelectList']"
-        [required]="false" />
-    </div> -->
-
     </div>
 
     <div class="mt-3 p-dialog-footer">

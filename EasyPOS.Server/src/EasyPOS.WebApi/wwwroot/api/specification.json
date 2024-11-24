@@ -12850,6 +12850,14 @@
             "format": "guid",
             "nullable": true
           },
+          "departmentHead": {
+            "type": "string",
+            "nullable": true
+          },
+          "activeStatus": {
+            "type": "string",
+            "nullable": true
+          },
           "optionsDataSources": {
             "type": "object",
             "additionalProperties": {}
