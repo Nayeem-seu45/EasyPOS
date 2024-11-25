@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using EasyPOS.Application.Common.Behaviours;
+using EasyPOS.Application.Common.Services;
 using EasyPOS.Application.Features.PurchaseMangements.Services;
 using EasyPOS.Application.Features.SaleManagements.Services;
 using EasyPOS.Application.Features.Stakeholders.Customers.Services;
@@ -40,6 +41,8 @@ public static class DependencyInjection
         services.AddScoped<ISaleReturnService, SaleReturnService>();
 
         services.AddScoped<IStockService, StockService>();
+
+        services.AddScoped<ICurrentEmployee, CurrentEmployeeService>();
 
         return services;
     }
