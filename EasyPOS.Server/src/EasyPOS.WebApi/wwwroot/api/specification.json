@@ -2189,6 +2189,54 @@
         ]
       }
     },
+    "/api/LeaveRequests/GetDateRangeTotalCount": {
+      "post": {
+        "tags": [
+          "LeaveRequests"
+        ],
+        "operationId": "GetDateRangeTotalCount",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetDateRangeTotalCountQuery"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
     "/api/WorkingShifts/GetAll": {
       "post": {
         "tags": [
@@ -13824,6 +13872,32 @@
           },
           "cacheKey": {
             "type": "string"
+          }
+        }
+      },
+      "GetDateRangeTotalCountQuery": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "employeeId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "leaveTypeId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "allowCache": {
+            "type": "boolean",
+            "nullable": true
           }
         }
       },

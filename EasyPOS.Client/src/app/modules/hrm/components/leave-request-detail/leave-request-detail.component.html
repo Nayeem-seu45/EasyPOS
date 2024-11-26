@@ -3,29 +3,34 @@
     <div class="p-fluid p-formgrid grid">
       <div class="field col-12 md:col-6">
         <app-input-select label="Employee" formControlName="employeeId"
-          [options]="optionsDataSources?.['employeesSelectList']" [required]="false" />
+          [options]="optionsDataSources?.['employeesSelectList']" [required]="true" />
       </div>
       <div class="field col-12 md:col-6">
         <app-input-select label="Leave Type" formControlName="leaveTypeId"
-          [options]="optionsDataSources?.['leaveTypeSelectList']" [required]="false" />
+          [options]="optionsDataSources?.['leaveTypeSelectList']" [required]="true" />
+      </div>
+      <!-- <div class="field col-12 md:col-8">
+        <app-input-datepicker label="Start Datepicker" formControlName="startDate" [showTime]="true" [showSeconds]="true" [readonlyInput]="true" dataType="string"  />
+      </div> -->
+      <div class="field col-12 md:col-4">
+        <app-input-datepicker label="Start Date" formControlName="startDate" dataType="string" [maxDate]="maxStartDate" (onChange)="onStartDateChange($event)" />
+        <!-- <app-input-datepicker label="Start Date" formControlName="startDate" dataType="string" [maxDate]="maxStartDate" [required]="true"  /> -->
       </div>
       <div class="field col-12 md:col-4">
-        <app-input-date label="Start Date" formControlName="startDate" />
-      </div>
-      <div class="field col-12 md:col-4">
-        <app-input-date label="End Date" formControlName="endDate" />
+        <app-input-datepicker label="End Date" formControlName="endDate" dataType="string" [minDate]="minEndDate" (onChange)="onEndDateChange($event)" />
+        <!-- <app-input-datepicker label="End Date" formControlName="endDate" dataType="string" [minDate]="minEndDate" [required]="true" /> -->
       </div>
       <div class="field col-12 md:col-4">
         <app-input-number label="Total Days" formControlName="totalDays" textAlign="right" [showButtons]="false"
-          [required]="false" [readonly]="true" />
+          [required]="true" [readonly]="true" />
       </div>
       <div class="field col-12 md:col-6">
-        <app-input-select label="Status" formControlName="statusId" [options]="optionsDataSources?.['leaveStatusSelectList']"
-          [required]="false" />
+        <app-input-select label="Status" formControlName="statusId"
+          [options]="optionsDataSources?.['leaveStatusSelectList']" [required]="false" />
       </div>
       <div class="field col-12 md:col-6">
         <div class="field col-12">
-          <app-input-file-adv [maxFileSize]="100000000" mode="basic" location="images"  />
+          <app-input-file-adv [maxFileSize]="100000000" mode="basic" location="images" />
         </div>
 
       </div>

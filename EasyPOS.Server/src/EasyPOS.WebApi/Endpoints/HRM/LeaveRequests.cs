@@ -41,6 +41,11 @@ public class LeaveRequests : EndpointGroupBase
              .WithName("DeleteLeaveRequests")
              .Produces(StatusCodes.Status204NoContent)
              .Produces<ProblemDetails>(StatusCodes.Status400BadRequest);
+
+        group.MapPost("GetDateRangeTotalCount", GetDateRangeTotalCount)
+             .WithName("GetDateRangeTotalCount")
+             .Produces<int>(StatusCodes.Status200OK)
+             .Produces<ProblemDetails>(StatusCodes.Status400BadRequest);
     }
 
     private async Task<IResult> GetAll(ISender sender, GetLeaveRequestListQuery query)
@@ -130,5 +135,14 @@ public class LeaveRequests : EndpointGroupBase
             employeeId = currentEmployeeId.HasValue ? currentEmployeeId.Value : employeeId;
         }
         return employeeId;
+    }
+
+    private async Task<IResult> GetDateRangeTotalCount(ISender sender, [FromBody] GetDateRangeTotalCountQuery command)
+    {
+        var result = await sender.Send(command);
+
+        return result.Match(
+            onSuccess: () => TypedResults.Ok(result.Value),
+            onFailure: result.ToProblemDetails);
     }
 }

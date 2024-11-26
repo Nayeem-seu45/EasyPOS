@@ -7,6 +7,10 @@
     <form #saleForm="ngForm" (ngSubmit)="onSubmit()">
       <div class="p-fluid p-formgrid grid">
 
+        <!-- <div class="field col-12 md:col-4">
+          <app-input-datepicker label="Date" [(ngModel)]="item.saleDate" name="saleDate" />
+        </div> -->
+
         <!-- Sale Date -->
         <div class="field col-12 md:col-4">
           <app-input-date label="Date" [(ngModel)]="item.saleDate" name="saleDate" />

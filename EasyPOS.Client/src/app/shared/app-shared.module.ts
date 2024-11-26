@@ -74,6 +74,7 @@ import { ChartModule } from 'primeng/chart';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { AutoCompleteComponent } from './components/auto-complete/autocomplete.component';
 import { ProductSearchComponent } from './components/product-search/product-search.component';
+import { InputDatepickerComponent } from './components/input-datepicker/input-datepicker.component';
 
 @NgModule({
 	declarations: [
@@ -111,7 +112,8 @@ import { ProductSearchComponent } from './components/product-search/product-sear
 		SelectButtonComponent,
 		TagComponent,
 		AutoCompleteComponent,
-		ProductSearchComponent
+		ProductSearchComponent,
+		InputDatepickerComponent
 	],
 	imports: [
 		CommonModule,
@@ -200,7 +202,8 @@ import { ProductSearchComponent } from './components/product-search/product-sear
 		TagComponent,
 		TableModule,
 		AutoCompleteComponent,
-		ProductSearchComponent
+		ProductSearchComponent,
+		InputDatepickerComponent
 	]
 })
 export class AppSharedModule { }

@@ -2833,6 +2833,7 @@ export interface ILeaveRequestsClient {
     update(command: UpdateLeaveRequestCommand): Observable<void>;
     delete(id: string): Observable<void>;
     deleteMultiple(ids: string[]): Observable<void>;
+    getDateRangeTotalCount(command: GetDateRangeTotalCountQuery): Observable<number>;
 }
 
 @Injectable()
@@ -3167,6 +3168,67 @@ export class LeaveRequestsClient implements ILeaveRequestsClient {
         if (status === 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             return _observableOf(null as any);
+            }));
+        } else if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ProblemDetails.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    getDateRangeTotalCount(command: GetDateRangeTotalCountQuery): Observable<number> {
+        let url_ = this.baseUrl + "/api/LeaveRequests/GetDateRangeTotalCount";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            withCredentials: true,
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetDateRangeTotalCount(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetDateRangeTotalCount(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<number>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<number>;
+        }));
+    }
+
+    protected processGetDateRangeTotalCount(response: HttpResponseBase): Observable<number> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : <any>null;
+    
+            return _observableOf(result200);
             }));
         } else if (status === 400) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
@@ -20866,6 +20928,58 @@ export interface IUpdateLeaveRequestCommand {
     attachmentUrl?: string | undefined;
     reason?: string | undefined;
     cacheKey?: string;
+}
+
+export class GetDateRangeTotalCountQuery implements IGetDateRangeTotalCountQuery {
+    employeeId?: string;
+    leaveTypeId?: string;
+    startDate?: Date;
+    endDate?: Date;
+    allowCache?: boolean | undefined;
+
+    constructor(data?: IGetDateRangeTotalCountQuery) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.employeeId = _data["employeeId"];
+            this.leaveTypeId = _data["leaveTypeId"];
+            this.startDate = _data["startDate"] ? new Date(_data["startDate"].toString()) : <any>undefined;
+            this.endDate = _data["endDate"] ? new Date(_data["endDate"].toString()) : <any>undefined;
+            this.allowCache = _data["allowCache"];
+        }
+    }
+
+    static fromJS(data: any): GetDateRangeTotalCountQuery {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetDateRangeTotalCountQuery();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["employeeId"] = this.employeeId;
+        data["leaveTypeId"] = this.leaveTypeId;
+        data["startDate"] = this.startDate ? formatDate(this.startDate) : <any>undefined;
+        data["endDate"] = this.endDate ? formatDate(this.endDate) : <any>undefined;
+        data["allowCache"] = this.allowCache;
+        return data;
+    }
+}
+
+export interface IGetDateRangeTotalCountQuery {
+    employeeId?: string;
+    leaveTypeId?: string;
+    startDate?: Date;
+    endDate?: Date;
+    allowCache?: boolean | undefined;
 }
 
 export class PaginatedResponseOfWorkingShiftModel implements IPaginatedResponseOfWorkingShiftModel {
