@@ -58,8 +58,11 @@ public static class DependencyInjection
     private static void AddDapperTypeHandler(IServiceCollection services)
     {
         SqlMapper.AddTypeHandler(new DapperSqlDateOnlyTypeHandler());
+        SqlMapper.AddTypeHandler(new DapperSqlNullableDateOnlyTypeHandler());
         SqlMapper.AddTypeHandler(new DapperSqlTimeOnlyTypeHandler());
+        SqlMapper.AddTypeHandler(new DapperSqlNullableTimeOnlyTypeHandler());
     }
+
 
     private static void AddJsonConfiguration(IServiceCollection services)
     {

@@ -17,3 +17,5 @@ public class DapperSqlDateOnlyTypeHandler : SqlMapper.TypeHandler<DateOnly>
         return DateOnly.FromDateTime((DateTime)value);
     }
 }
+
+

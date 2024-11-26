@@ -13231,6 +13231,14 @@
             "type": "string",
             "nullable": true
           },
+          "userId": {
+            "type": "string",
+            "nullable": true
+          },
+          "photoUrl": {
+            "type": "string",
+            "nullable": true
+          },
           "warehouse": {
             "type": "string",
             "nullable": true

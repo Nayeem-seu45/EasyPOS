@@ -47,9 +47,12 @@ internal sealed class GetEmployeeByIdQueryHandler(ISqlConnectionFactory sqlConne
             WHERE t.Id = @Id
             """;
 
+        //var employee = await connection.QueryFirstOrDefaultAsync<EmployeeModel>(sql, new { request.Id });
+
+
         var employeeDictionary = new Dictionary<Guid, EmployeeModel>();
 
-        var result = await connection.QueryAsync<EmployeeModel, Guid, EmployeeModel>(
+        var result = await connection.QueryAsync<EmployeeModel, Guid?, EmployeeModel>(
             sql,
             (employee, leaveTypeId) =>
             {
@@ -60,9 +63,9 @@ internal sealed class GetEmployeeByIdQueryHandler(ISqlConnectionFactory sqlConne
                     employeeDictionary[employee.Id] = employeeEntry;
                 }
 
-                if (leaveTypeId != Guid.Empty)
+                if (!leaveTypeId.IsNullOrEmpty())
                 {
-                    employeeEntry.LeaveTypes.Add(leaveTypeId);
+                    employeeEntry.LeaveTypes.Add(leaveTypeId.Value);
                 }
 
                 return employeeEntry;
@@ -70,6 +73,7 @@ internal sealed class GetEmployeeByIdQueryHandler(ISqlConnectionFactory sqlConne
             new { request.Id },
             splitOn: "LeaveTypeId"
         );
+
 
         var employee = employeeDictionary.Values.FirstOrDefault();
 

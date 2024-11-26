@@ -20,6 +20,9 @@ public record EmployeeModel
     public string Country { get; set; }
     public string? City { get; set; }
     public string? Address { get; set; }
+    public string? UserId { get; set; }
+    public string? PhotoUrl { get; set; }
+
 
     public string? Warehouse { get; set; }
     public string? Department { get; set; }

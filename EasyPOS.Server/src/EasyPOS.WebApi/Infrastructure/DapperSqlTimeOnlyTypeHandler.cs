@@ -17,3 +17,4 @@ public class DapperSqlTimeOnlyTypeHandler : SqlMapper.TypeHandler<TimeOnly>
         return TimeOnly.FromTimeSpan((TimeSpan)value);
     }
 }
+

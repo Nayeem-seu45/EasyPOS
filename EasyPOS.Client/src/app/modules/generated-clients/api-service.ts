@@ -19800,6 +19800,8 @@ export class EmployeeModel implements IEmployeeModel {
     country?: string;
     city?: string | undefined;
     address?: string | undefined;
+    userId?: string | undefined;
+    photoUrl?: string | undefined;
     warehouse?: string | undefined;
     department?: string | undefined;
     designation?: string | undefined;
@@ -19836,6 +19838,8 @@ export class EmployeeModel implements IEmployeeModel {
             this.country = _data["country"];
             this.city = _data["city"];
             this.address = _data["address"];
+            this.userId = _data["userId"];
+            this.photoUrl = _data["photoUrl"];
             this.warehouse = _data["warehouse"];
             this.department = _data["department"];
             this.designation = _data["designation"];
@@ -19882,6 +19886,8 @@ export class EmployeeModel implements IEmployeeModel {
         data["country"] = this.country;
         data["city"] = this.city;
         data["address"] = this.address;
+        data["userId"] = this.userId;
+        data["photoUrl"] = this.photoUrl;
         data["warehouse"] = this.warehouse;
         data["department"] = this.department;
         data["designation"] = this.designation;
@@ -19921,6 +19927,8 @@ export interface IEmployeeModel {
     country?: string;
     city?: string | undefined;
     address?: string | undefined;
+    userId?: string | undefined;
+    photoUrl?: string | undefined;
     warehouse?: string | undefined;
     department?: string | undefined;
     designation?: string | undefined;
