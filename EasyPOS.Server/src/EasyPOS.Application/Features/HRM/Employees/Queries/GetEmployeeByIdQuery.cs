@@ -41,6 +41,7 @@ internal sealed class GetEmployeeByIdQueryHandler(ISqlConnectionFactory sqlConne
                 t.Country AS {nameof(EmployeeModel.Country)},
                 t.City AS {nameof(EmployeeModel.City)},
                 t.Address AS {nameof(EmployeeModel.Address)},
+                t.UserId AS {nameof(EmployeeModel.UserId)},
                 elt.LeaveTypeId
             FROM dbo.Employees AS t
             LEFT JOIN dbo.EmployeeLeaveTypes AS elt ON elt.EmployeeId = t.Id

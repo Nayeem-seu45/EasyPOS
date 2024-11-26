@@ -1,8 +1,5 @@
-﻿using System.Text.Json.Serialization;
-using EasyPOS.Application.Common.Abstractions.Caching;
-using EasyPOS.Application.Common.Abstractions.Identity;
-using EasyPOS.Application.Common.Abstractions.Messaging;
-using EasyPOS.Domain.Shared;
+﻿using EasyPOS.Application.Common.Abstractions.Identity;
+using EasyPOS.Application.Features.Admin.AppUsers.Models;
 
 namespace EasyPOS.Application.Features.Admin.AppUsers.Queries;
 

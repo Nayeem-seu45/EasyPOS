@@ -13,6 +13,7 @@ public static class CacheKeys
     #region Admin
 
     public const string AppUser = nameof(AppUser);
+    public const string AppUser_Select_List = nameof(AppUser_Select_List);
     public const string Role = nameof(Role);
     public const string Role_Permissions = nameof(Role_Permissions);
     public const string Role_All_SelectList = nameof(Role_All_SelectList);

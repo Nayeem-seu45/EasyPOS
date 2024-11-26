@@ -19988,6 +19988,7 @@ export class CreateEmployeeCommand implements ICreateEmployeeCommand {
     country?: string | undefined;
     city?: string | undefined;
     address?: string | undefined;
+    userId?: string | undefined;
     leaveTypes?: string[];
     cacheKey?: string;
 
@@ -20019,6 +20020,7 @@ export class CreateEmployeeCommand implements ICreateEmployeeCommand {
             this.country = _data["country"];
             this.city = _data["city"];
             this.address = _data["address"];
+            this.userId = _data["userId"];
             if (Array.isArray(_data["leaveTypes"])) {
                 this.leaveTypes = [] as any;
                 for (let item of _data["leaveTypes"])
@@ -20054,6 +20056,7 @@ export class CreateEmployeeCommand implements ICreateEmployeeCommand {
         data["country"] = this.country;
         data["city"] = this.city;
         data["address"] = this.address;
+        data["userId"] = this.userId;
         if (Array.isArray(this.leaveTypes)) {
             data["leaveTypes"] = [];
             for (let item of this.leaveTypes)
@@ -20082,6 +20085,7 @@ export interface ICreateEmployeeCommand {
     country?: string | undefined;
     city?: string | undefined;
     address?: string | undefined;
+    userId?: string | undefined;
     leaveTypes?: string[];
     cacheKey?: string;
 }
@@ -20105,6 +20109,7 @@ export class UpdateEmployeeCommand implements IUpdateEmployeeCommand {
     country?: string | undefined;
     city?: string | undefined;
     address?: string | undefined;
+    userId?: string | undefined;
     leaveTypes?: string[];
     cacheKey?: string;
 
@@ -20137,6 +20142,7 @@ export class UpdateEmployeeCommand implements IUpdateEmployeeCommand {
             this.country = _data["country"];
             this.city = _data["city"];
             this.address = _data["address"];
+            this.userId = _data["userId"];
             if (Array.isArray(_data["leaveTypes"])) {
                 this.leaveTypes = [] as any;
                 for (let item of _data["leaveTypes"])
@@ -20173,6 +20179,7 @@ export class UpdateEmployeeCommand implements IUpdateEmployeeCommand {
         data["country"] = this.country;
         data["city"] = this.city;
         data["address"] = this.address;
+        data["userId"] = this.userId;
         if (Array.isArray(this.leaveTypes)) {
             data["leaveTypes"] = [];
             for (let item of this.leaveTypes)
@@ -20202,6 +20209,7 @@ export interface IUpdateEmployeeCommand {
     country?: string | undefined;
     city?: string | undefined;
     address?: string | undefined;
+    userId?: string | undefined;
     leaveTypes?: string[];
     cacheKey?: string;
 }

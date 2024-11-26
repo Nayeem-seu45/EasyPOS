@@ -13,6 +13,7 @@ using EasyPOS.Infrastructure.Communications;
 using EasyPOS.WebApi.Extensions;
 using EasyPOS.WebApi.Infrastructure;
 using Microsoft.AspNetCore.SignalR;
+using EasyPOS.Application.Features.Admin.AppUsers.Models;
 
 namespace EasyPOS.WebApi.Endpoints.Admin;
 

@@ -1,5 +1,5 @@
 ﻿using EasyPOS.Application.Features.Admin.AppUsers.Commands;
-using EasyPOS.Application.Features.Admin.AppUsers.Queries;
+using EasyPOS.Application.Features.Admin.AppUsers.Models;
 using EasyPOS.Domain.Shared;
 
 namespace EasyPOS.Application.Common.Abstractions.Identity;

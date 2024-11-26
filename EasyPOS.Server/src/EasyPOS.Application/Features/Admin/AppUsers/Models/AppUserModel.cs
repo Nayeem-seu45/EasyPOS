@@ -1,4 +1,4 @@
-﻿namespace EasyPOS.Application.Features.Admin.AppUsers.Queries;
+﻿namespace EasyPOS.Application.Features.Admin.AppUsers.Models;
 
 public record AppUserModel
 {

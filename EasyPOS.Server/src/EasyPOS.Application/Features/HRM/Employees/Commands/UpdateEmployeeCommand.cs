@@ -21,6 +21,7 @@ public record UpdateEmployeeCommand(
     string? Country,
     string? City,
     string? Address,
+    string? UserId,
     List<Guid> LeaveTypes
     ) : ICacheInvalidatorCommand
 {

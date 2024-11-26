@@ -1,4 +1,6 @@
-﻿using EasyPOS.Application.Features.Common.Queries;
+﻿using EasyPOS.Application.Common.Extensions;
+using EasyPOS.Application.Common.Services;
+using EasyPOS.Application.Features.Common.Queries;
 using EasyPOS.Application.Features.HRM.LeaveRequests.Commands;
 using EasyPOS.Application.Features.HRM.LeaveRequests.Queries;
 using EasyPOS.Application.Features.HRM.LeaveTypes.Queries;
@@ -47,9 +49,11 @@ public class LeaveRequests : EndpointGroupBase
         return TypedResults.Ok(result.Value);
     }
 
-    private async Task<IResult> Get(ISender sender, Guid id)
+    private async Task<IResult> Get(ISender sender, ICurrentEmployee currentEmployee, Guid id)
     {
         var result = await sender.Send(new GetLeaveRequestByIdQuery(id));
+        
+        var employeeId = await GetEmployeeId(currentEmployee, id, result.Value);
 
         var employeesSelectList = await sender.Send(new GetSelectListQuery(
             Sql: SelectListSqls.EmployeesSelectListSql,
@@ -60,12 +64,12 @@ public class LeaveRequests : EndpointGroupBase
 
         var leaveStatusSelectList = await sender.Send(new GetSelectListQuery(
             Sql: SelectListSqls.GetLookupDetailSelectListByDevCodeSql,
-            Parameters: new {DevCode = (int)LookupDevCode.LeaveStatus },
+            Parameters: new { DevCode = (int)LookupDevCode.LeaveStatus },
             Key: $"{CacheKeys.LookupDetail}_{LookupDevCode.LeaveStatus}",
             AllowCacheList: true)
         );
 
-        var leaveTypeSelectList = await sender.Send(new GetLeaveTypeSelectListQuery(CacheAllowed: false));
+        var leaveTypeSelectList = await sender.Send(new GetEmployeeLeaveTypeSelectListQuery(employeeId, CacheAllowed: false));
 
         result.Value.OptionsDataSources.Add("employeesSelectList", employeesSelectList.Value);
         result.Value.OptionsDataSources.Add("leaveTypeSelectList", leaveTypeSelectList.Value);
@@ -73,6 +77,8 @@ public class LeaveRequests : EndpointGroupBase
 
         return TypedResults.Ok(result.Value);
     }
+
+
 
     private async Task<IResult> Create(ISender sender, [FromBody] CreateLeaveRequestCommand command)
     {
@@ -108,5 +114,21 @@ public class LeaveRequests : EndpointGroupBase
         return result!.Match(
             onSuccess: Results.NoContent,
             onFailure: result!.ToProblemDetails);
+    }
+
+    private static async Task<Guid> GetEmployeeId(ICurrentEmployee currentEmployee, Guid id, LeaveRequestModel leaveRequest)
+    {
+        var employeeId = Guid.Empty;
+
+        if (!id.IsNullOrEmpty())
+        {
+            employeeId = leaveRequest.EmployeeId;
+        }
+        else
+        {
+            var currentEmployeeId = await currentEmployee.GetCurrentEmployeeIdAsync();
+            employeeId = currentEmployeeId.HasValue ? currentEmployeeId.Value : employeeId;
+        }
+        return employeeId;
     }
 }

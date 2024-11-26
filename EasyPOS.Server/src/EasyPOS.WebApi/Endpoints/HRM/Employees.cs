@@ -1,4 +1,5 @@
-﻿using EasyPOS.Application.Features.Common.Queries;
+﻿using EasyPOS.Application.Features.Admin.AppUsers.Queries;
+using EasyPOS.Application.Features.Common.Queries;
 using EasyPOS.Application.Features.HRM.Employees.Commands;
 using EasyPOS.Application.Features.HRM.Employees.Queries;
 using EasyPOS.Application.Features.HRM.LeaveTypes.Queries;
@@ -102,6 +103,7 @@ public class Employees : EndpointGroupBase
         );
 
         var leaveTypeSelectList = await sender.Send(new GetLeaveTypeSelectListQuery(CacheAllowed: false));
+        var userSelectList = await sender.Send(new GetAppUserSelectListQuery());
 
         result.Value.OptionsDataSources.Add("employeesSelectList", employeesSelectList.Value);
         result.Value.OptionsDataSources.Add("warehousesSelectList", warehousesSelectList.Value);
@@ -111,6 +113,7 @@ public class Employees : EndpointGroupBase
         result.Value.OptionsDataSources.Add("countrySelectList", countrySelectList.Value);
         result.Value.OptionsDataSources.Add("genderSelectList", genderSelectList.Value);
         result.Value.OptionsDataSources.Add("leaveTypeSelectList", leaveTypeSelectList.Value);
+        result.Value.OptionsDataSources.Add("userSelectList", userSelectList.Value);
 
 
         return TypedResults.Ok(result.Value);

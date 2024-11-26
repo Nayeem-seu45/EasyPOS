@@ -22,7 +22,7 @@ export class LeaveTypeDetailComponent extends BaseDetailComponent {
       code: [null],
       totalLeaveDays: [null],
       maxConsecutiveDays: [null],
-      isSandwichAllowed: [null]
+      isSandwichAllowed: [false]
 
     });
   }

@@ -1,8 +1,4 @@
-﻿using EasyPOS.Application.Common.Abstractions;
-using EasyPOS.Application.Common.Abstractions.Messaging;
-using EasyPOS.Application.Common.DapperQueries;
-using EasyPOS.Application.Common.Security;
-using EasyPOS.Domain.Shared;
+﻿using EasyPOS.Application.Features.Admin.AppUsers.Models;
 
 namespace EasyPOS.Application.Features.Admin.AppUsers.Queries;
 
