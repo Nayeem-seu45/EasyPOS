@@ -123,7 +123,8 @@ public static class DependencyInjection
             .AddEntityFrameworkStores<IdentityContext>()
             .AddApiEndpoints();
 
-        services.AddTransient<IIdentityService, IdentityService>();
+        services.AddScoped<IIdentityService, IdentityService>();
+        services.AddTransient<ICustomAuthorizationService, CustomAuthorizationService>();
         services.AddTransient<IIdentityRoleService, IdentityRoleService>();
         services.AddTransient<IAuthService, AuthService>();
         services.AddTransient<IAccessTokenProvider, AccessTokenProvider>();

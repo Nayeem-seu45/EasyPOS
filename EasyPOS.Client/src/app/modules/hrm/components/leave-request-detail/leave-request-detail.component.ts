@@ -27,10 +27,6 @@ export class LeaveRequestDetailComponent extends BaseDetailComponent {
     console.log(this.form.value)
   }
 
-  onRequestSubmit(){
-
-  }
-
   onStartDateChange(date){
     const employeeId = this.f['employeeId']?.value;
     const leaveTypeId = this.f['leaveTypeId']?.value;
@@ -90,11 +86,13 @@ export class LeaveRequestDetailComponent extends BaseDetailComponent {
     });
   }
 
-  override beforeActionProcess(command: any): any {
+  override beforeActionProcess(command: any, actionData: any): any {
+    const isSubmitted = actionData === 'submitted';
     return {
       ...command,
       startDate: this.dateUtil.convert_dmy_to_ymd(command.startDate),
       endDate: this.dateUtil.convert_dmy_to_ymd(command.endDate),
+      isSubmitted: isSubmitted
     };
   }
 

@@ -1,6 +1,4 @@
-﻿using EasyPOS.Application.Common.Extensions;
-using EasyPOS.Application.Common.Services;
-using EasyPOS.Application.Features.Common.Queries;
+﻿using EasyPOS.Application.Features.Common.Queries;
 using EasyPOS.Application.Features.HRM.LeaveRequests.Commands;
 using EasyPOS.Application.Features.HRM.LeaveRequests.Queries;
 using EasyPOS.Application.Features.HRM.LeaveTypes.Queries;
@@ -46,6 +44,14 @@ public class LeaveRequests : EndpointGroupBase
              .WithName("GetDateRangeTotalCount")
              .Produces<int>(StatusCodes.Status200OK)
              .Produces<ProblemDetails>(StatusCodes.Status400BadRequest);
+
+        group.MapPut("Approval", Approval)
+             .WithName("LeaveRequestApproval")
+             .Produces(StatusCodes.Status200OK)
+             .Produces<ProblemDetails>(StatusCodes.Status400BadRequest)
+             .Produces(StatusCodes.Status404NotFound);
+
+
     }
 
     private async Task<IResult> GetAll(ISender sender, GetLeaveRequestListQuery query)
@@ -119,20 +125,13 @@ public class LeaveRequests : EndpointGroupBase
             onFailure: result!.ToProblemDetails);
     }
 
-    private static async Task<Guid> GetEmployeeId(ICurrentEmployee currentEmployee, Guid id, LeaveRequestModel leaveRequest)
+    private async Task<IResult> Approval(ISender sender, [FromBody] LeaveRequestApprovalCommand command)
     {
-        var employeeId = Guid.Empty;
+        var result = await sender.Send(command);
 
-        if (!id.IsNullOrEmpty())
-        {
-            employeeId = leaveRequest.EmployeeId;
-        }
-        else
-        {
-            var currentEmployeeId = await currentEmployee.GetCurrentEmployeeIdAsync();
-            employeeId = currentEmployeeId.HasValue ? currentEmployeeId.Value : employeeId;
-        }
-        return employeeId;
+        return result.Match(
+            onSuccess: () => Results.Ok(),
+            onFailure: result.ToProblemDetails);
     }
 
     private async Task<IResult> GetDateRangeTotalCount(ISender sender, [FromBody] GetDateRangeTotalCountQuery command)

@@ -59,7 +59,7 @@ public enum Gender
 
 public enum LeaveStatus
 {
-    Drafted = 12001,
+    Initiated = 12001,
     Submitted = 12002,
     Forwarded = 12003,
     Approved = 12004,

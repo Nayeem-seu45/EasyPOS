@@ -63,6 +63,14 @@ public static class SelectListSqls
         ORDER BY Name
         """;
 
+    public const string GetRoleByNameSelectListSql = """
+        SELECT Name AS Id, Name 
+        FROM [identity].Roles r
+        WHERE 1 = 1
+        ORDER BY Name
+        """;
+
+
     public const string GetAppMenuSelectListSql = """
         SELECT Id, Label AS Name
         FROM [dbo].AppMenus 

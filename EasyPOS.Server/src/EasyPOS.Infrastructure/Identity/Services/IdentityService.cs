@@ -1,15 +1,10 @@
-﻿using System.Diagnostics;
-using System.Linq;
-using System.Security.Claims;
+﻿using System.Transactions;
 using EasyPOS.Application.Common.Abstractions.Caching;
 using EasyPOS.Application.Common.Abstractions.Identity;
 using EasyPOS.Application.Common.Constants;
 using EasyPOS.Application.Features.Admin.AppUsers.Commands;
 using EasyPOS.Application.Features.Admin.AppUsers.Models;
-using EasyPOS.Domain.Shared;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using StackExchange.Redis;
 
@@ -18,26 +13,207 @@ namespace EasyPOS.Infrastructure.Identity.Services;
 public class IdentityService : IIdentityService
 {
     private readonly UserManager<ApplicationUser> _userManager;
-    private readonly IUserClaimsPrincipalFactory<ApplicationUser> _userClaimsPrincipalFactory;
-    private readonly IAuthorizationService _authorizationService;
     private readonly IdentityContext _identityContext;
     private readonly IDistributedCacheService _cacheService;
     private readonly ILogger<IdentityService> _logger;
-
     public IdentityService(
         UserManager<ApplicationUser> userManager,
-        IUserClaimsPrincipalFactory<ApplicationUser> userClaimsPrincipalFactory,
-        IAuthorizationService authorizationService,
         IdentityContext identityContext,
         IDistributedCacheService cacheService,
         ILogger<IdentityService> logger)
     {
         _userManager = userManager;
-        _userClaimsPrincipalFactory = userClaimsPrincipalFactory;
-        _authorizationService = authorizationService;
         _identityContext = identityContext;
         _cacheService = cacheService;
         _logger = logger;
+    }
+
+    public async Task<Result<string>> CreateUserAsync(
+        CreateAppUserCommand command,
+        CancellationToken cancellation = default)
+    {
+        // Use TransactionScope to manage transactions across multiple operations
+        using var transaction = new TransactionScope(
+            TransactionScopeAsyncFlowOption.Enabled);
+
+        try
+        {
+            // Create the user using UserManager
+            var user = new ApplicationUser
+            {
+                UserName = command.Username,
+                Email = command.Email,
+                FirstName = command.FirstName,
+                LastName = command.LastName,
+                IsActive = command.IsActive,
+                PhotoUrl = command.PhotoUrl,
+                PhoneNumber = command.PhoneNumber
+            };
+
+            var createUserResult = await _userManager.CreateAsync(user, command.Password);
+            if (!createUserResult.Succeeded)
+            {
+                return createUserResult.ToApplicationResult<string>(string.Empty);
+            }
+
+            // Add roles if specified
+            if (command.Roles?.Count > 0)
+            {
+                await _userManager.AddToRolesAsync(user, command.Roles);
+                await _identityContext.SaveChangesAsync(cancellation);
+            }
+
+            // Mark transaction as complete
+            transaction.Complete();
+
+            return Result<string>.Success(user.Id);
+        }
+        catch (Exception ex)
+        {
+            // TransactionScope will automatically roll back if `Complete` is not called
+            return Result.Failure<string>(
+                Error.Failure(ErrorMessages.UNABLE_CREATE_USER, $"An error occurred: {ex.Message}")
+            );
+        }
+    }
+
+
+
+    //public async Task<Result<string>> CreateUserAsync(
+    //    CreateAppUserCommand command,
+    //    CancellationToken cancellation = default)
+    //{
+    //    // Atomic transaction scope
+    //    using var transaction = await _identityContext.Database.BeginTransactionAsync(cancellation);
+
+    //    try
+    //    {
+    //        // Create the user
+    //        var user = new ApplicationUser
+    //        {
+    //            UserName = command.Username,
+    //            Email = command.Email,
+    //            FirstName = command.FirstName,
+    //            LastName = command.LastName,
+    //            IsActive = command.IsActive,
+    //            PhotoUrl = command.PhotoUrl,
+    //            PhoneNumber = command.PhoneNumber
+    //        };
+
+    //        var createUserResult = await _userManager.CreateAsync(user, command.Password);
+    //        if (!createUserResult.Succeeded)
+    //        {
+    //            return createUserResult.ToApplicationResult<string>(string.Empty);
+    //        }
+
+    //        // Add roles to the user, if any
+    //        if (command.Roles?.Count > 0)
+    //        {
+
+    //            _identityContext.UserRoles.AddRange(command.Roles.Select(x => new IdentityUserRole<string>
+    //            {
+    //                UserId = user.Id,
+    //                RoleId = x
+    //            }));
+
+    //            await _identityContext.SaveChangesAsync(cancellation);
+    //        }
+
+    //        // Commit transaction
+    //        await transaction.CommitAsync(cancellation);
+
+    //        return Result<string>.Success(user.Id);
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        // Rollback on error
+    //        await transaction.RollbackAsync(cancellation);
+    //        return Result.Failure<string>(Error.Failure(ErrorMessages.UNABLE_CREATE_USER, $"An error occurred: {ex.Message}"));
+    //    }
+    //}
+
+    public async Task<Result> UpdateUserAsync(
+        UpdateAppUserCommand command,
+        CancellationToken cancellation = default)
+    {
+        // Begin a transaction to ensure atomicity
+        await using var transaction = await _identityContext.Database.BeginTransactionAsync(cancellation);
+
+        try
+        {
+            // Find the user using UserManager
+            var user = await _userManager.FindByIdAsync(command.Id);
+            if (user == null)
+                return Result.Failure(Error.Failure("User.Update", ErrorMessages.USER_NOT_FOUND));
+
+            // Update user properties
+            user.UserName = command.Username;
+            user.Email = command.Email;
+            user.FirstName = command.FirstName;
+            user.LastName = command.LastName;
+            user.IsActive = command.IsActive;
+            user.PhoneNumber = command.PhoneNumber;
+
+            // Update the user
+            var updateResult = await _userManager.UpdateAsync(user);
+            if (!updateResult.Succeeded)
+                return Result.Failure(Error.Failure("User.Update", string.Join(", ", updateResult.Errors.Select(e => e.Description))));
+
+            // Update roles (if specified)
+            if (command.Roles?.Count > 0)
+            {
+                var roleUpdateResult = await UpdateUserRolesAsync(command.Roles, user, cancellation);
+                if (!roleUpdateResult.IsSuccess)
+                    return roleUpdateResult; // Rollback transaction if role update fails
+            }
+
+            // Commit the transaction
+            await transaction.CommitAsync(cancellation);
+            return Result.Success();
+        }
+        catch (Exception ex)
+        {
+            // Rollback the transaction in case of errors
+            await transaction.RollbackAsync(cancellation);
+            return Result.Failure(Error.Failure("User.Update", $"An error occurred: {ex.Message}"));
+        }
+    }
+
+    private async Task<Result> UpdateUserRolesAsync(
+        List<string> roles,
+        ApplicationUser user,
+        CancellationToken cancellation = default)
+    {
+        // Get current roles of the user
+        var currentRoles = await _userManager.GetRolesAsync(user);
+
+        // Determine roles to remove and add
+        var rolesToRemove = currentRoles.Except(roles).ToList();
+        var rolesToAdd = roles.Except(currentRoles).ToList();
+
+        // Remove roles
+        if (rolesToRemove.Count > 0)
+        {
+            var removeResult = await _userManager.RemoveFromRolesAsync(user, rolesToRemove);
+            if (!removeResult.Succeeded)
+            {
+                var errors = string.Join(", ", removeResult.Errors.Select(e => e.Description));
+                return Result.Failure(Error.Failure("User.UpdateRoles", $"Failed to remove roles: {errors}"));
+            }
+        }
+
+        // Add roles
+        if (rolesToAdd.Count > 0)
+        {
+            var addResult = await _userManager.AddToRolesAsync(user, rolesToAdd);
+            if (!addResult.Succeeded)
+            {
+                var errors = string.Join(", ", addResult.Errors.Select(e => e.Description));
+                return Result.Failure(Error.Failure("User.UpdateRoles", $"Failed to add roles: {errors}"));
+            }
+        }
+
+        return Result.Success();
     }
 
     public async Task<string?> GetUserNameAsync(string userId, CancellationToken cancellation = default)
@@ -49,65 +225,6 @@ public class IdentityService : IIdentityService
         return user?.UserName;
     }
 
-    public async Task<Result<string>> CreateUserAsync(
-        CreateAppUserCommand command,
-        CancellationToken cancellation = default)
-    {
-        var user = new ApplicationUser
-        {
-            UserName = command.Username,
-            Email = command.Email,
-            FirstName = command.FirstName,
-            LastName = command.LastName,
-            IsActive = command.IsActive,
-            PhotoUrl = command.PhotoUrl,
-            PhoneNumber = command.PhoneNumber
-        };
-
-        var result = await _userManager.CreateAsync(user, command.Password);
-
-        if (result.Succeeded && command.Roles?.Count > 0)
-        {
-            _identityContext.UserRoles.AddRange(command.Roles.Select(x => new IdentityUserRole<string>
-            {
-                UserId = user.Id,
-                RoleId = x
-            }));
-
-            await _identityContext.SaveChangesAsync(cancellation);
-        }
-
-        return result.ToApplicationResult(user.Id);
-    }
-
-    public async Task<Result> UpdateUserAsync(
-       UpdateAppUserCommand command,
-       CancellationToken cancellation = default)
-    {
-
-        var user = await _identityContext.Users
-            .SingleOrDefaultAsync(u => u.Id == command.Id, cancellation)
-            .ConfigureAwait(false);
-
-        if (user is null)
-            return Result.Failure(Error.Failure("User.Update", ErrorMessages.USER_NOT_FOUND));
-
-        user.UserName = command.Username;
-        user.Email = command.Email;
-        user.FirstName = command.FirstName;
-        user.LastName = command.LastName;
-        user.IsActive = command.IsActive;
-        user.PhoneNumber = command.PhoneNumber;
-
-        if (command.Roles?.Count > 0)
-        {
-            await DeleteAndAddUserRoles(command.Roles, user, cancellation);
-        }
-
-        await _identityContext.SaveChangesAsync(cancellation);
-
-        return Result.Success();
-    }
 
     public async Task<Result> UpdateUserBasicAsync(
       UpdateAppUserBasicCommand command,
@@ -121,6 +238,7 @@ public class IdentityService : IIdentityService
             return Result.Failure(Error.Failure("User.Update", ErrorMessages.USER_NOT_FOUND));
 
         user.Email = command.Email;
+        user.NormalizedEmail = command.Email.ToUpper();
         user.FirstName = command.FirstName;
         user.LastName = command.LastName;
         user.PhoneNumber = command.PhoneNumber;
@@ -131,6 +249,34 @@ public class IdentityService : IIdentityService
             ? Result.Success()
             : Result.Failure(Error.Failure("User.Update", ErrorMessages.UNABLE_UPDATE_USER));
     }
+
+    public async Task<Result> DeleteUserAsync(string userId, CancellationToken cancellation = default)
+    {
+        var user = await _userManager.Users
+            .SingleOrDefaultAsync(u => u.Id == userId, cancellation);
+
+        if (user is null)
+            return Result.Failure(Error.NotFound(nameof(user), ErrorMessages.USER_NOT_FOUND));
+
+        // Step 1: Get the user's roles
+        var userRoles = await _userManager.GetRolesAsync(user);
+
+        // Step 2: Remove the user from roles
+        var removeRolesResult = await _userManager.RemoveFromRolesAsync(user, userRoles);
+        if (!removeRolesResult.Succeeded)
+        {
+            return Result.Failure(Error.Failure("User.RemoveRoles", ErrorMessages.UNABLE_REMOVE_ROLES));
+        }
+
+        // Step 3: Delete the user
+        var result = await _userManager.DeleteAsync(user);
+
+        // Step 4: Return result
+        return result.Succeeded
+            ? Result.Success()
+            : Result.Failure(Error.Failure("User.Delete", ErrorMessages.UNABLE_DELETE_USER));
+    }
+
 
     public async Task<Result> ChangePasswordAsync(
       string userId,
@@ -171,23 +317,6 @@ public class IdentityService : IIdentityService
             : Result.Failure(Error.Failure("User.Update", ErrorMessages.UNABLE_UPDATE_USER_PHOTO));
     }
 
-    private async Task DeleteAndAddUserRoles(
-        List<string> roles,
-        ApplicationUser user,
-        CancellationToken cancellation)
-    {
-        await _identityContext.UserRoles
-                    .Where(x => x.UserId == user.Id)
-                    .ExecuteDeleteAsync(cancellation);
-
-        _identityContext.UserRoles
-            .AddRange(roles.Select(x => new IdentityUserRole<string>
-            {
-                UserId = user.Id,
-                RoleId = x
-            }));
-    }
-
     public async Task<Result<AppUserModel>> GetUserAsync(
       string id,
       CancellationToken cancellation = default)
@@ -208,14 +337,18 @@ public class IdentityService : IIdentityService
             PhotoUrl = user.PhotoUrl,
             Username = user.UserName!,
             Email = user.Email!,
-            PhoneNumber = user.PhoneNumber
+            PhoneNumber = user.PhoneNumber,
         };
 
-        appUser.Roles = await _identityContext.UserRoles
-            .AsNoTracking()
-            .Where(x => x.UserId == id)
-            .Select(x => x.RoleId)
-            .ToListAsync(cancellation);
+        appUser.Roles = await _userManager.GetRolesAsync(user);
+
+        //appUser.Roles = await _identityContext.UserRoles
+        //    .AsNoTracking()
+        //    .Where(x => x.UserId == id)
+        //    .Select(x => x.RoleId)
+        //    .ToListAsync(cancellation);
+
+
 
         return Result.Success(appUser);
     }
@@ -247,50 +380,6 @@ public class IdentityService : IIdentityService
         appUser.AssignedRoles = string.Join(", ", roles);
 
         return Result.Success(appUser);
-    }
-
-    public async Task<Result> IsInRoleAsync(string userId, string role, CancellationToken cancellation = default)
-    {
-        var user = await _userManager.Users
-            .AsNoTracking()
-            .SingleOrDefaultAsync(u => u.Id == userId, cancellation);
-
-        if (user is null) return Result.Failure(Error.NotFound(nameof(user), ErrorMessages.USER_NOT_FOUND));
-
-        return await _userManager.IsInRoleAsync(user, role)
-            ? Result.Success()
-            : Result.Failure(Error.Forbidden(nameof(ErrorType.Forbidden), "You have no permission to access the resource"));
-    }
-
-    public async Task<Result> AuthorizeAsync(string userId, string policyName, CancellationToken cancellation = default)
-    {
-        var user = _userManager.Users
-            .AsNoTracking()
-            .SingleOrDefault(u => u.Id == userId);
-
-        if (user is null) return Result.Failure(Error.NotFound(nameof(user), ErrorMessages.USER_NOT_FOUND));
-
-        var principal = await _userClaimsPrincipalFactory.CreateAsync(user);
-
-        var result = await _authorizationService.AuthorizeAsync(principal, policyName);
-
-        return result.Succeeded
-            ? Result.Success()
-            : Result.Failure(Error.Unauthorized(nameof(ErrorType.Unauthorized), string.Empty));
-    }
-
-    public async Task<Result> DeleteUserAsync(string userId, CancellationToken cancellation = default)
-    {
-        var user = await _userManager.Users
-        .SingleOrDefaultAsync(u => u.Id == userId, cancellation);
-
-        if (user is null) return Result.Failure(Error.NotFound(nameof(user), ErrorMessages.USER_NOT_FOUND));
-
-        var result = await _userManager.DeleteAsync(user!);
-
-        return result.Succeeded
-            ? Result.Success()
-            : Result.Failure(Error.Failure("User.Delete", ErrorMessages.UNABLE_DELETE_USER));
     }
 
     public async Task<Result<string[]>> GetUserPermissionsAsync(string userId, CancellationToken cancellationToken = default)
@@ -332,17 +421,66 @@ public class IdentityService : IIdentityService
     }
 
     public async Task<Result> AddToRolesAsync(
-        AddToRolesCommand command,
+        string userId,
+        List<string> roleNames,
         CancellationToken cancellation = default)
     {
-        var user = await _userManager.FindByIdAsync(command.Id);
+        var user = await _userManager.FindByIdAsync(userId);
 
         if (user is null) return Result.Failure(Error.NotFound(nameof(user), ErrorMessages.USER_NOT_FOUND));
 
-        var result = await _userManager.AddToRolesAsync(user, command.RoleNames);
+        var result = await _userManager.AddToRolesAsync(user, roleNames);
 
         return result.Succeeded
             ? Result.Success()
             : Result.Failure(Error.Unauthorized(nameof(ErrorType.Unauthorized), string.Empty));
     }
+
+    private async Task DeleteAndAddUserRoles(
+        List<string> roles,
+        ApplicationUser user,
+        CancellationToken cancellation)
+    {
+        await _identityContext.UserRoles
+                    .Where(x => x.UserId == user.Id)
+                    .ExecuteDeleteAsync(cancellation);
+
+        _identityContext.UserRoles
+            .AddRange(roles.Select(x => new IdentityUserRole<string>
+            {
+                UserId = user.Id,
+                RoleId = x
+            }));
+    }
+
+
+    //public async Task<Result> IsInRoleAsync(string userId, string role, CancellationToken cancellation = default)
+    //{
+    //    var user = await _userManager.Users
+    //        .AsNoTracking()
+    //        .SingleOrDefaultAsync(u => u.Id == userId, cancellation);
+
+    //    if (user is null) return Result.Failure(Error.NotFound(nameof(user), ErrorMessages.USER_NOT_FOUND));
+
+    //    return await _userManager.IsInRoleAsync(user, role)
+    //        ? Result.Success()
+    //        : Result.Failure(Error.Forbidden(nameof(ErrorType.Forbidden), "You have no permission to access the resource"));
+    //}
+
+    //public async Task<Result> AuthorizeAsync(string userId, string policyName, CancellationToken cancellation = default)
+    //{
+    //    var user = _userManager.Users
+    //        .AsNoTracking()
+    //        .SingleOrDefault(u => u.Id == userId);
+
+    //    if (user is null) return Result.Failure(Error.NotFound(nameof(user), ErrorMessages.USER_NOT_FOUND));
+
+    //    var principal = await _userClaimsPrincipalFactory.CreateAsync(user);
+
+    //    var result = await _authorizationService.AuthorizeAsync(principal, policyName);
+
+    //    return result.Succeeded
+    //        ? Result.Success()
+    //        : Result.Failure(Error.Unauthorized(nameof(ErrorType.Unauthorized), string.Empty));
+    //}
 }

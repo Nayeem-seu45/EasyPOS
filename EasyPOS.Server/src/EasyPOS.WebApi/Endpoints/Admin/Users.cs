@@ -14,6 +14,8 @@ using EasyPOS.WebApi.Extensions;
 using EasyPOS.WebApi.Infrastructure;
 using Microsoft.AspNetCore.SignalR;
 using EasyPOS.Application.Features.Admin.AppUsers.Models;
+using DocumentFormat.OpenXml.Drawing.Charts;
+using EasyPOS.Application.Features.Admin.AppMenus.Commands;
 
 namespace EasyPOS.WebApi.Endpoints.Admin;
 
@@ -46,6 +48,12 @@ public class Users : EndpointGroupBase
             .WithName("UpdateUser")
             .Produces(StatusCodes.Status204NoContent)
             .Produces<ProblemDetails>(StatusCodes.Status400BadRequest);
+
+        group.MapPut("Delete/{id}", Delete)
+            .WithName("DeleteAppUser")
+            .Produces(StatusCodes.Status204NoContent)
+            .Produces<ProblemDetails>(StatusCodes.Status400BadRequest);
+
 
         group.MapPut("ChangePhoto", ChangePhoto)
             .WithName("ChangePhoto")
@@ -87,7 +95,7 @@ public class Users : EndpointGroupBase
         var result = await sender.Send(new GetAppUserByIdQuery(id));
 
         var roleSelectList = await sender.Send(new GetSelectListQuery(
-                Sql: SelectListSqls.GetRoleSelectListSql,
+                Sql: SelectListSqls.GetRoleByNameSelectListSql,
                 Parameters: new { },
                 Key: CacheKeys.Role_All_SelectList,
                 AllowCacheList: false)
@@ -134,6 +142,14 @@ public class Users : EndpointGroupBase
         return result.Match(
             onSuccess: () => Results.NoContent(),
             onFailure: result.ToProblemDetails);
+    }
+
+    public async Task<IResult> Delete(ISender sender, [FromRoute] string id)
+    {
+        var result = await sender.Send(new DeleteAppUserCommand(id));
+        return result.Match(
+             onSuccess: () => Results.NoContent(),
+             onFailure: result.ToProblemDetails);
     }
 
     private async Task<IResult> ChangePhoto(ISender sender, [FromBody] ChangeUserPhotoCommand command)

@@ -1,27 +1,17 @@
 ﻿using System.Reflection;
-using EasyPOS.Application.Common.Exceptions;
 using EasyPOS.Application.Common.Abstractions.Identity;
-using EasyPOS.Application.Common.Security;
-using EasyPOS.Domain.Shared;
+using EasyPOS.Application.Common.Exceptions;
 
 namespace EasyPOS.Application.Common.Behaviours;
 
-internal sealed class AuthorizationBehaviour<TRequest, TResponse>
+internal sealed class AuthorizationBehaviour<TRequest, TResponse>(
+    IUser user,
+    ICustomAuthorizationService identityService)
+    //IIdentityService identityService)
     : IPipelineBehavior<TRequest, TResponse>
     where TRequest : notnull
     where TResponse : Result
 {
-    private readonly IUser _user;
-    private readonly IIdentityService _identityService;
-
-    public AuthorizationBehaviour(
-        IUser user,
-        IIdentityService identityService)
-    {
-        _user = user;
-        _identityService = identityService;
-    }
-
     public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
     {
         var authorizeAttributes = request.GetType().GetCustomAttributes<AuthorizeAttribute>();
@@ -29,7 +19,7 @@ internal sealed class AuthorizationBehaviour<TRequest, TResponse>
         if (authorizeAttributes.Any())
         {
             // Must be authenticated user
-            if (_user.Id == null)
+            if (user.Id == null)
             {
                 throw new UnauthorizedAccessException();
             }
@@ -45,7 +35,7 @@ internal sealed class AuthorizationBehaviour<TRequest, TResponse>
                 {
                     foreach (var role in roles)
                     {
-                        var isInRole = await _identityService.IsInRoleAsync(_user.Id, role.Trim());
+                        var isInRole = await identityService.IsInRoleAsync(user.Id, role.Trim(), cancellationToken);
                         if (isInRole.IsSuccess)
                         {
                             authorized = true;
@@ -69,7 +59,7 @@ internal sealed class AuthorizationBehaviour<TRequest, TResponse>
             {
                 foreach (var policy in authorizeAttributesWithPolicies.Select(a => a.Policy))
                 {
-                    var authorized = await _identityService.AuthorizeAsync(_user.Id, policy);
+                    var authorized = await identityService.AuthorizeAsync(user.Id, policy, cancellationToken);
 
                     if (authorized.IsFailure)
                     {

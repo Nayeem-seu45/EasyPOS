@@ -60,17 +60,21 @@ export abstract class BaseDetailComponent implements OnInit {
   /**
    * Submits the form data.
    */
-  protected onSubmit(data?: any) {
+  protected onSubmit(actionData?: any) {
 
     if (this.form.invalid) {
       this.toast.showError('Form is invalid.');
       return;
     }
 
+     // Prepare the command object with optional action-based customization
+     let command = { ...this.form.value };
+     command = this.beforeActionProcess(command, actionData);
+
     if (!this.id || this.id === this.emptyGuid) {
-      this.save();
+      this.save(command);
     } else {
-      this.update();
+      this.update(command);
     }
   }
 
@@ -97,9 +101,9 @@ export abstract class BaseDetailComponent implements OnInit {
   /**
   * Save operation. Executes the creation logic.
   */
-  protected save() {
-    let command = { ...this.form.value };
-    command = this.beforeActionProcess(command) || command;
+  protected save(command: any) {
+    // let command = { ...this.form.value };
+    // command = this.beforeActionProcess(command) || command;
     this.entityClient.create(command).subscribe({
       next: () => {
         this.toast.created();
@@ -117,9 +121,9 @@ export abstract class BaseDetailComponent implements OnInit {
   /**
    * Update operation. Executes the update logic.
    */
-  protected update() {
-    let command = { ...this.form.value };
-    command = this.beforeActionProcess(command);
+  protected update(command: any) {
+    // let command = { ...this.form.value };
+    // command = this.beforeActionProcess(command);
     this.entityClient.update(command).subscribe({
       next: () => {
         this.toast.updated();
@@ -138,7 +142,7 @@ export abstract class BaseDetailComponent implements OnInit {
    * Hook to process data before save/update.
    * Can be overridden by child classes for custom logic.
    */
-  protected beforeActionProcess(command?: any): any {
+  protected beforeActionProcess(command?: any, data?: any): any {
     return command; // Default implementation does nothing
   }
 
@@ -146,7 +150,7 @@ export abstract class BaseDetailComponent implements OnInit {
    * Hook executed after save/update.
    * Can be overridden by child classes for custom logic.
    */
-  protected postActionProcess(data?: any) {
+  protected postActionProcess(actionData?: any) {
 
   }
 

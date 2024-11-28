@@ -6,11 +6,8 @@ using System.Text;
 using EasyPOS.Application.Common.Abstractions.Identity;
 using EasyPOS.Application.Common.Constants;
 using EasyPOS.Application.Features.Identity.Models;
-using EasyPOS.Domain.Shared;
-using EasyPOS.Infrastructure.Identity;
 using EasyPOS.Infrastructure.Identity.OptionsSetup;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 

@@ -2237,6 +2237,49 @@
         ]
       }
     },
+    "/api/LeaveRequests/Approval": {
+      "put": {
+        "tags": [
+          "LeaveRequests"
+        ],
+        "operationId": "LeaveRequestApproval",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LeaveRequestApprovalCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
     "/api/WorkingShifts/GetAll": {
       "post": {
         "tags": [
@@ -11856,6 +11899,45 @@
         ]
       }
     },
+    "/api/Users/Delete/{id}": {
+      "put": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "DeleteAppUser",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
     "/api/Users/ChangePhoto": {
       "put": {
         "tags": [
@@ -13821,6 +13903,9 @@
             "type": "string",
             "nullable": true
           },
+          "isSubmitted": {
+            "type": "boolean"
+          },
           "cacheKey": {
             "type": "string"
           }
@@ -13870,6 +13955,9 @@
             "type": "string",
             "nullable": true
           },
+          "isSubmitted": {
+            "type": "boolean"
+          },
           "cacheKey": {
             "type": "string"
           }
@@ -13900,6 +13988,56 @@
             "nullable": true
           }
         }
+      },
+      "LeaveRequestApprovalCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "totalDays": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "reason": {
+            "type": "string",
+            "nullable": true
+          },
+          "approvalAction": {
+            "$ref": "#/components/schemas/LeaveStatus"
+          },
+          "cacheKey": {
+            "type": "string"
+          }
+        }
+      },
+      "LeaveStatus": {
+        "type": "integer",
+        "description": "",
+        "x-enumNames": [
+          "Initiated",
+          "Submitted",
+          "Forwarded",
+          "Approved",
+          "Rejected"
+        ],
+        "enum": [
+          12001,
+          12002,
+          12003,
+          12004,
+          12005
+        ]
       },
       "PaginatedResponseOfWorkingShiftModel": {
         "type": "object",

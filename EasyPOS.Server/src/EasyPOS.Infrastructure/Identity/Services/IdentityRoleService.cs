@@ -93,6 +93,7 @@ internal class IdentityRoleService(
                 Result.Failure(Error.Failure("Role.Update", ErrorMessages.ROLE_NOT_FOUND));
 
             role!.Name = name;
+            role!.NormalizedName = name.ToUpper();
 
             await RemoveAndAddPermissionAsync(role!, permissions, cancellation);
             await RemoveAndAddRoleMenuAsync(role!, rolemenus, cancellation);

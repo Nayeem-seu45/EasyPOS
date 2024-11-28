@@ -2,28 +2,24 @@
 
 namespace EasyPOS.Application.Features.HRM.LeaveRequests.Commands;
 
-public record UpdateLeaveRequestCommand(
+public record LeaveRequestApprovalCommand(
     Guid Id,
-    Guid EmployeeId,
-    Guid LeaveTypeId,
     DateOnly StartDate,
     DateOnly EndDate,
     int TotalDays,
-    Guid? StatusId,
-    string? AttachmentUrl,
     string? Reason,
-    bool IsSubmitted = false
+    LeaveStatus ApprovalAction
     ) : ICacheInvalidatorCommand
 {
     public string CacheKey => CacheKeys.LeaveRequest;
 }
 
-internal sealed class UpdateLeaveRequestCommandHandler(
+internal sealed class LeaveRequestApprovalCommandHandler(
     IApplicationDbContext dbContext,
     ICommonQueryService commonQueryService) 
-    : ICommandHandler<UpdateLeaveRequestCommand>
+    : ICommandHandler<LeaveRequestApprovalCommand>
 {
-    public async Task<Result> Handle(UpdateLeaveRequestCommand request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(LeaveRequestApprovalCommand request, CancellationToken cancellationToken)
     {
         var entity = await dbContext.LeaveRequests.FindAsync([request.Id], cancellationToken);
 
@@ -31,11 +27,8 @@ internal sealed class UpdateLeaveRequestCommandHandler(
 
         request.Adapt(entity);
 
-        // Determine status based on IsSubmitted flag
-        var statusType = request.IsSubmitted ? LeaveStatus.Submitted : LeaveStatus.Initiated;
-
         // Get StatusId based on status type
-        var leaveStatusId = await commonQueryService.GetLookupDetailIdAsync((int)statusType, cancellationToken);
+        var leaveStatusId = await commonQueryService.GetLookupDetailIdAsync((int)request.ApprovalAction, cancellationToken);
         if (leaveStatusId.IsNullOrEmpty())
         {
             return Result.Failure<Guid>(

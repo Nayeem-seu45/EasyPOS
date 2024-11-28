@@ -2834,6 +2834,7 @@ export interface ILeaveRequestsClient {
     delete(id: string): Observable<void>;
     deleteMultiple(ids: string[]): Observable<void>;
     getDateRangeTotalCount(command: GetDateRangeTotalCountQuery): Observable<number>;
+    approval(command: LeaveRequestApprovalCommand): Observable<void>;
 }
 
 @Injectable()
@@ -3236,6 +3237,66 @@ export class LeaveRequestsClient implements ILeaveRequestsClient {
             let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
             result400 = ProblemDetails.fromJS(resultData400);
             return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    approval(command: LeaveRequestApprovalCommand): Observable<void> {
+        let url_ = this.baseUrl + "/api/LeaveRequests/Approval";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            withCredentials: true,
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+            })
+        };
+
+        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processApproval(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processApproval(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processApproval(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ProblemDetails.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            }));
+        } else if (status === 404) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("A server side error occurred.", status, _responseText, _headers);
             }));
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
@@ -17020,6 +17081,7 @@ export interface IUsersClient {
     getProfile(): Observable<AppUserModel>;
     create(command: CreateAppUserCommand): Observable<string>;
     update(command: UpdateAppUserCommand): Observable<void>;
+    delete(id: string): Observable<void>;
     changePhoto(command: ChangeUserPhotoCommand): Observable<void>;
     updateBasic(command: UpdateAppUserBasicCommand): Observable<void>;
     addToRoles(command: AddToRolesCommand): Observable<void>;
@@ -17296,6 +17358,61 @@ export class UsersClient implements IUsersClient {
     }
 
     protected processUpdate(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ProblemDetails.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    delete(id: string): Observable<void> {
+        let url_ = this.baseUrl + "/api/Users/Delete/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            withCredentials: true,
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDelete(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDelete(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processDelete(response: HttpResponseBase): Observable<void> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -20799,6 +20916,7 @@ export class CreateLeaveRequestCommand implements ICreateLeaveRequestCommand {
     statusId?: string | undefined;
     attachmentUrl?: string | undefined;
     reason?: string | undefined;
+    isSubmitted?: boolean;
     cacheKey?: string;
 
     constructor(data?: ICreateLeaveRequestCommand) {
@@ -20820,6 +20938,7 @@ export class CreateLeaveRequestCommand implements ICreateLeaveRequestCommand {
             this.statusId = _data["statusId"];
             this.attachmentUrl = _data["attachmentUrl"];
             this.reason = _data["reason"];
+            this.isSubmitted = _data["isSubmitted"];
             this.cacheKey = _data["cacheKey"];
         }
     }
@@ -20841,6 +20960,7 @@ export class CreateLeaveRequestCommand implements ICreateLeaveRequestCommand {
         data["statusId"] = this.statusId;
         data["attachmentUrl"] = this.attachmentUrl;
         data["reason"] = this.reason;
+        data["isSubmitted"] = this.isSubmitted;
         data["cacheKey"] = this.cacheKey;
         return data;
     }
@@ -20855,6 +20975,7 @@ export interface ICreateLeaveRequestCommand {
     statusId?: string | undefined;
     attachmentUrl?: string | undefined;
     reason?: string | undefined;
+    isSubmitted?: boolean;
     cacheKey?: string;
 }
 
@@ -20868,6 +20989,7 @@ export class UpdateLeaveRequestCommand implements IUpdateLeaveRequestCommand {
     statusId?: string | undefined;
     attachmentUrl?: string | undefined;
     reason?: string | undefined;
+    isSubmitted?: boolean;
     cacheKey?: string;
 
     constructor(data?: IUpdateLeaveRequestCommand) {
@@ -20890,6 +21012,7 @@ export class UpdateLeaveRequestCommand implements IUpdateLeaveRequestCommand {
             this.statusId = _data["statusId"];
             this.attachmentUrl = _data["attachmentUrl"];
             this.reason = _data["reason"];
+            this.isSubmitted = _data["isSubmitted"];
             this.cacheKey = _data["cacheKey"];
         }
     }
@@ -20912,6 +21035,7 @@ export class UpdateLeaveRequestCommand implements IUpdateLeaveRequestCommand {
         data["statusId"] = this.statusId;
         data["attachmentUrl"] = this.attachmentUrl;
         data["reason"] = this.reason;
+        data["isSubmitted"] = this.isSubmitted;
         data["cacheKey"] = this.cacheKey;
         return data;
     }
@@ -20927,6 +21051,7 @@ export interface IUpdateLeaveRequestCommand {
     statusId?: string | undefined;
     attachmentUrl?: string | undefined;
     reason?: string | undefined;
+    isSubmitted?: boolean;
     cacheKey?: string;
 }
 
@@ -20980,6 +21105,74 @@ export interface IGetDateRangeTotalCountQuery {
     startDate?: Date;
     endDate?: Date;
     allowCache?: boolean | undefined;
+}
+
+export class LeaveRequestApprovalCommand implements ILeaveRequestApprovalCommand {
+    id?: string;
+    startDate?: Date;
+    endDate?: Date;
+    totalDays?: number;
+    reason?: string | undefined;
+    approvalAction?: LeaveStatus;
+    cacheKey?: string;
+
+    constructor(data?: ILeaveRequestApprovalCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.startDate = _data["startDate"] ? new Date(_data["startDate"].toString()) : <any>undefined;
+            this.endDate = _data["endDate"] ? new Date(_data["endDate"].toString()) : <any>undefined;
+            this.totalDays = _data["totalDays"];
+            this.reason = _data["reason"];
+            this.approvalAction = _data["approvalAction"];
+            this.cacheKey = _data["cacheKey"];
+        }
+    }
+
+    static fromJS(data: any): LeaveRequestApprovalCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new LeaveRequestApprovalCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["startDate"] = this.startDate ? formatDate(this.startDate) : <any>undefined;
+        data["endDate"] = this.endDate ? formatDate(this.endDate) : <any>undefined;
+        data["totalDays"] = this.totalDays;
+        data["reason"] = this.reason;
+        data["approvalAction"] = this.approvalAction;
+        data["cacheKey"] = this.cacheKey;
+        return data;
+    }
+}
+
+export interface ILeaveRequestApprovalCommand {
+    id?: string;
+    startDate?: Date;
+    endDate?: Date;
+    totalDays?: number;
+    reason?: string | undefined;
+    approvalAction?: LeaveStatus;
+    cacheKey?: string;
+}
+
+export enum LeaveStatus {
+    Initiated = 12001,
+    Submitted = 12002,
+    Forwarded = 12003,
+    Approved = 12004,
+    Rejected = 12005,
 }
 
 export class PaginatedResponseOfWorkingShiftModel implements IPaginatedResponseOfWorkingShiftModel {
