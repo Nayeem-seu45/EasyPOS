@@ -1,4 +1,6 @@
-﻿namespace EasyPOS.Application.Features.HRM.LeaveRequests.Queries;
+﻿using EasyPOS.Application.Common.Services;
+
+namespace EasyPOS.Application.Features.HRM.LeaveRequests.Queries;
 
 public record GetLeaveRequestByIdQuery(Guid Id) : ICacheableQuery<LeaveRequestModel>
 {
@@ -9,7 +11,9 @@ public record GetLeaveRequestByIdQuery(Guid Id) : ICacheableQuery<LeaveRequestMo
     public bool? AllowCache => false;
 }
 
-internal sealed class GetLeaveRequestByIdQueryHandler(ISqlConnectionFactory sqlConnection)
+internal sealed class GetLeaveRequestByIdQueryHandler(
+    ISqlConnectionFactory sqlConnection,
+    ICurrentEmployee currentEmployee)
      : IQueryHandler<GetLeaveRequestByIdQuery, LeaveRequestModel>
 {
 
@@ -17,7 +21,11 @@ internal sealed class GetLeaveRequestByIdQueryHandler(ISqlConnectionFactory sqlC
     {
         if (request.Id.IsNullOrEmpty())
         {
-            return new LeaveRequestModel();
+            var currentEmployeeId = await currentEmployee.GetCurrentEmployeeIdAsync();
+            return new LeaveRequestModel()
+            {
+                EmployeeId = currentEmployeeId ?? Guid.Empty,
+            };
         }
         var connection = sqlConnection.GetOpenConnection();
 

@@ -1,3 +1,5 @@
+using System.Data;
+
 namespace EasyPOS.Application.Features.HRM.LeaveRequests.Queries;
 
 public record GetDateRangeTotalCountQuery(
@@ -13,7 +15,8 @@ public record GetDateRangeTotalCountQuery(
     public bool? AllowCache => false;
 }
 
-internal sealed class GetDateRangeTotalQueryHandler(ISqlConnectionFactory sqlConnection, IApplicationDbContext applicationDbContext)
+internal sealed class GetDateRangeTotalQueryHandler(
+    ISqlConnectionFactory sqlConnection)
      : IQueryHandler<GetDateRangeTotalCountQuery, int>
 {
 
@@ -21,69 +24,110 @@ internal sealed class GetDateRangeTotalQueryHandler(ISqlConnectionFactory sqlCon
     {
         using var connection = sqlConnection.GetOpenConnection();
 
-        // Query LeaveType
-        var leaveType = await connection.QueryFirstOrDefaultAsync<dynamic>(
-            @"SELECT IsSandwichAllowed, MaxConsecutiveDays
-              FROM LeaveTypes
-              WHERE Id = @LeaveTypeId",
-            new { request.LeaveTypeId });
+        var leaveType = await GetLeaveTypeAsync(connection, request.LeaveTypeId);
 
         if (leaveType == null)
-        {
             return Result.Failure<int>(Error.Failure(ErrorMessages.NotFound, "Leave Type not found."));
-        }
 
-
-        // Query WorkingShiftDetails
-        var shiftDetails = await connection.QueryAsync<dynamic>(
-            @"SELECT DayOfWeek, IsWeekend
-              FROM WorkingShiftDetails
-              WHERE WorkingShiftId = (
-                  SELECT Id FROM WorkingShifts WHERE EmployeeId = @EmployeeId
-              )",
-            new { request.EmployeeId });
+        var shiftDetails = await GetWorkingShiftDetailsAsync(connection, request.EmployeeId);
 
         if (!shiftDetails.Any())
-        {
             return Result.Failure<int>(Error.Failure(ErrorMessages.NotFound, "Working Shift not found."));
-        }
 
-        // Query Holidays
-        var holidays = await connection.QueryAsync<dynamic>(
-            @"SELECT StartDate, EndDate
-              FROM Holidays
-              WHERE IsActive = 1
-                AND StartDate <= @EndDate
-                AND EndDate >= @StartDate",
-            new { request.StartDate, request.EndDate });
+        var holidays = await GetHolidaysAsync(connection, request.StartDate, request.EndDate);
 
-        // Calculate Total Days
-        int totalDays = request.EndDate.DayNumber - request.StartDate.DayNumber;
+        // Calculate total days (inclusive of both start and end dates)
+        int totalDays = CalculateTotalDays(request.StartDate, request.EndDate);
 
+        // Handle Sandwich Leave Scenario
         if (leaveType.IsSandwichAllowed)
         {
-            return leaveType.MaxConsecutiveDays is not null && totalDays > (int)leaveType.MaxConsecutiveDays
-                ? Result.Failure<int>(Error.Failure(ErrorMessages.InvalidOperation, "Selected range can't exceed Max Consecutive Days."))
-                : (Result<int>)totalDays;
+            return ValidateSandwichLeave(leaveType.MaxConsecutiveDays, totalDays);
         }
 
-        // Build Date Range
-        var dateRange = Enumerable.Range(0, totalDays)
-                                  .Select(offset => request.StartDate.AddDays(offset))
-                                  .ToList();
+        // Calculate Working Days
+        var workingDays = CalculateWorkingDays(request.StartDate, totalDays, shiftDetails, holidays);
 
-        // Filter Weekends and Holidays
-        int workingDays = dateRange.Count(date =>
-            !shiftDetails.Any(sd => (DayOfWeek)sd.DayOfWeek == date.DayOfWeek && sd.IsWeekend) &&
-            !holidays.Any(h => h.StartDate <= date && h.EndDate >= date));
-
-        if (leaveType.MaxConsecutiveDays != null && workingDays > (int)leaveType.MaxConsecutiveDays)
+        // Validate against Max Consecutive Days
+        if (leaveType.MaxConsecutiveDays != null && workingDays > leaveType.MaxConsecutiveDays)
         {
-            return Result.Failure<int>(Error.Failure(
-                ErrorMessages.InvalidOperation,
+            return Result.Failure<int>(Error.Failure(ErrorMessages.InvalidOperation,
                 "Selected range can't exceed Max Consecutive Days."));
         }
 
         return workingDays;
     }
+
+    private static async Task<dynamic> GetLeaveTypeAsync(IDbConnection connection, Guid leaveTypeId)
+    {
+        return await connection.QueryFirstOrDefaultAsync<dynamic>(
+            @"SELECT IsSandwichAllowed, MaxConsecutiveDays
+              FROM LeaveTypes
+              WHERE Id = @LeaveTypeId",
+            new { LeaveTypeId = leaveTypeId });
+    }
+
+    private static async Task<IEnumerable<dynamic>> GetWorkingShiftDetailsAsync(IDbConnection connection, Guid employeeId)
+    {
+        return await connection.QueryAsync<dynamic>(
+            @"SELECT DayOfWeek, IsWeekend
+              FROM dbo.WorkingShiftDetails
+              WHERE WorkingShiftId = (
+                  SELECT ws.Id 
+                  FROM dbo.Employees e 
+                  INNER JOIN dbo.WorkingShifts ws ON ws.Id = e.WorkingShiftId
+                  WHERE e.Id = @EmployeeId
+              )",
+            new { EmployeeId = employeeId });
+    }
+
+    private static async Task<IEnumerable<dynamic>> GetHolidaysAsync(
+        IDbConnection connection, 
+        DateOnly startDate, 
+        DateOnly endDate)
+    {
+        return await connection.QueryAsync<dynamic>(
+            @"SELECT StartDate, EndDate
+              FROM Holidays
+              WHERE IsActive = 1
+                AND StartDate <= @EndDate
+                AND EndDate >= @StartDate",
+            new { StartDate = startDate, EndDate = endDate });
+    }
+
+    private static int CalculateTotalDays(
+        DateOnly startDate,
+        DateOnly endDate) => endDate.DayNumber - startDate.DayNumber + 1;
+
+    private static Result<int> ValidateSandwichLeave(int? maxConsecutiveDays, int totalDays)
+    {
+        if (maxConsecutiveDays is not null && totalDays > maxConsecutiveDays)
+        {
+            return Result.Failure<int>(Error.Failure(
+                ErrorMessages.InvalidOperation, "Selected range can't exceed Max Consecutive Days."));
+        }
+        return Result.Success(totalDays);
+    }
+
+    private static int CalculateWorkingDays(
+        DateOnly startDate, 
+        int totalDays, 
+        IEnumerable<dynamic> shiftDetails, 
+        IEnumerable<dynamic> holidays)
+    {
+        var dateRange = Enumerable.Range(0, totalDays)
+                                  .Select(offset => startDate.AddDays(offset))
+                                  .ToList();
+
+        return dateRange.Count(date =>
+            !IsWeekend(date, shiftDetails) &&
+            !IsHoliday(date, holidays));
+    }
+
+    private static bool IsWeekend(DateOnly date, IEnumerable<dynamic> shiftDetails) 
+        => shiftDetails.Any(sd => (DayOfWeek)sd.DayOfWeek == date.DayOfWeek && sd.IsWeekend);
+
+    private static bool IsHoliday(
+        DateOnly date, 
+        IEnumerable<dynamic> holidays) => holidays.Any(h => h.StartDate <= date && h.EndDate >= date);
 }

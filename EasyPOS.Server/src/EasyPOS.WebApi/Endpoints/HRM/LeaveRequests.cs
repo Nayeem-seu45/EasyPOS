@@ -54,12 +54,10 @@ public class LeaveRequests : EndpointGroupBase
         return TypedResults.Ok(result.Value);
     }
 
-    private async Task<IResult> Get(ISender sender, ICurrentEmployee currentEmployee, Guid id)
+    private async Task<IResult> Get(ISender sender, Guid id)
     {
         var result = await sender.Send(new GetLeaveRequestByIdQuery(id));
         
-        var employeeId = await GetEmployeeId(currentEmployee, id, result.Value);
-
         var employeesSelectList = await sender.Send(new GetSelectListQuery(
             Sql: SelectListSqls.EmployeesSelectListSql,
             Parameters: new { },
@@ -74,7 +72,7 @@ public class LeaveRequests : EndpointGroupBase
             AllowCacheList: true)
         );
 
-        var leaveTypeSelectList = await sender.Send(new GetEmployeeLeaveTypeSelectListQuery(employeeId, CacheAllowed: false));
+        var leaveTypeSelectList = await sender.Send(new GetEmployeeLeaveTypeSelectListQuery(result.Value.EmployeeId, CacheAllowed: false));
 
         result.Value.OptionsDataSources.Add("employeesSelectList", employeesSelectList.Value);
         result.Value.OptionsDataSources.Add("leaveTypeSelectList", leaveTypeSelectList.Value);

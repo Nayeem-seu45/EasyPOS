@@ -1,4 +1,4 @@
-import { Component, Directive, Inject, inject, OnInit } from "@angular/core";
+import { Directive, Inject, inject, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { CustomDialogService } from "../../services/custom-dialog.service";
 import { ToastService } from "../../services/toast.service";
@@ -24,6 +24,7 @@ export abstract class BaseDetailComponent implements OnInit {
     return this.form.controls;
   }
 
+  // Dependency injections
   protected toast: ToastService = inject(ToastService);
   protected customDialogService: CustomDialogService = inject(CustomDialogService)
   protected fb: FormBuilder = inject(FormBuilder);
@@ -31,18 +32,35 @@ export abstract class BaseDetailComponent implements OnInit {
   constructor(@Inject(ENTITY_CLIENT) protected entityClient: any) { }
 
   ngOnInit() {
+    this.onInitialize();
+  }
+
+  /**
+   * Initialization logic separated from `ngOnInit`.
+   * Can be overridden by child components for custom initialization.
+   */
+  protected onInitialize(): void {
     this.id = this.customDialogService.getConfigData();
     this.initializeFormGroup();
     this.getById(this.id);
   }
 
+  /**
+   * Initialize the form group structure. Must be implemented by derived classes.
+   */
   protected abstract initializeFormGroup(): void;
 
+  /**
+   * Close the modal dialog.
+   */
   protected cancel() {
     this.customDialogService.close(false);
   }
 
-  protected onSubmit() {
+  /**
+   * Submits the form data.
+   */
+  protected onSubmit(data?: any) {
 
     if (this.form.invalid) {
       this.toast.showError('Form is invalid.');
@@ -56,10 +74,33 @@ export abstract class BaseDetailComponent implements OnInit {
     }
   }
 
+  /**
+   * Handles data fetching by ID.
+   */
+  protected getById(id: string) {
+    this.entityClient.get(id).subscribe({
+      next: (res: any) => {
+        if (id && id !== this.emptyGuid) {
+          this.item = res;
+        }
+        this.optionsDataSources = res.optionsDataSources;
+        this.form.patchValue({
+          ...this.item
+        });
+      },
+      error: (error) => {
+        this.toast.showError(CommonUtils.getErrorMessage(error));
+      }
+    });
+  }
+
+  /**
+  * Save operation. Executes the creation logic.
+  */
   protected save() {
-    let createCommand = { ...this.form.value };
-    createCommand = this.beforeActionProcess(createCommand);
-    this.entityClient.create(createCommand).subscribe({
+    let command = { ...this.form.value };
+    command = this.beforeActionProcess(command) || command;
+    this.entityClient.create(command).subscribe({
       next: () => {
         this.toast.created();
         this.customDialogService.close(true);
@@ -73,10 +114,13 @@ export abstract class BaseDetailComponent implements OnInit {
     });
   }
 
+  /**
+   * Update operation. Executes the update logic.
+   */
   protected update() {
-    let updateCommand = { ...this.form.value };
-    updateCommand = this.beforeActionProcess(updateCommand);
-    this.entityClient.update(updateCommand).subscribe({
+    let command = { ...this.form.value };
+    command = this.beforeActionProcess(command);
+    this.entityClient.update(command).subscribe({
       next: () => {
         this.toast.updated();
         this.customDialogService.close(true);
@@ -91,31 +135,19 @@ export abstract class BaseDetailComponent implements OnInit {
   }
 
   /**
-    * Optional method to process the command object before API calls.
-    * Child classes can override this method as needed.
-    */
-  protected beforeActionProcess(command: any): any {
+   * Hook to process data before save/update.
+   * Can be overridden by child classes for custom logic.
+   */
+  protected beforeActionProcess(command?: any): any {
     return command; // Default implementation does nothing
   }
 
-  protected postActionProcess() {
+  /**
+   * Hook executed after save/update.
+   * Can be overridden by child classes for custom logic.
+   */
+  protected postActionProcess(data?: any) {
 
   }
 
-  protected getById(id: string) {
-    this.entityClient.get(id).subscribe({
-      next: (res: any) => {
-        if (!this.mapCreateResponse && id && id !== this.emptyGuid) {
-          this.item = res;
-        }
-        this.optionsDataSources = res.optionsDataSources;
-        this.form.patchValue({
-          ...this.item
-        });
-      },
-      error: (error) => {
-        this.toast.showError(CommonUtils.getErrorMessage(error));
-      }
-    });
-  }
 }
