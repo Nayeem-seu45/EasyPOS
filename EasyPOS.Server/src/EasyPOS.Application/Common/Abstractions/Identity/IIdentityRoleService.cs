@@ -1,7 +1,4 @@
-﻿using EasyPOS.Application.Features.Admin.Roles.Commands;
-using EasyPOS.Application.Common.Models;
-using EasyPOS.Application.Features.Admin.Roles.Queries;
-using EasyPOS.Domain.Shared;
+﻿using EasyPOS.Application.Features.Admin.Roles.Queries;
 
 namespace EasyPOS.Application.Common.Abstractions.Identity;
 

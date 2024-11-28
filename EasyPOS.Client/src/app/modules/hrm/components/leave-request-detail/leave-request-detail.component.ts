@@ -1,11 +1,12 @@
 ﻿import { Component, Inject } from '@angular/core';
 import { BaseDetailComponent } from 'src/app/shared/components/base-detail/base-detail.component';
 import { ENTITY_CLIENT } from 'src/app/shared/injection-tokens/tokens';
-import { GetDateRangeTotalCountQuery, LeaveRequestModel, LeaveRequestsClient } from 'src/app/modules/generated-clients/api-service';
+import { GetDateRangeTotalCountQuery, LeaveRequestModel, LeaveRequestsClient, LeaveStatus } from 'src/app/modules/generated-clients/api-service';
 import { DatePipe } from '@angular/common';
 import { DateUtilService } from 'src/app/shared/Utilities/date-util.service';
 import { CommonUtils } from 'src/app/shared/Utilities/common-utilities';
 import { CommonConstants } from 'src/app/core/contants/common';
+import { PermissionService } from 'src/app/core/auth/services/permission.service';
 
 @Component({
   selector: 'app-leave-request-detail',
@@ -17,14 +18,22 @@ export class LeaveRequestDetailComponent extends BaseDetailComponent {
 
   minEndDate: Date | null = null;
   maxStartDate: Date | null = null;
+  LeaveStatus = LeaveStatus;
 
   constructor(@Inject(ENTITY_CLIENT) entityClient: LeaveRequestsClient,
-  private dateUtil: DateUtilService){
+  private dateUtil: DateUtilService,
+  private permissionService: PermissionService){
     super(entityClient)
   }
 
-  override onSubmit(){
-    console.log(this.form.value)
+  override onSubmit(actionData?: any){
+    if (!actionData) {
+      const submitButton = document.activeElement as HTMLButtonElement;
+      actionData = submitButton?.value ? parseInt(submitButton.value, 10) : undefined;
+    }
+  
+    console.log(this.form.value);
+    console.log(actionData);
   }
 
   onStartDateChange(date){
@@ -103,11 +112,20 @@ export class LeaveRequestDetailComponent extends BaseDetailComponent {
       leaveTypeId: [null],
       startDate: [null],
       endDate: [null],
-      totalDays: [null],
+      totalDays: [{ value: null, disabled: true }],
       statusId: [null],
       attachmentUrl: [null],
       reason: [null]
     });
+  }
+
+  override applyFieldPermissions(): void {
+    // Enable or disable the employeeId field based on the user's permission
+    if (this.permissionService.hasPermission('Permissions.LeaveRequests.ModifyEmployee')) {
+      this.form.get('employeeId')?.enable();
+    } else {
+      this.form.get('employeeId')?.disable();
+    }
   }
 
   private getDateRangeCount(){

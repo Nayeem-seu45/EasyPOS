@@ -43,6 +43,7 @@ export abstract class BaseDetailComponent implements OnInit {
     this.id = this.customDialogService.getConfigData();
     this.initializeFormGroup();
     this.getById(this.id);
+    this.applyFieldPermissions(); // Hook for permission handling
   }
 
   /**
@@ -152,6 +153,13 @@ export abstract class BaseDetailComponent implements OnInit {
    */
   protected postActionProcess(actionData?: any) {
 
+  }
+
+  /**
+   * Can be overridden by child components to enable/disable fields based on permissions.
+   */
+  protected applyFieldPermissions(): void {
+    // Default behavior: No field permissions applied.
   }
 
 }

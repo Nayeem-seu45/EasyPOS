@@ -1,17 +1,12 @@
-﻿using System.Security.Claims;
-using EasyPOS.Application.Features.Admin.Roles.Commands;
-using EasyPOS.Domain.Admin;
-using EasyPOS.Infrastructure.Persistence;
+﻿using System.Transactions;
 using EasyPOS.Application.Common.Abstractions;
 using EasyPOS.Application.Common.Abstractions.Identity;
 using EasyPOS.Application.Common.Constants;
 using EasyPOS.Application.Common.Models;
 using EasyPOS.Application.Features.Admin.Roles.Queries;
-using EasyPOS.Domain.Shared;
-using EasyPOS.Infrastructure.Identity;
+using EasyPOS.Domain.Admin;
 using EasyPOS.Infrastructure.Identity.Permissions;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace EasyPOS.Infrastructure.Identity.Services;
@@ -116,20 +111,50 @@ internal class IdentityRoleService(
     }
 
     public async Task<Result> DeleteRoleAsync(
-            string id,
-            CancellationToken cancellation = default)
+        string id,
+        CancellationToken cancellationToken = default)
     {
-        var role = await roleManager.FindByIdAsync(id);
+        // Use using statement to ensure proper disposal
+        using var transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
 
-        if (role is null)
-            Result.Failure(Error.Failure("Role.Delete", ErrorMessages.ROLE_NOT_FOUND));
+        try
+        {
+            // Find the role
+            var role = await roleManager.FindByIdAsync(id);
+            if (role is null)
+                return Result.Failure(Error.Failure("Role.Delete", ErrorMessages.ROLE_NOT_FOUND));
 
-        var result = await roleManager.DeleteAsync(role!);
+            // Remove all claims associated with this role first
+            var roleClaims = await roleManager.GetClaimsAsync(role);
+            foreach (var claim in roleClaims)
+            {
+                var removeClaimResult = await roleManager.RemoveClaimAsync(role, claim);
+                if (!removeClaimResult.Succeeded)
+                {
+                    return Result.Failure(Error.Failure("Role.Delete",
+                        $"Failed to remove role claim: {claim.Type}"));
+                }
+            }
 
-        return result.Succeeded
-            ? Result.Success()
-            : Result.Failure(Error.Failure("Role.Delete", ErrorMessages.UNABLE_DELETE_ROLE));
+            // Delete the role
+            var deleteResult = await roleManager.DeleteAsync(role);
+            if (!deleteResult.Succeeded)
+            {
+                return Result.Failure(Error.Failure("Role.Delete", ErrorMessages.UNABLE_DELETE_ROLE));
+            }
 
+            // Complete the transaction
+            transaction.Complete();
+            return Result.Success();
+        }
+        catch (Exception ex)
+        {
+            // Log the exception if you have a logger
+            // _logger.LogError(ex, "Error deleting role with ID {RoleId}", id);
+
+            return Result.Failure(Error.Failure("Role.Delete",
+                "An unexpected error occurred while deleting the role"));
+        }
     }
 
     public async Task<Result<RoleModel>> GetRoleAsync(

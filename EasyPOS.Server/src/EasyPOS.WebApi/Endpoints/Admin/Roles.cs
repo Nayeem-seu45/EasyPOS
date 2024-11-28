@@ -1,13 +1,9 @@
-﻿using EasyPOS.Application.Features.Admin.AppMenus.Queries;
-using EasyPOS.Application.Common.Abstractions;
-using EasyPOS.Application.Common.DapperQueries;
+﻿using EasyPOS.Application.Common.Abstractions;
 using EasyPOS.Application.Common.Models;
+using EasyPOS.Application.Features.Admin.AppMenus.Queries;
 using EasyPOS.Application.Features.Admin.Roles.Commands;
 using EasyPOS.Application.Features.Admin.Roles.Queries;
-using EasyPOS.Domain.Shared;
 using EasyPOS.Infrastructure.Communications;
-using EasyPOS.WebApi.Extensions;
-using EasyPOS.WebApi.Infrastructure;
 using Microsoft.AspNetCore.SignalR;
 
 namespace EasyPOS.WebApi.Endpoints.Admin;
@@ -36,6 +32,12 @@ public class Roles : EndpointGroupBase
             .WithName("UpdateRole")
             .Produces(StatusCodes.Status204NoContent)
             .Produces<ProblemDetails>(StatusCodes.Status400BadRequest);
+
+        group.MapPut("Delete/{id}", Delete)
+            .WithName("DeleteRole")
+            .Produces(StatusCodes.Status204NoContent)
+            .Produces<ProblemDetails>(StatusCodes.Status400BadRequest);
+
 
         group.MapGet("GetRolePermissions/{id}", GetRolePermissions)
             .WithName("GetRolePermissions")
@@ -89,6 +91,15 @@ public class Roles : EndpointGroupBase
             onSuccess: () => Results.NoContent(),
             onFailure: result.ToProblemDetails);
     }
+
+    public async Task<IResult> Delete(ISender sender, [FromRoute] string id)
+    {
+        var result = await sender.Send(new DeleteRoleCommand(id));
+        return result.Match(
+             onSuccess: () => Results.NoContent(),
+             onFailure: result.ToProblemDetails);
+    }
+
 
     private async Task<IResult> GetRolePermissions(ISender sender, [FromRoute] string id)
     {

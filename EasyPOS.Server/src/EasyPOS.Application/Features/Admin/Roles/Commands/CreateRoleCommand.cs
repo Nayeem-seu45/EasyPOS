@@ -1,8 +1,4 @@
-﻿using System.Text.Json.Serialization;
-using EasyPOS.Application.Common.Abstractions.Caching;
-using EasyPOS.Application.Common.Abstractions.Identity;
-using EasyPOS.Application.Common.Abstractions.Messaging;
-using EasyPOS.Domain.Shared;
+﻿using EasyPOS.Application.Common.Abstractions.Identity;
 
 namespace EasyPOS.Application.Features.Admin.Roles.Commands;
 
@@ -16,7 +12,8 @@ public record CreateRoleCommand(
     public string CacheKey => CacheKeys.Role;
 }
 
-internal sealed class CreateRoleCommandHandler(IIdentityRoleService roleService) : ICommandHandler<CreateRoleCommand, string>
+internal sealed class CreateRoleCommandHandler(IIdentityRoleService roleService) 
+    : ICommandHandler<CreateRoleCommand, string>
 {
     public async Task<Result<string>> Handle(CreateRoleCommand request, CancellationToken cancellationToken)
     {
