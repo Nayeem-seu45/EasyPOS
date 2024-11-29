@@ -26,4 +26,16 @@ export class PermissionService {
     return this.permissions.has(permission.trim());
   }
 
+  hasAnyPermission(permissions: string[]): boolean 
+  { 
+    if (permissions.length === 0) return false; 
+    return permissions.some(permission => this.permissions.has(permission.trim())); 
+  } 
+    
+  hasAllPermissions(permissions: string[]): boolean 
+  { 
+    if (permissions.length === 0) return false; 
+    return permissions.every(permission => this.permissions.has(permission.trim())); 
+  }
+
 }

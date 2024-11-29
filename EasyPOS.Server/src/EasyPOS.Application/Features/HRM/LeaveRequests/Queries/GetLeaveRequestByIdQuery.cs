@@ -39,8 +39,10 @@ internal sealed class GetLeaveRequestByIdQueryHandler(
                 t.TotalDays AS {nameof(LeaveRequestModel.TotalDays)},
                 t.StatusId AS {nameof(LeaveRequestModel.StatusId)},
                 t.AttachmentUrl AS {nameof(LeaveRequestModel.AttachmentUrl)},
-                t.Reason AS {nameof(LeaveRequestModel.Reason)}
+                t.Reason AS {nameof(LeaveRequestModel.Reason)},
+                ls.DevCode AS {nameof(LeaveRequestModel.LeaveStatus)}
             FROM dbo.LeaveRequests AS t
+            LEFT JOIN dbo.LookupDetails AS ls ON ls.Id = t.StatusId
             WHERE t.Id = @Id
             """;
 

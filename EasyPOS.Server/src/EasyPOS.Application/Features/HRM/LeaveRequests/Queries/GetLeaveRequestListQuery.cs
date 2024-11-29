@@ -31,11 +31,13 @@ internal sealed class GetLeaveRequestQueryHandler(ISqlConnectionFactory sqlConne
                 t.Reason AS {nameof(LeaveRequestModel.Reason)},
                 e.FirstName AS {nameof(LeaveRequestModel.EmployeeName)},
                 d.Name AS {nameof(LeaveRequestModel.Department)},
-                d2.Name AS {nameof(LeaveRequestModel.Designation)}
+                d2.Name AS {nameof(LeaveRequestModel.Designation)},
+                ls.Name AS {nameof(LeaveRequestModel.Status)}
             FROM dbo.LeaveRequests AS t
             LEFT JOIN dbo.Employees e ON e.Id = t.EmployeeId
             LEFT JOIN dbo.Departments d ON d.Id = e.DepartmentId
             LEFT JOIN dbo.Designations d2 ON d2.Id = e.DesignationId
+            LEFT JOIN dbo.LookupDetails ls ON ls.Id = t.StatusId
             WHERE 1 = 1
             """;
 

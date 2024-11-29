@@ -4,6 +4,7 @@ import { CustomDialogService } from "../../services/custom-dialog.service";
 import { ToastService } from "../../services/toast.service";
 import { ENTITY_CLIENT } from "../../injection-tokens/tokens";
 import { CommonUtils } from "../../Utilities/common-utilities";
+import { PermissionService } from "src/app/core/auth/services/permission.service";
 
 @Directive({
   selector: '[baseDetail]', // Selector is required but can be generic
@@ -17,18 +18,21 @@ export abstract class BaseDetailComponent implements OnInit {
   form: FormGroup;
   id: string = '';
   item: any;
-  mapCreateResponse: boolean = false;
   public optionsDataSources = {};
 
   protected get f() {
     return this.form.controls;
   }
 
+  protected get isEdit(): boolean{
+    return this.id && this.id !== this.emptyGuid;
+  }
+
   // Dependency injections
   protected toast: ToastService = inject(ToastService);
   protected customDialogService: CustomDialogService = inject(CustomDialogService)
   protected fb: FormBuilder = inject(FormBuilder);
-
+  protected permissionService = inject(PermissionService);
   constructor(@Inject(ENTITY_CLIENT) protected entityClient: any) { }
 
   ngOnInit() {
@@ -63,20 +67,48 @@ export abstract class BaseDetailComponent implements OnInit {
    */
   protected onFormSubmit(actionData?: any) {
 
+    // Mark all fields as touched to trigger validation
+    // Object.keys(this.form.controls).forEach(field => {
+    //   const control = this.form.get(field);
+    //   control?.markAsTouched();
+    // });
+
     if (this.form.invalid) {
       this.toast.showError('Form is invalid.');
       return;
     }
 
      // Prepare the command object with optional action-based customization
-     let command = { ...this.form.value };
-     command = this.beforeActionProcess(command, actionData);
+     let formData = { ...this.form.getRawValue() };
+     formData = this.beforeActionProcess(formData, actionData);
 
     if (!this.id || this.id === this.emptyGuid) {
-      this.save(command);
+      this.save(formData);
     } else {
-      this.update(command);
+      this.update(formData);
     }
+  }
+
+  protected onActionClick(event: Event,  actionData?: any): void {
+
+     // Prevent default form submission
+     event.preventDefault();
+    
+     // Stop event propagation to prevent triggering ngSubmit
+     event.stopPropagation();
+
+    // Mark all fields as touched to trigger validation
+    Object.keys(this.form.controls).forEach(field => {
+      const control = this.form.get(field);
+      control?.markAsTouched();
+    });
+
+    if (this.form.invalid) {
+      this.toast.showError('Form is invalid.');
+      return;
+    }
+
+    this.onActionHandler(this.form.getRawValue(), actionData)
   }
 
   /**
@@ -139,6 +171,14 @@ export abstract class BaseDetailComponent implements OnInit {
     });
   }
 
+  protected diableField(fieldName: string){
+    this.form.get(fieldName)?.disable();
+  }
+
+  protected enableField(fieldName: string){
+    this.form.get(fieldName)?.enable();
+  }
+
   /**
    * Hook to process data before save/update.
    * Can be overridden by child classes for custom logic.
@@ -160,6 +200,38 @@ export abstract class BaseDetailComponent implements OnInit {
    */
   protected applyFieldPermissions(): void {
     // Default behavior: No field permissions applied.
+  }
+
+  protected updateFieldsBasedOnPermissions(permission: string, fieldNames: string | string[], enable: boolean): void {
+    const fields = Array.isArray(fieldNames) ? fieldNames : [fieldNames];
+  
+    fields.forEach(fieldName => {
+      const field = this.form.get(fieldName);
+      if (field) {
+        if (enable && this.permissionService.hasPermission(permission)) {
+          field.enable();
+        } else {
+          field.disable();
+        }
+      }
+    });
+  }
+  
+  protected enableFieldsBasedOnPermissions(permission: string, fieldNames: string | string[]): void {
+    this.updateFieldsBasedOnPermissions(permission, fieldNames, true);
+  }
+  
+  protected disableFieldsBasedOnPermissions(permission: string, fieldNames: string | string[]): void {
+    this.updateFieldsBasedOnPermissions(permission, fieldNames, false);
+  }
+  
+
+   /**
+   * Hook to handle on onActionClick button clicked.
+   * Can be overridden by child classes for custom logic.
+   */
+   protected onActionHandler(formData?: any, actionData?: any) {
+
   }
 
 }

@@ -13883,11 +13883,36 @@
             "type": "string",
             "nullable": true
           },
+          "leaveStatus": {
+            "$ref": "#/components/schemas/LeaveStatus"
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
           "optionsDataSources": {
             "type": "object",
             "additionalProperties": {}
           }
         }
+      },
+      "LeaveStatus": {
+        "type": "integer",
+        "description": "",
+        "x-enumNames": [
+          "Initiated",
+          "Submitted",
+          "Forwarded",
+          "Approved",
+          "Rejected"
+        ],
+        "enum": [
+          12001,
+          12002,
+          12003,
+          12004,
+          12005
+        ]
       },
       "GetLeaveRequestListQuery": {
         "allOf": [
@@ -14059,24 +14084,6 @@
             "type": "string"
           }
         }
-      },
-      "LeaveStatus": {
-        "type": "integer",
-        "description": "",
-        "x-enumNames": [
-          "Initiated",
-          "Submitted",
-          "Forwarded",
-          "Approved",
-          "Rejected"
-        ],
-        "enum": [
-          12001,
-          12002,
-          12003,
-          12004,
-          12005
-        ]
       },
       "PaginatedResponseOfWorkingShiftModel": {
         "type": "object",

@@ -33,14 +33,14 @@ export class InputDatepickerComponent implements ControlValueAccessor, Validator
 
   // Style & Accessibility
   @Input() inputStyle: { [key: string]: string } = {};
-  @Input() inputStyleClass: string  = null;
-  @Input() panelStyle: { [key: string]: string }  = null;
-  @Input() panelStyleClass: string  = null;
+  @Input() inputStyleClass: string = null;
+  @Input() panelStyle: { [key: string]: string } = null;
+  @Input() panelStyleClass: string = null;
   @Input() style: {} = null;
   @Input() styleClass: string = null;
-  @Input() ariaLabel: string  = null;
-  @Input() ariaLabelledBy: string  = null;
-  @Input() iconAriaLabel: string  = null;
+  @Input() ariaLabel: string = null;
+  @Input() ariaLabelledBy: string = null;
+  @Input() iconAriaLabel: string = null;
 
   // Date Formatting & Selection
   @Input() dateFormat: string = 'dd/mm/yy';
@@ -48,18 +48,18 @@ export class InputDatepickerComponent implements ControlValueAccessor, Validator
   @Input() multipleSeparator: string = ',';
   @Input() rangeSeparator: string = '-';
   @Input() dataType: string = 'date';
-  @Input() minDate: Date  = null;
-  @Input() maxDate: Date  = null;
-  @Input() yearRange: string  = null;
-  @Input() defaultDate: Date  = null;
-  @Input() firstDayOfWeek: number  = null;
-  @Input() maxDateCount: number  = null;
+  @Input() minDate: Date = null;
+  @Input() maxDate: Date = null;
+  @Input() yearRange: string = null;
+  @Input() defaultDate: Date = null;
+  @Input() firstDayOfWeek: number = null;
+  @Input() maxDateCount: number = null;
   @Input() disabledDates: Date[] = null;
   @Input() disabledDays: number[] = null;
 
   // UI Features
   @Input() showIcon: boolean = true;
-  @Input() icon: string  = null;
+  @Input() icon: string = null;
   @Input() iconDisplay: 'input' | 'button' = 'input';
   @Input() readonlyInput: boolean = false;
   @Input() showButtonBar: boolean = true;
@@ -95,7 +95,7 @@ export class InputDatepickerComponent implements ControlValueAccessor, Validator
   @Input() inline: boolean = false;
   @Input() showOtherMonths: boolean = true;
   @Input() selectOtherMonths: boolean = false;
-  @Input() numberOfMonths: number  = 1;
+  @Input() numberOfMonths: number = 1;
   @Input() locale: any = null;
   @Input() view: "date" | "month" | "year" = "date";
   @Input() touchUI: boolean = false;
@@ -108,25 +108,25 @@ export class InputDatepickerComponent implements ControlValueAccessor, Validator
   @Input() showTransitionOptions: string = '.12s cubic-bezier(0, 0, 0.2, 1)';
   @Input() hideTransitionOptions: string = '.1s linear';
 
-   // Output Event Emitters
-   @Output() onFocus: EventEmitter<Event> = new EventEmitter<Event>();
-   @Output() onBlur: EventEmitter<Event> = new EventEmitter<Event>();
-   @Output() onClose: EventEmitter<AnimationEvent> = new EventEmitter<AnimationEvent>();
-   @Output() onSelect: EventEmitter<Date> = new EventEmitter<Date>();
-   @Output() onClear: EventEmitter<any> = new EventEmitter<any>();
-   @Output() onInput: EventEmitter<any> = new EventEmitter<any>();
-   @Output() onTodayClick: EventEmitter<Date> = new EventEmitter<Date>();
-   @Output() onClearClick: EventEmitter<any> = new EventEmitter<any>();
-   @Output() onMonthChange: EventEmitter<any> = new EventEmitter<any>();
-   @Output() onYearChange: EventEmitter<any> = new EventEmitter<any>();
-   @Output() onClickOutside: EventEmitter<any> = new EventEmitter<any>();
-   @Output() onShow: EventEmitter<any> = new EventEmitter<any>()
-   @Output() onChange: EventEmitter<any> = new EventEmitter<any>()
+  // Output Event Emitters
+  @Output() onFocus: EventEmitter<Event> = new EventEmitter<Event>();
+  @Output() onBlur: EventEmitter<Event> = new EventEmitter<Event>();
+  @Output() onClose: EventEmitter<AnimationEvent> = new EventEmitter<AnimationEvent>();
+  @Output() onSelect: EventEmitter<Date> = new EventEmitter<Date>();
+  @Output() onClear: EventEmitter<any> = new EventEmitter<any>();
+  @Output() onInput: EventEmitter<any> = new EventEmitter<any>();
+  @Output() onTodayClick: EventEmitter<Date> = new EventEmitter<Date>();
+  @Output() onClearClick: EventEmitter<any> = new EventEmitter<any>();
+  @Output() onMonthChange: EventEmitter<any> = new EventEmitter<any>();
+  @Output() onYearChange: EventEmitter<any> = new EventEmitter<any>();
+  @Output() onClickOutside: EventEmitter<any> = new EventEmitter<any>();
+  @Output() onShow: EventEmitter<any> = new EventEmitter<any>()
+  @Output() onChange: EventEmitter<any> = new EventEmitter<any>()
 
   // Callback for ControlValueAccessor
   value: any = null;
-  onTouched: any = () => {};
-  onChangeFn: any = (_: any) => {};
+  onTouched: any = () => { };
+  onChangeFn: any = (_: any) => { };
 
   writeValue(value: any): void {
     this.value = value;
@@ -170,6 +170,8 @@ export class InputDatepickerComponent implements ControlValueAccessor, Validator
   }
 
   onClearEvent(value: any): void {
+    this.value = null; // Reset the value
+    this.onChangeFn(this.value); // Propagate the change to the parent form
     this.onClear.emit(value);
   }
 

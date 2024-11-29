@@ -51,13 +51,132 @@ export class DateUtilService {
     return null;
   }
 
-  convert_dmy_to_ymd(dmy: string, splitter: string = '/'){
-    if(!dmy){
-      return '';
-    }
-    const dateParts = dmy.split(splitter);
-    return `${dateParts[2]}${splitter}${dateParts[1]}${splitter}${dateParts[0]}`;
+   /**
+ * Converts a date string from one format to another.
+ *
+ * @param {string} date - The date string to be converted.
+ * @param {'dmy' | 'mdy' | 'ymd'} [inputFormat='dmy'] - The format of the input date string.
+ *        - 'dmy': day/month/year (default)
+ *        - 'mdy': month/day/year
+ *        - 'ymd': year/month/day
+ * @param {'ymd' | 'dmy' | 'mdy'} [outputFormat='ymd'] - The desired format of the output date string.
+ *        - 'ymd': year-month-day (default)
+ *        - 'dmy': day-month-year
+ *        - 'mdy': month-day-year
+ * @param {string} [inputSplitter='/'] - The character that splits the input date parts. Default is '/'.
+ * @param {string} [outputSplitter='-'] - The character that will split the output date parts. Default is '-'.
+ * @returns {string} The converted date string.
+ * @throws {Error} If the input date format is invalid or the date string is not in the expected format.
+ *
+ * @example
+ * // Convert from day/month/year to year-month-day
+ * convertDate('06/11/2024', 'dmy', 'ymd'); // Output: '2024-11-06'
+ *
+ * @example
+ * // Convert from month-day-year to day/month/year with different splitters
+ * convertDate('11-06-2024', 'mdy', 'dmy', '-', '/'); // Output: '06/11/2024'
+ */
+ convertDateStringFormat(
+  date: string,
+  inputFormat: 'dmy' | 'mdy' | 'ymd' = 'dmy',
+  outputFormat: 'ymd' | 'dmy' | 'mdy' = 'ymd',
+  inputSplitter: string = '/',
+  outputSplitter: string = '-'
+): string {
+  if (!date) {
+    return '';
   }
+
+  const dateParts = date.split(inputSplitter);
+  if (dateParts.length !== 3) {
+    throw new Error('Invalid date format');
+  }
+
+  let day: string, month: string, year: string;
+
+  switch (inputFormat) {
+    case 'dmy':
+      [day, month, year] = dateParts;
+      break;
+    case 'mdy':
+      [month, day, year] = dateParts;
+      break;
+    case 'ymd':
+      [year, month, day] = dateParts;
+      break;
+    default:
+      throw new Error('Invalid input date format');
+  }
+
+  let result: string;
+  switch (outputFormat) {
+    case 'ymd':
+      result = `${year}${outputSplitter}${month}${outputSplitter}${day}`;
+      break;
+    case 'dmy':
+      result = `${day}${outputSplitter}${month}${outputSplitter}${year}`;
+      break;
+    case 'mdy':
+      result = `${month}${outputSplitter}${day}${outputSplitter}${year}`;
+      break;
+    default:
+      throw new Error('Invalid output date format');
+  }
+
+  return result;
+}
+
+/**
+ * Converts a date string from 'day/month/year' format to 'year-month-day' format.
+ *
+ * This function is a convenience wrapper around the `convertDateStringFormat` function.
+ * It transforms a date string from the 'dmy' format with '/' as the input splitter
+ * to the 'ymd' format with '-' as the output splitter.
+ *
+ * @param {string} dateString - The date string to be converted. It should be in the 'day/month/year' format.
+ * @returns {string} - The converted date string in the 'year-month-day' format.
+ *                    Returns an empty string if the input date string is invalid or empty.
+ *
+ * @example
+ * // Convert '06/11/2024' from 'day/month/year' to 'year-month-day'
+ * convertToDateOnlyFormat('06/11/2024'); // Output: '2024-11-06'
+ */
+convertToDateOnlyFormat(dateString: string): string {
+  return this.convertDateStringFormat(dateString, 'dmy', 'ymd', '/', '-');
+}
+
+convertTo_dmy_Format(dateString: string): string {
+  return this.convertDateStringFormat(dateString, 'ymd', 'dmy', '-', '/');
+}
+
+ isValidDateStringFormat(dateString: string): boolean {
+  if (!dateString) {
+    return false;
+  }
+
+  let splitter: string;
+  if (dateString.includes('/')) {
+    splitter = '/';
+  } else if (dateString.includes('-')) {
+    splitter = '-';
+  } else {
+    return false;
+  }
+
+  const dateParts = dateString.split(splitter);
+  if (dateParts.length !== 3) {
+    return false;
+  }
+
+  const [day, month, year] = dateParts;
+  return this.isNumber(day) && this.isNumber(month) && this.isNumber(year);
+}
+
+private isNumber(value: string): boolean {
+  return !isNaN(Number(value));
+}
+
+  
 
   //  convert_dmy_to_ymd(dmy: string, splitter: string = '/'): string | null {
   //   // Check if the input is a valid date format

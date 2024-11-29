@@ -18,10 +18,6 @@ export class UserDetailComponent extends BaseDetailComponent {
     super(entityClient)
   }
 
-  get isEdit(): boolean{
-    return this.id && this.id !== this.emptyGuid
-  }
-
   protected override initializeFormGroup() {
     this.form = this.fb.group({
       id: [''],

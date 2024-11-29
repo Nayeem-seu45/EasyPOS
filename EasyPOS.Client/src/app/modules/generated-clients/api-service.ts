@@ -20847,6 +20847,8 @@ export class LeaveRequestModel implements ILeaveRequestModel {
     employeeName?: string | undefined;
     department?: string | undefined;
     designation?: string | undefined;
+    leaveStatus?: LeaveStatus;
+    status?: string | undefined;
     optionsDataSources?: { [key: string]: any; };
 
     constructor(data?: ILeaveRequestModel) {
@@ -20872,6 +20874,8 @@ export class LeaveRequestModel implements ILeaveRequestModel {
             this.employeeName = _data["employeeName"];
             this.department = _data["department"];
             this.designation = _data["designation"];
+            this.leaveStatus = _data["leaveStatus"];
+            this.status = _data["status"];
             if (_data["optionsDataSources"]) {
                 this.optionsDataSources = {} as any;
                 for (let key in _data["optionsDataSources"]) {
@@ -20903,6 +20907,8 @@ export class LeaveRequestModel implements ILeaveRequestModel {
         data["employeeName"] = this.employeeName;
         data["department"] = this.department;
         data["designation"] = this.designation;
+        data["leaveStatus"] = this.leaveStatus;
+        data["status"] = this.status;
         if (this.optionsDataSources) {
             data["optionsDataSources"] = {};
             for (let key in this.optionsDataSources) {
@@ -20927,7 +20933,17 @@ export interface ILeaveRequestModel {
     employeeName?: string | undefined;
     department?: string | undefined;
     designation?: string | undefined;
+    leaveStatus?: LeaveStatus;
+    status?: string | undefined;
     optionsDataSources?: { [key: string]: any; };
+}
+
+export enum LeaveStatus {
+    Initiated = 12001,
+    Submitted = 12002,
+    Forwarded = 12003,
+    Approved = 12004,
+    Rejected = 12005,
 }
 
 export class GetLeaveRequestListQuery extends DataGridModel implements IGetLeaveRequestListQuery {
@@ -21221,14 +21237,6 @@ export interface ILeaveRequestApprovalCommand {
     reason?: string | undefined;
     approvalAction?: LeaveStatus;
     cacheKey?: string;
-}
-
-export enum LeaveStatus {
-    Initiated = 12001,
-    Submitted = 12002,
-    Forwarded = 12003,
-    Approved = 12004,
-    Rejected = 12005,
 }
 
 export class PaginatedResponseOfWorkingShiftModel implements IPaginatedResponseOfWorkingShiftModel {
