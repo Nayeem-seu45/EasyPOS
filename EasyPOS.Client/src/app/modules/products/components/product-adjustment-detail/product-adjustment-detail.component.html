@@ -3,7 +3,7 @@
   <h3>Add Or Update Adjustment</h3>
 
   <div class="col-12">
-    <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+    <form [formGroup]="form" (ngSubmit)="onFormSubmit()" novalidate>
       <div class="p-fluid p-formgrid grid">
            <div class="field col-12 md:col-4">
         <app-input-select label="Warehouse" formControlName="warehouseId" [options]="optionsDataSources?.['warehousesSelectList']"

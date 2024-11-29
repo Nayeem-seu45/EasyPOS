@@ -2,7 +2,7 @@
 <div class="card">
   <h3>Purchase Return</h3>
   <div class="col-12">
-    <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+    <form [formGroup]="form" (ngSubmit)="onFormSubmit()" novalidate>
       <div class="p-fluid p-formgrid grid">
         <div class="field col-12 md:col-4">
           <app-input-date label="Date" formControlName="returnDate" [required]="true" />

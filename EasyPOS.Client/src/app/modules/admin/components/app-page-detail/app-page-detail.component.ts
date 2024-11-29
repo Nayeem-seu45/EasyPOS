@@ -55,7 +55,7 @@ export class AppPageDetailComponent implements OnInit {
     this.customDialogService.close(false);
   }
 
-  onSubmit() {
+  onFormSubmit() {
     if (!this.id || this.id === this.comConst.EmptyGuid) {
       console.log(this.form.value)
       this.save();

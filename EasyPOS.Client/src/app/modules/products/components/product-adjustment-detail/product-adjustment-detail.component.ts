@@ -68,7 +68,7 @@ export class ProductAdjustmentDetailComponent {
     this.selectedProduct = null;
   }
 
-  onSubmit() {
+  onFormSubmit() {
     if (this.form.invalid) {
       this.toast.showError('Form is invalid.');
       return;

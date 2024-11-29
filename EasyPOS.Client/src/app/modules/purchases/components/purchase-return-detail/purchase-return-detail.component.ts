@@ -91,7 +91,7 @@ export class PurchaseReturnDetailComponent implements OnInit {
 
   // #region CRUDS
 
-  onSubmit() {
+  onFormSubmit() {
     if (this.form.invalid) {
       this.toast.showError('Form is invalid.');
       return;

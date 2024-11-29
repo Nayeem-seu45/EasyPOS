@@ -32,7 +32,7 @@ export class WorkingShiftDetailComponent implements OnInit {
     this.customDialogService.close(false);
   }
 
-  protected onSubmit() {
+  protected onFormSubmit() {
     if (!this.id || this.id === CommonConstants.EmptyGuid) {
       this.save();
     } else {

@@ -26,7 +26,7 @@ export class LeaveRequestDetailComponent extends BaseDetailComponent {
     super(entityClient)
   }
 
-  override onSubmit(actionData?: any){
+  override onFormSubmit(actionData?: any){
     if (!actionData) {
       const submitButton = document.activeElement as HTMLButtonElement;
       actionData = submitButton?.value ? parseInt(submitButton.value, 10) : undefined;

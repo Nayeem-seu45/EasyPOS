@@ -43,7 +43,7 @@ export class ProductDetailComponent implements OnInit {
   }
 
 
-  onSubmit() {
+  onFormSubmit() {
 
     if (this.form.invalid) {
       this.toast.showError('Form is invalid.');

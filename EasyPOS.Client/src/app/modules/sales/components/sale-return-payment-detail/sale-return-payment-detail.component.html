@@ -1,5 +1,5 @@
 <div class="col-12">
-  <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+  <form [formGroup]="form" (ngSubmit)="onFormSubmit()" novalidate>
     <div class="p-fluid p-formgrid grid">
       <div class="field col-12 md:col-6">
         <app-input-decimal label="Received Amount" formControlName="receivedAmount" (onChange)="updateChangeAmount()" textAlign="right" [required]="true" />

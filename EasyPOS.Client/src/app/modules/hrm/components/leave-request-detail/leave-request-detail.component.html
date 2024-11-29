@@ -1,5 +1,5 @@
 ﻿<div class="col-12">
-  <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+  <form [formGroup]="form" (ngSubmit)="onFormSubmit()" novalidate>
     <div class="p-fluid p-formgrid grid">
       <div class="field col-12 md:col-6">
         <app-input-select label="Employee" formControlName="employeeId"
@@ -47,16 +47,16 @@
       <!-- <app-button label="Save" type="submit" icon="pi pi-check" [text]="true" [disabled]="form.invalid" /> -->
       <app-button label="Save" type="submit" icon="pi pi-check" [text]="true"  />
 
-      <!-- <app-button label="Submit" severity="info" type="submit" (click)="onSubmit(LeaveStatus.Submitted)" icon="pi pi-check" [text]="true"  />
-      <app-button label="Forward" severity="info" type="submit" (click)="onSubmit(LeaveStatus.Forwarded)" icon="pi pi-check" [text]="true"  />
-      <app-button label="Approve" severity="info" type="submit" (click)="onSubmit(LeaveStatus.Approved)" icon="pi pi-check" [text]="true"  />
-      <app-button label="Reject" severity="danger" type="submit" (click)="onSubmit(LeaveStatus.Rejected)" icon="pi pi-check" [text]="true"  /> -->
+      <!-- <app-button label="Submit" severity="info" type="submit" (click)="onFormSubmit(LeaveStatus.Submitted)" icon="pi pi-check" [text]="true"  />
+      <app-button label="Forward" severity="info" type="submit" (click)="onFormSubmit(LeaveStatus.Forwarded)" icon="pi pi-check" [text]="true"  />
+      <app-button label="Approve" severity="info" type="submit" (click)="onFormSubmit(LeaveStatus.Approved)" icon="pi pi-check" [text]="true"  />
+      <app-button label="Reject" severity="danger" type="submit" (click)="onFormSubmit(LeaveStatus.Rejected)" icon="pi pi-check" [text]="true"  /> -->
 
       <!-- <app-button label="Submit" severity="info" type="submit" [value]="LeaveStatus.Submitted" icon="pi pi-check" [text]="true"  /> -->
       <!-- <app-button label="Forward" severity="info" type="submit" [value]="LeaveStatus.Forwarded" icon="pi pi-check" [text]="true"  /> -->
       <button  type="submit" [value]="LeaveStatus.Rejected" icon="pi pi-check" class="p-button" [disabled]="form.invalid">Reject</button>
-      <!-- <app-button label="Approve" severity="info" type="submit" (click)="onSubmit(LeaveStatus.Approved)" icon="pi pi-check" [text]="true"  />
-      <app-button label="Reject" severity="danger" type="submit" (click)="onSubmit(LeaveStatus.Rejected)" icon="pi pi-check" [text]="true"  /> -->
+      <!-- <app-button label="Approve" severity="info" type="submit" (click)="onFormSubmit(LeaveStatus.Approved)" icon="pi pi-check" [text]="true"  />
+      <app-button label="Reject" severity="danger" type="submit" (click)="onFormSubmit(LeaveStatus.Rejected)" icon="pi pi-check" [text]="true"  /> -->
 
     </div>
   </form>

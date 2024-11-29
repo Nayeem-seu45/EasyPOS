@@ -61,7 +61,7 @@ export abstract class BaseDetailComponent implements OnInit {
   /**
    * Submits the form data.
    */
-  protected onSubmit(actionData?: any) {
+  protected onFormSubmit(actionData?: any) {
 
     if (this.form.invalid) {
       this.toast.showError('Form is invalid.');

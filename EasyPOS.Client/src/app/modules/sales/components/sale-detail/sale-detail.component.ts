@@ -178,7 +178,7 @@ export class SaleDetailComponent implements OnInit {
 
   // #region CRUDS
 
-  onSubmit() {
+  onFormSubmit() {
     if (!this.id || this.id === this.CommonConstant.EmptyGuid) {
       this.save();
     } else {

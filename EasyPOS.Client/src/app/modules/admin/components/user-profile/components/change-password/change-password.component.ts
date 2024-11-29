@@ -30,7 +30,7 @@ export class ChangePasswordComponent {
     this.initializeFormGroup();
   }
 
-  onSubmit() {
+  onFormSubmit() {
     if (this.form.invalid) {
       this.toast.showError('Form is invalid.');
       return;

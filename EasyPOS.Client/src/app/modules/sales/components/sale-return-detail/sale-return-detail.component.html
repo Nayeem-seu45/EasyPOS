@@ -3,7 +3,7 @@
   <h3 *ngIf="!isEdit">Return Sale</h3>
   <h3 *ngIf="isEdit">Update Return Sale</h3>
   <div class="col-12" *ngIf="item">
-    <form #saleForm="ngForm" (ngSubmit)="onSubmit()">
+    <form #saleForm="ngForm" (ngSubmit)="onFormSubmit()">
       <div class="p-fluid p-formgrid grid">
 
         <!-- Sale Date -->

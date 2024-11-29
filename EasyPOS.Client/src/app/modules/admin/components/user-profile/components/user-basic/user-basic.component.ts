@@ -32,7 +32,7 @@ export class UserBasicComponent {
     this.getProfile();
   }
 
-  onSubmit() {
+  onFormSubmit() {
     if (this.form.invalid) {
       this.toast.showError('Form is invalid.');
       return;

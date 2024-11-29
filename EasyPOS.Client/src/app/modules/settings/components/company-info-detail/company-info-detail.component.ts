@@ -49,7 +49,7 @@ export class CompanyInfoDetailComponent {
   }
 
 
-  onSubmit() {
+  onFormSubmit() {
     if (this.form.invalid) {
       this.toast.showError('Form is invalid.');
       return;

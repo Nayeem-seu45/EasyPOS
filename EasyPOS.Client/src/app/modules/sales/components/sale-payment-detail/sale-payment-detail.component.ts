@@ -68,7 +68,7 @@ export class SalePaymentDetailComponent implements OnInit {
     });
   }
 
-  onSubmit(){
+  onFormSubmit(){
     if(this.id && this.id !== CommonConstants.EmptyGuid){
       this.update();
     } else {

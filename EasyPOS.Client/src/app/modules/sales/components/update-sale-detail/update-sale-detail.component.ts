@@ -57,7 +57,7 @@ export class UpdateSaleDetailComponent {
     this.customDialogService.close(false);
   }
 
-  protected onSubmit() {
+  protected onFormSubmit() {
     if (this.form.invalid) {
       return;
     }
