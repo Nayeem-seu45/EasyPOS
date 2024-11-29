@@ -425,9 +425,7 @@ public static class Permissions
         public const string Edit = "Permissions.LeaveRequests.Edit";
         public const string Delete = "Permissions.LeaveRequests.Delete";
         public const string ModifyEmployee = "Permissions.LeaveRequests.ModifyEmployee";
-        public const string Forward = "Permissions.LeaveTypes.Forward";
-        public const string Approve = "Permissions.LeaveTypes.Approve";
-        public const string Reject = "Permissions.LeaveTypes.Reject";
+        public const string Approval = "Permissions.LeaveRequests.Approval";
     }
 
     public static class LeaveTypes

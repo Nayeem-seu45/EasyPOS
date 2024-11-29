@@ -10,11 +10,10 @@
           [options]="optionsDataSources?.['leaveTypeSelectList']" [required]="true" [showClear]="false" />
       </div>
       <div class="field col-12 md:col-4">
-        <!-- <app-input-datepicker label="Start Date" formControlName="startDate" dataType="string" [required]="true" [maxDate]="maxStartDate" (onChange)="onStartDateChange($event)" [readonlyInput]="true" /> -->
-        <app-input-datepicker label="Start Date" formControlName="startDate" dataType="string" [required]="true" (onChange)="onStartDateChange($event)" [readonlyInput]="true" />
+        <app-input-datepicker #startDatePicker label="Start Date" formControlName="startDate" dataType="string" [required]="true" (onChange)="onStartDateChange($event)" [readonlyInput]="true" />
       </div>
       <div class="field col-12 md:col-4">
-        <app-input-datepicker label="End Date" formControlName="endDate" dataType="string" [required]="true" [minDate]="minEndDate" (onChange)="onEndDateChange($event)" [readonlyInput]="true" />
+        <app-input-datepicker #endDatePicker label="End Date" formControlName="endDate" dataType="string" [required]="true" [minDate]="minEndDate" (onChange)="onEndDateChange($event)" [readonlyInput]="true" />
       </div>
       <div class="field col-12 md:col-4">
         <app-input-number label="Total Days" formControlName="totalDays" textAlign="right" [showButtons]="false"
@@ -68,9 +67,9 @@
       type="submit" 
       icon="pi pi-check" 
       [text]="true"
-      *ngIf="isSubmitted"
+      *ngIf="isSubmitted && hasApprovalPermission"
       [disabled]="form.invalid"
-      (onClick)="onActionClick($event, LeaveStatus.Forwarded)"
+      (onClick)="onActionClick($event, LeaveStatus.Approved)"
     />
 
     <app-button 
@@ -79,7 +78,7 @@
       type="submit" 
       icon="pi pi-check" 
       [text]="true"
-      *ngIf="isSubmitted"
+      *ngIf="isSubmitted && hasApprovalPermission"
       [disabled]="form.invalid"
       (onClick)="onActionClick($event, LeaveStatus.Rejected)"
     />

@@ -1,4 +1,4 @@
-﻿import { Component, Inject } from '@angular/core';
+﻿import { Component, Inject, ViewChild } from '@angular/core';
 import { BaseDetailComponent } from 'src/app/shared/components/base-detail/base-detail.component';
 import { ENTITY_CLIENT } from 'src/app/shared/injection-tokens/tokens';
 import { GetDateRangeTotalCountQuery, LeaveRequestModel, LeaveRequestsClient, LeaveStatus } from 'src/app/modules/generated-clients/api-service';
@@ -6,6 +6,7 @@ import { DatePipe } from '@angular/common';
 import { DateUtilService } from 'src/app/shared/Utilities/date-util.service';
 import { CommonUtils } from 'src/app/shared/Utilities/common-utilities';
 import { CommonConstants } from 'src/app/core/contants/common';
+import { InputDatepickerComponent } from 'src/app/shared/components/input-datepicker/input-datepicker.component';
 
 @Component({
   selector: 'app-leave-request-detail',
@@ -16,9 +17,12 @@ import { CommonConstants } from 'src/app/core/contants/common';
 export class LeaveRequestDetailComponent extends BaseDetailComponent {
 
   minEndDate: Date | null = null;
-  maxStartDate: Date | null = null;
   LeaveStatus = LeaveStatus;
   isSubmitted: boolean = false;
+  hasApprovalPermission: boolean = false;
+
+  @ViewChild('startDatePicker') startDatePicker: InputDatepickerComponent;
+  @ViewChild('endDatePicker') endDatePicker: InputDatepickerComponent;
 
   constructor(@Inject(ENTITY_CLIENT) entityClient: LeaveRequestsClient,
     private dateUtil: DateUtilService,
@@ -30,53 +34,82 @@ export class LeaveRequestDetailComponent extends BaseDetailComponent {
     console.log(formData);
     console.log(actionData);
     if (actionData === LeaveStatus.Submitted) {
-      // this.submit(formData)
+      this.submit(formData)
+    } else if (actionData === LeaveStatus.Approved || actionData === LeaveStatus.Rejected){
+      this.approval(formData, actionData)
     }
   }
 
-  onStartDateChange(date: any) {
-    console.log(date)
-    const employeeId = this.f['employeeId']?.value;
-    const leaveTypeId = this.f['leaveTypeId']?.value;
-    if (!employeeId || employeeId == CommonConstants.EmptyGuid) {
-      this.toast.showWarn('Select Employee');
-      this.form.patchValue({'startDate': null, 'endDate': null }, { emitEvent: false });
-      this.f['startDate'].setValue(null); 
-      return;
-    } else if (!leaveTypeId || leaveTypeId == CommonConstants.EmptyGuid) {
-      this.toast.showWarn('Select Leave Type');
-      this.form.patchValue({'startDate': null, 'endDate': null }, { emitEvent: false });
-      this.f['startDate'].setValue(null); 
+  
+
+  onStartDateChange(date: any): void {
+    if (!this.checkEmployeeAndLeaveType()) {
+      this.emptyStartAndEndDate();
       return;
     }
+
+    // Set minEndDate based on selected startDate
     this.minEndDate = new Date(this.dateUtil.convertToDateOnlyFormat(date));
-    if (this.f['endDate']?.value && this.dateUtil.isValidDateStringFormat(this.f['endDate']?.value)) {
+
+    // Validate endDate if it exists
+    this.validateEndDate();
+  }
+
+
+  onEndDateChange(date: any): void {
+    if (!this.checkEmployeeAndLeaveType()) {
+      this.f['endDate']?.setValue(null);
+      return;
+    }
+
+    // Validate startDate and endDate
+    this.validateStartDate();
+  }
+
+  private validateEndDate(): void {
+    const endDate = this.f['endDate']?.value;
+    if (endDate && this.dateUtil.isValidDateStringFormat(endDate)) {
       this.getDateRangeCount();
-      // this.form.patchValue({'startDate': null}, { emitEvent: false });
     }
   }
 
-  onEndDateChange(date: any) {
-    this.f['startDate'].setValue(null); 
-      return;
+  private validateStartDate(): void {
+    const startDate = this.f['startDate']?.value;
+    if (startDate && this.dateUtil.isValidDateStringFormat(startDate)) {
+      this.getDateRangeCount();
+    }
+  }
+
+  private emptyStartAndEndDate() {
+    this.f['startDate']?.setValue(null, { emitEvent: false });
+    this.f['endDate']?.setValue(null, { emitEvent: false });
+
+    // Clear date pickers without triggering events
+    if (this.startDatePicker) {
+      this.startDatePicker.writeValue(null);
+    }
+    if (this.endDatePicker) {
+      this.endDatePicker.writeValue(null);
+    }
+  }
+
+  private checkEmployeeAndLeaveType(): boolean {
     const employeeId = this.f['employeeId']?.value;
     const leaveTypeId = this.f['leaveTypeId']?.value;
-    if (!employeeId || employeeId == CommonConstants.EmptyGuid) {
+
+    if (!employeeId || employeeId === CommonConstants.EmptyGuid) {
       this.toast.showWarn('Select Employee');
-      this.form.get('endDate')?.setValue(null);
-      return;
-    } else if (!leaveTypeId || leaveTypeId == CommonConstants.EmptyGuid) {
-      this.toast.showWarn('Select Leave Type');
-      this.form.get('endDate')?.setValue(null, { emitEvent: false });
-      return;
-    }
-    this.maxStartDate = new Date(this.dateUtil.convertToDateOnlyFormat(date));
-    if (this.f['startDate']?.value && this.dateUtil.isValidDateStringFormat(this.f['startDate']?.value)) {
-      this.getDateRangeCount();
-      // this.form.patchValue({'endDate': null}, { emitEvent: false });
+      return false;
     }
 
+    if (!leaveTypeId || leaveTypeId === CommonConstants.EmptyGuid) {
+      this.toast.showWarn('Select Leave Type');
+      return false;
+    }
+
+    return true;
   }
+
 
   private submit(command: any) {
     command = {
@@ -99,19 +132,43 @@ export class LeaveRequestDetailComponent extends BaseDetailComponent {
     });
   }
 
+  private approval(command: any, actionData: any) {
+    command = {
+      ...command,
+      startDate: this.dateUtil.convertToDateOnlyFormat(command.startDate),
+      endDate: this.dateUtil.convertToDateOnlyFormat(command.endDate),
+      approvalAction: actionData
+    };
+    this.entityClient.approval(command).subscribe({
+      next: () => {
+          if (actionData === LeaveStatus.Approved) {
+            this.toast.showSuccess('Approved Successfully', 'Approved');
+          } else if (actionData === LeaveStatus.Rejected){
+            this.toast.showSuccess('Rejected Successfully', 'Rejected');
+          }
+        this.customDialogService.close(true);
+      },
+      error: (error) => {
+        this.toast.showError(CommonUtils.getErrorMessage(error));
+      },
+      complete: () => {
+        this.postActionProcess();
+      }
+    });
+  }
+
   private isRequestSubmitted() {
-    this.isSubmitted = this.item?.leaveStatus === LeaveStatus.Submitted;
+    this.isSubmitted = this.item?.leaveStatus >= LeaveStatus.Submitted;
 
     if (this.isSubmitted)
       this.diableField('leaveTypeId');
 
   }
 
-  formatDate(date: any): string 
-  { 
-    if (!date) return ''; 
-    const dateObj = new Date(date); 
-    return this.datePipe.transform(dateObj, 'dd/MM/yyyy')!; 
+  formatDate(date: any): string {
+    if (!date) return '';
+    const dateObj = new Date(date);
+    return this.datePipe.transform(dateObj, 'dd/MM/yyyy')!;
   }
 
   override getById(id: string) {
@@ -119,8 +176,8 @@ export class LeaveRequestDetailComponent extends BaseDetailComponent {
       next: (res: LeaveRequestModel) => {
         if (id && id !== this.emptyGuid) {
           this.item = res;
-         this.item.startDate =  this.formatDate(res.startDate), 
-         this.item.endDate = this.formatDate(res.endDate)
+          this.item.startDate = this.formatDate(res.startDate),
+            this.item.endDate = this.formatDate(res.endDate)
 
         } else {
           this.item = new LeaveRequestModel();
@@ -129,7 +186,7 @@ export class LeaveRequestDetailComponent extends BaseDetailComponent {
         this.optionsDataSources = res.optionsDataSources;
         this.isRequestSubmitted();
         this.form.patchValue({
-          ...this.item    
+          ...this.item
         });
       },
       error: (error) => {
@@ -167,6 +224,9 @@ export class LeaveRequestDetailComponent extends BaseDetailComponent {
     } else {
       this.form.get('employeeId')?.disable();
     }
+    if (this.permissionService.hasPermission('Permissions.LeaveRequests.Approval')) {
+      this.hasApprovalPermission = true;
+    }
   }
 
   private getDateRangeCount() {
@@ -186,15 +246,15 @@ export class LeaveRequestDetailComponent extends BaseDetailComponent {
       return;
     }
     query.startDate = new Date(this.dateUtil.convertToDateOnlyFormat(startDate)),
-    query.endDate = new Date(this.dateUtil.convertToDateOnlyFormat(endDate)),
+      query.endDate = new Date(this.dateUtil.convertToDateOnlyFormat(endDate)),
 
-    this.entityClient.getDateRangeTotalCount(query).subscribe({
-      next: (totalDays: number) => {
-        this.f['totalDays'].setValue(totalDays);
-      }, error: (error) => {
-        this.toast.showWarn(CommonUtils.getErrorMessage(error[0]))
-      }
-    });
+      this.entityClient.getDateRangeTotalCount(query).subscribe({
+        next: (totalDays: number) => {
+          this.f['totalDays'].setValue(totalDays);
+        }, error: (error) => {
+          this.toast.showWarn(CommonUtils.getErrorMessage(error[0]))
+        }
+      });
   }
 
 }

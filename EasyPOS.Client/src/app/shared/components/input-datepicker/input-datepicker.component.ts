@@ -176,6 +176,7 @@ export class InputDatepickerComponent implements ControlValueAccessor, Validator
   }
 
   onInputEvent(value: any): void {
+    this.onChangeFn(this.value);
     this.onInput.emit(value);
   }
 
@@ -203,9 +204,9 @@ export class InputDatepickerComponent implements ControlValueAccessor, Validator
     this.onShow.emit(value);
   }
 
-  onInputChange(event: any): void {
+  onCalendarChange(event: any): void {
     this.value = event;
-    this.onChangeFn(this.value);
-    this.onChange.emit(this.value);
+    this.onChangeFn(this.value); // Notify the parent form control of the value change
+    this.onChange.emit(this.value); // Emit the custom output event
   }
 }

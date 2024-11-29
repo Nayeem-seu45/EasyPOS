@@ -1,6 +1,4 @@
-﻿using EasyPOS.Application.Features.HRM.Holidays.Queries;
-
-namespace EasyPOS.Application.Features.HRM.LeaveRequests.Queries;
+﻿namespace EasyPOS.Application.Features.HRM.LeaveRequests.Queries;
 
 [Authorize(Policy = Permissions.LeaveRequests.View)]
 public record GetLeaveRequestListQuery 

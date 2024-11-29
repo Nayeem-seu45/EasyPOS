@@ -48,6 +48,11 @@ export abstract class BaseDetailComponent implements OnInit {
     this.initializeFormGroup();
     this.getById(this.id);
     this.applyFieldPermissions(); // Hook for permission handling
+    this.afterOnInit(); // Hook for afterOnInit handling
+  }
+
+  afterOnInit(){
+
   }
 
   /**
