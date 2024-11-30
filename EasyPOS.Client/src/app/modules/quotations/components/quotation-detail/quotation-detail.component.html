@@ -7,18 +7,19 @@
 
         <!-- Quotation Date -->
         <div class="field col-12 md:col-4">
-          <app-input-date label="Date" [(ngModel)]="item.quotationDate" name="quotationDate" />
+          <app-input-datepicker label="Date" [(ngModel)]="item.quotationDate" name="quotationDate" />
         </div>
 
         <!-- Reference No -->
-        <div class="field col-12 md:col-4">
+        <!-- <div class="field col-12 md:col-4">
           <app-input-text label="Reference No" [(ngModel)]="item.referenceNo" name="referenceNo" />
-        </div>
+        </div> -->
 
         <!-- Warehouse -->
         <div class="field col-12 md:col-4">
           <app-input-select label="Warehouse" [(ngModel)]="item.warehouseId" name="warehouseId"
-            [options]="optionsDataSources?.warehousesSelectList" />
+            [options]="optionsDataSources?.warehousesSelectList" (onChange)="onWarehouseChange($event)" />
+            <small class="validation-color" *ngIf="showWarehouseValidationMsg">Please select warehouse</small>
         </div>
 
         <!-- Customer -->
@@ -34,9 +35,20 @@
         </div>
 
         <!-- product select  -->
-        <div class="col-12">
+        <!-- <div class="col-12">
           <app-input-select label="" [optionValue]="null" name="selectedProduct" [(ngModel)]="selectedProduct"
             (ngModelChange)="onProductSelect()" [options]="optionsDataSources?.productsSelectList" />
+        </div> -->
+
+        <div class="col-12">
+          <app-product-search #productSearch 
+            [forceSelection]="true"
+            [showClear]="true"
+            [warehouseId]="item.warehouseId"        
+            (onSelect)="onProductSelect($event)" 
+            (onExactMatched)="onExactMatchProduct($event)" 
+            (onWarehouseNotFound)="getWarehouseValidation($event)" 
+            placeholder="Search Product by code or name"  />
         </div>
 
         <!-- Quotation Details List -->
@@ -63,14 +75,16 @@
                     (onChange)="onItemPropsChange(detail)" />
                 </td>
                 <td>
-                  <app-input-decimal [(ngModel)]="detail.netUnitPrice" name="unitPrice-{{i}}" textAlign="center" />
+                  <!-- <app-input-decimal [(ngModel)]="detail.netUnitPrice" name="unitPrice-{{i}}" textAlign="center" /> -->
+                  {{ detail.netUnitPrice | number:'1.2-2' }}
                 </td>
                 <td>
-                  <app-input-decimal [(ngModel)]="detail.discountAmount" name="discountAmount-{{i}}" textAlign="center" />
-                  <!-- {{ detail.discountAmount }} -->
+                  <!-- <app-input-decimal [(ngModel)]="detail.discountAmount" name="discountAmount-{{i}}" textAlign="center" /> -->
+                  {{ detail.discountAmount | number:'1.2-2' }}
                 </td>
                 <td>
-                  <app-input-decimal [(ngModel)]="detail.taxAmount" name="taxAmount-{{i}}" textAlign="center"  />
+                  <!-- <app-input-decimal [(ngModel)]="detail.taxAmount" name="taxAmount-{{i}}" textAlign="center"  /> -->
+                  {{ detail.taxAmount | number:'1.2-2' }}
                 </td>
                 <td>
                   <div class="text-right mr-2">

@@ -17,6 +17,7 @@ internal sealed class CreateQuotationCommandHandler(
         var entity = request.Adapt<Quotation>();
 
         dbContext.Quotations.Add(entity);
+        entity.ReferenceNo = UtilityExtensions.GetDateTimeStampRef("SQ-");
 
         await dbContext.SaveChangesAsync(cancellationToken);
 

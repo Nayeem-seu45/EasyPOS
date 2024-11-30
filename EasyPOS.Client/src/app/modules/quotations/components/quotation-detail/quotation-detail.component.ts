@@ -84,6 +84,32 @@ export class QuotationDetailComponent implements OnInit {
     }
   }
 
+   //#region AutoComplete Search
+   showWarehouseValidationMsg: boolean = false;
+
+   onWarehouseChange(event: any) {
+     if (event && event !== CommonConstants.EmptyGuid) {
+       this.showWarehouseValidationMsg = false; // Hide the validation message when a warehouse is selected
+     }
+   }
+ 
+   getWarehouseValidation(event: boolean){
+     this.showWarehouseValidationMsg = event;
+   }
+ 
+   onProductSelect(selectedEvent: any) {
+     const selectedProduct = selectedEvent.value;
+     if (selectedProduct.value) {
+       this.addProductToQuotationDetails(selectedProduct.value);
+     }
+   }
+ 
+   onExactMatchProduct(product: ProductSelectListModel) {
+     this.addProductToQuotationDetails(product);
+   }
+ 
+   //#endregion
+
   // #region CRUDS
 
   onFormSubmit() {
@@ -133,12 +159,12 @@ export class QuotationDetailComponent implements OnInit {
 
   // #region Add or Update QuotationDetail
 
-  onProductSelect() {
-    if (this.selectedProduct) {
-      this.addProductToQuotationDetails(this.selectedProduct);
-      this.selectedProduct = null;
-    }
-  }
+  // onProductSelect() { // old
+  //   if (this.selectedProduct) {
+  //     this.addProductToQuotationDetails(this.selectedProduct);
+  //     this.selectedProduct = null;
+  //   }
+  // }
 
   onRemoveQuotationDetail(index: number, id: string) {
     this.item.quotationDetails.splice(index, 1);

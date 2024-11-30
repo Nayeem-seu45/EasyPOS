@@ -30,7 +30,7 @@ export class InputSelectComponent implements ControlValueAccessor, Validator {
   @Input() options: any[] = [];
   @Input() inputId: string = '';
   @Input() checkmark: boolean = true;
-  @Input() showClear: boolean = true;
+  @Input() showClear: boolean = false;
   @Input() editable: boolean = false;
   @Input() filter: boolean = true;
   @Input() filterBy: string = 'name';
