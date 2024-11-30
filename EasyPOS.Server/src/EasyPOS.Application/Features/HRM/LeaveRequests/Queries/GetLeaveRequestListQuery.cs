@@ -1,4 +1,6 @@
-﻿namespace EasyPOS.Application.Features.HRM.LeaveRequests.Queries;
+﻿using EasyPOS.Application.Common.Enums;
+
+namespace EasyPOS.Application.Features.HRM.LeaveRequests.Queries;
 
 [Authorize(Policy = Permissions.LeaveRequests.View)]
 public record GetLeaveRequestListQuery 
@@ -30,7 +32,12 @@ internal sealed class GetLeaveRequestQueryHandler(ISqlConnectionFactory sqlConne
                 e.FirstName AS {nameof(LeaveRequestModel.EmployeeName)},
                 d.Name AS {nameof(LeaveRequestModel.Department)},
                 d2.Name AS {nameof(LeaveRequestModel.Designation)},
-                ls.Name AS {nameof(LeaveRequestModel.Status)}
+                ls.Name AS {nameof(LeaveRequestModel.Status)},
+                CASE
+                WHEN ls.DevCode IS NULL THEN NULL
+                WHEN ISNULL(ls.DevCode, 0) >= {(int)LeaveStatus.Submitted} THEN 0
+                ELSE 1
+                END AS  {nameof(LeaveRequestModel.HideRemoveIfSubmitted)}
             FROM dbo.LeaveRequests AS t
             LEFT JOIN dbo.Employees e ON e.Id = t.EmployeeId
             LEFT JOIN dbo.Departments d ON d.Id = e.DepartmentId

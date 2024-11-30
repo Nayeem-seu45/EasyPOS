@@ -20849,6 +20849,7 @@ export class LeaveRequestModel implements ILeaveRequestModel {
     designation?: string | undefined;
     leaveStatus?: LeaveStatus;
     status?: string | undefined;
+    hideRemoveIfSubmitted?: boolean | undefined;
     optionsDataSources?: { [key: string]: any; };
 
     constructor(data?: ILeaveRequestModel) {
@@ -20876,6 +20877,7 @@ export class LeaveRequestModel implements ILeaveRequestModel {
             this.designation = _data["designation"];
             this.leaveStatus = _data["leaveStatus"];
             this.status = _data["status"];
+            this.hideRemoveIfSubmitted = _data["hideRemoveIfSubmitted"];
             if (_data["optionsDataSources"]) {
                 this.optionsDataSources = {} as any;
                 for (let key in _data["optionsDataSources"]) {
@@ -20909,6 +20911,7 @@ export class LeaveRequestModel implements ILeaveRequestModel {
         data["designation"] = this.designation;
         data["leaveStatus"] = this.leaveStatus;
         data["status"] = this.status;
+        data["hideRemoveIfSubmitted"] = this.hideRemoveIfSubmitted;
         if (this.optionsDataSources) {
             data["optionsDataSources"] = {};
             for (let key in this.optionsDataSources) {
@@ -20935,6 +20938,7 @@ export interface ILeaveRequestModel {
     designation?: string | undefined;
     leaveStatus?: LeaveStatus;
     status?: string | undefined;
+    hideRemoveIfSubmitted?: boolean | undefined;
     optionsDataSources?: { [key: string]: any; };
 }
 
@@ -35003,6 +35007,7 @@ export class AppPageActionModel implements IAppPageActionModel {
     parentId?: string | undefined;
     sortOrder?: number;
     isVisible?: boolean;
+    conditionFieldName?: string | undefined;
 
     constructor(data?: IAppPageActionModel) {
         if (data) {
@@ -35030,6 +35035,7 @@ export class AppPageActionModel implements IAppPageActionModel {
             this.parentId = _data["parentId"];
             this.sortOrder = _data["sortOrder"];
             this.isVisible = _data["isVisible"];
+            this.conditionFieldName = _data["conditionFieldName"];
         }
     }
 
@@ -35057,6 +35063,7 @@ export class AppPageActionModel implements IAppPageActionModel {
         data["parentId"] = this.parentId;
         data["sortOrder"] = this.sortOrder;
         data["isVisible"] = this.isVisible;
+        data["conditionFieldName"] = this.conditionFieldName;
         return data;
     }
 }
@@ -35077,6 +35084,7 @@ export interface IAppPageActionModel {
     parentId?: string | undefined;
     sortOrder?: number;
     isVisible?: boolean;
+    conditionFieldName?: string | undefined;
 }
 
 export class GetAppPageListQuery extends DataGridModel implements IGetAppPageListQuery {

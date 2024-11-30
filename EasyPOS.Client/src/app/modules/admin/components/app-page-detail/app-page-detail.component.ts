@@ -339,7 +339,8 @@ export class AppPageDetailComponent implements OnInit {
       sortOrder: [sortOrder],
       isVisible: [true],
       showCaption: [true],
-      showProperties: [true]
+      conditionFieldName: [null],
+      showProperties: [true] // this field is must need for handling expansion and collapse
     });
   }
 

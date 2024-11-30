@@ -486,7 +486,7 @@
                             <div class="flex" *ngIf="appPageLayout?.rowActionType === 'button'">
                                 <ng-container *ngFor="let action of rowActions">
                                     <app-button 
-                                        *ngIf="permit.applyPermissionIfHas(action.permissions)"
+                                        *ngIf="permit.applyPermissionIfHas(action.permissions) && action.isVisible"
                                         [icon]="action.icon" 
                                         [severity]="action.severity" 
                                         [rounded]="true" 

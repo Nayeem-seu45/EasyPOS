@@ -24,7 +24,7 @@ import { DynamicDialogConfig } from 'primeng/dynamicdialog';
   providers: [BackoffService, ConfirmDialogService, DatePipe, AppPagesClient]
 })
 export class DataGridComponent implements OnInit, OnDestroy {
- baseUrl = environment.API_BASE_URL;
+  baseUrl = environment.API_BASE_URL;
 
   // Page Layout Settings Start Start
   isPagelayoutFound: boolean = true;
@@ -34,6 +34,7 @@ export class DataGridComponent implements OnInit, OnDestroy {
   rightToolbarActions: AppPageActionModel[] = [];
   rowActions: AppPageActionModel[] = [];
   dataFields: AppPageFieldModel[] = [];
+  // allDataFields: AppPageFieldModel[] = [];
   appPageModel: AppPageModel = null;
   globalfiltersTooltip: string = '';
 
@@ -47,7 +48,7 @@ export class DataGridComponent implements OnInit, OnDestroy {
   // Table Settings //
   isInitialLoaded: boolean = false;
   responsiveLayout = 'scroll';
-  cols: any[] = [];
+  // cols: any[] = [];
   filters: DataFilterModel[] = [];
   lazyLoading: boolean = true;
   selectionMode: "single" | "multiple" = "multiple";
@@ -122,6 +123,8 @@ export class DataGridComponent implements OnInit, OnDestroy {
   }
 
 
+
+
   private backoffService = inject(BackoffService);
   public toast = inject(ToastService);
   public confirmDialogService = inject(ConfirmDialogService);
@@ -144,25 +147,27 @@ export class DataGridComponent implements OnInit, OnDestroy {
     if (this.pageId) {
       this.appPagesClient.get(this.pageId).subscribe({
         next: (data: AppPageModel) => {
-          if (data) {            
+          if (data) {
             this.appPageModel = data;
 
             this.appPageLayout = data.appPageLayout ? JSON.parse(data.appPageLayout) : null;
-            
+
             this.filterType = this.appPageLayout?.gridFilterType;
-            
+
             this.pageTitle = this.pageTitle ?? this.appPageModel?.title ?? this.listComponent.constructor.name;
-            
+
             this.dataFields = this.appPageLayout?.appPageFields?.filter(field => field.isVisible === true) || [];
-            
+
+            // this.allDataFields = this.appPageLayout?.appPageFields || [];
+
             this.leftToolbarActions = this.appPageLayout?.toolbarActions?.filter(action => action.position === 'left' && action.isVisible === true) || [];
-            
+
             this.rightToolbarActions = this.appPageLayout?.toolbarActions?.filter(action => action.position === 'right' && action.isVisible === true) || [];
-            
+
             this.rowActions = this.appPageLayout?.rowActions?.filter(field => field.isVisible === true) || [];
-            
+
             this.globalFilterFields = this.appPageLayout?.appPageFields?.filter(x => x.isGlobalFilterable)?.map(x => x.field) || [];
-            
+
             this.appPageLayout?.appPageFields?.filter(x => x.isGlobalFilterable)?.forEach(field => {
               this.globalFilterFieldModels.push(new GlobalFilterFieldModel({
                 field: field.field,
@@ -232,6 +237,9 @@ export class DataGridComponent implements OnInit, OnDestroy {
           this.optionsDataSources = res.optionsDataSources;
           this.isInitialLoaded = true;
         }
+
+        // Update visibility for rowActions
+        this.updateRowActionsVisibility();
       },
       error: (error) => {
         console.error(error, 'Error while fetching data')
@@ -241,6 +249,18 @@ export class DataGridComponent implements OnInit, OnDestroy {
       }
     });
   }
+
+  private updateRowActionsVisibility() {
+    this.rowActions.forEach(action => {
+      // If conditionFieldName is not set or is empty, mark as visible
+      if (!action.conditionFieldName || action.conditionFieldName.trim() === '') {
+        action.isVisible = true;
+      } else {
+        action.isVisible = this.items.some(item => !!item[action.conditionFieldName]);
+      }
+    });
+  }
+
 
   private createDataFilterModelList() {
     this.dataFields.filter(field => field.isFilterable === true).forEach(field => {
@@ -461,13 +481,13 @@ export class DataGridComponent implements OnInit, OnDestroy {
   private getTranformValue(filter: DataFilterModel, filterMetadata: FilterMetadata): string {
     if (filter.fieldType !== FieldType.number && Array.isArray(filterMetadata.value)) {
       return filterMetadata.value.map(item => `'${item.id}'`).join(', ');
-    } 
+    }
     else if (filter.fieldType === FieldType.number && Array.isArray(filterMetadata.value)) {
       return filterMetadata.value.map(item => `${item.id}`).join(', ');
     }
     else if (filter.fieldType !== FieldType.number && filter.filterType == FilterType.select) {
       return filterMetadata.value !== null ? `'${filterMetadata.value}'` : '';
-    } 
+    }
     else if (filter.fieldType === FieldType.number && filter.filterType == FilterType.select) {
       return filterMetadata.value !== null ? filterMetadata.value.toString() : '';
     }
@@ -582,7 +602,7 @@ export class DataGridComponent implements OnInit, OnDestroy {
       .map(filter => {
         const dataField = this.dataFields.find(x => x.field === filter.field);
         let filterValue = filter.value;
-        
+
         if (dataField.fieldType === 'select' || dataField.fieldType === 'multiselect') {
           const dataSource = this.optionsDataSources[dataField?.dsName]?.find(
             x => x.id?.toString().toLowerCase() == filterValue.toLowerCase().replace(/^'|'$/g, ''));
@@ -591,7 +611,7 @@ export class DataGridComponent implements OnInit, OnDestroy {
 
         console.log(dataField)
         return `${dataField.header}: ${filterValue}`
-    });
+      });
 
     import("jspdf").then(jsPDF => {
       import("jspdf-autotable").then(autoTable => {

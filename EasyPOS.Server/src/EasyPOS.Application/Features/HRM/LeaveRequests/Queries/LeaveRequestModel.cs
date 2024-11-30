@@ -20,7 +20,7 @@ public record LeaveRequestModel
     public string? Designation { get; set; }
     public LeaveStatus LeaveStatus { get; set; }
     public string? Status { get; set; }
-
+    public bool? HideRemoveIfSubmitted { get; set; }
 
     public Dictionary<string, object> OptionsDataSources { get; set; } = [];
 }

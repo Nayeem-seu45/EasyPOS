@@ -61,4 +61,5 @@ public record AppPageActionModel
     public Guid? ParentId { get; set; }
     public int SortOrder { get; set; }
     public bool IsVisible { get; set; }
+    public string? ConditionFieldName { get; set; }
 }

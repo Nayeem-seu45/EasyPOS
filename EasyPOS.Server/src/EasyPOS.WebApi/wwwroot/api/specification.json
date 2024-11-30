@@ -13890,6 +13890,10 @@
             "type": "string",
             "nullable": true
           },
+          "hideRemoveIfSubmitted": {
+            "type": "boolean",
+            "nullable": true
+          },
           "optionsDataSources": {
             "type": "object",
             "additionalProperties": {}
@@ -22210,6 +22214,10 @@
           },
           "isVisible": {
             "type": "boolean"
+          },
+          "conditionFieldName": {
+            "type": "string",
+            "nullable": true
           }
         }
       },
