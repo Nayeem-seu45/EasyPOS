@@ -21,8 +21,13 @@ export class PermissionService {
     });
   }
 
-  hasPermission(permission: string = ''): boolean {
-    if(permission.trim() === '') return true;
+  applyPermissionIfHas(permission: string = null): boolean {
+    if(!permission) return true;
+    return this.permissions.has(permission.trim());
+  }
+
+  hasPermission(permission?: string): boolean {
+    if(!permission) return true;
     return this.permissions.has(permission.trim());
   }
 

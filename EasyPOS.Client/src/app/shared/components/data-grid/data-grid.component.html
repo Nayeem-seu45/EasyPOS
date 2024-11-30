@@ -12,7 +12,7 @@
                         <ng-container *ngFor="let action of leftToolbarActions">
                             <span>
                             <app-button 
-                                *ngIf="permit.hasPermission(action.permissions) && action.actionType !== 'multi-select' "
+                                *ngIf="permit.applyPermissionIfHas(action.permissions) && action.actionType !== 'multi-select' "
                                 [id]="action.actionName + '_btn'"
                                 [label]="action.showCaption ? action.caption : null" 
                                 class="mr-2" 
@@ -24,7 +24,7 @@
                             </span>
                             <span>
                             <app-button 
-                                *ngIf="permit.hasPermission(action.permissions) && action.actionType === 'multi-select'"
+                                *ngIf="permit.applyPermissionIfHas(action.permissions) && action.actionType === 'multi-select'"
                                 [id]="action.actionName + '_btn'"
                                 [label]="action.showCaption ? action.caption : null" 
                                 class="mr-2" 
@@ -66,7 +66,7 @@
                     <ng-container *ngFor="let action of rightToolbarActions">
                     <span>
                         <app-button 
-                            *ngIf="permit.hasPermission(action.permissions) && action.actionType === 'button'"
+                            *ngIf="permit.applyPermissionIfHas(action.permissions) && action.actionType === 'button'"
                             [id]="action.actionName + '_btn'"
                             [label]="action.showCaption ? action.caption : null" 
                             class="mr-2" 
@@ -92,7 +92,7 @@
                     </span>
                     </ng-container>
                     <app-button
-                        *ngIf="permit.hasPermission('Permissions.AppPageSetting.Edit')"
+                        *ngIf="permit.applyPermissionIfHas('Permissions.AppPageSetting.Edit')"
                         icon="pi pi-wrench" 
                         [rounded]="true" 
                         [outlined]="true" 
@@ -486,7 +486,7 @@
                             <div class="flex" *ngIf="appPageLayout?.rowActionType === 'button'">
                                 <ng-container *ngFor="let action of rowActions">
                                     <app-button 
-                                        *ngIf="permit.hasPermission(action.permissions)"
+                                        *ngIf="permit.applyPermissionIfHas(action.permissions)"
                                         [icon]="action.icon" 
                                         [severity]="action.severity" 
                                         [rounded]="true" 
