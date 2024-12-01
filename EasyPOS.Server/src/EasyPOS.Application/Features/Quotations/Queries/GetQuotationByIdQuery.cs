@@ -1,4 +1,5 @@
 ﻿using EasyPOS.Application.Common.Enums;
+using EasyPOS.Application.Features.Quotations.Models;
 using EasyPOS.Domain.Common.Enums;
 
 namespace EasyPOS.Application.Features.Quotations.Queries;
@@ -24,7 +25,7 @@ internal sealed class GetQuotationByIdQueryHandler(ISqlConnectionFactory sqlConn
                 DiscountType = DiscountType.Fixed,
                 ShippingCost = 0,
                 DiscountAmount = 0,
-                QuotationStatusId = await commonQueryService.GetLookupDetailIdAsync((int)QuotationStatus.Pending),
+                QuotationStatusId = await commonQueryService.GetLookupDetailIdAsync((int)QuotationStatus.Sent),
                 TaxRate = 0,
                 QuotationDate = DateOnly.FromDateTime(DateTime.Now)
             };

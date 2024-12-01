@@ -1,4 +1,4 @@
-﻿using EasyPOS.Application.Features.Quotations.Queries;
+﻿using EasyPOS.Application.Features.Quotations.Models;
 
 namespace EasyPOS.Application.Features.Quotations.Commands;
 

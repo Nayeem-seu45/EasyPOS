@@ -2,7 +2,7 @@
 using EasyPOS.Application.Features.Settings.CompanyInfos.Queries;
 using EasyPOS.Domain.Common.Enums;
 
-namespace EasyPOS.Application.Features.Quotations.Queries;
+namespace EasyPOS.Application.Features.Quotations.Models;
 
 public class QuotationInfoModel
 {

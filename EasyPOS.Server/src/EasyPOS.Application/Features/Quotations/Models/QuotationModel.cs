@@ -1,7 +1,7 @@
 ﻿using EasyPOS.Domain.Common.Enums;
 using EasyPOS.Domain.Enums;
 
-namespace EasyPOS.Application.Features.Quotations.Queries;
+namespace EasyPOS.Application.Features.Quotations.Models;
 
 public record QuotationModel
 {

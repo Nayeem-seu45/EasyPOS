@@ -40,10 +40,10 @@
         <span>Reference: {{item?.referenceNo}}</span>
       </div>
       <div>
-        <span>Quotation Status: {{item?.quotationStatus}}</span>
+        <span>Date: {{item?.quotationDate | date: 'dd/MM/yyyy'}}</span>
       </div>
       <div>
-        <span>Payment Status: {{item?.paymentStatusId}}</span>
+        <span>Quotation Status: {{item?.quotationStatus}}</span>
       </div>
     </div>
   </div>
@@ -76,7 +76,7 @@
               {{detail.quantity}}
             </td>
             <td class="text-right">
-              {{detail.netUnitCost | number:'1.2-2'}}
+              {{detail.netUnitPrice | number:'1.2-2'}}
             </td>
             <td class="text-right">
               {{detail.discountAmount | number:'1.2-2'}}

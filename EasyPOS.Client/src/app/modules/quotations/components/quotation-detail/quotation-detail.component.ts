@@ -37,6 +37,10 @@ export class QuotationDetailComponent implements OnInit {
   // Grand total Section
   totalItems: string = '0';
 
+  get isEdit(): boolean{
+    return this.id && this.id !== CommonConstants.EmptyGuid;
+  }
+
   private closeDialogsubscription: Subscription;
 
 

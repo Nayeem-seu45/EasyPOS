@@ -1,4 +1,6 @@
-﻿namespace EasyPOS.Application.Features.Quotations.Queries;
+﻿using EasyPOS.Application.Features.Quotations.Models;
+
+namespace EasyPOS.Application.Features.Quotations.Queries;
 
 public record GetQuotationDetailByIdQuery(Guid Id) : ICacheableQuery<QuotationInfoModel>
 {
@@ -42,6 +44,7 @@ internal sealed class GetQuotationDetailByIdQueryHandler(
                 t.ShippingCost AS {nameof(QuotationInfoModel.ShippingCost)},
                 t.GrandTotal AS {nameof(QuotationInfoModel.GrandTotal)},
                 t.QuotationNote AS {nameof(QuotationInfoModel.QuotationNote)},
+                ls.Name AS {nameof(QuotationInfoModel.QuotationStatus)},
 
                 -- QuotationDetails
                 pd.Id AS {nameof(QuotationDetailModel.Id)},
@@ -68,6 +71,7 @@ internal sealed class GetQuotationDetailByIdQueryHandler(
 
             FROM dbo.Quotations t
             LEFT JOIN dbo.QuotationDetails pd ON pd.QuotationId = t.Id
+            LEFT JOIN dbo.LookupDetails ls ON ls.Id = t.QuotationStatusId
             WHERE t.Id = @Id
             """;
 

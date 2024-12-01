@@ -61,12 +61,12 @@ internal sealed class CommonQueryService(ISqlConnectionFactory sqlConnection) : 
             SELECT
                 t.Id AS {nameof(SupplierModel.Id)},
                 t.Name AS {nameof(SupplierModel.Name)},
-                t.Email AS {nameof(SupplierModel.Email)},
-                t.PhoneNo AS {nameof(SupplierModel.PhoneNo)},
-                t.Mobile AS {nameof(SupplierModel.Mobile)},
-                t.Country AS {nameof(SupplierModel.Country)},
-                t.City AS {nameof(SupplierModel.City)},
-                t.Address AS {nameof(SupplierModel.Address)},
+                ISNULL(t.Email, '') AS {nameof(SupplierModel.Email)},
+                ISNULL(t.PhoneNo, '') AS {nameof(SupplierModel.PhoneNo)},
+                ISNULL(t.Mobile, '') AS {nameof(SupplierModel.Mobile)},
+                ISNULL(t.Country, '') AS {nameof(SupplierModel.Country)},
+                ISNULL(t.City, '') AS {nameof(SupplierModel.City)},
+                ISNULL(t.Address, '') AS {nameof(SupplierModel.Address)},
                 t.IsActive AS {nameof(SupplierModel.IsActive)}
             FROM dbo.Suppliers t
             WHERE t.Id = @Id
@@ -83,12 +83,12 @@ internal sealed class CommonQueryService(ISqlConnectionFactory sqlConnection) : 
             SELECT
                 t.Id AS {nameof(CustomerModel.Id)},
                 t.Name AS {nameof(CustomerModel.Name)},
-                t.Email AS {nameof(CustomerModel.Email)},
-                t.PhoneNo AS {nameof(CustomerModel.PhoneNo)},
-                t.Mobile AS {nameof(CustomerModel.Mobile)},
-                t.Country AS {nameof(CustomerModel.Country)},
-                t.City AS {nameof(CustomerModel.City)},
-                t.Address AS {nameof(CustomerModel.Address)},
+                ISNULL(t.Email, '') AS {nameof(CustomerModel.Email)},
+                ISNULL(t.PhoneNo, '') AS {nameof(CustomerModel.PhoneNo)},
+                ISNULL(t.Mobile, '') AS {nameof(CustomerModel.Mobile)},
+                ISNULL(t.Country, '') AS {nameof(CustomerModel.Country)},
+                ISNULL(t.City, '') AS {nameof(CustomerModel.City)},
+                ISNULL(t.Address, '') AS {nameof(CustomerModel.Address)},
                 t.IsActive AS {nameof(CustomerModel.IsActive)}
             FROM dbo.Customers t
             WHERE t.Id = @Id
@@ -105,17 +105,18 @@ internal sealed class CommonQueryService(ISqlConnectionFactory sqlConnection) : 
         var sql = $"""
             SELECT TOP 1
                 t.Id AS {nameof(CompanyInfoModel.Id)},
-                t.Name AS {nameof(CompanyInfoModel.Name)},
-                t.Phone AS {nameof(CompanyInfoModel.Phone)},
-                t.Mobile AS {nameof(CompanyInfoModel.Mobile)},
-                t.Country AS {nameof(CompanyInfoModel.Country)},
-                t.State AS {nameof(CompanyInfoModel.State)},
-                t.City AS {nameof(CompanyInfoModel.City)},
-                t.PostalCode AS {nameof(CompanyInfoModel.PostalCode)},
-                t.Address AS {nameof(CompanyInfoModel.Address)},
+                ISNULL(t.Name, '') AS {nameof(CompanyInfoModel.Name)},
+                ISNULL(t.Phone, '') AS {nameof(CompanyInfoModel.Phone)},
+                ISNULL(t.Mobile, '') AS {nameof(CompanyInfoModel.Mobile)},
+                ISNULL(t.Email, '') AS {nameof(CompanyInfoModel.Email)},
+                ISNULL(t.Country, '') AS {nameof(CompanyInfoModel.Country)},
+                ISNULL(t.State, '') AS {nameof(CompanyInfoModel.State)},
+                ISNULL(t.City, '') AS {nameof(CompanyInfoModel.City)},
+                ISNULL(t.PostalCode, '') AS {nameof(CompanyInfoModel.PostalCode)},
+                ISNULL(t.Address, '') AS {nameof(CompanyInfoModel.Address)},
                 t.LogoUrl AS {nameof(CompanyInfoModel.LogoUrl)},
                 t.SignatureUrl AS {nameof(CompanyInfoModel.SignatureUrl)},
-                t.Website AS {nameof(CompanyInfoModel.Website)}
+                ISNULL(t.Website, '') AS {nameof(CompanyInfoModel.Website)}
             FROM dbo.CompanyInfos AS t
             """;
 

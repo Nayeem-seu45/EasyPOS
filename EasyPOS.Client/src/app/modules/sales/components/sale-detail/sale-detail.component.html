@@ -19,7 +19,7 @@
         <!-- Warehouse -->
         <div class="field col-12 md:col-4">
           <app-input-select label="Warehouse" [(ngModel)]="item.warehouseId" name="warehouseId"
-            [options]="optionsDataSources?.warehousesSelectList" [required]="true" (onChange)="onWarehouseChange()" [showClear]="false" />
+            [options]="optionsDataSources?.warehousesSelectList" [required]="true" (onChange)="onWarehouseChange($event)" [showClear]="false" />
             <small class="validation-color" *ngIf="showWarehouseValidationMsg">Please select warehouse</small>
         </div>
 
@@ -42,8 +42,14 @@
         </div> -->
 
         <div class="col-12">
-          <app-product-search  [suggestions]="suggestions" (onComplete)="searchProduct($event)" [showClear]="true"
-            (onSelect)="onProductSelect($event)" [forceSelection]="true" placeholder="Search Product by code or name"  />
+          <app-product-search #productSearch 
+            [forceSelection]="true"
+            [showClear]="true"
+            [warehouseId]="item.warehouseId"        
+            (onSelect)="onProductSelect($event)" 
+            (onExactMatched)="onExactMatchProduct($event)" 
+            (onWarehouseNotFound)="getWarehouseValidation($event)" 
+            placeholder="Search Product by code or name"  />
         </div>
 
         <!-- Sale Details List -->

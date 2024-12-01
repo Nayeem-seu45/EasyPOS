@@ -85,11 +85,6 @@ export class SaleDetailComponent implements OnInit {
     });
 
     this.getById(this.id || this.CommonConstant.EmptyGuid)
-
-    // Subscribe to the searchSubject for debounced search
-    this.searchSubject.pipe(debounceTime(300)).subscribe((query) => {
-      this.fetchProductSuggestions(query);
-    });
   }
 
   ngOnDestroy() {
@@ -100,81 +95,32 @@ export class SaleDetailComponent implements OnInit {
   }
 
   //#region AutoComplete Search
-  suggestions: any[] | undefined;
-  private searchSubject = new Subject<string>();
   showWarehouseValidationMsg: boolean = false;
 
-  onWarehouseChange() {
-    if (this.item.warehouseId && this.item.warehouseId !== CommonConstants.EmptyGuid) {
+  onWarehouseChange(event: any) {
+    if (event && event !== CommonConstants.EmptyGuid) {
       this.showWarehouseValidationMsg = false; // Hide the validation message when a warehouse is selected
     }
   }
 
-  /**
-  * Handles product search in autocomplete
-  */
-  searchProduct(event: AutoCompleteCompleteEvent) {
-    const query = event.query?.trim();
-
-    if (!this.item.warehouseId || this.item.warehouseId === CommonConstants.EmptyGuid) {
-      this.showWarehouseValidationMsg = true;
-      this.suggestions = [];
-      return;
-    }
-
-    this.showWarehouseValidationMsg = false;
-
-    if (query) {
-      this.searchSubject.next(query); // Trigger debounced search
-    } else {
-      this.suggestions = [];
-    }
+  getWarehouseValidation(event: boolean){
+    this.showWarehouseValidationMsg = event;
   }
 
   onProductSelect(selectedEvent: any) {
     const selectedProduct = selectedEvent.value;
-
     if (selectedProduct.value) {
       this.addProductToSaleDetails(selectedProduct.value);
     }
   }
 
-  /**
-   * Fetch product suggestions from server
-   */
-  fetchProductSuggestions(query: string) {
-    const warehouseId = this.item.warehouseId;
-
-    const searchCommand = new GetProductSearchInStockSelectListQuery();
-    searchCommand.warehouseId = warehouseId;
-    searchCommand.query = query;
-    this.productsClient.searchProductInStocks(searchCommand).subscribe({
-      next: (response) => {
-        this.suggestions = response.map((product) => ({
-          label: `${product.name} (${product.code})`,
-          value: product
-        }));
-
-        // Automatically add product to the table if an exact match exists
-        const exactMatch = response.find(
-          (product) =>
-            product.name?.toLowerCase() === query.toLowerCase() ||
-            product.code?.toLowerCase() === query.toLowerCase()
-        );
-
-        if (exactMatch) {
-          this.addProductToSaleDetails(exactMatch);
-          this.suggestions = [];
-        }
-
-      }, error: (error) => {
-        console.error('Error fetching products:', error);
-      }
-    });
+  onExactMatchProduct(product: ProductSelectListModel) {
+    this.addProductToSaleDetails(product);
   }
 
-
   //#endregion
+
+
 
   // #region CRUDS
 

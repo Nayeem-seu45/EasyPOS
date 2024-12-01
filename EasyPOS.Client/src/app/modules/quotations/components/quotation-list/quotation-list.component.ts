@@ -73,9 +73,10 @@ private exportPdf() {
   doc.text('Quotation Details', 10, 15);
 
   // Section: Company and Supplier Info
+  const quotationDate = this.item?.quotationDate ? this.datePipe.transform(this.item.quotationDate, 'dd/MM/yyyy') : '';
   const companyText = `From:\n${this.item.companyInfo.name}\n${this.item.companyInfo.address}, ${this.item.companyInfo.city}, ${this.item.companyInfo.country}\nPhone: ${this.item.companyInfo.phone}\nMobile: ${this.item.companyInfo.mobile}\nEmail: ${this.item.companyInfo.email}`;
   const customerText = `Customer:\n${this.item.customer.name}\n${this.item.customer.address}, ${this.item.customer.city}, ${this.item.customer.country}\nPhone: ${this.item.customer.phoneNo}\nMobile: ${this.item.customer.mobile}\nEmail: ${this.item.customer.email}`;
-  const referenceText = `Reference: ${this.item.referenceNo}\nQuotation Status: ${this.item.quotationStatus}\nPayment Status: ${this.item.paymentStatusId}`;
+  const referenceText = `Reference: ${this.item.referenceNo}\nDate: ${quotationDate}\nQuotation Status: ${this.item.quotationStatus ?? ''}`;
 
   // Display company, customer, and reference info
   doc.setFontSize(10);

@@ -1,7 +1,7 @@
 ﻿using EasyPOS.Application.Features.Common.Queries;
 using EasyPOS.Application.Features.ProductManagement.Products.SelectLists;
-using EasyPOS.Application.Features.ProductManagement.Queries;
 using EasyPOS.Application.Features.Quotations.Commands;
+using EasyPOS.Application.Features.Quotations.Models;
 using EasyPOS.Application.Features.Quotations.Queries;
 using EasyPOS.Application.Features.UnitManagement.Queries;
 

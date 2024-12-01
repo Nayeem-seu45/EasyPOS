@@ -1,6 +1,4 @@
-﻿using EasyPOS.Application.Common.DapperQueries;
-
-namespace EasyPOS.Application.Features.Setups.LookupDetails.Commands;
+﻿namespace EasyPOS.Application.Features.Setups.LookupDetails.Commands;
 
 public class UpdateLookupDetailCommandValidator : AbstractValidator<UpdateLookupDetailCommand>
 {
@@ -39,7 +37,7 @@ public class UpdateLookupDetailCommandValidator : AbstractValidator<UpdateLookup
     {
         return !await _commonQuery.IsExistAsync(
             "dbo.LookupDetails",
-            ["Name"],
+            ["Name", "LookupId"],
             new { Name = name, command.Id, command.LookupId },
             ["Id"]);
     }

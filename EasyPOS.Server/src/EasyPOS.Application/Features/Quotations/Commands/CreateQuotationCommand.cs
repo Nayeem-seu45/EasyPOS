@@ -1,4 +1,4 @@
-﻿using EasyPOS.Application.Features.Quotations.Queries;
+﻿using EasyPOS.Application.Features.Quotations.Models;
 using EasyPOS.Domain.Quotations;
 
 namespace EasyPOS.Application.Features.Quotations.Commands;
@@ -17,7 +17,7 @@ internal sealed class CreateQuotationCommandHandler(
         var entity = request.Adapt<Quotation>();
 
         dbContext.Quotations.Add(entity);
-        entity.ReferenceNo = UtilityExtensions.GetDateTimeStampRef("SQ-");
+        entity.ReferenceNo = UtilityExtensions.GetDateTimeStampRef("QT-");
 
         await dbContext.SaveChangesAsync(cancellationToken);
 

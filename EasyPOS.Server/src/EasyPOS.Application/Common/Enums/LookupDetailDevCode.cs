@@ -28,7 +28,7 @@ public enum PaymentType
 public enum QuotationStatus
 {
     Pending = 113001,
-    Send = 113002
+    Sent = 113002
 }
 
 public enum PurchaseReturnStatus
