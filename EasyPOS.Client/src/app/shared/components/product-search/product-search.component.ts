@@ -34,6 +34,7 @@ export class ProductSearchComponent implements ControlValueAccessor {
   @Input() inputId: string = null; // Identifier for input focus
   @Input() name: string = null; // Name attribute of the input field
   @Input() warehouseId: string = null;
+  @Input() isWarehouseRequired: boolean = true;
 
   // Data Handling Properties
   @Input() suggestions: any[] = []; // Array of suggestions to display
@@ -149,7 +150,7 @@ export class ProductSearchComponent implements ControlValueAccessor {
   handleComplete(event: any): void {
     const query = event.query?.trim();
 
-    if (!this.warehouseId || this.warehouseId === CommonConstants.EmptyGuid) {
+    if (this.isWarehouseRequired && !this.warehouseId || this.warehouseId === CommonConstants.EmptyGuid) {
       this.onWarehouseNotFound.emit(true);
       this.suggestions = [];
       return;
@@ -197,32 +198,45 @@ export class ProductSearchComponent implements ControlValueAccessor {
    * Fetch product suggestions from server
    */
    fetchProductSuggestions(query: string) {
+    const isExactMatch = (product) =>
+        product.name?.toLowerCase() === query.toLowerCase() ||
+        product.code?.toLowerCase() === query.toLowerCase();
 
-    const searchCommand = new GetProductSearchInStockSelectListQuery();
-    searchCommand.warehouseId = this.warehouseId;
-    searchCommand.query = query;
-    this.productsClient.searchProductInStocks(searchCommand).subscribe({
-      next: (response) => {
+    const handleResponse = (response) => {
         this.suggestions = response.map((product) => ({
-          label: `${product.name} (${product.code})`,
-          value: product
+            label: `${product.name} (${product.code})`,
+            value: product
         }));
 
         // Automatically add product to the table if an exact match exists
-        const exactMatch = response.find(
-          (product) =>
-            product.name?.toLowerCase() === query.toLowerCase() ||
-            product.code?.toLowerCase() === query.toLowerCase()
-        );
+        const exactMatch = response.find(isExactMatch);
 
         if (exactMatch) {
-          this.onExactMatched.emit(exactMatch);
-          this.suggestions = [];
+            this.onExactMatched.emit(exactMatch);
+            this.suggestions = [];
         }
+    };
 
-      }, error: (error) => {
+    const handleError = (error) => {
         console.error('Error fetching products:', error);
-      }
-    });
-  }
+    };
+
+    if (this.isWarehouseRequired) {
+        const searchCommand = new GetProductSearchInStockSelectListQuery({
+            warehouseId: this.warehouseId,
+            query: query
+        });
+        this.productsClient.searchProductInStocks(searchCommand).subscribe({
+            next: handleResponse,
+            error: handleError
+        });
+    } else {
+        this.productsClient.searchProducts(query, false).subscribe({
+            next: handleResponse,
+            error: handleError
+        });
+    }
+}
+
+
 }

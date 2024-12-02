@@ -80,6 +80,21 @@ export class PurchaseDetailComponent implements OnInit {
     }
   }
 
+  //#region AutoComplete Search
+
+  onProductSelect(selectedEvent: any) {
+    const selectedProduct = selectedEvent.value;
+    if (selectedProduct.value) {
+      this.addProductToPurchaseDetails(selectedProduct.value);
+    }
+  }
+
+  onExactMatchProduct(product: ProductSelectListModel) {
+    this.addProductToPurchaseDetails(product);
+  }
+
+  //#endregion
+
   // #region CRUDS
 
   onFormSubmit() {
@@ -199,11 +214,11 @@ export class PurchaseDetailComponent implements OnInit {
   // #region Add or Update PurchaseDetail
 
 
-  onProductSelect(selectedProduct: ProductSelectListModel) {
-    if (selectedProduct) {
-      this.addProductToPurchaseDetails(selectedProduct);
-    }
-  }
+  // onProductSelect(selectedProduct: ProductSelectListModel) {
+  //   if (selectedProduct) {
+  //     this.addProductToPurchaseDetails(selectedProduct);
+  //   }
+  // }
 
   removePurchaseDetail(index: number) {
 
@@ -217,6 +232,11 @@ export class PurchaseDetailComponent implements OnInit {
   }
 
   private addProductToPurchaseDetails(product: ProductSelectListModel) {
+
+    const isAlreadyExisted = this.increaseQuantityIfProductAlreadyExist(product);
+
+    if(isAlreadyExisted) return;
+
     const productFormGroup = this.addPurchaseDetailFormGroup();
     const quantity = 1; 
     // const totalDiscountAmount = (product.discountAmount || 0) * quantity;
@@ -242,6 +262,33 @@ export class PurchaseDetailComponent implements OnInit {
 
     this.calculateTaxAndTotalPrice(this.purchaseDetails.length - 1, productFormGroup.value);
   }
+
+  private increaseQuantityIfProductAlreadyExist(product: ProductSelectListModel): boolean {
+    // Access the controls of the FormArray
+    const existingProductFormGroup = this.purchaseDetails.controls.find(
+      (formGroup) =>
+        (formGroup as FormGroup).value.productId === product.id
+    ) as FormGroup;
+  
+    if (existingProductFormGroup) {
+      // Increase quantity
+      const updatedQuantity = existingProductFormGroup.value.quantity + 1;
+  
+      // Update the FormGroup with the new quantity
+      existingProductFormGroup.patchValue({ quantity: updatedQuantity });
+  
+      // Recalculate tax and total price
+      const index = this.purchaseDetails.controls.indexOf(existingProductFormGroup);
+      this.calculateTaxAndTotalPrice(index, existingProductFormGroup.value);
+  
+      // this.calculateGrandTotal();
+      return true;
+    }
+  
+    return false;
+  }
+  
+  
 
   private deletePurchaseDetail(id: string) {
     if (!id) {

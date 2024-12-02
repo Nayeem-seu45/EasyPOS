@@ -61,6 +61,7 @@
     [showTransitionOptions]="showTransitionOptions"
     [hideTransitionOptions]="hideTransitionOptions"
     [(ngModel)]="value"
+    [ngModelOptions]="{standalone: true}"
     (completeMethod)="handleComplete($event)"
     (onSelect)="handleSelect($event)"
     (onUnselect)="handleUnselect($event)"

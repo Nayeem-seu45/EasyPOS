@@ -55,6 +55,12 @@ public class Products : EndpointGroupBase
              .Produces<List<ProductSelectListModel>>(StatusCodes.Status200OK)
              .Produces<ProblemDetails>(StatusCodes.Status400BadRequest);
 
+        group.MapPost("SearchProducts", SearchProducts)
+             .WithName("SearchProducts")
+             .Produces<List<ProductSelectListModel>>(StatusCodes.Status200OK)
+             .Produces<ProblemDetails>(StatusCodes.Status400BadRequest);
+
+
     }
 
     private async Task<IResult> GetAll(ISender sender, GetProductListQuery query)
@@ -198,6 +204,20 @@ public class Products : EndpointGroupBase
     {
         var result = await sender.Send(query);
 
-        return TypedResults.Ok(result.Value);
+        //return TypedResults.Ok(result.Value);
+        return result!.Match(
+            onSuccess: () => Results.Ok(result.Value),
+            onFailure: result!.ToProblemDetails);
+    }
+
+    private async Task<IResult> SearchProducts(ISender sender, string query, bool? allowCache = false)
+    {
+        var result = await sender.Send(new GetProductSearchSelectListQuery(query, allowCache));
+
+        //return TypedResults.Ok(result.Value);
+        return result!.Match(
+            onSuccess: () => Results.Ok(result.Value),
+            onFailure: result!.ToProblemDetails);
+
     }
 }

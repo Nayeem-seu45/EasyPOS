@@ -33,17 +33,21 @@
         </div>
 
         <!-- product select  -->
-        <div class="col-12">
+        <!-- <div class="col-12">
           <app-input-select label="" (onChange)="onProductSelect($event)" [optionValue]="null"
             [options]="optionsDataSources?.['productsSelectList']" [(ngModel)]="selectedProduct"
             [ngModelOptions]="{standalone: true}" />
-        </div>
-
-        <!-- <div class="col-12">
-          <app-input-select label="" (ngModelChange)="onProductSelect()" [optionValue]="null"
-            [options]="optionsDataSources?.['productsSelectList']" [(ngModel)]="selectedProduct"
-            [ngModelOptions]="{standalone: true}" />
         </div> -->
+
+        <div class="col-12">
+          <app-product-search #productSearch 
+            [forceSelection]="true"
+            [showClear]="true"
+            (onSelect)="onProductSelect($event)" 
+            (onExactMatched)="onExactMatchProduct($event)" 
+            [isWarehouseRequired]="false"
+            placeholder="Search Product by code or name"  />
+        </div>
 
         <div class="col-12">
           <p-table [value]="purchaseDetails.controls" [scrollable]="true" scrollHeight="600px">

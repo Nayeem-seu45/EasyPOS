@@ -9,6 +9,7 @@ import { ToastService } from 'src/app/shared/services/toast.service';
 import { CommonUtils } from 'src/app/shared/Utilities/common-utilities';
 import { Subject, Subscription } from 'rxjs';
 import { UpdateProductTransferOrderDetailComponent } from '../update-product-transfer-order-detail/update-product-transfer-order-detail.component';
+import { isArraysEqual } from '@fullcalendar/core/internal';
 
 @Component({
   selector: 'app-product-transfer-detail',
@@ -244,6 +245,11 @@ export class ProductTransferDetailComponent implements OnInit {
   }
 
   private addProductToProductTransferDetails(product: ProductSelectListModel) {
+
+    const isAlreadyExisted = this.increaseQuantityIfProductAlreadyExist(product);
+
+    if (isAlreadyExisted) return;
+
     const productFormGroup = this.addProductTransferDetailFormGroup();
     const quantity = 1;
     // const totalDiscountAmount = (product.discountAmount || 0) * quantity;
@@ -268,6 +274,31 @@ export class ProductTransferDetailComponent implements OnInit {
     this.productTransferDetails.push(productFormGroup);
 
     this.calculateTaxAndTotalPrice(this.productTransferDetails.length - 1, productFormGroup.value);
+  }
+
+  private increaseQuantityIfProductAlreadyExist(product: ProductSelectListModel): boolean {
+    // Access the controls of the FormArray
+    const existingProductFormGroup = this.productTransferDetails.controls.find(
+      (formGroup) =>
+        (formGroup as FormGroup).value.productId === product.id
+    ) as FormGroup;
+  
+    if (existingProductFormGroup) {
+      // Increase quantity
+      const updatedQuantity = existingProductFormGroup.value.quantity + 1;
+  
+      // Update the FormGroup with the new quantity
+      existingProductFormGroup.patchValue({ quantity: updatedQuantity });
+  
+      // Recalculate tax and total price
+      const index = this.productTransferDetails.controls.indexOf(existingProductFormGroup);
+      this.calculateTaxAndTotalPrice(index, existingProductFormGroup.value);
+  
+      // this.calculateGrandTotal();
+      return true;
+    }
+  
+    return false;
   }
 
   private deleteProductTransferDetail(id: string) {

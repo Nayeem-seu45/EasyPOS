@@ -177,6 +177,11 @@ export class QuotationDetailComponent implements OnInit {
   }
 
   private addProductToQuotationDetails(product: ProductSelectListModel) {
+
+    const isAlreadyExisted = this.increaseQuantityIfProductAlreadyExist(product);
+
+    if(isAlreadyExisted) return;
+
     const quantity = 1; // Default quantity
     // const totalDiscountAmount = (product.discountAmount || 0) * quantity;
 
@@ -205,6 +210,20 @@ export class QuotationDetailComponent implements OnInit {
     this.item.quotationDetails.push(productDetail);
 
     this.calculateGrandTotal();
+  }
+
+  private increaseQuantityIfProductAlreadyExist(product: ProductSelectListModel): boolean {
+    let existedProduct = this.item.quotationDetails.find(x => x.productId === product.id);
+    if (existedProduct) {
+      existedProduct.quantity += 1;
+
+      // Calculate tax and total price
+      this.calculateTaxAndTotalPrice(existedProduct);
+
+      this.calculateGrandTotal();
+      return true;
+    }
+    return false;
   }
 
   onItemPropsChange(productDetail: QuotationDetailModel) {
