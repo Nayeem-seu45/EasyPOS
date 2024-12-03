@@ -4,6 +4,7 @@ using EasyPOS.Application.Common.Abstractions.Identity;
 using EasyPOS.Application.Common.DapperQueries;
 using EasyPOS.Domain.Constants;
 using EasyPOS.Infrastructure.Caching;
+using EasyPOS.Infrastructure.Communications;
 using EasyPOS.Infrastructure.Identity;
 using EasyPOS.Infrastructure.Identity.OptionsSetup;
 using EasyPOS.Infrastructure.Identity.Permissions;
@@ -50,6 +51,7 @@ public static class DependencyInjection
         AddIdentity(services);
         AddAuthenticationAndAuthorization(services);
         AddHealthChecks(services, dbConString, redisConString);
+        EmailServiceExtension.AddEmailServices(services, configuration);
 
         return services;
     }

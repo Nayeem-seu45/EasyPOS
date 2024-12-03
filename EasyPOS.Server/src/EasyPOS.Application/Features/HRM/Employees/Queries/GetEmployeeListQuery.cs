@@ -1,4 +1,6 @@
-﻿namespace EasyPOS.Application.Features.HRM.Employees.Queries;
+﻿using EasyPOS.Application.Common.Abstractions.Communication;
+
+namespace EasyPOS.Application.Features.HRM.Employees.Queries;
 
 [Authorize(Policy = Permissions.Employees.View)]
 public record GetEmployeeListQuery 
@@ -9,11 +11,14 @@ public record GetEmployeeListQuery
      
 }
 
-internal sealed class GetEmployeeQueryHandler(ISqlConnectionFactory sqlConnection) 
+internal sealed class GetEmployeeQueryHandler(ISqlConnectionFactory sqlConnection, IEmailService emailService) 
      : IQueryHandler<GetEmployeeListQuery, PaginatedResponse<EmployeeModel>>
 {
     public async Task<Result<PaginatedResponse<EmployeeModel>>> Handle(GetEmployeeListQuery request, CancellationToken cancellationToken)
     {
+
+        await emailService.SendEmailAsync("salmanshafiq00@gmail.com", "Test Email 2", "This is sample test mail");
+
         var connection = sqlConnection.GetOpenConnection();
 
         var sql = $"""
