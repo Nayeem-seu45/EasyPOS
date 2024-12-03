@@ -1,4 +1,5 @@
-﻿using EasyPOS.Application.Features.Admin.AppUsers.Queries;
+﻿using EasyPOS.Application.Common.Models;
+using EasyPOS.Application.Features.Admin.AppUsers.Queries;
 using EasyPOS.Application.Features.Common.Queries;
 using EasyPOS.Application.Features.HRM.Employees.Commands;
 using EasyPOS.Application.Features.HRM.Employees.Queries;
@@ -40,6 +41,11 @@ public class Employees : EndpointGroupBase
              .WithName("DeleteEmployees")
              .Produces(StatusCodes.Status204NoContent)
              .Produces<ProblemDetails>(StatusCodes.Status400BadRequest);
+
+        group.MapGet("GetEmployeeHierarchy/{id:Guid}", GetEmployeeHierarchy)
+             .WithName("GetEmployeeHierarchy")
+             .Produces<HierarchyTreeNodeModel>(StatusCodes.Status200OK);
+
     }
 
     private async Task<IResult> GetAll(ISender sender, GetEmployeeListQuery query)
@@ -149,9 +155,20 @@ public class Employees : EndpointGroupBase
     private async Task<IResult> DeleteMultiple(ISender sender, [FromBody] Guid[] ids)
     {
         var result = await sender.Send(new DeleteEmployeesCommand(ids));
-        
+
         return result!.Match(
             onSuccess: Results.NoContent,
             onFailure: result!.ToProblemDetails);
+    }
+
+    private async Task<IResult> GetEmployeeHierarchy(ISender sender, Guid id)
+    {
+        var result = await sender.Send(new GetEmployeeSubordinateByIdQuery(id));
+
+        return result.Match(
+            onSuccess: () => Results.Ok(result.Value),
+            onFailure: result.ToProblemDetails);
+
+
     }
 }

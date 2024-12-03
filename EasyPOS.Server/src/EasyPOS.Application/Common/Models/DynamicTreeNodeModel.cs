@@ -1,11 +1,11 @@
 ﻿namespace EasyPOS.Application.Common.Models;
 
-public class TreeNodeModel
+public class DynamicTreeNodeModel
 {
-    public Guid Key { get; set; }
+    public dynamic Key { get; set; }
     public string Label { get; set; } = string.Empty;
     public string Icon { get; set; } = string.Empty;
-    public Guid? ParentId { get; set; }
+    public dynamic? ParentId { get; set; }
     public string Data { get; set; } = string.Empty;
     public bool DisabledCheckbox { get; set; } = false;
     public bool Disabled { get; set; } = false;
@@ -14,7 +14,7 @@ public class TreeNodeModel
     public bool PartialSelected { get; set; }
     public int OrderNo { get; set; }
     public bool Leaf => Children.Count == 0;
-    public TreeNodeModel? Parent { get; set; }
-    public IList<TreeNodeModel> Children { get; set; } = [];
+    public DynamicTreeNodeModel? Parent { get; set; }
+    public IList<DynamicTreeNodeModel> Children { get; set; } = [];
 }
 

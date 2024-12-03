@@ -2117,6 +2117,7 @@ export interface IEmployeesClient {
     update(command: UpdateEmployeeCommand): Observable<void>;
     delete(id: string): Observable<void>;
     deleteMultiple(ids: string[]): Observable<void>;
+    getEmployeeHierarchy(id: string): Observable<HierarchyTreeNodeModel>;
 }
 
 @Injectable()
@@ -2458,6 +2459,58 @@ export class EmployeesClient implements IEmployeesClient {
             let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
             result400 = ProblemDetails.fromJS(resultData400);
             return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    getEmployeeHierarchy(id: string): Observable<HierarchyTreeNodeModel> {
+        let url_ = this.baseUrl + "/api/Employees/GetEmployeeHierarchy/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            withCredentials: true,
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetEmployeeHierarchy(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetEmployeeHierarchy(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<HierarchyTreeNodeModel>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<HierarchyTreeNodeModel>;
+        }));
+    }
+
+    protected processGetEmployeeHierarchy(response: HttpResponseBase): Observable<HierarchyTreeNodeModel> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = HierarchyTreeNodeModel.fromJS(resultData200);
+            return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
@@ -20091,6 +20144,7 @@ export class EmployeeModel implements IEmployeeModel {
     code?: string;
     firstName?: string;
     lastName?: string | undefined;
+    fullName?: string | undefined;
     gender?: string;
     dob?: Date | undefined;
     nid?: string | undefined;
@@ -20129,6 +20183,7 @@ export class EmployeeModel implements IEmployeeModel {
             this.code = _data["code"];
             this.firstName = _data["firstName"];
             this.lastName = _data["lastName"];
+            this.fullName = _data["fullName"];
             this.gender = _data["gender"];
             this.dob = _data["dob"] ? new Date(_data["dob"].toString()) : <any>undefined;
             this.nid = _data["nid"];
@@ -20177,6 +20232,7 @@ export class EmployeeModel implements IEmployeeModel {
         data["code"] = this.code;
         data["firstName"] = this.firstName;
         data["lastName"] = this.lastName;
+        data["fullName"] = this.fullName;
         data["gender"] = this.gender;
         data["dob"] = this.dob ? formatDate(this.dob) : <any>undefined;
         data["nid"] = this.nid;
@@ -20218,6 +20274,7 @@ export interface IEmployeeModel {
     code?: string;
     firstName?: string;
     lastName?: string | undefined;
+    fullName?: string | undefined;
     gender?: string;
     dob?: Date | undefined;
     nid?: string | undefined;
@@ -20517,6 +20574,110 @@ export interface IUpdateEmployeeCommand {
     userId?: string | undefined;
     leaveTypes?: string[];
     cacheKey?: string;
+}
+
+export class HierarchyTreeNodeModel implements IHierarchyTreeNodeModel {
+    key?: string;
+    expanded?: boolean;
+    type?: string;
+    label?: string;
+    icon?: string;
+    parentId?: string | undefined;
+    data?: any;
+    disabledCheckbox?: boolean;
+    disabled?: boolean;
+    visible?: boolean;
+    isActive?: boolean;
+    partialSelected?: boolean;
+    orderNo?: number;
+    leaf?: boolean;
+    parent?: HierarchyTreeNodeModel | undefined;
+    children?: HierarchyTreeNodeModel[];
+
+    constructor(data?: IHierarchyTreeNodeModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.key = _data["key"];
+            this.expanded = _data["expanded"];
+            this.type = _data["type"];
+            this.label = _data["label"];
+            this.icon = _data["icon"];
+            this.parentId = _data["parentId"];
+            this.data = _data["data"];
+            this.disabledCheckbox = _data["disabledCheckbox"];
+            this.disabled = _data["disabled"];
+            this.visible = _data["visible"];
+            this.isActive = _data["isActive"];
+            this.partialSelected = _data["partialSelected"];
+            this.orderNo = _data["orderNo"];
+            this.leaf = _data["leaf"];
+            this.parent = _data["parent"] ? HierarchyTreeNodeModel.fromJS(_data["parent"]) : <any>undefined;
+            if (Array.isArray(_data["children"])) {
+                this.children = [] as any;
+                for (let item of _data["children"])
+                    this.children!.push(HierarchyTreeNodeModel.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): HierarchyTreeNodeModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new HierarchyTreeNodeModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["key"] = this.key;
+        data["expanded"] = this.expanded;
+        data["type"] = this.type;
+        data["label"] = this.label;
+        data["icon"] = this.icon;
+        data["parentId"] = this.parentId;
+        data["data"] = this.data;
+        data["disabledCheckbox"] = this.disabledCheckbox;
+        data["disabled"] = this.disabled;
+        data["visible"] = this.visible;
+        data["isActive"] = this.isActive;
+        data["partialSelected"] = this.partialSelected;
+        data["orderNo"] = this.orderNo;
+        data["leaf"] = this.leaf;
+        data["parent"] = this.parent ? this.parent.toJSON() : <any>undefined;
+        if (Array.isArray(this.children)) {
+            data["children"] = [];
+            for (let item of this.children)
+                data["children"].push(item.toJSON());
+        }
+        return data;
+    }
+}
+
+export interface IHierarchyTreeNodeModel {
+    key?: string;
+    expanded?: boolean;
+    type?: string;
+    label?: string;
+    icon?: string;
+    parentId?: string | undefined;
+    data?: any;
+    disabledCheckbox?: boolean;
+    disabled?: boolean;
+    visible?: boolean;
+    isActive?: boolean;
+    partialSelected?: boolean;
+    orderNo?: number;
+    leaf?: boolean;
+    parent?: HierarchyTreeNodeModel | undefined;
+    children?: HierarchyTreeNodeModel[];
 }
 
 export class PaginatedResponseOfHolidayModel implements IPaginatedResponseOfHolidayModel {

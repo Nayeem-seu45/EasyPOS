@@ -1,0 +1,22 @@
+<div class="card flex justify-content-center overflow-x-auto">
+    <p-organizationChart 
+        [value]="employeeHierarchy" 
+        selectionMode="multiple" 
+        [(selection)]="selectedNodes" 
+        [collapsible]="true">
+            <ng-template let-node pTemplate="person">
+                <div class="p-2 text-center">
+                    <!-- [src]="node.data.photoUrl"  -->
+                    <img 
+                        [src]="'https://picsum.photos/200'" 
+                        class="mb-3 w-3rem h-3rem" />
+                    <div class="font-bold">
+                        {{ node.data.fullName }}
+                    </div>
+                    <div>
+                        {{ node.data.designation }}
+                    </div>
+                </div>
+            </ng-template>
+    </p-organizationChart>
+  </div>

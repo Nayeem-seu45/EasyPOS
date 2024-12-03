@@ -4,6 +4,7 @@ import { HRMRoutingComponents, HRMRoutingModule } from './hrm-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppSharedModule } from 'src/app/shared/app-shared.module';
 import { TabViewModule } from 'primeng/tabview';
+import { OrganizationChartModule } from 'primeng/organizationchart';
 
 
 @NgModule({
@@ -16,7 +17,8 @@ import { TabViewModule } from 'primeng/tabview';
     ReactiveFormsModule,
     HRMRoutingModule,
     AppSharedModule,
-    TabViewModule
+    TabViewModule,
+    OrganizationChartModule 
   ]
 })
 export class HRMModule { }

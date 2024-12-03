@@ -16,6 +16,7 @@ import { LeaveRequestListComponent } from './components/leave-request-list/leave
 import { LeaveRequestDetailComponent } from './components/leave-request-detail/leave-request-detail.component';
 import { LeaveTypeListComponent } from './components/leave-type-list/leave-type-list.component';
 import { LeaveTypeDetailComponent } from './components/leave-type-detail/leave-type-detail.component';
+import { EmployeeSubordinateTreeComponent } from './components/employee-subordinate-tree/employee-subordinate-tree.component';
 
 const routes: Routes = [
   {path: 'departments', component: DepartmentListComponent},
@@ -52,5 +53,6 @@ export const HRMRoutingComponents = [
   LeaveRequestListComponent,
   LeaveRequestDetailComponent,
   LeaveTypeListComponent,
-  LeaveTypeDetailComponent
+  LeaveTypeDetailComponent,
+  EmployeeSubordinateTreeComponent
 ]

@@ -1691,6 +1691,43 @@
         ]
       }
     },
+    "/api/Employees/GetEmployeeHierarchy/{id}": {
+      "get": {
+        "tags": [
+          "Employees"
+        ],
+        "operationId": "GetEmployeeHierarchy",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HierarchyTreeNodeModel"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
     "/api/Holidays/GetAll": {
       "post": {
         "tags": [
@@ -13399,6 +13436,10 @@
             "type": "string",
             "nullable": true
           },
+          "fullName": {
+            "type": "string",
+            "nullable": true
+          },
           "gender": {
             "type": "string"
           },
@@ -13702,6 +13743,70 @@
           },
           "cacheKey": {
             "type": "string"
+          }
+        }
+      },
+      "HierarchyTreeNodeModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "key": {
+            "type": "string",
+            "format": "guid"
+          },
+          "expanded": {
+            "type": "boolean"
+          },
+          "type": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "icon": {
+            "type": "string"
+          },
+          "parentId": {
+            "type": "string",
+            "format": "guid",
+            "nullable": true
+          },
+          "data": {},
+          "disabledCheckbox": {
+            "type": "boolean"
+          },
+          "disabled": {
+            "type": "boolean"
+          },
+          "visible": {
+            "type": "boolean"
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "partialSelected": {
+            "type": "boolean"
+          },
+          "orderNo": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "leaf": {
+            "type": "boolean"
+          },
+          "parent": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/HierarchyTreeNodeModel"
+              }
+            ]
+          },
+          "children": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/HierarchyTreeNodeModel"
+            }
           }
         }
       },
