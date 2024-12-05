@@ -4,9 +4,7 @@ import {
   TemplateRef, 
   ViewContainerRef, 
   OnInit, 
-  OnDestroy,
-  ElementRef,
-  Renderer2
+  OnDestroy
 } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { PermissionService } from '../core/auth/services/permission.service';
@@ -27,7 +25,10 @@ export class HasPermissionDirective implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.checkPermission();
+    // Subscribe to permission changes
+    this.permissionSubscription = this.permissionService.permissions$.subscribe(() => {
+      this.checkPermission();
+    });
   }
 
   ngOnDestroy() {

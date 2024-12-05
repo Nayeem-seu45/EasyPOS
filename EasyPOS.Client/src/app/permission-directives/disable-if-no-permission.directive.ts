@@ -24,7 +24,10 @@ export class DisableIfNoPermissionDirective implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.checkPermission();
+    // Subscribe to permission changes
+    this.permissionSubscription = this.permissionService.permissions$.subscribe(() => {
+      this.checkPermission();
+    });
   }
 
   ngOnDestroy() {

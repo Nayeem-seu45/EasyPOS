@@ -6,17 +6,17 @@ import {
   OnInit, 
   OnDestroy
 } from '@angular/core';
-import { Subscription } from 'rxjs';
 import { PermissionService } from '../core/auth/services/permission.service';
+import { Subscription } from 'rxjs';
 
+// Module to declare and export directives
 @Directive({
-  selector: '[appHasAllPermissions]'
+  selector: '[appApplyPermissionIfHas]'
 })
-export class HasAllPermissionsDirective implements OnInit, OnDestroy {
+export class ApplyPermissionIfHasDirective implements OnInit, OnDestroy {
+  @Input() appApplyPermissionIfHas!: string;
+  @Input() appApplyPermissionIfHasElse?: TemplateRef<any>;
   private permissionSubscription: Subscription | null = null;
-  
-  @Input() appHasAllPermissions!: string[];
-  @Input() appHasAllPermissionsElse?: TemplateRef<any>;
 
   constructor(
     private templateRef: TemplateRef<any>,
@@ -36,14 +36,14 @@ export class HasAllPermissionsDirective implements OnInit, OnDestroy {
   }
 
   private checkPermission() {
-    const hasAllPermissions = this.permissionService.hasAllPermissions(this.appHasAllPermissions);
+    const shouldApply = this.permissionService.applyPermissionIfHas(this.appApplyPermissionIfHas);
     
     this.viewContainer.clear();
     
-    if (hasAllPermissions) {
+    if (shouldApply) {
       this.viewContainer.createEmbeddedView(this.templateRef);
-    } else if (this.appHasAllPermissionsElse) {
-      this.viewContainer.createEmbeddedView(this.appHasAllPermissionsElse);
+    } else if (this.appApplyPermissionIfHasElse) {
+      this.viewContainer.createEmbeddedView(this.appApplyPermissionIfHasElse);
     }
   }
 }

@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { DisableIfNoPermissionDirective } from './disable-if-no-permission-directive.directive';
+import { DisableIfNoPermissionDirective } from './disable-if-no-permission.directive';
 import { HasAllPermissionsDirective } from './has-all-permission.directive';
 import { HasAnyPermissionDirective } from './has-any-permission.directive';
 import { HasPermissionDirective } from './has-permission.directive';

@@ -9,7 +9,7 @@ export class PermissionService {
   private permissionsSubject = new BehaviorSubject<Set<string>>(new Set());
   public permissions$ = this.permissionsSubject.asObservable();
 
-  constructor(private accountsClient: AccountsClient) {}
+  constructor(private accountsClient: AccountsClient) { }
 
   /**
    * Load user permissions and update the permissions state
@@ -36,9 +36,14 @@ export class PermissionService {
    * @param permission Permission to check
    * @returns Boolean indicating permission existence
    */
-  applyPermissionIfHas(permission: string = null): boolean {
-    if(!permission) return true;
-    return this.permissionsSubject.value.has(permission.trim().toLowerCase());
+  applyPermissionIfHas(permission: string | null = null): boolean {
+    // If no permission is specified, return true (default access)
+    if (!permission) return true;
+
+    // Normalize the permission check
+    const normalizedPermission = permission.trim().toLowerCase();
+
+    return this.permissionsSubject.value.has(normalizedPermission);
   }
 
 
@@ -91,33 +96,34 @@ export class PermissionService {
     return Array.from(this.permissionsSubject.value);
   }
 
+
   // observable verions of loadPermissions
-/**
-   * Load user permissions
-   * @param allowCache Whether to allow cached permissions (default: true)
-   * @returns Observable of permission loading process
-   */
-// loadPermissions(allowCache: boolean = true): Observable<string[]> {
-//   return new Observable(observer => {
-//     this.accountsClient.getUserPermissions(allowCache).subscribe({
-//       next: (permits: string[]) => {
-//         // Normalize permissions by trimming and converting to lowercase
-//         const normalizedPermissions = new Set(
-//           permits.map(p => p.trim().toLowerCase())
-//         );
-        
-//         // Update the BehaviorSubject
-//         this.permissionsSubject.next(normalizedPermissions);
-        
-//         observer.next(permits);
-//         observer.complete();
-//       },
-//       error: (error) => {
-//         console.error('Failed to load permissions:', error);
-//         observer.error(error);
-//       }
-//     });
-//   });
-// }
-  
+  /**
+     * Load user permissions
+     * @param allowCache Whether to allow cached permissions (default: true)
+     * @returns Observable of permission loading process
+     */
+  // loadPermissions(allowCache: boolean = true): Observable<string[]> {
+  //   return new Observable(observer => {
+  //     this.accountsClient.getUserPermissions(allowCache).subscribe({
+  //       next: (permits: string[]) => {
+  //         // Normalize permissions by trimming and converting to lowercase
+  //         const normalizedPermissions = new Set(
+  //           permits.map(p => p.trim().toLowerCase())
+  //         );
+
+  //         // Update the BehaviorSubject
+  //         this.permissionsSubject.next(normalizedPermissions);
+
+  //         observer.next(permits);
+  //         observer.complete();
+  //       },
+  //       error: (error) => {
+  //         console.error('Failed to load permissions:', error);
+  //         observer.error(error);
+  //       }
+  //     });
+  //   });
+  // }
+
 }
