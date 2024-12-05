@@ -9,6 +9,7 @@ import { environment } from 'src/environments/environment';
 import { API_BASE_URL } from '../generated-clients/api-service';
 import { AuthRoutingComponents, AuthRoutingModule } from './auth-routing.module';
 import { ButtonModule } from 'primeng/button';
+import { PermissionDirectivesModule } from 'src/app/permission-directives/permission-directives.module';
 
 
 
@@ -25,7 +26,8 @@ import { ButtonModule } from 'primeng/button';
     InputTextModule,
     FormsModule,
     PasswordModule,
-    AuthRoutingModule
+    AuthRoutingModule,
+    PermissionDirectivesModule
   ],
   providers: [
     { provide: API_BASE_URL, useValue: environment.API_BASE_URL },

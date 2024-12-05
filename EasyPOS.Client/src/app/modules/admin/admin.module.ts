@@ -13,6 +13,7 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { TreeModule } from 'primeng/tree';
 import { DraggablePositionModule } from 'src/app/others/draggable-position/draggable-position.module';
+import { PermissionDirectivesModule } from 'src/app/permission-directives/permission-directives.module';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { DraggablePositionModule } from 'src/app/others/draggable-position/dragg
     FileUploadModule,
     SelectButtonModule,
     TreeModule,
-    DraggablePositionModule
+    DraggablePositionModule,
+    PermissionDirectivesModule
   ],
   providers: [
     { provide: API_BASE_URL, useValue: environment.API_BASE_URL },

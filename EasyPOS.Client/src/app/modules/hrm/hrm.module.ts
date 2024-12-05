@@ -18,7 +18,7 @@ import { OrganizationChartModule } from 'primeng/organizationchart';
     HRMRoutingModule,
     AppSharedModule,
     TabViewModule,
-    OrganizationChartModule 
+    OrganizationChartModule,
   ]
 })
 export class HRMModule { }

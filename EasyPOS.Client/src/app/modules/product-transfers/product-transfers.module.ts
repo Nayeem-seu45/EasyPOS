@@ -15,7 +15,7 @@ import { productTransferRoutingComponents, ProductTransferRoutingModule } from '
     FormsModule,
     ReactiveFormsModule,
     AppSharedModule,
-    ProductTransferRoutingModule
+    ProductTransferRoutingModule,
   ]
 })
 export class ProductTransfersModule { }

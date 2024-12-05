@@ -16,9 +16,6 @@ internal sealed class GetEmployeeQueryHandler(ISqlConnectionFactory sqlConnectio
 {
     public async Task<Result<PaginatedResponse<EmployeeModel>>> Handle(GetEmployeeListQuery request, CancellationToken cancellationToken)
     {
-
-        await emailService.SendEmailAsync("salmanshafiq00@gmail.com", "Test Email 2", "This is sample test mail");
-
         var connection = sqlConnection.GetOpenConnection();
 
         var sql = $"""

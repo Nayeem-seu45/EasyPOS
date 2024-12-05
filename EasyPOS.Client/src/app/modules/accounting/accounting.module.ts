@@ -6,7 +6,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { environment } from 'src/environments/environment';
 import { API_BASE_URL } from '../generated-clients/api-service';
 
-
 @NgModule({
   declarations: [
     ...AccountingRoutingComponents
@@ -16,7 +15,7 @@ import { API_BASE_URL } from '../generated-clients/api-service';
     FormsModule,
     ReactiveFormsModule,
     AppSharedModule,
-    AccountingRoutingModule
+    AccountingRoutingModule,
   ],
   providers: [
     { provide: API_BASE_URL, useValue: environment.API_BASE_URL },

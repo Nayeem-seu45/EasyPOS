@@ -75,6 +75,7 @@ import { AutoCompleteModule } from 'primeng/autocomplete';
 import { AutoCompleteComponent } from './components/auto-complete/autocomplete.component';
 import { ProductSearchComponent } from './components/product-search/product-search.component';
 import { InputDatepickerComponent } from './components/input-datepicker/input-datepicker.component';
+import { PermissionDirectivesModule } from '../permission-directives/permission-directives.module';
 
 @NgModule({
 	declarations: [
@@ -119,7 +120,7 @@ import { InputDatepickerComponent } from './components/input-datepicker/input-da
 		CommonModule,
 		FormsModule,
 		ReactiveFormsModule,
-
+		PermissionDirectivesModule,
 		//
 		EditorModule,
 
@@ -203,7 +204,9 @@ import { InputDatepickerComponent } from './components/input-datepicker/input-da
 		TableModule,
 		AutoCompleteComponent,
 		ProductSearchComponent,
-		InputDatepickerComponent
+		InputDatepickerComponent,
+
+		PermissionDirectivesModule
 	]
 })
 export class AppSharedModule { }

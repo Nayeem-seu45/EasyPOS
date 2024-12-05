@@ -10,6 +10,7 @@ import { TableModule } from 'primeng/table';
 import { DashboardRouting, DashboardRoutingComponents } from './dashboard-routing.module';
 import { DragDropModule } from 'primeng/dragdrop';
 import { DraggablePositionModule } from 'src/app/others/draggable-position/draggable-position.module';
+import { PermissionDirectivesModule } from 'src/app/permission-directives/permission-directives.module';
 
 
 @NgModule({
@@ -28,6 +29,7 @@ import { DraggablePositionModule } from 'src/app/others/draggable-position/dragg
     DashboardRouting,
     DragDropModule,
     DraggablePositionModule,
+    PermissionDirectivesModule
   ]
 })
 export class DashboardModule { }
