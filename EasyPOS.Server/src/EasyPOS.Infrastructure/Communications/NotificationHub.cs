@@ -1,7 +1,7 @@
 ﻿using EasyPOS.Application.Common.Security;
-using EasyPOS.Application.Common.Abstractions;
 using EasyPOS.Application.Features.Admin.AppNotifications.Queries;
 using Microsoft.AspNetCore.SignalR;
+using EasyPOS.Application.Common.Abstractions.Communication;
 
 namespace EasyPOS.Infrastructure.Communications;
 

@@ -1,4 +1,4 @@
-﻿using EasyPOS.Application.Common.Abstractions;
+﻿using EasyPOS.Application.Common.Abstractions.Communication;
 using EasyPOS.Application.Common.Extensions;
 using EasyPOS.Application.Common.Models;
 using EasyPOS.Application.Features.Admin.AppMenus.Commands;

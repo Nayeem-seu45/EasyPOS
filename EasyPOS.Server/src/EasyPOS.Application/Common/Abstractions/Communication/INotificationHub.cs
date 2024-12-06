@@ -1,6 +1,6 @@
 ﻿using EasyPOS.Application.Features.Admin.AppNotifications.Queries;
 
-namespace EasyPOS.Application.Common.Abstractions;
+namespace EasyPOS.Application.Common.Abstractions.Communication;
 
 public interface INotificationHub
 {

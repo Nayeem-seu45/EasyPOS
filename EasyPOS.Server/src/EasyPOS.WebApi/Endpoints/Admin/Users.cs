@@ -1,5 +1,4 @@
 ﻿using EasyPOS.Application.Features.Common.Queries;
-using EasyPOS.Application.Common.Abstractions;
 using EasyPOS.Application.Common.Abstractions.Caching;
 using EasyPOS.Application.Common.Abstractions.Identity;
 using EasyPOS.Application.Common.Constants;
@@ -16,6 +15,7 @@ using Microsoft.AspNetCore.SignalR;
 using EasyPOS.Application.Features.Admin.AppUsers.Models;
 using DocumentFormat.OpenXml.Drawing.Charts;
 using EasyPOS.Application.Features.Admin.AppMenus.Commands;
+using EasyPOS.Application.Common.Abstractions.Communication;
 
 namespace EasyPOS.WebApi.Endpoints.Admin;
 

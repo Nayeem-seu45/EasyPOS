@@ -24,6 +24,7 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using StackExchange.Redis;
+using EasyPOS.Infrastructure.BackgroundJobs;
 
 namespace EasyPOS.Infrastructure;
 
@@ -47,7 +48,8 @@ public static class DependencyInjection
         AddRedis(services, redisConString);
         AddScopedServices(services);
         AddCaching(services);
-        AddHangfireJobs(services, dbConString);
+        //AddHangfireJobs(services, dbConString);
+        HangfireServiceExtension.AddHangfireService(services, dbConString);
         AddIdentity(services);
         AddAuthenticationAndAuthorization(services);
         AddHealthChecks(services, dbConString, redisConString);

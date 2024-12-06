@@ -1,11 +1,9 @@
 using EasyPOS.Application;
 using EasyPOS.Application.Common.Abstractions;
 using EasyPOS.Infrastructure;
-using EasyPOS.Infrastructure.Persistence;
-using EasyPOS.Infrastructure.Identity;
+using EasyPOS.Infrastructure.BackgroundJobs;
 using EasyPOS.Infrastructure.Communications;
 using EasyPOS.WebApi;
-using EasyPOS.WebApi.Extensions;
 using EasyPOS.WebApi.Middlewares;
 using Hangfire;
 using HealthChecks.UI.Client;
@@ -108,11 +106,13 @@ app.UseHealthChecks("/api/health", new HealthCheckOptions
 
 app.UseHangfireDashboard(options: new DashboardOptions
 {
-    Authorization = [],
+    Authorization = [
+        //new HangfireDashboardAuthorizationFilter()
+    ],
     DarkModeEnabled = true,
 });
 
-//app.UseBackgroundJobs();
+app.UseBackgroundJobs();
 
 //app.MapRazorPages();
 
