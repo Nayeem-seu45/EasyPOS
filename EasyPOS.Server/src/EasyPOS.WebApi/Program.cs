@@ -1,7 +1,6 @@
 using EasyPOS.Application;
 using EasyPOS.Application.Common.Abstractions;
 using EasyPOS.Infrastructure;
-using EasyPOS.Infrastructure.BackgroundJobs;
 using EasyPOS.Infrastructure.Communications;
 using EasyPOS.WebApi;
 using EasyPOS.WebApi.Middlewares;
@@ -61,7 +60,7 @@ else
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 string folderName = "Resources";
@@ -112,7 +111,7 @@ app.UseHangfireDashboard(options: new DashboardOptions
     DarkModeEnabled = true,
 });
 
-app.UseBackgroundJobs();
+//app.UseBackgroundJobs();
 
 //app.MapRazorPages();
 
